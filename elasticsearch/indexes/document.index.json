@@ -1,0 +1,46 @@
+{
+  "settings": {
+    "number_of_shards": 1, 
+    "analysis": {
+      "char_filter": {
+        "normalize_characters": {
+          "type": "mapping",
+          "mappings": [
+            "& => and",
+            "$ => S",
+            "º => umber"
+          ]
+        }
+      },
+      "analyzer": {
+        "default": {
+          "type": "custom",
+          "char_filter":  ["html_strip"],
+          "tokenizer": "whitespace",
+          "filter": ["lowercase", "asciifolding", "classic"]
+        },
+        "normalized": {
+          "type": "custom",
+          "char_filter": ["html_strip", "normalize_characters"],
+          "tokenizer": "whitespace",
+          "filter": ["lowercase", "asciifolding", "classic"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "unsafe_text": {
+         "type": "text",
+         "term_vector": "with_positions_offsets",
+         "copy_to": "normalized_unsafe_text"
+      },
+      "normalized_unsafe_text": {
+        "type": "text",
+        "analyzer": "normalized",
+        "store": true,
+        "term_vector": "with_positions_offsets"
+      }
+    }
+  }
+}

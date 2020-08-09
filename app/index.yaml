@@ -1,0 +1,50 @@
+indexes:
+
+- kind: Album
+  properties:
+  - name: revoked
+  - name: album_artist
+  - name: album_id
+  - name: disc_number
+  - name: is_compilation
+  - name: title
+
+- kind: Album
+  properties:
+  - name: revoked
+  - name: import_timestamp
+    direction: desc
+
+- kind: Artist
+  properties:
+  - name: revoked
+  - name: name
+
+- kind: PlaylistEvent
+  properties:
+  - name: class
+  - name: established
+
+- kind: TagEdit
+  properties:
+  - name: added
+  - name: subject
+  - name: timestamp
+    direction: desc
+
+kind: Track
+  properties:
+  - name: album
+  - name: revoked
+  - name: track_num
+
+- kind: Track
+  properties:
+  - name: album
+  - name: revoked
+  - name: track_num
+  - name: bit_rate_kbps
+  - name: current_tags
+  - name: duration_ms
+  - name: title
+  - name: track_artist

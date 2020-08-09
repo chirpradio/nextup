@@ -1,0 +1,35 @@
+{{> search/result.header title='Albums'}}
+<div class="row no-gutters">
+    {{#if results.hits.length}}
+    <ul class="list-unstyled col-sm-12">
+        <li class="row no-gutters py-2">
+            <div class="col-sm-4">Artist</div>
+            <div class="col-sm-8">Album</div>        
+        </li>
+    {{/if}}
+    {{#each results.hits}}
+        <li class="row no-gutters border-top py-2">
+            <div class="col-sm-4 search_result__col">
+                <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumArtist _source}}">{{displayAlbumArtist _source}}</a>
+            </div>
+            <div class="col-sm-8 search_result__col">
+                <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumTitle _source}}">{{displayAlbumTitle _source}}</a>
+                <ul class="list-inline">
+                    {{#each _source.current_tags}}
+                    <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
+                    {{/each}}
+                </ul>
+            </div>        
+        </li>
+    {{else}}
+        <p>No albums found</p>
+    {{/each}}
+    {{#if showAllLink}}
+        <li class="border-top py-2">
+            <a href="/music/search/album?term={{term}}">view all {{results.count}} albums...</a>
+        </li>
+    {{/if}}
+    {{#if results.hits.length}}
+    </ul>
+    {{/if}}
+</div>

@@ -1,0 +1,36 @@
+<h1>{{{artist.name}}}</h1>
+<ul class="list-inline">
+{{#each artist.current_tags}}
+  <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
+{{/each}}
+</ul>
+{{> music/add-to-crate item=artist name=artist.name}}
+
+<h2 class="mt-4">Albums</h2>
+{{#each albums}}
+<div class="card">
+  <div class="row no-gutters">
+    <div class="col-md-2 p-2">   
+        <a href="/music/album/{{album_id.value}}">
+          {{#if lastfm_lg_image_url}}
+            <img class="img-fluid" src="{{lastfm_lg_image_url}}">
+          {{else}}  
+            <img height="174px" width="174px" src="http://www.chirpradio.org/_/img/placeholders/album-art.png">
+          {{/if}}
+        </a>
+    </div>    
+    <div class="col-md-10">
+      <div class="card-body pt-2 pb-4 px-2">
+        <h3 class="card-title"><a href="/music/album/{{album_id.value}}">{{title}}</a></h3>
+        <p class="card-subtitle">{{year}} – {{label}}{{#if disc_number}} – Disc {{disc_number}}{{/if}}</p>
+        <ul class="list-inline">
+        {{#each current_tags}}
+          <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
+        {{/each}}
+        </ul>
+        {{> music/add-to-crate item=this name=title crates=../crates}}
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}

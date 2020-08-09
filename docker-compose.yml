@@ -1,0 +1,53 @@
+---
+version: '3'
+services:
+
+  app:
+    image: node:10.20.1
+    command: [ "npx", "nodemon", "--inspect=0.0.0.0", "server.js" ]
+    container_name: app
+    environment:
+      ELASTICSEARCH_DOMAIN: ${ELASTICSEARCH_DOMAIN}
+      ELASTICSEARCH_API_VERSION: 7.2 
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+      SESSION_SECRET: ${SESSION_SECRET}
+      SESSION_LENGTH: ${SESSION_LENGTH}
+      LASTFM_API_KEY: ${LASTFM_API_KEY}                 
+      DATASTORE_PROJECT_ID: ${DATASTORE_PROJECT_ID}
+      PORT: 1071 
+    ports:
+      - 1071:1071      
+      - 9229:9229
+    volumes: 
+      - ./app:/usr/src/app
+      - ~/.config:/root/.config
+    working_dir: /usr/src/app
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    environment:
+      ELASTICSEARCH_URL: http://es:9200
+      ELASTICSEARCH_HOSTS: http://es:9200
+    ports: 
+      - 5601:5601
+
+volumes:
+  esdata:
+    external: true

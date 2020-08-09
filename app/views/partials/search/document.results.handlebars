@@ -1,0 +1,37 @@
+{{> search/result.header title='Reviews'}}
+<div class="row no-gutters">
+    {{#if results.hits.length}}
+    <ul class="list-unstyled col-sm-12 pl-0">
+        <li class="row py-2">
+            <div class="col-sm-4">Artist</div>
+            <div class="col-sm-8">Album</div>            
+        </li>
+    {{/if}}
+    {{#each results.hits}}
+        <li class="border-top pt-2">
+        <div class="row pb-2">
+            <div class="col-sm-4 search_result__col">
+                <a href="/music/album/{{_source.subject.album_id.value}}" title="{{displayAlbumArtist _source.subject}}">{{displayAlbumArtist _source.subject}}</a>
+            </div>
+            <div class="col-sm-8 search_result__col">
+                <a href="/music/album/{{_source.subject.album_id.value}}" title="{{displayAlbumTitle _source.subject}}">{{displayAlbumTitle _source.subject}}</a>
+            </div>          
+        </div>
+        {{#each highlight.unsafe_text}}
+        <div class="row">
+            <p class="col-sm text-muted">{{{prepareFragment this}}}</p>
+        </div>
+        {{/each}}
+        </li>
+    {{else}}
+        <p>No reviews found</p>
+    {{/each}}
+    {{#if showAllLink}}
+        <li class="border-top py-2">
+            <a href="/music/search/document?term={{term}}">view all {{results.count}} reviews...</a>
+        </li>
+    {{/if}}
+    {{#if results.hits.length}}
+    </ul>
+    {{/if}}
+</div>

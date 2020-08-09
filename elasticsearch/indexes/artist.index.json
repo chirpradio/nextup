@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "number_of_shards": 1, 
+    "analysis": {
+      "char_filter": {
+        "normalize_characters": {
+          "type": "mapping",
+          "mappings": [
+            "& => and",
+            "$ => S",
+            "º => umber"
+          ]
+        }
+      },
+      "analyzer": {
+        "default": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding", "classic"]
+        },
+        "normalized": {
+          "type": "custom",
+          "char_filter": ["normalize_characters"],
+          "tokenizer": "whitespace",
+          "filter": ["lowercase", "asciifolding", "classic"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+         "type": "text",
+         "copy_to": "normalized_name"
+      },
+      "normalized_name": {
+        "type": "text",
+        "analyzer": "normalized",
+        "store": true
+      }
+    }
+  }
+}

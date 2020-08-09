@@ -1,0 +1,10 @@
+<form class="form-inline" method="post" action="/music/crate/{{id}}">
+  <input type="hidden" name="key" value="{{serializeKey item}}">
+  <input type="hidden" name="name" value="{{name}}">
+  <select class="custom-select custom-select-sm {{#if fullWidth}}w-100{{/if}}" onchange="javascript:this.form.action=this.options[this.selectedIndex].value; this.form.submit();">
+    <option>add to crate</option>
+    {{#each crates}}
+    <option value="/music/crate/{{entityKey.id}}">{{displayCrateName this}}</option>
+    {{/each}}
+  </select>
+</form>

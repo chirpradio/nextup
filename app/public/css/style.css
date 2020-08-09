@@ -1,0 +1,36 @@
+mark {
+  margin: -0.2em;
+}
+
+.expand__btn::before {
+  content: "▶";
+}
+
+.expand__btn[aria-expanded=true]::before {
+  content: "▼";
+}
+
+.search_result__col {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.track_list {
+  counter-reset: track-counter;
+}
+.track_list .track_list__track {
+  counter-increment: track-counter;
+}
+.track_list__track::before {
+  content: counter(track-counter) "."; 
+}
+
+.track_list__header::before {
+  content: ' ';
+}
+
+.track_list__header::before,
+.track_list__track::before {
+  min-width: 2em;
+}

@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-2 border-right">
+    <form action="#" method="get">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label class="sr-only" for="search">Search</label>
+          <input class="form-control mb-2" id="search" name="term" type="search" placeholder="search the music library" value="{{term}}" aria-label="search">
+          <button class="btn btn-primary btn-block" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-10">
+    {{> search/artist.results results=artists showAllLink=showAllLink.artists showPagination=false}}
+    {{> search/album.results results=albums showAllLink=showAllLink.albums showPagination=false}}
+    {{> search/track.results results=tracks showAllLink=showAllLink.tracks showPagination=false}}
+    {{> search/document.results results=documents showAllLink=showAllLink.documents showPagination=false}}
+  </div>
+</div>

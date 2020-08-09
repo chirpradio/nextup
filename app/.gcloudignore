@@ -1,0 +1,4 @@
+db/setup/**
+search/import/**
+node_modules/**
+.env
