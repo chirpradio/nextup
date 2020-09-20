@@ -21,25 +21,11 @@ async function indexHandler(req, res) {
     ]);
 
     res.render("music/music", {
-      heavy_rotation: {
-        albums: heavyPreview,
-        linkPath: "/music/tag/heavy_rotation",
-        linkText: "in heavy rotation",
-        total: heavyAlbums.length,
-      },
-      light_rotation: {
-        albums: lightPreview,
-        linkPath: "/music/tag/light_rotation",
-        linkText: "in light rotation",
-        total: lightAlbums.length,
-      },
-      recent: {
-        albums: recentPreview,
-        linkPath: "/music/recent",
-        linkText: "that were recently added",
-        total: newButNotRotation.length,
-      },
+      heavy_rotation: heavyPreview,
+      light_rotation: lightPreview,
+      recent: recentPreview,
       title: "Music - CHIRP NextUp",
+      hideSearch: true,
     });
   } catch (err) {
     console.error(err);

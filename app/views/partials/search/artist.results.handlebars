@@ -1,32 +1,26 @@
 {{> search/result.header title='Artists'}}
-<div class="row no-gutters">
+<div class="row mb-4">
     {{#if results.hits.length}}
-    <ul class="list-unstyled col">
-        <li class="row no-gutters py-2">
-            <div class="col">Artist</div>      
-        </li>
+    <div class="col-sm-12">
+        <div class="row py-2 mx-0">
+            <h5 class="col">Artist</h5>      
+        </div>
     {{/if}}
     {{#each results.hits}}
-        <li class="row no-gutters border-top py-2">
+        <div class="row border-top py-2 mx-0">
             <div class="col search_result__col">
                 <a href="/music/artist/{{getArtistKeyProp _source}}">{{_source.name}}</a>
-                <ul class="list-inline">
-                    {{#each _source.current_tags}}
-                    <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
-                    {{/each}}
-                </ul>
-            </div>  
-                
-        </li>
+            </div>                
+        </div>
     {{else}}
-        <p>No artists found</p>
+        <p class="ml-3">No artists found</p>
     {{/each}}
     {{#if showAllLink}}
-        <li class="border-top py-2">
-            <a href="/music/search/artist?term={{term}}">view all {{results.count}} artists...</a>
-        </li>
+        <div class="border-top py-2">
+            <a class="pl-3" href="/music/search/artist?term={{query.term}}">view all {{results.count}} artists...</a>
+        </div>
     {{/if}}
     {{#if results.hits.length}}
-    </ul>
+    </div>
     {{/if}}
 </div>

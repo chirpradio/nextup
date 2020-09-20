@@ -1,16 +1,18 @@
-<form class="col-md-6 border border-primary p-3 mb-3 form-inline" action="/music/search" method="get">
+<form class="col-md-12 border border-primary p-3 mb-3 form-inline" action="/music/search" method="get">
   <div class="form-group flex-grow-1 pr-3">
     <label class="sr-only" for="search">Search</label>
-    <input class="form-control flex-grow-1" id="search" name="term" type="search" placeholder="search the music library" aria-label="search">
+    <input class="form-control flex-grow-1" id="search" name="term" type="search" placeholder="search the entire music library by album, track, or artist name (or words in a review)" aria-label="search">
   </div>
   <button class="btn btn-primary" type="submit">Search</button>
+  <span class="mx-2">or</span>
+  <a href="/music/search" class="btn btn-outline-primary">Randomize</a>
 </form>
 
-<h1>Heavy Rotation</h1>
-{{> music/albumlist albums=heavy_rotation.albums total=heavy_rotation.total linkPath=heavy_rotation.linkPath linkText=heavy_rotation.linkText}}
+<h1>Heavy Rotation <a href="/music/tag/heavy_rotation"><small>see all</small></a></h1>
+{{> music/albumlist albums=heavy_rotation}}
 
-<h1 class="mt-4">Light Rotation</h1>
-{{> music/albumlist albums=light_rotation.albums total=light_rotation.total linkPath=light_rotation.linkPath linkText=light_rotation.linkText}}
+<h1 class="mt-4">Light Rotation <a href="/music/tag/light_rotation"><small>see all</small></a></h1>
+{{> music/albumlist albums=light_rotation}}
 
-<h1 class="mt-4">More Recently Added</h1>
-{{> music/albumlist albums=recent.albums total=recent.total linkPath=recent.linkPath linkText=recent.linkText}}
+<h1 class="mt-4">More Recently Added <a href="/music/recent"><small>see all</small></a></h1>
+{{> music/albumlist albums=recent}}

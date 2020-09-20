@@ -2,7 +2,7 @@ const gstore = require("../db").gstore;
 const { Schema } = gstore;
 
 function validateCurrentTags(obj, validator, validTags) {
-  if (Array.isArray(obj)) {
+  if (Array.isArray(obj)) {    
     return obj.every((tag) => validTags.includes(tag));
   }
 

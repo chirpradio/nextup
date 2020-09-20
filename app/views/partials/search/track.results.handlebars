@@ -1,24 +1,29 @@
 {{> search/result.header title='Tracks'}}
-<div class="row no-gutters">
+<div class="row mb-4">
     {{#if results.hits.length}}
-    <ul class="list-unstyled col-sm-12">
-        <li class="row no-gutters py-2">
-            <div class="col-sm-4">Artist</div>
-            <div class="col-sm-4">Album</div>
-            <div class="col-sm-3">Track</div>
-            <div class="col-sm-1">Duration</div>
-        </li>
+    <div class="col-sm-12">
+        <div class="row mx-0 py-2">
+            <h5 class="col-sm-3">Artist</h5>
+            <h5 class="col-sm-3">Album</h5>
+            <h5 class="col-sm-5">Track</h5>
+            <h5 class="col-sm-1">Length</h5>
+        </div>
     {{/if}}
     {{#each results.hits}}
-        <li class="row no-gutters border-top py-2">
-            <div class="col-sm-4 search_result__col">
-                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumArtist _source.album}}">{{displayAlbumArtist _source.album}}</a>
-            </div>
-            <div class="col-sm-4 search_result__col">
-                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">{{displayAlbumTitle _source.album}}</a>
+        <div class="row mx-0 border-top py-2">
+            <div class="col-sm-3 search_result__col">
+                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumOrTrackArtist _source}}">{{displayAlbumOrTrackArtist _source}}</a>
             </div>
             <div class="col-sm-3 search_result__col">
-                <a href="/music/album/{{_source.album.album_id.value}}" title="{{_source.title}}">{{_source.title}}</a>
+                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">{{displayAlbumTitle _source.album}}</a>
+                <ul class="list-inline">
+                    {{#each _source.album.current_tags}}
+                    <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="col-sm-5 search_result__col">
+                {{_source.title}}
                 {{#if (isExplicit _source)}}          
                     <span class="ml-1">🚫</span>
                 {{else if (isRecommended _source)}}                    
@@ -26,18 +31,18 @@
                 {{/if}}
             </div>
             <div class="col-sm-1 search_result__col">
-                <a href="/music/album/{{_source.album.album_id.value}}" title="duration">{{formatMinutesAndSeconds _source.duration_ms}}</a>
+                {{formatMinutesAndSeconds _source.duration_ms}}
             </div>
-        </li>
+        </div>
     {{else}}
-        <p>No tracks found</p>
+        <p class="ml-3">No tracks found</p>
     {{/each}}
     {{#if showAllLink}}
-        <li class="border-top py-2">
-            <a href="/music/search/track?term={{term}}">view all {{results.count}} tracks...</a>
-        </li>
+        <div class="border-top py-2 mx-0">
+            <a class="pl-3" href="/music/search/track?{{parseQuery query}}">view all {{results.count}} tracks...</a>
+        </div>
     {{/if}}
     {{#if results.hits.length}}
-    </ul>
+    </div>
     {{/if}}
 </div>

@@ -1,10 +1,10 @@
 {{> search/result.header title='Reviews'}}
-<div class="row no-gutters">
+<div class="row mb-4 no-gutters">
     {{#if results.hits.length}}
     <ul class="list-unstyled col-sm-12 pl-0">
         <li class="row py-2">
-            <div class="col-sm-4">Artist</div>
-            <div class="col-sm-8">Album</div>            
+            <h5 class="col-sm-4">Artist</h5>
+            <h5 class="col-sm-8">Album</h5>            
         </li>
     {{/if}}
     {{#each results.hits}}
@@ -28,7 +28,7 @@
     {{/each}}
     {{#if showAllLink}}
         <li class="border-top py-2">
-            <a href="/music/search/document?term={{term}}">view all {{results.count}} reviews...</a>
+            <a href="/music/search/document?term={{query.term}}">view all {{results.count}} reviews...</a>
         </li>
     {{/if}}
     {{#if results.hits.length}}
