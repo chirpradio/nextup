@@ -3,16 +3,22 @@
     {{#if results.hits.length}}
     <div class="col-sm-12">
         <div class="row mx-0 py-2">
+            <h5 class="col-sm-1"></h5>
             <h5 class="col-sm-3">Artist</h5>
             <h5 class="col-sm-3">Album</h5>
-            <h5 class="col-sm-5">Track</h5>
+            <h5 class="col-sm-4">Track</h5>
             <h5 class="col-sm-1">Length</h5>
         </div>
     {{/if}}
     {{#each results.hits}}
         <div class="row mx-0 border-top py-2">
+            <div class="col-sm-1 search_result__col no_overflow">
+                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">
+                    <img src="{{_source.album.lastfm_med_image_url}}">
+                </a>
+            </div>
             <div class="col-sm-3 search_result__col">
-                <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumOrTrackArtist _source}}">{{displayAlbumOrTrackArtist _source}}</a>
+                <a href="/music/artist/{{getTrackArtistKey _source}}" title="{{displayAlbumOrTrackArtist _source}}">{{displayAlbumOrTrackArtist _source}}</a>
             </div>
             <div class="col-sm-3 search_result__col">
                 <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">{{displayAlbumTitle _source.album}}</a>
@@ -22,7 +28,7 @@
                     {{/each}}
                 </ul>
             </div>
-            <div class="col-sm-5 search_result__col">
+            <div class="col-sm-4 search_result__col">
                 {{_source.title}}
                 {{#if (isExplicit _source)}}          
                     <span class="ml-1">🚫</span>

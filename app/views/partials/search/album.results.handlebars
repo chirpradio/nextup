@@ -15,13 +15,15 @@
     {{#each results.hits}}
         <div class="row border-top py-2 mx-0">
             <div class="col-sm-1 search_result__col no_overflow">
-                <img src="{{_source.lastfm_med_image_url}}">
+                <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumTitle _source}}">
+                    <img src="{{_source.lastfm_med_image_url}}">
+                </a>
             </div>
             <div class="col-sm-3 search_result__col">
                 {{#if _source.is_compilation}}
                     <div class="badge badge-info">Compilation</div>
                 {{else}}                
-                    <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumArtist _source}}">{{displayAlbumArtist _source}}</a>
+                    <a href="/music/artist/{{getArtistKeyProp _source.album_artist}}" title="{{displayAlbumArtist _source}}">{{displayAlbumArtist _source}}</a>
                 {{/if}}
             </div>
             <div class="col-sm-4 search_result__col">

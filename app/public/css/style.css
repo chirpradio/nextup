@@ -28,6 +28,10 @@ mark {
   text-overflow: clip;
 }
 
+.whitespace-initial {
+  white-space: initial;
+}
+
 .track_list {
   counter-reset: track-counter;
 }

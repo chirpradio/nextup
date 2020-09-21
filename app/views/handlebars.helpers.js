@@ -113,8 +113,7 @@ module.exports = {
   },
 
   getTrackArtistKey(track) {
-    const artist = track.album.is_compilation ? track.track_artist : track.album.album_artist;
-    console.log(artist);
+    const artist = track.album.is_compilation ? track.track_artist : track.album.album_artist;    
     return ArtistService.getKeyValue(artist);
   },
 
