@@ -31,7 +31,12 @@
     "properties": {
       "title": {
          "type": "text",
-         "copy_to": "normalized_title"
+         "copy_to": "normalized_title",
+         "fields": {
+            "raw": { 
+              "type":  "keyword"
+            }
+          }
       },
       "normalized_title": {
         "type": "text",
@@ -44,12 +49,25 @@
             "properties": {
               "name": {
                  "type": "text",
-                 "copy_to": "normalized_name"
+                 "copy_to": "normalized_name",
+                 "fields": {
+                    "raw": { 
+                      "type":  "keyword"
+                    }
+                  }
               },
               "normalized_name": {
                 "type": "text",
                 "analyzer": "normalized",
                 "store": true
+              }
+            }
+          },
+          "title": {
+            "type": "text",
+            "fields": {
+              "raw": { 
+                "type":  "keyword"
               }
             }
           }
@@ -58,8 +76,13 @@
       "track_artist": {
         "properties": {
           "name": {
-             "type": "text",
-             "copy_to": "normalized_name"
+            "type": "text",
+            "copy_to": "normalized_name",
+            "fields": {
+              "raw": { 
+                "type":  "keyword"
+              }
+            }
           },
           "normalized_name": {
             "type": "text",

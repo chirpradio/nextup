@@ -31,7 +31,12 @@
     "properties": {
       "title": {
          "type": "text",
-         "copy_to": "normalized_title"
+         "copy_to": "normalized_title",
+         "fields": {
+            "raw": { 
+              "type":  "keyword"
+            }
+          }
       },
       "normalized_title": {
         "type": "text",
@@ -41,8 +46,13 @@
       "album_artist": {
         "properties": {
           "name": {
-             "type": "text",
-             "copy_to": "normalized_name"
+              "type": "text",
+              "copy_to": "normalized_name",
+              "fields": {
+                "raw": { 
+                  "type":  "keyword"
+                }
+              }
           },
           "normalized_name": {
             "type": "text",
