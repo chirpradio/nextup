@@ -8,8 +8,15 @@
           "mappings": [
             "& => and",
             "$ => S",
-            "º => umber"
+            "º => o"
           ]
+        }
+      },
+      "filter": {
+        "catenate": {
+          "type": "word_delimiter_graph",
+          "catenate_all": true,
+          "preserve_original": true
         }
       },
       "analyzer": {
@@ -18,11 +25,17 @@
           "tokenizer": "standard",
           "filter": ["lowercase", "asciifolding", "classic"]
         },
-        "normalized": {
+        "normalizer_standard": {
+          "type": "custom",
+          "char_filter": ["normalize_characters"],
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding", "classic", "catenate"]
+        },
+        "normalizer_whitespace": {
           "type": "custom",
           "char_filter": ["normalize_characters"],
           "tokenizer": "whitespace",
-          "filter": ["lowercase", "asciifolding", "classic"]
+          "filter": ["lowercase", "asciifolding", "classic", "catenate"]
         }
       }
     }
@@ -31,33 +44,37 @@
     "properties": {
       "title": {
          "type": "text",
-         "copy_to": "normalized_title",
          "fields": {
-            "raw": { 
+            "keyword": { 
               "type":  "keyword"
+            }, 
+            "normalized_standard": {
+              "type": "text",
+              "analyzer": "normalizer_standard"
+            },
+            "normalized_whitespace": {
+              "type": "text",
+              "analyzer": "normalizer_whitespace"
             }
           }
-      },
-      "normalized_title": {
-        "type": "text",
-        "analyzer": "normalized",
-        "store": true
       },
       "album_artist": {
         "properties": {
           "name": {
               "type": "text",
-              "copy_to": "normalized_name",
               "fields": {
-                "raw": { 
+                "keyword": { 
                   "type":  "keyword"
+                },
+                "normalized_standard": {
+                  "type": "text",
+                  "analyzer": "normalizer_standard"
+                },
+                "normalized_whitespace": {
+                  "type": "text",
+                  "analyzer": "normalizer_whitespace"
                 }
               }
-          },
-          "normalized_name": {
-            "type": "text",
-            "analyzer": "normalized",
-            "store": true
           }
         }
       }

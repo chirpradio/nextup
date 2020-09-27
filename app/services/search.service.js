@@ -89,21 +89,33 @@ function buildArtistSearch(params, options) {
   const queryObj = buildQueryObj(options);
   
   if(params.term) {
-    Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, ["normalized_name", "name"]));
+    Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
+      "name.normalized_standard",
+      "name.normalized_whitespace", 
+      "name"
+    ]));
   }
 
+  console.dir(queryObj);
   return queryObj;
 }
 
 
 function buildAlbumSearch(params, options) {
   const queryObj = buildQueryObj(options);
+  // queryObj.sort = [
+  //   "_score",
+  //   "album_artist.name.raw",
+  //   "title.raw",
+  // ];
 
   if(params.term) {
     Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
-      "normalized_title^3",
+      "title.normalized_standard^3",
+      "title.normalized_whitespace^3",
       "title^2",
-      "album_artist.normalized_name",
+      "album_artist.name.normalized_standard",
+      "album_artist.name.normalized_whitespace",
       "album_artist.name",
       "label",
     ]));
@@ -137,57 +149,71 @@ function buildAlbumFilters(params, prefix = "") {
         filters.push(buildQuery("match_phrase", `${prefix}${key}`, params[key]));
     }
   }
-  console.log(filters);
+
   return filters;
 }
 
 function buildTrackSearch(params, options) {
   const queryObj = buildQueryObj(options);
+  // queryObj.sort = [
+  //   "_score",
+  //   "title",
+  //   "album.album_artist.name",
+  //   "album.title",
+  // ];
   
   if(params.term) {
     Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
-      "normalized_title^4",
+      "title.normalized_standard^4",
+      "title.normalized_whitespace^4",
       "title^3",
-      "track_artist.normalized_name^2",
+      "track_artist.name.normalized_standard^2",
+      "track_artist.name.normalized_whitespace^2",
       "track_artist.name^2",
-      "album.album_artist.normalized_name",
+      "album.album_artist.name.normalized_standard",
+      "album.album_artist.name.normalized_whitespace",
       "album.album_artist.name",
-      "album.normalized_title",
+      "album.title.normalized_standard",
+      "album.title.normalized_whitespace",
       "album.title",
     ]));
   }
 
   if(params.track) {
-    const filters = [];
-    
-    if(params.track) {
-      if(params.track.duration_ms) {      
-        const durationFilter = {
-          range: {
-            duration_ms: params.track.duration_ms
-          }
-        };
-  
-        if(durationFilter.range.duration_ms.lte === '') {
-          delete durationFilter.range.duration_ms.lte;
-        }
-
-        filters.push(durationFilter);
-      }
-
-      if(params.track.is_recommended) {
-        filters.push({ "match": { "current_tags": "recommended" } });
-      }
-    }
-
-    if(params.track.album) {
-      filters.push(buildAlbumFilters(params.track.album, "album."));
-    }
-  
-    queryObj.query.bool.filter = filters;
+    queryObj.query.bool.filter = buildTrackFilters(params);
   }
 
   return queryObj;
+}
+
+function buildTrackFilters(params) {
+  const filters = [];
+    
+  if(params.track) {
+    if(params.track.duration_ms) {      
+      const durationFilter = {
+        range: {
+          duration_ms: params.track.duration_ms
+        }
+      };
+
+      if(durationFilter.range.duration_ms.lte === '') {
+        delete durationFilter.range.duration_ms.lte;
+      }
+
+      filters.push(durationFilter);
+    }
+
+    if(params.track.is_recommended) {
+      filters.push({ "match": { "current_tags": "recommended" } });
+    }
+  }
+
+  if(params.track.album) {
+    filters.push(buildAlbumFilters(params.track.album, "album."));
+  }
+
+  return filters;
 }
 
 function buildDocumentSearch(params, { from = 0, size = 10 } = {}) {
@@ -197,7 +223,8 @@ function buildDocumentSearch(params, { from = 0, size = 10 } = {}) {
     query: {
       multi_match: {
         query: params.term,
-        fields: ["normalized_unsafe_text", "unsafe_text"],
+        operator: "AND",
+        fields: ["unsafe_text.normalized", "unsafe_text"],
       },
     },
     highlight: {
@@ -212,6 +239,7 @@ function buildDocumentSearch(params, { from = 0, size = 10 } = {}) {
 }
 
 function buildFuzzyMultiMatch(term, fields) {
+  console.log(term);
   return {
     minimum_should_match: 1,
     should: [
