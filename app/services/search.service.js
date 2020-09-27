@@ -192,6 +192,7 @@ function buildTrackSearch(params, options) {
     queryObj.query.bool.filter = buildTrackFilters(params);
   }
 
+  console.log(JSON.stringify(queryObj));
   return queryObj;
 }
 
@@ -219,7 +220,10 @@ function buildTrackFilters(params) {
   }
 
   if(params.track.album) {
-    filters.push(buildAlbumFilters(params.track.album, "album."));
+    const albumFilters = buildAlbumFilters(params.track.album, "album.");
+    if(albumFilters && Array.isArray(albumFilters) && albumFilters.length > 0) {
+      filters.push(albumFilters);
+    }
   }
 
   return filters;
