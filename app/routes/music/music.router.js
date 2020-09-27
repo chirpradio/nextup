@@ -11,7 +11,7 @@ router.get("/", MusicController.indexHandler);
 router.use("/album", require("./album/album.router"));
 router.use("/artist", require("./artist/artist.router"));
 router.use("/crate", require("./crate/crate.router"));
-router.use("/recent", require("./recent/recent.router"));
+router.use("/library_adds", require("./libraryadds/libraryadds.router"));
 router.use("/search", require("./search/search.router"));
 router.use("/tag", require("./tag/tag.router"));
 
