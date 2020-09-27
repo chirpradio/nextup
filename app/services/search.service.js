@@ -37,8 +37,17 @@ async function doMSearch(params) {
 function getRandomQuery() {
   return {
     "query": {
-      "function_score": {
-        "random_score": {}
+      "bool": {
+        "must": {
+          "function_score": {
+            "random_score": {}
+          }
+        },
+        "must_not": {
+          "terms": {
+            "current_tags": ["explicit"]  
+          }
+        }
       }
     }
   };
