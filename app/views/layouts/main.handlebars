@@ -32,6 +32,7 @@
             <a class="dropdown-item" href="/music/library_adds">Library Adds</a>
           </div>
         </li>
+        {{#if userIsMusicDirector}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {{isActive 'reports' activeNav}}" href="#" id="reports-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Reports
@@ -41,6 +42,7 @@
             <a class="dropdown-item" href="/reports/rotation/albums">Rotation Albums</a>
           </div>
         </li>
+        {{/if}}
       </ul>
       <form class="form-inline my-2 my-lg-0 {{isInvisible hideSearch}}" action="/music/search" method="get">
         <input class="form-control mr-sm-2" type="search" name="term" placeholder="Search" aria-label="Search">        
