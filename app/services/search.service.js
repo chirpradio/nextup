@@ -192,7 +192,6 @@ function buildTrackSearch(params, options) {
     queryObj.query.bool.filter = buildTrackFilters(params);
   }
 
-  console.log(JSON.stringify(queryObj));
   return queryObj;
 }
 
@@ -268,7 +267,7 @@ function buildFuzzyMultiMatch(term, fields) {
           query: term,
           operator: "AND",
           fuzziness: 1,
-          prefix_length: 2,
+          prefix_length: 1,
           fields: fields,
         },
       },
