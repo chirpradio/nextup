@@ -18,7 +18,11 @@
                     </a>
                 </div>
                 <div class="col-sm-3 search_result__col">
-                    <a href="/music/artist/{{getArtistKeyProp _source.subject.album_artist}}" title="{{displayAlbumArtist _source.subject}}">{{displayAlbumArtist _source.subject}}</a>
+                    {{#if _source.subject.is_compilation}}
+                        <div class="badge badge-info">Compilation</div>
+                    {{else}}   
+                        <a href="/music/artist/{{getArtistKeyProp _source.subject.album_artist}}" title="{{displayAlbumArtist _source.subject}}">{{displayAlbumArtist _source.subject}}</a>
+                    {{/if}}
                 </div>
                 <div class="col-sm-3 search_result__col">
                     <a href="/music/album/{{_source.subject.album_id.value}}" title="{{displayAlbumTitle _source.subject}}">{{displayAlbumTitle _source.subject}}</a>
