@@ -6,7 +6,7 @@
             <h5 class="col-sm-1"></h5>
             <h5 class="col-sm-3">Artist</h5>
             <h5 class="col-sm-3">Album</h5>
-            <h5 class="col-sm-4">Track</h5>
+            <h5 class="col-sm-4 track_title">Track</h5>
             <h5 class="col-sm-1">Length</h5>
         </div>
     {{/if}}
@@ -29,12 +29,7 @@
                 </ul>
             </div>
             <div class="col-sm-4 search_result__col">
-                {{_source.title}}
-                {{#if (isExplicit _source)}}          
-                    <span class="ml-1">🚫</span>
-                {{else if (isRecommended _source)}}                    
-                    <span class="ml-1">⭐️</span>
-                {{/if}}
+                <span class="track_title {{#if (isExplicit _source)}}explicit{{/if}} {{#if (isRecommended _source)}}recommended{{/if}}">{{_source.title}}</span> 
             </div>
             <div class="col-sm-1 search_result__col">
                 {{formatMinutesAndSeconds _source.duration_ms}}

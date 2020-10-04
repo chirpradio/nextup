@@ -44,10 +44,10 @@
 <h3>Tracks</h3>
 <div class="track_list__header row ml-2 mt-3 py-1">
   {{#if album.is_compilation}}
-    <h6 class="col-sm-4">Title</h6>
+    <h6 class="col-sm-4 track_title">Title</h6>
     <h6 class="col-sm-3">Artist</h6>
   {{else}}
-    <h6 class="col-sm-7">Title</h6>
+    <h6 class="col-sm-7 track_title">Title</h6>
   {{/if}}
   <h6 class="col-sm-1 text-right">Length</h6>
   <h6 class="col-sm-1 text-right d-none d-md-block">Bit rate</h6>
@@ -58,22 +58,12 @@
   <div class="track_list__track row py-1 border-top">    
     {{#if ../album.is_compilation}}
       <div class="col-sm-4">
-        {{title}} 
-        {{#if (isExplicit this)}}
-          <span class="ml-1">🚫</span>
-        {{else if (isRecommended this)}}
-          <span class="ml-1">⭐️</span>
-        {{/if}}
+        <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span>
       </div>
       <div class="col-sm-3">{{track_artist.name}}</div>
     {{else}}
       <div class="col-sm-7">
-        {{title}}
-        {{#if (isExplicit this)}}          
-          <span class="ml-1">🚫</span>
-        {{else if (isRecommended this)}}                    
-          <span class="ml-1">⭐️</span>
-        {{/if}}  
+        <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span> 
       </div>
     {{/if}}
     <div class="col-sm-1 text-right">{{formatMinutesAndSeconds duration_ms}}</div>
