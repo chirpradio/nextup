@@ -53,6 +53,17 @@ async function getPopulatedAlbum(albumId) {
   return await album.populate("album_artist");
 }
 
+async function getAlbumById(albumId, { format = "JSON", populate = false } = {}) {
+  const runOptions = format === "JSON" ? jsonOptions : options;
+  const album = await Album.findOne(
+    { album_id: albumId, revoked: false },
+    null,
+    null,
+    runOptions
+  );
+  return await (populate ? album.populate("album_artist") : album);
+}
+
 async function getPopulatedAlbumByKey(
   key,
   { format = "JSON", populate = true } = {}
@@ -258,6 +269,7 @@ module.exports = {
   albumInRotation,
   albumNotInRotation,
   flattenArtists,
+  getAlbumById,
   getAlbumByKey,
   getPopulatedAlbum,
   getPopulatedAlbumByKey,

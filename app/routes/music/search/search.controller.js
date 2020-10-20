@@ -1,12 +1,4 @@
-const {
-  AlbumService,
-  DateService,
-  DocumentService,
-  SearchService,
-  TagEditService,
-  ArtistService,
-} = require("../../../services");
-const { datastore } = require("../../../db");
+const { SearchService } = require("../../../services");
 const qs = require("qs");
 
 async function indexHandler(req, res) {
@@ -14,8 +6,7 @@ async function indexHandler(req, res) {
     res.redirect(`/music/search/${req.query.type}?${qs.stringify(req.query)}`);
     return;
   }
-  
-  
+   
   try { 
     const title = req.query.term ? req.query.term : 'Search'; 
     const locals = {
@@ -80,109 +71,8 @@ async function typeHandler(req, res) {
   }
 }
 
-async function updateAlbumsHandler(req, res) {
-  try {
-    const date = req.query.since
-      ? DateService.getStartDateFromHTMLValue(req.query.since)
-      : DateService.getXDaysPrevious(1);
-    const albums = await AlbumService.listAlbumsByImportDate(date, {
-      format: "JSON",
-      populate: false,
-    });
-    const reviewedAlbums = albums.filter((album) => album.is_reviewed);
-
-    for (const album of reviewedAlbums) {
-      const albumId = SearchService.getAlbumId(album);
-      let artist;
-
-      if (album.album_artist) {
-        artist = await ArtistService.getArtist(album.album_artist);
-        await SearchService.update(
-          "artist",
-          SearchService.getArtistId(artist),
-          artist
-        );
-        album.album_artist = artist;
-      }
-
-      await SearchService.update("album", albumId, album);
-
-      const documents = await DocumentService.listDocumentsBySubject(album);
-      for (const document of documents) {
-        document.subject = album;
-        await SearchService.update(
-          "document",
-          SearchService.getDocumentId(document, albumId),
-          document
-        );
-      }
-
-      const tracks = await AlbumService.listAlbumTracks(album);
-      for (const track of tracks) {
-        track.album = album;
-        await SearchService.update(
-          "track",
-          SearchService.getTrackId(track, album),
-          track
-        );
-      }
-    }
-
-    res.send(`Updated ${reviewedAlbums.length} albums`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-}
-
-async function updateTagsHandler(req, res) {
-  try {
-    const date = req.query.since
-      ? DateService.getStartDateFromHTMLValue(req.query.since)
-      : DateService.getXDaysPrevious(1);
-    const edits = await TagEditService.listTagEditsSinceDate(date);
-
-    for (const edit of edits) {
-      const kind = edit.subject.kind;
-      const result = await datastore
-        .createQuery(kind)
-        .filter("__key__", edit.subject)
-        .run(AlbumService.options);
-      const subject = result[0][0];
-      subject.__key = subject[datastore.KEY];
-      let subjectId;
-
-      switch (kind) {
-        case "Track":
-          subject.album = await AlbumService.getPopulatedAlbumByKey(
-            subject.album
-          );
-          subjectId = SearchService.getTrackId(
-            subject,
-            SearchService.getAlbumId(subject.album)
-          );
-          break;
-        case "Artist":
-          subjectId = SearchService.getArtistId(subject);
-          break;
-        case "Album":
-          subjectId = SearchService.getAlbumId(subject);
-          break;
-      }
-
-      await SearchService.update(kind.toLowerCase(), subjectId, subject);
-    }
-
-    res.send(`Updated ${edits.length} entities`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-}
 
 module.exports = {
   indexHandler,
   typeHandler,
-  updateAlbumsHandler,
-  updateTagsHandler,
 };

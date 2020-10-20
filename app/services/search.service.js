@@ -350,21 +350,30 @@ function getTrackId(track, album) {
   return `${getAlbumId(album)}-${track.track_num}`;
 }
 
+async function get(index, id) {
+  return await client.get({
+    index,
+    id,
+  });
+}
 
 async function update(index, id, doc) {
-  await client.update({
+  const result = await client.update({
     id: id,
     index: index,
     body: {
       doc: doc,
       doc_as_upsert: true,
     },
+    refresh: true,
   });
+  return result;
 }
 
 module.exports = {
   bulk,
   count,
+  get,
   getAlbumId,
   getArtistId,
   getDocumentId,
