@@ -34,18 +34,20 @@ async function updateIndexWithAlbumTracks(album) {
 
 async function reindexAlbumEverywhere(albumId) {
   const albumResponse = await AlbumService.getAlbumById(albumId);
-  const album = albumResponse.entityData;
+  const albumJson = albumResponse.entityData;
 
-  if (album.album_artist) {
-    const artist = await ArtistService.getArtist(album.album_artist);
+  if (albumJson.album_artist) {
+    const artist = await ArtistService.getArtist(albumJson.album_artist);
     await updateIndexWithAlbumArtist(artist);
-    album.album_artist = artist;
-    await AlbumService.addImagesFromLastFm(album);
+    albumJson.album_artist = artist;
+    
+    const albumInstance = AlbumService.getAlbumById(albumId, { format: "ENTITY" });
+    await AlbumService.addImagesFromLastFm(albumInstance);
   }
 
-  await SearchService.update('album', SearchService.getAlbumId(album), album);    
-  await updateIndexWithAlbumTracks(album);
-  await updateIndexWithAlbumDocuments(album);
+  await SearchService.update('album', SearchService.getAlbumId(albumJson), albumJson);    
+  await updateIndexWithAlbumTracks(albumJson);
+  await updateIndexWithAlbumDocuments(albumJson);
 }
 
 function updateCurrentTags(doc, body) {
@@ -60,7 +62,7 @@ function updateCurrentTags(doc, body) {
     }
   }
   if(body.removed) {
-    for(const tag of req.body.removed) {
+    for(const tag of body.removed) {
       const tagIndex = doc.current_tags.findIndex(tag => tag);
       if(tagIndex > -1) {
         doc.current_tags.splice(tagIndex, 1);
