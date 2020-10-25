@@ -19,7 +19,8 @@ async function search(params, type = "all", options) {
 }
 
 async function doMSearch(params) {
-  const emptyParams = Object.keys(params).length === 0;
+  const keys = Object.keys(params);
+  const emptyParams = keys.length === 0 || keys.length === 1 && keys[0] === 'term' && params.term === '';
   const lines = emptyParams ? getRandomQueries() : getQueries(params);
 
   const { responses } = await client.msearch({
