@@ -53,7 +53,10 @@ async function getPopulatedAlbum(albumId) {
   return await album.populate("album_artist");
 }
 
-async function getAlbumById(albumId, { format = "JSON", populate = false } = {}) {
+async function getAlbumById(
+  albumId,
+  { format = "JSON", populate = false } = {}
+) {
   const runOptions = format === "JSON" ? jsonOptions : options;
   const album = await Album.findOne(
     { album_id: albumId, revoked: false },

@@ -11,7 +11,6 @@ const client = new elasticsearch.Client({
   host,
 });
 
-
 async function search(params, type = "all", options) {
   const searchFn =
     type === "all" ? doMSearch(params) : doTypedSearch(params, type, options);
@@ -20,7 +19,9 @@ async function search(params, type = "all", options) {
 
 async function doMSearch(params) {
   const keys = Object.keys(params);
-  const emptyParams = keys.length === 0 || keys.length === 1 && keys[0] === 'term' && params.term === '';
+  const emptyParams =
+    keys.length === 0 ||
+    (keys.length === 1 && keys[0] === "term" && params.term === "");
   const lines = emptyParams ? getRandomQueries() : getQueries(params);
 
   const { responses } = await client.msearch({
@@ -37,26 +38,26 @@ async function doMSearch(params) {
 
 function getRandomQuery() {
   return {
-    "query": {
-      "bool": {
-        "must": {
-          "function_score": {
-            "random_score": {}
-          }
+    query: {
+      bool: {
+        must: {
+          function_score: {
+            random_score: {},
+          },
         },
-        "must_not": {
-          "terms": {
-            "current_tags": ["explicit"]  
-          }
-        }
-      }
-    }
+        must_not: {
+          terms: {
+            current_tags: ["explicit"],
+          },
+        },
+      },
+    },
   };
 }
 
 function getRandomQueries() {
   const queryString = JSON.stringify(getRandomQuery());
-  
+
   return [
     '{ "index": "artist" }',
     queryString,
@@ -77,7 +78,7 @@ function getQueries(params) {
     JSON.stringify(buildTrackSearch(params)),
     '{ "index": "document" }',
     JSON.stringify(buildDocumentSearch(params)),
-  ]; 
+  ];
 }
 
 function buildQueryObj({ from = 0, size = 10 } = {}) {
@@ -91,71 +92,78 @@ function buildQueryObj({ from = 0, size = 10 } = {}) {
 }
 
 function buildArtistSearch(params, options) {
-  if(!options) {
+  if (!options) {
     options = {
       size: 5,
     };
   }
   const queryObj = buildQueryObj(options);
-  
-  if(params.term) {
-    Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
-      "name.normalized_standard",
-      "name.normalized_whitespace", 
-      "name"
-    ]));
+
+  if (params.term) {
+    Object.assign(
+      queryObj.query.bool,
+      buildFuzzyMultiMatch(params.term, [
+        "name.normalized_standard",
+        "name.normalized_whitespace",
+        "name",
+      ])
+    );
   }
 
   return queryObj;
 }
 
-
 function buildAlbumSearch(params, options) {
   const queryObj = buildQueryObj(options);
-  queryObj.sort = [
-    "_score",
-    "album_artist.name.keyword",
-    "title.keyword",
-  ];
+  queryObj.sort = ["_score", "album_artist.name.keyword", "title.keyword"];
 
-  if(params.term) {
-    Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
-      "title.normalized_standard^3",
-      "title.normalized_whitespace^3",
-      "title^2",
-      "album_artist.name.normalized_standard",
-      "album_artist.name.normalized_whitespace",
-      "album_artist.name",
-      "label",
-    ]));
+  if (params.term) {
+    Object.assign(
+      queryObj.query.bool,
+      buildFuzzyMultiMatch(params.term, [
+        "title.normalized_standard^3",
+        "title.normalized_whitespace^3",
+        "title^2",
+        "album_artist.name.normalized_standard",
+        "album_artist.name.normalized_whitespace",
+        "album_artist.name",
+        "label",
+      ])
+    );
   }
-  
-  if(params.album) {
+
+  if (params.album) {
     queryObj.query.bool.filter = buildAlbumFilters(params.album);
   }
-  
+
   return queryObj;
 }
 
 function buildAlbumFilters(params, prefix = "") {
   const filters = [];
-  for(const key in params) {
-    switch(key) {
+  for (const key in params) {
+    switch (key) {
       case "rotation":
-        if(params.rotation !== "any") {
-          filters.push(buildQuery("terms", `${prefix}current_tags`, [params.rotation]));
+        if (params.rotation !== "any") {
+          filters.push(
+            buildQuery("terms", `${prefix}current_tags`, [params.rotation])
+          );
         }
         break;
       case "local":
-        if(params.local !== "any") {
-          filters.push(buildQuery("terms", `${prefix}current_tags`, [params.local]));
+        if (params.local !== "any") {
+          filters.push(
+            buildQuery("terms", `${prefix}current_tags`, [params.local])
+          );
         }
         break;
       case "is_compilation":
         filters.push(buildQuery("match", `${prefix}${key}`, params[key]));
         break;
       default:
-        filters.push(buildQuery("match_phrase", `${prefix}${key}`, params[key]));
+        filters.push(
+          buildQuery("match_phrase", `${prefix}${key}`, params[key])
+        );
     }
   }
 
@@ -171,25 +179,28 @@ function buildTrackSearch(params, options) {
     "album.title.keyword",
     "track_num",
   ];
-  
-  if(params.term) {
-    Object.assign(queryObj.query.bool, buildFuzzyMultiMatch(params.term, [
-      "title.normalized_standard^4",
-      "title.normalized_whitespace^4",
-      "title^3",
-      "track_artist.name.normalized_standard^2",
-      "track_artist.name.normalized_whitespace^2",
-      "track_artist.name^2",
-      "album.album_artist.name.normalized_standard",
-      "album.album_artist.name.normalized_whitespace",
-      "album.album_artist.name",
-      "album.title.normalized_standard",
-      "album.title.normalized_whitespace",
-      "album.title",
-    ]));
+
+  if (params.term) {
+    Object.assign(
+      queryObj.query.bool,
+      buildFuzzyMultiMatch(params.term, [
+        "title.normalized_standard^4",
+        "title.normalized_whitespace^4",
+        "title^3",
+        "track_artist.name.normalized_standard^2",
+        "track_artist.name.normalized_whitespace^2",
+        "track_artist.name^2",
+        "album.album_artist.name.normalized_standard",
+        "album.album_artist.name.normalized_whitespace",
+        "album.album_artist.name",
+        "album.title.normalized_standard",
+        "album.title.normalized_whitespace",
+        "album.title",
+      ])
+    );
   }
 
-  if(params.track) {
+  if (params.track) {
     queryObj.query.bool.filter = buildTrackFilters(params);
   }
 
@@ -198,30 +209,34 @@ function buildTrackSearch(params, options) {
 
 function buildTrackFilters(params) {
   const filters = [];
-    
-  if(params.track) {
-    if(params.track.duration_ms) {      
+
+  if (params.track) {
+    if (params.track.duration_ms) {
       const durationFilter = {
         range: {
-          duration_ms: params.track.duration_ms
-        }
+          duration_ms: params.track.duration_ms,
+        },
       };
 
-      if(durationFilter.range.duration_ms.lte === '') {
+      if (durationFilter.range.duration_ms.lte === "") {
         delete durationFilter.range.duration_ms.lte;
       }
 
       filters.push(durationFilter);
     }
 
-    if(params.track.is_recommended) {
-      filters.push({ "match": { "current_tags": "recommended" } });
+    if (params.track.is_recommended) {
+      filters.push({ match: { current_tags: "recommended" } });
     }
   }
 
-  if(params.track.album) {
+  if (params.track.album) {
     const albumFilters = buildAlbumFilters(params.track.album, "album.");
-    if(albumFilters && Array.isArray(albumFilters) && albumFilters.length > 0) {
+    if (
+      albumFilters &&
+      Array.isArray(albumFilters) &&
+      albumFilters.length > 0
+    ) {
       filters.push(albumFilters);
     }
   }
@@ -276,20 +291,21 @@ function buildFuzzyMultiMatch(term, fields) {
   };
 }
 
-
 function buildQuery(type, field, value) {
   const query = {};
   const filter = {};
-  filter[field] = value; 
-  query[type] = filter; 
+  filter[field] = value;
+  query[type] = filter;
   return query;
 }
 
 async function doTypedSearch(params, index, options) {
   const emptyParams = Object.keys(params).length === 0;
-  const mainBody = emptyParams ? getRandomQuery() : getSearchBody(params, index, options);
+  const mainBody = emptyParams
+    ? getRandomQuery()
+    : getSearchBody(params, index, options);
   const body = Object.assign(mainBody, options);
-  
+
   const results = await client.search({
     index,
     body,
@@ -313,13 +329,13 @@ function getSearchBody(params, index, options) {
   }
 }
 
-function getFormattedResultsObject(results) {  
+function getFormattedResultsObject(results) {
   const formatted = {
     hits: [],
     count: 0,
   };
 
-  if(results) {
+  if (results) {
     formatted.hits = results.hits.hits;
     formatted.count = results.hits.total.value;
   }

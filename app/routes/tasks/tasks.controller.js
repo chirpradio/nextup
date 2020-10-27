@@ -1,4 +1,9 @@
-const { AlbumService, ArtistService, DocumentService, SearchService } = require('../../services');
+const {
+  AlbumService,
+  ArtistService,
+  DocumentService,
+  SearchService,
+} = require("../../services");
 
 async function updateIndexWithAlbumArtist(artist) {
   await SearchService.update(
@@ -40,31 +45,37 @@ async function reindexAlbumEverywhere(albumId) {
     const artist = await ArtistService.getArtist(albumJson.album_artist);
     await updateIndexWithAlbumArtist(artist);
     albumJson.album_artist = artist;
-    
-    const albumInstance = AlbumService.getAlbumById(albumId, { format: "ENTITY" });
+
+    const albumInstance = AlbumService.getAlbumById(albumId, {
+      format: "ENTITY",
+    });
     await AlbumService.addImagesFromLastFm(albumInstance);
   }
 
-  await SearchService.update('album', SearchService.getAlbumId(albumJson), albumJson);    
+  await SearchService.update(
+    "album",
+    SearchService.getAlbumId(albumJson),
+    albumJson
+  );
   await updateIndexWithAlbumTracks(albumJson);
   await updateIndexWithAlbumDocuments(albumJson);
 }
 
 function updateCurrentTags(doc, body) {
-  if(!doc.current_tags) {
+  if (!doc.current_tags) {
     doc.current_tags = [];
   }
-  if(body.added) {       
-    for(const tag of body.added) {
-      if(!doc.current_tags.includes(tag)) {
-        doc.current_tags.push(tag);        
+  if (body.added) {
+    for (const tag of body.added) {
+      if (!doc.current_tags.includes(tag)) {
+        doc.current_tags.push(tag);
       }
     }
   }
-  if(body.removed) {
-    for(const tag of body.removed) {
-      const tagIndex = doc.current_tags.findIndex(tag => tag);
-      if(tagIndex > -1) {
+  if (body.removed) {
+    for (const removed of body.removed) {
+      const tagIndex = doc.current_tags.findIndex((tag) => tag === removed);
+      if (tagIndex > -1) {
         doc.current_tags.splice(tagIndex, 1);
       }
     }
@@ -72,7 +83,7 @@ function updateCurrentTags(doc, body) {
 }
 
 async function reindexAlbumHandler(req, res) {
-  try {    
+  try {
     await reindexAlbumEverywhere(req.params.album_id);
     res.end();
   } catch (err) {
@@ -81,12 +92,12 @@ async function reindexAlbumHandler(req, res) {
   }
 }
 
-async function reindexTagsHandler(req, res) {  
+async function reindexTagsHandler(req, res) {
   const index = req.params.index.toLowerCase();
   const id = req.params.id;
 
   try {
-    if(index === 'album') {
+    if (index === "album") {
       /* 
         It's overkill to update everything, but it doesn't happen often
         and it keeps the code simpler 
@@ -94,15 +105,15 @@ async function reindexTagsHandler(req, res) {
       await reindexAlbumEverywhere(id);
     } else {
       const subject = await SearchService.get(index, id);
-    
-      if(subject._source) {
-        const doc = subject._source;      
+
+      if (subject._source) {
+        const doc = subject._source;
         updateCurrentTags(doc, req.body);
         await SearchService.update(index, id, doc);
       } else {
         console.log(subject);
       }
-    } 
+    }
     res.end();
   } catch (err) {
     console.error(err);

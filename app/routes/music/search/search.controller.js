@@ -2,13 +2,13 @@ const { SearchService } = require("../../../services");
 const qs = require("qs");
 
 async function indexHandler(req, res) {
-  if(req.query.type) {
+  if (req.query.type) {
     res.redirect(`/music/search/${req.query.type}?${qs.stringify(req.query)}`);
     return;
   }
-   
-  try { 
-    const title = req.query.term ? req.query.term : 'Search'; 
+
+  try {
+    const title = req.query.term ? req.query.term : "Search";
     const locals = {
       title: `${title} - CHIRP NextUp`,
       query: req.query,
@@ -26,9 +26,9 @@ async function indexHandler(req, res) {
       tracks: results.tracks.count > 10,
       documents: results.documents.count > 10,
     };
-    locals.search = true; 
-    locals.hideSearch = true;   
-    
+    locals.search = true;
+    locals.hideSearch = true;
+
     res.render("music/search/searchResults", locals);
   } catch (err) {
     console.trace(err.message);
@@ -40,15 +40,13 @@ async function typeHandler(req, res) {
   try {
     const from = parseInt(req.query.from, 10) || 0;
     const size = 50;
-    const results = await SearchService.search(
-      req.query,
-      req.params.type,
-      {
-        from,
-        size,
-      }
-    );
-    const type = `${req.params.type[0].toUpperCase()}${req.params.type.slice(1)}`;
+    const results = await SearchService.search(req.query, req.params.type, {
+      from,
+      size,
+    });
+    const type = `${req.params.type[0].toUpperCase()}${req.params.type.slice(
+      1
+    )}`;
     const renderOptions = {
       title: `${type} Search - CHIRP NextUp`,
       query: req.query,
@@ -70,7 +68,6 @@ async function typeHandler(req, res) {
     console.trace(err.message);
   }
 }
-
 
 module.exports = {
   indexHandler,

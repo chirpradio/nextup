@@ -1,7 +1,6 @@
 const qs = require("qs");
 const { datastore } = require("../db");
 const { ArtistService } = require("../services");
-const trackModel = require("../models/track.model");
 
 const startsWithCapital = new RegExp("^[A-Z]");
 const endsWithSentenceBoundary = new RegExp("[.!?]$");
@@ -113,7 +112,9 @@ module.exports = {
   },
 
   getTrackArtistKey(track) {
-    const artist = track.album.is_compilation ? track.track_artist : track.album.album_artist;    
+    const artist = track.album.is_compilation
+      ? track.track_artist
+      : track.album.album_artist;
     return ArtistService.getKeyValue(artist);
   },
 
@@ -126,6 +127,7 @@ module.exports = {
   },
 
   isChecked(prop, value) {
+    // eslint-disable-next-line
     return prop == value ? "checked" : "";
   },
 
@@ -138,7 +140,7 @@ module.exports = {
   },
 
   isInvisible(bool) {
-    return bool ? 'invisible' : '';
+    return bool ? "invisible" : "";
   },
 
   isRecommended(track) {
@@ -146,6 +148,7 @@ module.exports = {
   },
 
   isSelected(prop, value) {
+    // eslint-disable-next-line
     return prop == value ? "selected" : "";
   },
 
