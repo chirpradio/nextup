@@ -1,6 +1,39 @@
-<h1><a href="/music/crate">Your Crates</a> / {{displayCrateName crate}}</h1>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/music/crate">Your Crates</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{displayCrateName crate}}</li>
+  </ol>
+</nav>
 <ol>
-{{#each itemKeys}}
-    <li>{{this}}</li>
+    <li class="row mx-0 py-2">
+        <div class="col"></div>
+        <div class="col">Artist</div>
+        <div class="col">Album</div>
+        <div class="col">Track</div>
+        <div class="col">Duration</div>
+        <div class="col">Label</div>
+        <div class="col">Year</div>        
+    </li>
+{{#each orderedItems}}
+    <li class="mx-0  py-2">
+        <div class="row border-top">
+            <div class="col">
+                {{#if this.album}}
+                <a href="/music/album/{{this.album.album_id.value}}" title="{{displayAlbumTitle this.album}}">
+                    <img src="{{this.album.lastfm_med_image_url}}">
+                </a>
+                {{/if}}
+            </div>
+            <div class="col">{{this.artist.name}}</div>
+            <div class="col">{{this.album.title}}</div>
+            <div class="col">{{this.track.title}}</div>
+            <div class="col">{{formatMinutesAndSeconds this.track.duration_ms}}</div>
+            <div class="col">{{this.album.label}}</div>
+            <div class="col">{{this.album.year}}</div>
+        </div>
+        <div class="row">
+            {{this.notes}}
+        </div>
+    </li>
 {{/each}}
 </ol>

@@ -84,12 +84,16 @@ module.exports = {
   },
 
   formatMinutesAndSeconds(value) {
-    const inSeconds = value / 1000;
-    const minutes = Math.trunc(inSeconds / 60);
-    const seconds = Math.round(inSeconds % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${minutes}:${seconds}`;
+    if(value && typeof value === 'number') {
+      const inSeconds = value / 1000;
+      const minutes = Math.trunc(inSeconds / 60);
+      const seconds = Math.round(inSeconds % 60)
+        .toString()
+        .padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    } else {
+      return "";
+    }
   },
 
   formatTime(date) {

@@ -1,6 +1,6 @@
 <h1>Your Crates</h1>
 <ul>
 {{#each crates}}
-    <li><a href="/music/crate/{{entityKey.id}}">{{displayCrateName this}} ({{items.length}} items)</a></li>
+    <li><a href="/music/crate/{{entityKey.id}}">{{displayCrateName this}} ({{#if items}}{{items.length}}{{else}}0{{/if}} items)</a></li>
 {{/each}}
 </ul>
