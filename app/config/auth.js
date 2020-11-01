@@ -68,8 +68,12 @@ module.exports = function configureAuth(app) {
   app.all("*", function requireAuth(req, res, next) {
     const exemptPaths = ["/auth/login", "/auth/logout", "/favicon.ico"];
     const desiredUrl = req.originalUrl;
+    const canContinue =
+      req.isAuthenticated() ||
+      exemptPaths.includes(desiredUrl) ||
+      desiredUrl.startsWith("/tasks");
 
-    if (req.isAuthenticated() || exemptPaths.includes(desiredUrl)) {
+    if (canContinue) {
       next();
     } else {
       req.session.desiredUrl = desiredUrl;

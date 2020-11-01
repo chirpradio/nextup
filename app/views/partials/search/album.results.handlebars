@@ -1,35 +1,55 @@
-{{> search/result.header title='Albums'}}
-<div class="row no-gutters">
+{{#if showHeader}}
+    {{> search/result.header title='Albums'}}
+{{/if}}
+<div class="row mb-4">
     {{#if results.hits.length}}
-    <ul class="list-unstyled col-sm-12">
-        <li class="row no-gutters py-2">
-            <div class="col-sm-4">Artist</div>
-            <div class="col-sm-8">Album</div>        
-        </li>
+    <div class="col-sm-12">
+        <div class="row py-2 mx-0"> 
+            <h5 class="col-sm-1"></h5>           
+            <h5 class="col-sm-3">Artist</h5>
+            <h5 class="col-sm-4">Album</h5>
+            <h5 class="col-sm-3">Label</h5>
+            <h5 class="col-sm-1">Year</h5>        
+        </div>
     {{/if}}
     {{#each results.hits}}
-        <li class="row no-gutters border-top py-2">
-            <div class="col-sm-4 search_result__col">
-                <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumArtist _source}}">{{displayAlbumArtist _source}}</a>
+        <div class="row border-top py-2 mx-0">
+            <div class="col-sm-1 search_result__col no_overflow">
+                <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumTitle _source}}">
+                    <img src="{{_source.lastfm_med_image_url}}">
+                </a>
             </div>
-            <div class="col-sm-8 search_result__col">
+            <div class="col-sm-3 search_result__col">
+                {{#if _source.is_compilation}}
+                    <div class="badge badge-info">Compilation</div>
+                {{else}}                
+                    <a href="/music/artist/{{getArtistKeyProp _source.album_artist}}" title="{{displayAlbumArtist _source}}">{{displayAlbumArtist _source}}</a>
+                {{/if}}
+            </div>
+            <div class="col-sm-4 search_result__col">
                 <a href="/music/album/{{_source.album_id.value}}" title="{{displayAlbumTitle _source}}">{{displayAlbumTitle _source}}</a>
                 <ul class="list-inline">
                     {{#each _source.current_tags}}
                     <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
                     {{/each}}
                 </ul>
+            </div>
+            <div class="col-sm-3 search_result__col">
+                {{_source.label}}
+            </div> 
+            <div class="col-sm-1 search_result__col">
+                {{_source.year}}
             </div>        
-        </li>
+        </div>
     {{else}}
-        <p>No albums found</p>
+        <p class="ml-3">No albums found</p>
     {{/each}}
     {{#if showAllLink}}
-        <li class="border-top py-2">
-            <a href="/music/search/album?term={{term}}">view all {{results.count}} albums...</a>
-        </li>
+        <div class="border-top py-2 mx-0">
+            <a class="pl-3" href="/music/search/album?{{parseQuery query}}">view all {{results.count}} albums...</a>
+        </div>
     {{/if}}
     {{#if results.hits.length}}
-    </ul>
+    </div>
     {{/if}}
 </div>

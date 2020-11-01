@@ -26,37 +26,58 @@ async function getArtists(limit, nextPageCursor) {
   return await query.run(options);
 }
 
+async function buildArtistMap() {
+  console.log('Getting artists...');
+  const { entities: artists } = await getArtists(20000);
+  console.log(`Retrieved ${artists.length} artists`);
+  artistMap = new Map(); 
+  artists.forEach(artist => artistMap.set(JSON.stringify(artist.__key), artist));   
+}
+
 async function getAlbums(limit, nextPageCursor) {
   let query = Album.query().filter("revoked", false).limit(limit);
-
   if (nextPageCursor) {
     query = query.start(nextPageCursor);
   }
 
-  const options = {
+  if(typeof artistMap === 'undefined') {
+    await buildArtistMap();
+  }
+
+  const albums = await query.run({
     showKey: true,
     wrapNumbers: {
       integerTypeCastFunction: datastore.int,
       properties: ["album_id"],
     },
-  };
+  });
+  
+  albums.entities.forEach(album => {
+    if (datastore.isKey(album.album_artist)) {
+      album.album_artist = artistMap.get(JSON.stringify(album.album_artist));
+    }
+  })
 
-  return await query.run(options).populate("album_artist");
+  return albums;
 }
 
-async function buildMaps() {
-  console.log('Getting artists...');
-  const { entities: artists } = await getArtists(20000);
-  console.log(`Retrieved ${artists.length} artists`);
+async function buildAlbumMap() {
   console.log('Getting albums...');
   const { entities: albums } = await getAlbums(20000);
   console.log(`Retrieved ${albums.length} albums`);
-
-  console.log('Building maps...'); 
-  artistMap = new Map(); 
-  artists.forEach(artist => artistMap.set(JSON.stringify(artist.__key), artist));  
+  
   albumMap = new Map();
-  albums.forEach(album => albumMap.set(JSON.stringify(album.__key), album));
+  albums.forEach(album => {
+    if (datastore.isKey(album.album_artist)) {
+      album.album_artist = artistMap.get(JSON.stringify(album.album_artist));
+    }
+    albumMap.set(JSON.stringify(album.__key), album);
+  });
+}
+
+async function buildMaps() {
+  await buildArtistMap();
+  await buildAlbumMap();
 }
 
 async function getDocuments(limit, nextPageCursor) {
@@ -69,25 +90,19 @@ async function getDocuments(limit, nextPageCursor) {
     query = query.start(nextPageCursor);
   }
 
-  const options = { 
+  const response = await query.run({ 
     format: "JSON",   
     showKey: true,
-  }
-
-  const response = await query.run(options);
+  });
   console.log(`Retrieved ${response.entities.length} documents`);
   
   if(typeof artistMap === 'undefined') {
-    await buildMaps();
+    await buildMaps();  
   }
-
   console.log('Populating documents...');
   const documents = response.entities.filter(document => albumMap.has(JSON.stringify(document.subject)));
   for (const document of documents) {
     const album = albumMap.get(JSON.stringify(document.subject));
-    if (datastore.isKey(album.album_artist)) {
-      album.album_artist = artistMap.get(JSON.stringify(album.album_artist));
-    }
     document.subject = album;
   }
 
@@ -115,15 +130,11 @@ async function getTracks(limit, nextPageCursor) {
   console.log(`Retrieved ${response.entities.length} tracks`);
   
   if(typeof artistMap === 'undefined') {
-    await buildMaps();
+    await buildMaps();  
   }
-
   console.log('Populating tracks...');
   for (const track of response.entities) {
     const album = albumMap.get(JSON.stringify(track.album));
-    if (datastore.isKey(album.album_artist)) {
-      album.album_artist = artistMap.get(JSON.stringify(album.album_artist));
-    }
     track.album = album;
 
     if (datastore.isKey(track.track_artist)) {

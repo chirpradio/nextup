@@ -1,3 +1,11 @@
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+h1, h2, h3, h4, h5, h6, button, .btn, .navbar, .badge, .breadcrumb {
+  font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;  
+}
+
 mark {
   margin: -0.2em;
 }
@@ -14,6 +22,14 @@ mark {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.no_overflow {
+  text-overflow: clip;
+}
+
+.whitespace-initial {
+  white-space: initial;
 }
 
 .track_list {
@@ -33,4 +49,25 @@ mark {
 .track_list__header::before,
 .track_list__track::before {
   min-width: 2em;
+}
+
+.track_title {
+  position: relative;
+}
+
+.track_title::before {
+  content: " ";
+  display: inline-block;
+  font-size: 0.75em;
+  position: relative;
+  top: -2px;
+  width: 1.5rem;
+}
+
+.recommended::before {
+  content: "⭐️";
+}
+
+.explicit::before {
+  content: "🚫";
 }

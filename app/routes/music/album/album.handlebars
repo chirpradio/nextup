@@ -1,7 +1,7 @@
 <div class="row mb-3">
   <div class="col-md-2">
     {{#if album.lastfm_lg_image_url}}
-      <img class="img-fluid" src="{{album.lastfm_lg_image_url}}">
+      <img class="img-fluid" src="{{album.lastfm_xl_image_url}}">
     {{else}}
       <img height="174px" width="174px" src="http://www.chirpradio.org/_/img/placeholders/album-art.png">
     {{/if}}
@@ -26,7 +26,7 @@
 </div>
 
 {{#each reviews}}
-<blockquote class="blockquote">
+<blockquote class="blockquote col-xl-9 py-3">
   <p class="mb-0">{{{unsafe_text}}}</p>
   <footer class="blockquote-footer">{{author.first_name}} {{author.last_name}} ({{formatDate created}})</footer>
 </blockquote>
@@ -42,38 +42,28 @@
 {{/if}}
 
 <h3>Tracks</h3>
-<div class="track_list__header row ml-2 py-1">
+<div class="track_list__header row ml-2 mt-3 py-1">
   {{#if album.is_compilation}}
-    <div class="col-sm-4">TITLE</div>
-    <div class="col-sm-3">ARTIST</div>
+    <h6 class="col-sm-4 track_title">Title</h6>
+    <h6 class="col-sm-3">Artist</h6>
   {{else}}
-    <div class="col-sm-7">TITLE</div>
+    <h6 class="col-sm-7 track_title">Title</h6>
   {{/if}}
-  <div class="col-sm-1 text-right">DURATION</div>
-  <div class="col-sm-1 text-right d-none d-md-block">BIT RATE</div>
-  <div class="col-sm-3"></div>
+  <h6 class="col-sm-1 text-right">Length</h6>
+  <h6 class="col-sm-1 text-right d-none d-md-block">Bit rate</h6>
+  <h6 class="col-sm-3"></h6>
 </div>
 <div class="track_list ml-4">
 {{#each tracks}}
   <div class="track_list__track row py-1 border-top">    
     {{#if ../album.is_compilation}}
       <div class="col-sm-4">
-        {{title}} 
-        {{#if (isExplicit this)}}
-          <span class="ml-1">🚫</span>
-        {{else if (isRecommended this)}}
-          <span class="ml-1">⭐️</span>
-        {{/if}}
+        <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span>
       </div>
       <div class="col-sm-3">{{track_artist.name}}</div>
     {{else}}
       <div class="col-sm-7">
-        {{title}}
-        {{#if (isExplicit this)}}          
-          <span class="ml-1">🚫</span>
-        {{else if (isRecommended this)}}                    
-          <span class="ml-1">⭐️</span>
-        {{/if}}  
+        <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span> 
       </div>
     {{/if}}
     <div class="col-sm-1 text-right">{{formatMinutesAndSeconds duration_ms}}</div>

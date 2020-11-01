@@ -1,22 +1,33 @@
-<div class="row">
-  <div class="col-md-2">
-    <form action="#" method="get">
-      <div class="form-group row">
-        <div class="col-md-12">
-          <label class="sr-only" for="search">Search</label>
-          <input class="form-control mb-2" id="search" name="term" type="search" placeholder="search the music library" value="{{term}}" aria-label="search">
-          <button class="btn btn-primary btn-block" type="submit">Search</button>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/music">Music</a></li>
+    <li class="breadcrumb-item"><a href="/music/search">Search</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{type}}</li>
+    <li class="ml-2">
+      <div class="dropdown d-inline">
+        <button class="btn btn-link dropdown-toggle p-0 align-top" type="button" id="searchTypeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">          
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="searchTypeButton">
+          <a class="dropdown-item" href="/music/search/album">Album</a>
+          <a class="dropdown-item" href="/music/search/track">Track</a>          
         </div>
       </div>
-    </form>
+    </li>
+  </ol>
+  
+</nav>
+
+<div class="row">
+  <div class="col-md-12 pb-4 mb-2 border-bottom">
+    {{> (lookup . 'filterType') query=query}}
   </div>
 
-  <div class="col-md-9">
-    {{> (lookup . 'resultType') showAllLink=false showPagination=true}}
+  <div class="col-md-12">
+    {{> (lookup . 'resultType') showAllLink=false showHeader=false}}
 
     <div class="row justify-content-between">
-      <a role="button" class="btn btn-primary col-sm-4 {{#unless enablePrevious}}disabled{{/unless}}" {{#if enablePrevious}}href="?term={{term}}&from={{previous}}"{{/if}}>Previous</a>
-      <a role="button" class="btn btn-primary col-sm-4 {{#unless enableNext}}disabled{{/unless}}" {{#if enableNext}}href="?term={{term}}&from={{next}}"{{/if}}>Next</a>      
+      <a role="button" class="btn btn-primary col-sm-4 {{#unless enablePrevious}}disabled{{/unless}}" {{#if enablePrevious}}href="?{{parseQuery query}}&from={{previous}}"{{/if}}>Previous</a>
+      <a role="button" class="btn btn-primary col-sm-4 {{#unless enableNext}}disabled{{/unless}}" {{#if enableNext}}href="?{{parseQuery query}}&from={{next}}"{{/if}}>Next</a>      
     </div>
   </div>
 </div>

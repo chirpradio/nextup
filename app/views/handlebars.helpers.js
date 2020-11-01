@@ -1,3 +1,4 @@
+const qs = require("qs");
 const { datastore } = require("../db");
 const { ArtistService } = require("../services");
 
@@ -44,6 +45,16 @@ module.exports = {
     }
 
     return "Unknown";
+  },
+
+  displayAlbumOrTrackArtist(track) {
+    if (track.album.is_compilation && track.track_artist) {
+      return track.track_artist.name;
+    } else if (track.album && track.album.album_artist) {
+      return track.album.album_artist.name;
+    }
+
+    return "";
   },
 
   displayAlbumTitle(album) {
@@ -100,6 +111,13 @@ module.exports = {
     return ArtistService.getKeyValue(artist);
   },
 
+  getTrackArtistKey(track) {
+    const artist = track.album.is_compilation
+      ? track.track_artist
+      : track.album.album_artist;
+    return ArtistService.getKeyValue(artist);
+  },
+
   inc(value) {
     return parseInt(value) + 1;
   },
@@ -108,12 +126,35 @@ module.exports = {
     return a === b ? "active" : "";
   },
 
-  isRecommended(track) {
-    return track.current_tags && track.current_tags.includes("recommended");
+  isChecked(prop, value) {
+    // eslint-disable-next-line
+    return prop == value ? "checked" : "";
+  },
+
+  isDisabled(prop) {
+    return !prop ? "disabled" : "";
   },
 
   isExplicit(track) {
     return track.current_tags && track.current_tags.includes("explicit");
+  },
+
+  isInvisible(bool) {
+    return bool ? "invisible" : "";
+  },
+
+  isRecommended(track) {
+    return track.current_tags && track.current_tags.includes("recommended");
+  },
+
+  isSelected(prop, value) {
+    // eslint-disable-next-line
+    return prop == value ? "selected" : "";
+  },
+
+  parseQuery(query) {
+    delete query.from;
+    return qs.stringify(query);
   },
 
   prepareFragment(fragment) {
@@ -123,5 +164,9 @@ module.exports = {
   serializeKey(item) {
     const key = item[datastore.KEY] || item.entityKey;
     return JSON.stringify(key.serialized);
+  },
+
+  toLowerCase(word) {
+    return word.toLowerCase();
   },
 };

@@ -1,20 +1,25 @@
-<div class="row">
-  <div class="col-md-2 border-right">
-    <form action="#" method="get">
-      <div class="form-group row">
-        <div class="col-md-12">
-          <label class="sr-only" for="search">Search</label>
-          <input class="form-control mb-2" id="search" name="term" type="search" placeholder="search the music library" value="{{term}}" aria-label="search">
-          <button class="btn btn-primary btn-block" type="submit">Search</button>
-        </div>
-      </div>
-    </form>
-  </div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/music">Music</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Search</li>
+  </ol>
+</nav>
 
-  <div class="col-md-10">
-    {{> search/artist.results results=artists showAllLink=showAllLink.artists showPagination=false}}
-    {{> search/album.results results=albums showAllLink=showAllLink.albums showPagination=false}}
-    {{> search/track.results results=tracks showAllLink=showAllLink.tracks showPagination=false}}
-    {{> search/document.results results=documents showAllLink=showAllLink.documents showPagination=false}}
+<div class="row">
+  <div class="col-md-12 pb-4 mb-2 border-bottom">
+    {{> search/filters query=query}}
+  </div>
+</div>
+  
+<div class="row">
+  <div class="col-md-12">
+    {{#if search}}
+      {{> search/album.results results=albums showAllLink=showAllLink.albums showHeader=true}}
+      {{> search/track.results results=tracks showAllLink=showAllLink.tracks}}
+      {{> search/artist.results results=artists showAllLink=showAllLink.artists}}
+      {{> search/document.results results=documents showAllLink=showAllLink.documents}}
+    {{else}}
+      <p class="lead">Search by word or phrase and/or filter by type</p>
+    {{/if}}
   </div>
 </div>
