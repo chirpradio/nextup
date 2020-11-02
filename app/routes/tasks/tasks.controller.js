@@ -45,11 +45,7 @@ async function reindexAlbumEverywhere(albumId) {
     const artist = await ArtistService.getArtist(albumJson.album_artist);
     await updateIndexWithAlbumArtist(artist);
     albumJson.album_artist = artist;
-
-    const albumInstance = AlbumService.getAlbumById(albumId, {
-      format: "ENTITY",
-    });
-    await AlbumService.addImagesFromLastFm(albumInstance);
+    await AlbumService.addImagesFromLastFm(albumResponse);
   }
 
   await SearchService.update(
