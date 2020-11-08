@@ -29,10 +29,14 @@ async function getArtist(key) {
 }
 
 function getKeyValue(artist) {
-  const key =
-    artist.key || artist[datastore.KEY] || artist.entityKey || artist.__key;
+  if (artist) {
+    const key =
+      artist.key || artist[datastore.KEY] || artist.entityKey || artist.__key;
 
-  return key.id || `${key.name}-${key.parent.id}`;
+    return key.id || `${key.name}-${key.parent.id}`;
+  }
+
+  return "";
 }
 
 module.exports = {

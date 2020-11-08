@@ -37,4 +37,8 @@ userSchema.methods.authenticate = function (plainText) {
   return hash === rehash;
 };
 
+userSchema.methods.isMusicDirector = function () {
+  return this.roles.includes("music_director");
+};
+
 module.exports = gstore.model("User", userSchema);

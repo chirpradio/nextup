@@ -8,8 +8,14 @@
           "mappings": [
             "& => and",
             "$ => S",
-            "º => umber"
+            "º => o"
           ]
+        }
+      },
+      "filter": {
+        "catenate": {
+          "type": "word_delimiter_graph",
+          "catenate_all": true
         }
       },
       "analyzer": {
@@ -23,7 +29,7 @@
           "type": "custom",
           "char_filter": ["html_strip", "normalize_characters"],
           "tokenizer": "whitespace",
-          "filter": ["lowercase", "asciifolding", "classic"]
+          "filter": ["lowercase", "asciifolding", "classic", "catenate"]
         }
       }
     }
@@ -33,13 +39,13 @@
       "unsafe_text": {
          "type": "text",
          "term_vector": "with_positions_offsets",
-         "copy_to": "normalized_unsafe_text"
-      },
-      "normalized_unsafe_text": {
-        "type": "text",
-        "analyzer": "normalized",
-        "store": true,
-        "term_vector": "with_positions_offsets"
+         "fields": {
+           "normalized": {
+             "type": "text",
+             "analyzer": "normalized",
+             "term_vector": "with_positions_offsets"
+           }
+         }
       }
     }
   }

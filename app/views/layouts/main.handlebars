@@ -20,20 +20,29 @@
 
     <div class="collapse navbar-collapse" id="navbar-content">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link {{isActive 'music' activeNav}}" href="/music">Music <span class="sr-only">(current)</span></a>
-        </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{isActive 'reports' activeNav}}" href="#" id="playlist-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle {{isActive 'music' activeNav}}" href="/music" id="music-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Music
+          </a>
+          <div class="dropdown-menu" aria-labelledby="music-menu-link">
+            <a class="dropdown-item" href="/music">Home</a>
+            <a class="dropdown-item" href="/music/search">Search</a>
+            <a class="dropdown-item" href="/music/tag/heavy_rotation">Heavy Rotation</a>
+            <a class="dropdown-item" href="/music/tag/light_rotation">Light Rotation</a>
+            <a class="dropdown-item" href="/music/library_adds">Library Adds</a>
+          </div>
+        </li>        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle {{isActive 'reports' activeNav}}" href="#" id="reports-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Reports
           </a>
-          <div class="dropdown-menu" aria-labelledby="playlist-menu-link">
+          <div class="dropdown-menu" aria-labelledby="reports-menu-link">
             <a class="dropdown-item" href="/reports/rotation/plays">Rotation Plays</a>
             <a class="dropdown-item" href="/reports/rotation/albums">Rotation Albums</a>
           </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" action="/music/search" method="get">
+      <form class="form-inline my-2 my-lg-0 {{isInvisible hideSearch}}" action="/music/search" method="get">
         <input class="form-control mr-sm-2" type="search" name="term" placeholder="Search" aria-label="Search">        
       </form>
       <div class="dropdown">

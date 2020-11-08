@@ -1,0 +1,251 @@
+<form id="filters" class="form-inline" action="/music/search" method="get">
+  
+    <div class="form-group flex-fill mr-2">
+      <label class="sr-only" for="search">Search</label>
+      <input class="form-control w-100" id="search" name="term" type="search" placeholder="search by album, track, or artist name (or words in a review)" value="{{query.term}}" aria-label="search">
+    </div>
+    <div class="form-group mr-2">
+      <button class="btn btn-primary" type="submit">Search Everything</button>
+    </div>
+    <div class="form-group">      
+      <div class="dropdown">
+        <button class="btn btn-link dropdown-toggle" type="button" id="advancedSearchButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Search by Type
+        </button>
+        <div class="dropdown-menu" aria-labelledby="advancedSearchButton">
+          <a class="dropdown-item" href="/music/search/album">Album</a>
+          <a class="dropdown-item" href="/music/search/track">Track</a>
+        </div>
+      </div>
+    </div>
+  
+<!--
+  <h2 class="mt-4">Advanced Search</h2>
+  <p class="text-muted small">Use these filters on their own or combine them with a text search above.</p>
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <input id="album__fields_header" type="radio" name="type" value="album">
+          <label for="album__fields_header"><h4>Album</h4></label>
+        </div>
+      </div>
+      <fieldset id="album__fields" class="card-body form-group row" disabled>
+        <div class="col-md-12">                   
+          <fieldset>
+            <div class="form-check">
+              <input id="album__current_tags_local_current_check" class="form-check-input" type="checkbox" name="album[current_tags]" value="local_current">
+              <label for="album__current_tags_local_current_check" class="form-check-label">Local Current</label>
+            </div>
+            <div class="form-check">
+              <input id="album__current_tags_local_classic_check" class="form-check-input" type="checkbox" name="album[current_tags]" value="local_classic">
+              <label for="album__current_tags_local_classic_check" class="form-check-label">Local Classic</label>
+            </div> 
+            <div class="form-check">
+              <input id="album__current_tags_heavy_rotation_check" class="form-check-input" type="checkbox" name="album[current_tags]" value="heavy_rotation">
+              <label for="album__current_tags_heavy_rotation_check" class="form-check-label">Heavy Rotation</label>
+            </div> 
+            <div class="form-check">
+              <input id="album__current_tags_light_rotation_check" class="form-check-input" type="checkbox" name="album[current_tags]" value="light_rotation">
+              <label for="album__current_tags_light_rotation_check" class="form-check-label">Light Rotation</label>
+            </div> 
+            <div class="form-check">
+              <input id="album___is_compilation_check" class="form-check-input" type="checkbox" name="album[is_compilation]" value="true" {{isChecked query.album.is_compilation}}>
+              <label for="album__is_compilation_check" class="form-check-label">Compilation</label>
+            </div>   
+          </fieldset>
+          <fieldset class="form-check mt-2">
+            <input id="album__label_check"  class="form-check-input" type="checkbox" {{isChecked query.album.label}}>
+            <label for="album__label_check" class="form-check-label">
+              Label
+            </label>
+            <input id="album__label_input" class="form-control" name="album[label]" value="{{query.album.label}}" {{isDisabled query.album.label}}>
+          </fieldset>
+          <fieldset class="form-check mt-2">
+            <input id="album__year_check"  class="form-check-input" type="checkbox" {{isChecked query.album.year}}>
+            <label for="album__year_check" class="form-check-label">
+              Year
+            </label>
+            <input id="album__year_input" class="form-control" type="number" name="album[year]" value="{{query.album.year}}" {{isDisabled query.album.year}}>
+          </fieldset>
+        </div>        
+      </fieldset>
+    </div>
+    
+    <div class="card mt-4">
+      
+      <div class="card-header">
+        <div>
+          <input id="track__fields_header" type="radio" name="type" value="track">
+          <label for="track__fields_header"><h4>Track</h4></label>
+        </div>
+      </div>
+      
+      <fieldset id="track__fields" class="card-body form-group row" disabled>
+        <div class="col-md-12">
+          <fieldset class="form-check">
+            <input id="track__is_recommended_check" name="track[is_recommended]" class="form-check-input" type="checkbox" {{isChecked query.track.is_recommended}}>
+            <label for="track__is_recommended_check" class="form-check-label">
+              Recommended ⭐️
+            </label>            
+          </fieldset>
+          
+          <fieldset class="form-check mt-2">
+            <input id="track__duration_ms_gte_check"  class="form-check-input" type="checkbox" {{isChecked query.track.duration_ms}}>
+            <label for="track__duration_ms_gte_check" class="form-check-label">
+              Minimum Length
+            </label>
+            <select id="track__duration_ms_gte_input" class="form-control" name="track[duration_ms][gte]" {{isDisabled query.track.duration_ms}}>
+              <option value="0">0:00</option>
+              <option value="30000">0:30</option>
+              <option value="60000">1:00</option>
+              <option value="90000">1:30</option>
+              <option value="120000">2:00</option>
+              <option value="150000">2:30</option>
+              <option value="180000">3:00</option>
+              <option value="210000">3:30</option>
+              <option value="240000">4:00</option>
+              <option value="270000">4:30</option>
+              <option value="300000">5:00</option>              
+              <option value="360000">6:00</option>              
+              <option value="420000">7:00</option>              
+              <option value="480000">8:00</option>              
+              <option value="540000">9:00</option>              
+              <option value="600000">10:00</option>
+            </select>
+          </fieldset>          
+          
+          <fieldset class="form-check mt-2">
+            <input id="track__duration_ms_lte_check"  class="form-check-input" type="checkbox" {{isChecked query.track.duration_ms}}>
+            <label for="track__duration_ms_lte_check" class="form-check-label">
+              Maximum Length
+            </label>
+            <select id="track__duration_ms_lte_input" class="form-control" name="track[duration_ms][lte]" value="{{query.track.duration_ms.lte}}" {{isDisabled query.track.duration_ms}}>
+              <option value="30000">0:30</option>
+              <option value="60000">1:00</option>
+              <option value="90000">1:30</option>
+              <option value="120000">2:00</option>
+              <option value="150000">2:30</option>
+              <option value="180000">3:00</option>
+              <option value="210000">3:30</option>
+              <option value="240000">4:00</option>
+              <option value="270000">4:30</option>
+              <option value="300000">5:00</option>              
+              <option value="360000">6:00</option>              
+              <option value="420000">7:00</option>              
+              <option value="480000">8:00</option>              
+              <option value="540000">9:00</option>              
+              <option value="600000">10:00</option>
+              <option value="">10:00+</option>
+            </select>
+          </fieldset>
+          
+          <h5 class="mt-4">Album</h5>
+          
+          <fieldset class="mt-2">
+            <div class="form-check">
+              <input id="track__current_tags_local_current_check" class="form-check-input" type="checkbox" name="track[album][current_tags]" value="local_current">
+              <label for="track__current_tags_local_current_check" class="form-check-label">Local Current</label>
+            </div>
+            <div class="form-check">
+              <input id="track__current_tags_local_classic_check" class="form-check-input" type="checkbox" name="track[album][current_tags]" value="local_classic">
+              <label for="track__current_tags_local_classic_check" class="form-check-label">Local Classic</label>
+            </div> 
+            <div class="form-check">
+              <input id="track__current_tags_heavy_rotation_check" class="form-check-input" type="checkbox" name="track[album][current_tags]" value="heavy_rotation">
+              <label for="track__current_tags_heavy_rotation_check" class="form-check-label">Heavy Rotation</label>
+            </div> 
+            <div class="form-check">
+              <input id="track__current_tags_light_rotation_check" class="form-check-input" type="checkbox" name="track[album][current_tags]" value="light_rotation">
+              <label for="track__current_tags_light_rotation_check" class="form-check-label">Light Rotation</label>
+            </div> 
+            <div class="form-check">
+              <input id="track___is_compilation_check" class="form-check-input" type="checkbox" name="track[album][is_compilation]" value="true" {{isChecked query.track.album.is_compilation}}>
+              <label for="track__is_compilation_check" class="form-check-label">Compilation</label>
+            </div>   
+          </fieldset>
+          
+          <fieldset class="form-check mt-2">
+            <input id="track__label_check"  class="form-check-input" type="checkbox" {{isChecked query.track.album.label}}>
+            <label for="track__label_check" class="form-check-label">
+              Label
+            </label>
+            <input id="track__label_input" class="form-control" name="track[album][label]" value="{{query.track.album.label}}" {{isDisabled query.track.album.label}}>
+          </fieldset>
+          
+          <fieldset class="form-check mt-2">
+            <input id="track__year_check"  class="form-check-input" type="checkbox" {{isChecked query.track.album.year}}>
+            <label for="track__year_check" class="form-check-label">
+              Year
+            </label>
+            <input id="track__year_input" class="form-control" type="number" name="track[album][year]" value="{{query.track.album.year}}" {{isDisabled query.track.album.year}}>
+          </fieldset>
+        </div>        
+      </fieldset>
+    </div>        
+  </div>
+  
+  <button class="btn btn-primary btn-block mt-2" type="submit">Search</button>
+
+  <script>
+    function toggleDisabledControls(event, id) {
+      const controlledElement = document.querySelector(id);
+      if(event.target.checked) {
+        controlledElement.removeAttribute('disabled');
+      } else {
+        controlledElement.setAttribute('disabled', true);
+      }
+    }
+
+    document.querySelector("#album__label_check").addEventListener("change", event => toggleDisabledControls(event, "#album__label_input"));
+    document.querySelector("#album__year_check").addEventListener("change", event => toggleDisabledControls(event, "#album__year_input"));
+    document.querySelector("#track__duration_ms_gte_check").addEventListener("change", event => toggleDisabledControls(event, "#track__duration_ms_gte_input"));
+    document.querySelector("#track__duration_ms_lte_check").addEventListener("change", event => toggleDisabledControls(event, "#track__duration_ms_lte_input"));
+    document.querySelector("#track__label_check").addEventListener("change", event => toggleDisabledControls(event, "#track__label_input"));
+    document.querySelector("#track__year_check").addEventListener("change", event => toggleDisabledControls(event, "#track__year_input"));
+    
+
+    function toggleDisabledFilterCards(event, id) {
+      const cards = document.querySelectorAll('#filters .card-body');
+      for(const card of cards) {
+        if(id === card.id) {
+          card.removeAttribute('disabled');
+        } else {
+          card.setAttribute('disabled', true);
+        }
+      }
+    }
+    
+    document.querySelector("#album__fields_header").addEventListener("change", event => toggleDisabledFilterCards(event, "album__fields"));
+    document.querySelector("#track__fields_header").addEventListener("change", event => toggleDisabledFilterCards(event, "track__fields"));
+
+
+    // pre-fill form based on query parameters
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('type')) {
+      const typeRadio = document.querySelector(`input[name="type"][value="${params.get('type')}"]`)
+      typeRadio.setAttribute('checked', true);
+      const changeEvent = new Event('change');
+      typeRadio.dispatchEvent(changeEvent);
+    }
+    if(params.has('track[duration_ms][gte]')) {    
+      document.querySelector(`select[name="track[duration_ms][gte]"]`).value = params.get('track[duration_ms][gte]');
+    }
+    if(params.has('track[duration_ms][lte]')) {    
+      document.querySelector(`select[name="track[duration_ms][lte]"]`).value = params.get('track[duration_ms][lte]');
+    }
+    if(params.has('album[current_tags]')) {
+      const tags = params.getAll('album[current_tags]');
+      for(const tag of tags) {
+        document.querySelector(`#album__current_tags_${tag}_check`).setAttribute('checked', true);
+      }
+    }
+    if(params.has('track[album][current_tags]')) {
+      const tags = params.getAll('track[album][current_tags]');
+      for(const tag of tags) {
+        document.querySelector(`#track__current_tags_${tag}_check`).setAttribute('checked', true);
+      }
+    }   
+  </script>
+-->
+</form>

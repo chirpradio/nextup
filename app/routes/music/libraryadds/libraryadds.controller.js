@@ -11,8 +11,8 @@ async function indexHandler(req, res) {
 
     res.render("music/tag/tag", {
       albums: newButNotRotation,
-      tag: "More Recently Added",
-      title: `More Recently Added - CHIRP NextUp`,
+      tag: "Library Adds",
+      title: `Library Adds - CHIRP NextUp`,
     });
   } catch (err) {
     console.error(err);

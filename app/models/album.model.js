@@ -35,6 +35,7 @@ const albumSchema = new Schema({
           "heavy_rotation",
           "light_rotation",
           "clean",
+          "ep",
         ],
       ],
     },
