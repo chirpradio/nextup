@@ -1,0 +1,17 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - id: deploy
+      uses: GoogleCloudPlatform/github-actions/appengine-deploy@master
+      with:
+        credentials: ${{ secrets.gcp_credentials }}
+        deliverables: app/app.yaml
+        version: staging
+        promote: false
