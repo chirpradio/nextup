@@ -16,6 +16,6 @@ jobs:
       uses: GoogleCloudPlatform/github-actions/appengine-deploy@master
       with:
         credentials: ${{ secrets.gcp_credentials }}
-        deliverables: ../app/app.yaml
+        deliverables: ./app/app.yaml
         version: staging
         promote: false
