@@ -1,9 +1,4 @@
 <h1>{{{artist.name}}}</h1>
-<ul class="list-inline">
-{{#each artist.current_tags}}
-  <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
-{{/each}}
-</ul>
 {{> music/add-to-crate item=artist name=artist.name}}
 
 <h2 class="mt-4">Albums</h2>
