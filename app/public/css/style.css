@@ -2,7 +2,7 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-h1, h2, h3, h4, h5, h6, button, .btn, .navbar, .badge, .breadcrumb {
+h1, h2, h3, h4, h5, h6, button, .btn, .navbar, .badge, .breadcrumb, .header__row {
   font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;  
 }
 
@@ -71,3 +71,18 @@ mark {
 .explicit::before {
   content: "🚫";
 }
+
+.heading1__input {
+  font-size: 1.75rem;
+}
+
+.crate_item {
+  cursor: move;
+}
+
+.sortable__drop-placeholder {
+  height: 4em; 
+  line-height: 1.2em;
+  border: 2px dotted #ccc;
+}
+

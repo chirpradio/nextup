@@ -4,36 +4,187 @@
     <li class="breadcrumb-item active" aria-current="page">{{displayCrateName crate}}</li>
   </ol>
 </nav>
-<ol>
-    <li class="row mx-0 py-2">
-        <div class="col"></div>
-        <div class="col">Artist</div>
-        <div class="col">Album</div>
-        <div class="col">Track</div>
-        <div class="col">Duration</div>
-        <div class="col">Label</div>
-        <div class="col">Year</div>        
+
+<h1 id="crate_name">
+    <span>{{displayCrateName crate}}</span>
+    <small><button id="rename__btn" class="btn btn-link">rename</button></small>
+</h1>
+
+<form id="rename__form" class="form-inline d-none pb-1" name="name">
+    <div class="col-md-3 px-0">
+        <input type="text" class="form-control w-100 heading1__input" name="name" value="{{crate.name}}">
+    </div>
+    <div class="col-md-3">
+        <button type="button" id="save_crate_name__btn" class="btn btn-primary">Save</button>
+        <button type="button" id="cancel_rename__btn" class="btn btn-outline-secondary">Cancel</button>
+    </div>
+</form>
+
+<ul id="crate_items" class="list-unstyled" data-order="{{crate.order}}">
+    <li class="row py-2 header__row sticky-top bg-white">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">Artist</div>
+        <div class="col-md-2">Album</div>
+        <div class="col-md-2">Track</div>
+        <div class="col-md-1">Duration</div>
+        <div class="col-md-2">Label</div>
+        <div class="col-md-1">Year</div>        
     </li>
 {{#each orderedItems}}
-    <li class="mx-0  py-2">
-        <div class="row border-top">
-            <div class="col">
+    <li class="item mx-0 py-2 crate_item" data-order="{{@index}}">
+        <div class="row border-top pt-2">
+            <div class="col-md-1">
                 {{#if this.album}}
                 <a href="/music/album/{{this.album.album_id.value}}" title="{{displayAlbumTitle this.album}}">
-                    <img src="{{this.album.lastfm_med_image_url}}">
+                    <img src="{{this.album.lastfm_sm_image_url}}">
                 </a>
                 {{/if}}
             </div>
-            <div class="col">{{this.artist.name}}</div>
-            <div class="col">{{this.album.title}}</div>
-            <div class="col">{{this.track.title}}</div>
-            <div class="col">{{formatMinutesAndSeconds this.track.duration_ms}}</div>
-            <div class="col">{{this.album.label}}</div>
-            <div class="col">{{this.album.year}}</div>
+            <div class="col-md-2">
+                {{#if this.artist.key}}
+                    <a href="/music/artist/{{getArtistKeyProp this.artist}}" title="{{this.artist.name}}">{{this.artist.name}}</a>
+                {{else if this.album.is_compilation}}
+                    <div class="badge badge-info">Compilation</div>
+                {{else}}
+                    {{this.artist.name}}
+                {{/if}}
+            </div>
+            <div class="col-md-2">
+                {{#if this.album.album_id}}
+                    <a href="/music/album/{{this.album.album_id.value}}" title="{{displayAlbumTitle this.album}}">{{displayAlbumTitle this.album}}</a>
+                    <ul class="list-inline">
+                        {{#each this.album.current_tags}}
+                        <li class="list-inline-item badge badge-light">{{formatTag this}}</li>
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    {{this.album.title}}
+                {{/if}}
+            </div>
+            <div class="col-md-2">{{this.track.title}}</div>
+            <div class="col-md-1">{{formatMinutesAndSeconds this.track.duration_ms}}</div>
+            <div class="col-md-2">{{this.album.label}}</div>
+            <div class="col-md-1">{{this.album.year}}</div>
+            <div class="col-md-1">
+                <a class="btn btn-outline-secondary" href="/music/crate/{{../crate.entityKey.id}}/items/{{@index}}/delete?redirect=true">Remove</a>
+            </div>
         </div>
         <div class="row">
-            {{this.notes}}
+            <div class="col-md-1"></div>
+            <div class="col-md-11 text-muted">{{this.notes}}</div>
         </div>
     </li>
 {{/each}}
-</ol>
+</ul>
+
+<form class="form border-top mx-0 py-2" method="post" action="/music/crate/{{crate.entityKey.id}}/items">
+    <div class="row pt-2">
+        <div class="col-md-1"></div>
+        <div class="col-md-2 input-group">
+            <input type="text" name="artist" class="form-control" placeholder="artist name" tabindex="1">
+        </div>
+        <div class="col-md-2 input-group">
+            <input type="text" name="album" class="form-control" placeholder="album title" tabindex="2">
+        </div>
+        <div class="col-md-2 input-group">
+            <input type="text" name="track" class="form-control" placeholder="track title" tabindex="3">
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2 input-group">
+            <input type="text" name="label" class="form-control" placeholder="label" tabindex="4">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" tabindex="6">Add Item</button>
+        </div>  
+    </div>        
+    <div class="row pt-2">
+        <div class="col-md-1"></div>
+        <div class="col-md-9 input-group">
+            <input type="text" name="notes" class="form-control" placeholder="notes" tabindex="5">
+        </div>
+    </div>
+</form>
+
+<script>    
+    async function patch(data) {
+        const response = await fetch(window.location.pathname, {
+            method: 'PATCH',                                    
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .catch(error => {
+            console.error(error);
+            return {
+                ok: false, 
+            };
+        });
+
+        return response;
+    }
+    
+    /*
+        SORT ITEMS WITH DRAG AND DROP
+    */
+    let previousIndex;
+
+    $(function() {
+        $("#crate_items").sortable({
+            items: "li:not(.header__row)",
+            placeholder: "sortable__drop-placeholder",
+            start: function(event, ui) {
+                // subtract one to account for the header row
+                previousIndex = ui.item.index() - 1;
+            },
+            update: async function(event, ui) {                
+                // subtract one to account for the header row
+                const newIndex = ui.item.index() - 1;  
+                if(newIndex !== previousIndex) {
+                    const order = ui.item[0].parentNode.dataset.order.split(',');
+                    const item = order.splice(previousIndex, 1);                
+                    order.splice(newIndex, 0, item[0]); 
+                    await patch({ order });
+                }
+            }
+        });
+        $("#crate_items").disableSelection();
+    });
+
+    /* 
+        RENAME CRATE 
+    */
+    function toggleDisplay() {
+        document.querySelector("#crate_name").classList.toggle("d-none");
+        document.querySelector("#rename__form").classList.toggle("d-none");
+    }
+
+    document.querySelector("#rename__btn").addEventListener("click", toggleDisplay);
+    document.querySelector("#cancel_rename__btn").addEventListener("click", toggleDisplay);
+    document.querySelector("#save_crate_name__btn").addEventListener("click", toggleDisplay);
+
+    function updateNameOnPage(name) {
+        const heading = document.querySelector("#crate_name span");
+        const navItem = document.querySelector("nav .breadcrumb-item.active");
+        
+        heading.textContent = name;
+        navItem.textContent = name;
+        document.title = `${name} - CHIRP NextUp`;
+    }
+
+    async function updateName() {
+        const heading = document.querySelector("#crate_name span");
+        const oldName = heading.textContent;
+        const newName = document.forms.name.name.value;
+        updateNameOnPage(newName);
+
+        const response = await patch({
+            name: newName
+        });
+        if(!response.ok) {
+            updateNameOnPage(oldName);
+        }
+    }
+
+    document.querySelector("#save_crate_name__btn").addEventListener("click", updateName);
+</script>

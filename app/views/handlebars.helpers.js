@@ -95,7 +95,7 @@ module.exports = {
   },
 
   formatMinutesAndSeconds(value) {
-    if(value && typeof value === 'number') {
+    if (value && typeof value === "number") {
       const inSeconds = value / 1000;
       const minutes = Math.trunc(inSeconds / 60);
       const seconds = Math.round(inSeconds % 60)

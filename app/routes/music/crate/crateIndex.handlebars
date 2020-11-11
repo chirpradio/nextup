@@ -1,6 +1,88 @@
-<h1>Your Crates</h1>
-<ul>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Your Crates</li>    
+  </ol>
+</nav>
+
+<div class="mb-4 px-3">
+    <button class="btn btn-primary" data-toggle="modal" data-target="#add_modal">Add Crate</button>
+</div>
+
+<div class="modal" id="add_modal" tabindex="-1" role="dialog" aria-labelledby="add_modal_heading" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add_modal_heading">Add Crate</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form" method="post" action="/music/crate">
+            <div class="form-group">
+                <label for="crate_name_input">Crate name</label>
+                <input type="text" class="form-control" id="crate_name_input" name="name" required>                
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Add Crate</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul class="list-unstyled">
 {{#each crates}}
-    <li><a href="/music/crate/{{entityKey.id}}">{{displayCrateName this}} ({{#if items}}{{items.length}}{{else}}0{{/if}} items)</a></li>
+    <li class="row border-top py-2 px-3">
+        <div class="col-md-7">
+            <h2><a href="/music/crate/{{entityKey.id}}">{{displayCrateName this}}</a></h2>
+        </div>
+        <div class="col-md-1">
+            {{#if items}}{{items.length}}{{else}}0{{/if}} items
+        </div>
+        <div class="col-md-4">            
+            <button class="btn btn-outline-danger delete_btn" data-id="{{entityKey.id}}">Delete</button>
+            <div class="confirm_delete__{{entityKey.id}} invisible d-inline pl-2">
+                <span>Are you sure?</span>
+                <button class="btn btn-link confirm_delete_btn text-danger" data-id="{{entityKey.id}}">Yes</button>
+                <button class="btn btn-link cancel_delete_btn" data-id="{{entityKey.id}}">No</button>
+            </div>
+        </div>
+    </li>
 {{/each}}
 </ul>
+
+<script>
+    /*
+        DELETE CRATE
+    */
+    function showDeleteConfirmation(event) {
+        const container = document.querySelector(`.confirm_delete__${event.target.dataset.id}`);
+        container.classList.remove('invisible');
+    }
+
+    function hideDeleteConfirmation(event) {
+        const container = document.querySelector(`.confirm_delete__${event.target.dataset.id}`);
+        container.classList.add('invisible');
+    }
+
+    function deleteCrate(event) {
+        const crateId = event.target.dataset.id;
+        fetch(`${window.location.pathname}/${crateId}`, {
+            method: 'DELETE', 
+        })
+        .then(response => {
+            const row = event.target.closest('li.row');
+            row.remove();
+        })
+        .catch(error => {
+            console.error(error);
+            hideDeleteConfirmation(event);
+        });
+    }
+
+    document.querySelectorAll('.delete_btn').forEach(btn => btn.addEventListener('click', showDeleteConfirmation));
+    document.querySelectorAll('.confirm_delete_btn').forEach(btn => btn.addEventListener('click', deleteCrate));
+    document.querySelectorAll('.cancel_delete_btn').forEach(btn => btn.addEventListener('click', hideDeleteConfirmation));
+</script>
