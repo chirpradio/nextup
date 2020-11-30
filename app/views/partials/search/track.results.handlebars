@@ -12,17 +12,24 @@
     {{/if}}
     {{#each results.hits}}
         <div class="row mx-0 border-top py-2">
-            <div class="col-sm-1 search_result__col no_overflow">
+            <div class="col-sm-1 search_result__col no_overflow">                                
                 <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">
                     <img src="{{_source.album.lastfm_med_image_url}}">
                 </a>
             </div>
             <div class="col-sm-3 search_result__col">
-                <a href="/music/artist/{{getTrackArtistKey _source}}" title="{{displayAlbumOrTrackArtist _source}}">{{displayAlbumOrTrackArtist _source}}</a>
+                {{#if _source.album.is_compilation}}
+                    {{displayAlbumOrTrackArtist _source}}                    
+                {{else}}
+                    <a href="/music/artist/{{getTrackArtistKey _source}}" title="{{displayAlbumOrTrackArtist _source}}">{{displayAlbumOrTrackArtist _source}}</a>
+                {{/if}}
             </div>
             <div class="col-sm-3 search_result__col">
                 <a href="/music/album/{{_source.album.album_id.value}}" title="{{displayAlbumTitle _source.album}}">{{displayAlbumTitle _source.album}}</a>
                 <ul class="list-inline">
+                    {{#if _source.album.is_compilation}}
+                    <li class="badge badge-info">Compilation</li>
+                    {{/if}}
                     {{#each _source.album.current_tags}}
                     <li class="list-inline-item badge badge-secondary">{{formatTag this}}</li>
                     {{/each}}

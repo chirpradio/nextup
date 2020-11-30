@@ -60,7 +60,9 @@
       <div class="col-sm-4">
         <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span>
       </div>
-      <div class="col-sm-3">{{track_artist.name}}</div>
+      <div class="col-sm-3">
+        <a href="/music/artist/{{getArtistKeyProp track_artist}}" title="{{track_artist.name}}">{{track_artist.name}}</a>
+      </div>
     {{else}}
       <div class="col-sm-7">
         <span class="track_title {{#if (isExplicit this)}}explicit{{/if}} {{#if (isRecommended this)}}recommended{{/if}}">{{title}}</span> 
