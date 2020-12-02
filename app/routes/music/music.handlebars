@@ -1,11 +1,11 @@
-<form class="col-md-12 border border-primary p-3 mb-3 form-inline" action="/music/search" method="get">
+<form id="search" class="col-md-12 border border-primary p-3 mb-3 form-inline" action="/music/search" method="get">
   <div class="form-group flex-grow-1 pr-3">
     <label class="sr-only" for="search">Search</label>
     <input class="form-control flex-grow-1" id="search" name="term" type="search" placeholder="search the entire music library by album, track, or artist name (or words in a review)" aria-label="search">
   </div>
   <button class="btn btn-primary" type="submit">Search</button>
   <span class="mx-2">or</span>
-  <a href="/music/search" class="btn btn-outline-primary">Randomize</a>
+  <a id="randomize" href="/music/search" class="btn btn-outline-primary">Randomize</a>
 </form>
 
 <h1>Heavy Rotation <a href="/music/tag/heavy_rotation"><small>see all</small></a></h1>
@@ -16,3 +16,34 @@
 
 <h1 class="mt-4">Library Adds <a href="/music/library_adds"><small>see all</small></a></h1>
 {{> music/albumlist albums=recent}}
+
+<script>
+  const form = document.getElementById('search');
+  
+  function onSubmit(event) {
+    event.preventDefault();    
+    gtag('event', 'Search', {
+      'event_category': 'Music', 
+      'event_label': 'Home',
+      'event_callback': function() {
+        form.submit();
+      }
+    });
+  }
+
+  form.addEventListener('submit', onSubmit);
+
+  function onRandomizeClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    gtag('event', 'Search', {
+      'event_category': 'Music',
+      'event_label': 'Randomize',
+      'event_callback': function() {
+        window.location.href = event.target.href;
+      }
+    });
+  }
+
+  document.querySelector('#randomize').addEventListener('click', onRandomizeClick);
+</script>
