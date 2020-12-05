@@ -44,8 +44,10 @@
 </form>
 
 <script>
-  function removeNamesWithoutValues(event) {
-    const inputs = event.target.querySelectorAll("input");
+  const form = document.getElementById('filters');
+  
+  function removeNamesWithoutValues() {
+    const inputs = form.querySelectorAll("input");
     for(const input of inputs) {
       if(input.value === "") {
         input.removeAttribute("name");
@@ -53,5 +55,17 @@
     }
   }
 
-  document.querySelector('#filters').addEventListener('submit', removeNamesWithoutValues);
+  function onSubmit(event) {
+    event.preventDefault();
+    removeNamesWithoutValues();
+    gtag('event', 'Search', {
+      'event_category': 'Music', 
+      'event_label': 'Album',
+      'event_callback': function() {
+        form.submit();
+      }
+    });
+  }
+
+  form.addEventListener('submit', onSubmit);
 </script>

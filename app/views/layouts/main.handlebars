@@ -9,6 +9,15 @@
   <link rel="stylesheet" href="/css/style.css">
   
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M6XM24GCTX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-M6XM24GCTX');
+  </script>
 </head>
 
 <body>
@@ -42,7 +51,7 @@
           </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0 {{isInvisible hideSearch}}" action="/music/search" method="get">
+      <form id="navbarSearch" class="form-inline my-2 my-lg-0 {{isInvisible hideSearch}}" action="/music/search" method="get">
         <input class="form-control mr-sm-2" type="search" name="term" placeholder="Search" aria-label="Search">        
       </form>
       <div class="dropdown">
@@ -71,5 +80,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script>
+  const form = document.getElementById('navbarSearch');
+  
+  function onSubmit(event) {
+    event.preventDefault();    
+    gtag('event', 'Search', {
+      'event_category': 'Music', 
+      'event_label': 'Navbar',
+      'event_callback': function() {
+        form.submit();
+      }
+    });
+  }
+
+  form.addEventListener('submit', onSubmit);
+</script>
 
 </html>
