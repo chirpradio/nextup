@@ -1,0 +1,3 @@
+dispatch:
+  - url: "nextup.chirpradio.org/*"
+    service: nextup
