@@ -21,28 +21,32 @@
   const form = document.getElementById('search');
   
   function onSubmit(event) {
-    event.preventDefault();    
-    gtag('event', 'Search', {
-      'event_category': 'Music', 
-      'event_label': 'Home',
-      'event_callback': function() {
-        form.submit();
-      }
-    });
+    if(window.gaGlobal && window.gtag) {
+      event.preventDefault();    
+      gtag('event', 'Search', {
+        'event_category': 'Music', 
+        'event_label': 'Home',
+        'event_callback': function() {
+          form.submit();
+        }
+      });
+    }
   }
 
   form.addEventListener('submit', onSubmit);
 
   function onRandomizeClick(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    gtag('event', 'Search', {
-      'event_category': 'Music',
-      'event_label': 'Randomize',
-      'event_callback': function() {
-        window.location.href = event.target.href;
-      }
-    });
+    if(window.gaGlobal && window.gtag) {
+      event.preventDefault();
+      event.stopPropagation();
+      gtag('event', 'Search', {
+        'event_category': 'Music',
+        'event_label': 'Randomize',
+        'event_callback': function() {
+          window.location.href = event.target.href;
+        }
+      });
+    }
   }
 
   document.querySelector('#randomize').addEventListener('click', onRandomizeClick);
