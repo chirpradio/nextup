@@ -8,3 +8,7 @@ handlers:
     secure: always
     redirect_http_response_code: 301
     script: auto
+automatic_scaling:
+  max_instances: 2
+  max_idle_instances: 1
+  min_pending_latency: 500ms
