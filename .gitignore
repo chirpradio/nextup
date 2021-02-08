@@ -3,3 +3,4 @@
 .env
 node_modules/
 app/env_variables.yaml
+app/routes/api/redoc-static.html

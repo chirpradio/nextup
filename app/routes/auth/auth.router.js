@@ -12,8 +12,10 @@ router.post(
     delayAfter: 5, // allow 5 requests to go at full-speed, then...
     delayMs: 500, // 6th request has a 500ms delay, 7th has a 1000ms delay, etc.
   }),
-  passport.authenticate("local", { failureRedirect: "/auth/login" }),
-  AuthController.loginPostHandler
+  passport.authenticate("local", {
+    successReturnToOrRedirect: "/",
+    failureRedirect: "/auth/login",
+  })
 );
 
 router.get("/logout", AuthController.logoutHandler);

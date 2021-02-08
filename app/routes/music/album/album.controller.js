@@ -2,15 +2,12 @@ const { AlbumService } = require("../../../services");
 
 async function albumHandler(req, res) {
   try {
-    const album = await AlbumService.getPopulatedAlbum(req.params.album_id);
-    if (album.lastfm_retrieval_time === null) {
-      await AlbumService.addImagesFromLastFm(album);
-    }
-    const [tracks, reviews, comments] = await Promise.all([
-      AlbumService.listAlbumTracks(album),
-      AlbumService.listAlbumReviews(album),
-      AlbumService.listAlbumComments(album),
-    ]);
+    const {
+      album,
+      tracks,
+      reviews,
+      comments,
+    } = await AlbumService.getFullAlbumDetails(req.params.album_id);
 
     res.render("music/album/album", {
       album,

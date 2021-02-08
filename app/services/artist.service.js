@@ -33,7 +33,7 @@ function getKeyValue(artist) {
     const key =
       artist.key || artist[datastore.KEY] || artist.entityKey || artist.__key;
 
-    if(key) {
+    if (key) {
       return key.id || `${key.name}-${key.parent.id}`;
     } else {
       console.error(`No key in ${JSON.stringify(artist)}`);

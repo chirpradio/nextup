@@ -5,11 +5,6 @@ function loginGetHandler(req, res) {
   });
 }
 
-function loginPostHandler(req, res) {
-  const path = req.session.desiredUrl || "/";
-  res.redirect(path);
-}
-
 function logoutHandler(req, res) {
   req.logout();
   res.redirect("/auth/login");
@@ -17,6 +12,5 @@ function logoutHandler(req, res) {
 
 module.exports = {
   loginGetHandler,
-  loginPostHandler,
   logoutHandler,
 };
