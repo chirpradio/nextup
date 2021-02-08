@@ -10,8 +10,9 @@
   "dependencies": {
     "@google-cloud/connect-datastore": "^5.0.1",
     "@google-cloud/datastore": "^6.3.0",
-    "@google-cloud/debug-agent": "^4.2.2",
+    "@google-cloud/debug-agent": "^5.1.3",
     "body-parser": "^1.19.0",
+    "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "csv-stringify": "^5.5.3",
     "elasticsearch": "^16.7.1",
@@ -21,8 +22,10 @@
     "express-slow-down": "^1.3.1",
     "gstore-node": "^7.2.5",
     "js-levenshtein": "^1.1.6",
+    "jsonwebtoken": "^8.5.1",
     "lastfm-node-client": "^2.2.0",
     "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.5.0"
   },

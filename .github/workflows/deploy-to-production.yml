@@ -22,6 +22,7 @@ jobs:
         _input-file: ./app/env_variables.yaml
         _output-file: ./app/env_variables.yaml
         _format-key: '%%key%%'
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         SESSION_LENGTH: ${{ secrets.SESSION_LENGTH }}
         ELASTICSEARCH_DOMAIN: ${{ secrets.ELASTICSEARCH_DOMAIN }}
@@ -29,6 +30,10 @@ jobs:
         ELASTICSEARCH_PASSWORD: ${{ secrets.ELASTICSEARCH_PASSWORD }}
         DATASTORE_PROJECT_ID: ${{ secrets.DATASTORE_PROJECT_ID }}
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+    - id: api-docs
+      uses: seeebiii/redoc-cli-github-action@v10
+      with:
+        args: 'bundle ./app/routes/api/specification.yml'
     - id: deploy
       uses: GoogleCloudPlatform/github-actions/appengine-deploy@master
       with:

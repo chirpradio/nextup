@@ -267,6 +267,27 @@ function flattenArtists(albums) {
   });
 }
 
+async function getFullAlbumDetails(albumId) {
+  const album = await getPopulatedAlbum(albumId);
+
+  if (album.lastfm_retrieval_time === null) {
+    await addImagesFromLastFm(album);
+  }
+
+  const [tracks, reviews, comments] = await Promise.all([
+    listAlbumTracks(album),
+    listAlbumReviews(album),
+    listAlbumComments(album),
+  ]);
+
+  return {
+    album,
+    tracks,
+    reviews,
+    comments,
+  };
+}
+
 module.exports = {
   albumIsReviewed,
   albumInRotation,
@@ -274,6 +295,7 @@ module.exports = {
   flattenArtists,
   getAlbumById,
   getAlbumByKey,
+  getFullAlbumDetails,
   getPopulatedAlbum,
   getPopulatedAlbumByKey,
   getRandomAlbumsWithArt,
