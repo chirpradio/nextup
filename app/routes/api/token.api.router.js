@@ -1,14 +1,13 @@
 const router = require("express").Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const slowDown = require("express-slow-down");
+const rateLimit = require("express-rate-limit");
 
 router.post(
   "/",
-  slowDown({
-    windowMs: 15 * 60 * 1000, // Every 15 minutes
-    delayAfter: 3, // allow 3 requests to go at full-speed, then...
-    delayMs: 1000, // 6th request has a 1s delay, 7th has a 2s delay, 8th 3s, etc.
+  rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 3,
   }),
   function (req, res, next) {
     passport.authenticate("local", { session: false }, (err, user) => {
