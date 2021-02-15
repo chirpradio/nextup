@@ -69,3 +69,12 @@ paths:
           description: Successful response
         '404':
           description: Not found
+  /crate:
+    get:
+      security:
+        - Bearer: []
+      summary: List crates
+      description: Lists all crates owned by the authorized user            
+      responses:
+        '200':
+          description: Successful response
