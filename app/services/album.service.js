@@ -1,5 +1,5 @@
 const { Album, Document, Track } = require("../models");
-const { datastore } = require("../db");
+const { datastore, renameKey } = require("../db");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
 
@@ -230,6 +230,49 @@ async function listAlbumsByCurrentTag(tag) {
   return albums;
 }
 
+function getBaseQuery({ limit = 25, offset = 0 } = {}) {
+  return query = Album.query()
+    .filter("revoked", false)
+    .offset(offset)
+    .limit(limit);
+}
+
+async function runAlbumsQuery(query) {
+  return await query
+    .run(jsonOptions)
+    .populate("album_artist");
+}
+
+function renameKeys(albums) {
+  return albums.map(album => {
+    renameKey(album.album_artist);
+    return album;
+  });
+}
+
+async function runAndRenameKeys(query) {
+  const { entities, nextPageCursor} = await runAlbumsQuery(query);
+  const albums = renameKeys(entities);
+  return { albums, nextPageCursor }; 
+}
+
+async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
+  return await runAndRenameKeys(query);
+}
+
+async function getAlbumsWithTag({ tag, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset }).filter("current_tags", tag);
+  return await runAndRenameKeys(query);
+}
+
+async function getAlbumsImportedSince({ date, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset })
+    .filter("import_timestamp", ">=", date)
+    .order("import_timestamp", { descending: true });
+  return await runAndRenameKeys(query);
+}
+
 async function listAlbumsByImportDate(
   date,
   { format = "ENTITY", populate = true } = {}
@@ -308,4 +351,7 @@ module.exports = {
   listAlbumsByImportDate,
   loadAlbumImages,
   options,
+  getAlbumsByAlbumArtist,
+  getAlbumsWithTag,
+  getAlbumsImportedSince,
 };

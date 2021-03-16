@@ -2,6 +2,8 @@ const router = require("express").Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
+const { body } = require("express-validator");
+const { checkErrors } = require("./errors");
 
 router.post(
   "/",
@@ -9,6 +11,9 @@ router.post(
     windowMs: 1 * 60 * 1000, // 1 minute
     max: 3,
   }),
+  body('email').isEmail(),
+  body('password').isString(),
+  checkErrors,
   function (req, res, next) {
     passport.authenticate("local", { session: false }, (err, user) => {
       if (err || !user) {
