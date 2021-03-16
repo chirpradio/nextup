@@ -3,8 +3,12 @@ const router = require("express").Router();
 const rateLimit = require("express-rate-limit");
 const passport = require("passport");
 const albumRouter = require("./album.api.router");
+const artistRouter = require("./artist.api.router");
 const crateRouter = require("./crate.api.router");
+const searchRouter = require("./search.api.router");
 const tokenRouter = require("./token.api.router");
+const { sendErrorCode } = require("./errors");
+const authorizeWithToken = passport.authenticate("jwt", { session: false });
 
 // documentation at the index
 router.get(
@@ -21,26 +25,31 @@ router.get(
 // routes
 router.use(
   "/album",
-  passport.authenticate("jwt", { session: false }),
+  authorizeWithToken,
   albumRouter
 );
+
+router.use(
+  "/artist",
+  authorizeWithToken,
+  artistRouter
+);
+
 router.use(
   "/crate",
-  passport.authenticate("jwt", { session: false }),
+  authorizeWithToken,
   crateRouter
 );
+
+router.use(
+  "/search",
+  authorizeWithToken,
+  searchRouter
+);
+
 router.use("/token", tokenRouter);
 
 // error handling
-router.use((error, req, res, next) => {
-  console.error(error);
-  let code = 500;
-
-  if (error.code === "ERR_ENTITY_NOT_FOUND") {
-    code = 404;
-  }
-
-  res.sendStatus(code);
-});
+router.use(sendErrorCode);
 
 module.exports = router;
