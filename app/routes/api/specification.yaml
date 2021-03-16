@@ -29,8 +29,8 @@ components:
       properties:
         key: 
           type: array
-      example:
-        key: ["IndexerTransaction", {"type":"DatastoreInt","value":"1603156624060411"}, "Track", "djdb/t:vol01/20201019-201216/8259b9a4fa17078443fdd04109e42db952946aeb"]
+      # example:
+      #   key: ["IndexerTransaction", {"type":"DatastoreInt","value":"1603156624060411"}, "Track", "djdb/t:vol01/20201019-201216/8259b9a4fa17078443fdd04109e42db952946aeb"]
 paths:
   /token:
     post:
@@ -168,13 +168,13 @@ paths:
           required: true
           schema:
             type: string
-          examples:
-            withoutParent:
-              summary: Artist id only (older artist additions)
-              value: 11286
-            withParent:
-              summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
-              value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
+          # examples:
+          #   withoutParent:
+          #     summary: Artist id only (older artist additions)
+          #     value: 11286
+          #   withParent:
+          #     summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
+          #     value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
       responses:
         '200':
           description: Successful response
@@ -192,13 +192,13 @@ paths:
           required: true
           schema:
             type: string
-          examples:
-            withoutParent:
-              summary: Artist id only (older artist additions)
-              value: 11286
-            withParent:
-              summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
-              value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
+          # examples:
+          #   withoutParent:
+          #     summary: Artist id only (older artist additions)
+          #     value: 11286
+          #   withParent:
+          #     summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
+          #     value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
       responses:
         '200':
           description: Successful response
