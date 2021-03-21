@@ -12,11 +12,30 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: "Most endpoints require an `Authorization: Bearer <token>` header, where `token` is the value retrieved from authorizing against the /token endpoint."
+  schemas:
+    CrateItem:
+      properties:
+        album:
+          type: string
+        artist:
+          type: string
+        label: 
+          type: string
+        notes:
+          type: string
+        track:
+          type: string
+    Key:      
+      properties:
+        key: 
+          type: array
+      # example:
+      #   key: ["IndexerTransaction", {"type":"DatastoreInt","value":"1603156624060411"}, "Track", "djdb/t:vol01/20201019-201216/8259b9a4fa17078443fdd04109e42db952946aeb"]
 paths:
   /token:
     post:
       summary: Get an authorization token
-      description: Authorize with email and password to retrieve a JSON Web Token (JWT) you can use to authorize against other API endpoints.
+      description: Authenticate with email and password to retrieve a JSON Web Token (JWT) you can use to authorize against other API endpoints.
       requestBody:
         required: true
         content:
@@ -52,6 +71,74 @@ paths:
                 properties:   
                   token:
                     type: string
+  /album/tag:
+    get:
+      security:
+        - Bearer: []
+      summary: Get albums with a tag
+      description: Returns albums with a given tag            
+      parameters:
+        - name: tag
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: 
+              - heavy_rotation
+              - light_rotation
+              - local_current
+              - local_classic         
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+          description: The number of albums to return. 
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: The index of the first album to return. Use with limit to get the next set of albums.
+      responses:
+        '200':
+          description: Successful response  
+  /album/recent:
+    get:
+      security:
+        - Bearer: []
+      summary: Get recently added albums
+      description: Returns albums added after a given date and time that aren't in rotation ("library adds")
+      parameters:
+        - name: timestamp
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'The number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored. Default: 28 days before the time of the request'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+          description: The number of albums to return 
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: The index of the first album to return. Use with limit to get the next set of albums.
+      responses:
+        '200':
+          description: Successful response  
   /album/{album_id}:
     get:
       security:
@@ -69,6 +156,54 @@ paths:
           description: Successful response
         '404':
           description: Not found
+  /artist/{id}:
+    get:
+      security:
+        - Bearer: []
+      summary: Get an artist
+      description: Returns an artist         
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          # examples:
+          #   withoutParent:
+          #     summary: Artist id only (older artist additions)
+          #     value: 11286
+          #   withParent:
+          #     summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
+          #     value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Not found
+  /artist/{id}/albums:
+    get:
+      security:
+        - Bearer: []
+      summary: Get an artist's albums
+      description: Returns an artist's albums        
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          # examples:
+          #   withoutParent:
+          #     summary: Artist id only (older artist additions)
+          #     value: 11286
+          #   withParent:
+          #     summary: A combination of Artist id and a parent IndexerTransaction id (newer artist additions)
+          #     value:  artist:0f91762d84207016d7a3e8ba19fa7c2a78558000-1388263575298362
+      responses:
+        '200':
+          description: Successful response
+        '404':
+          description: Not found
   /crate:
     get:
       security:
@@ -78,3 +213,116 @@ paths:
       responses:
         '200':
           description: Successful response
+  /crate/:id/item:
+    post:
+      security:
+        - Bearer: []
+      summary: Add an item to a crate
+      description: Add a track, album, or artist to a crate by its key, or add a custom item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:        
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Key'
+                # - $ref: '#/components/schemas/CrateItem'
+      responses:
+        '200':
+          description: Item added
+        '403':
+          description: Forbidden
+  /search:
+    get:
+      security:
+        - Bearer: []
+      summary: Search the library
+      description: Search for an album, track, or artist, or search the text of a review
+      parameters:
+        - name: term
+          in: query
+          required: false
+          schema:
+            type: string
+          description: The search term
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: The number of albums to return. 
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: The index of the first album to return. Use with limit to get the next set of albums.
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: 
+              - album
+              - track              
+          description: Limit the search and results to albums or tracks
+        - name: album[is_compilation]
+          in: query
+          required: false
+          schema:
+            type: boolean           
+        - name: album[label]
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: album[local]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: 
+              - any
+              - current
+              - classic
+        - name: album[rotation]
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: 
+              - any
+              - heavy
+              - light
+        - name: album[year]
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: track[duration][gte]
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Minimum track length in milliseconds
+        - name: track[duration][lte]
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Maximum track length in milliseconds
+        - name: track[is_recommended]
+          in: query
+          required: false
+          schema:
+            type: boolean
+          
