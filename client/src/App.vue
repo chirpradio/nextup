@@ -1,30 +1,68 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">Abo0ot</router-link>
+  <div>
+    <NavBar />
+    <router-view class="container-fluid py-3" />
   </div>
-  <router-view/>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+:root {
+  --dark-red: #822036;
+  --bright-red: #ee0032;
 }
 
-#nav {
-  padding: 30px;
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+h1, h2, h3, h4, h5, h6, button, label, .btn, .navbar, .badge, .breadcrumb, .pagination {
+  font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;  
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+a { 
+  color: var(--dark-red);
+}
+
+a:hover {
+  color: var(--bright-red);
+}
+
+button.btn-chirp-red {
+  background-color: var(--dark-red);
+  border-color: var(--dark-red);
+  color: #fff;
+}
+
+button.btn-chirp-red:hover {
+ background-color: var(--bright-red);
+ color: #fff; 
+}
+
+button.btn-link-chirp-red, a.btn-link-chirp-red {
+  color: var(--dark-red);
+}
+
+button.btn-link-chirp-red:hover, a.btn-link-chirp-red:hover {
+  color: var(--bright-red);
+}
+
+.no_overflow {
+  text-overflow: clip;
+}
+
+.search_result__col {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 </style>
+
+<script>
+import NavBar from "./components/NavBar";
+
+export default {
+  components: {
+    NavBar,
+  }
+}
+</script>

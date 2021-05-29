@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "NextUp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,9 +8,13 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "qs": "^6.5.2",
     "vue": "^3.0.0",
+    "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
     "vuex-persistedstate": "^4.0.0-beta.3"

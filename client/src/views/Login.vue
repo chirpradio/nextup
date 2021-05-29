@@ -1,53 +1,52 @@
 <template>
-  <div>
-    <h2>Login</h2>
-    <p v-if="$route.query.redirect">
-      You need to login first.
+  <div class="col-6">
+    <h2>Log in to NextUp</h2>
+    <p class="text-muted" v-if="$route.query.redirect">
+      You need to log in first.
     </p>
-    <form @submit.prevent="login">
-      <label><input v-model="email" placeholder="email"></label>
-      <label><input v-model="password" placeholder="password" type="password"></label>
-      <button type="submit">login</button>
-      <p v-if="error" class="error">Bad login information</p>
+    <form @submit.prevent="logIn">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" class="form-control" v-model="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" class="form-control" v-model="password" type="password" required>
+      </div>  
+      <button class="btn btn-chirp-red" type="submit">log in</button>      
     </form>
+    <p v-if="error" class="text-danger mt-3">{{errorMessage}}</p>
   </div>
 </template>
 
 <script>
-import authService from "../services/auth.service";
-import crateService from "../services/crate.service";
-
 export default {
   data () {
     return {
       email: '',
       password: '',
-      error: false
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
-    async login () {
-      this.error = false;
-      const response = await authService.login(this.email, this.password);
-      if(response.token) {        
-        this.$store.commit('token', response.token);  
-        
-        const crates = await crateService.listCrates(response.token);        
-        if(crates) {
-          this.$store.commit('crates', crates);          
-        }
-
-        this.$router.replace(this.$route.query.redirect || '/');
-      } else {
+    async logIn () {
+      try {
+        this.error = false;
+        await this.$store.dispatch('logIn', { email: this.email, password: this.password });
+        await this.$store.dispatch('getCrates');
+        this.$router.push(this.$route.query.redirect || '/');
+      } catch(error) {
         this.error = true;
+        switch (error.response.status) {
+          case 400:
+            this.errorMessage = 'Invalid username or password';
+            break;
+          default:
+            this.errorMessage = 'Could not log in';
+        }
       }
     }
   }  
 }
 </script>
-
-<style>
-.error {
-  color: red;
-}
-</style>
