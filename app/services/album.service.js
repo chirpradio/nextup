@@ -190,10 +190,16 @@ async function listAlbumTracks(album) {
       ["revoked", false],
     ],
     order: { property: "track_num" },
+    showKey: true,
   };
   const { entities: tracks } = await Track.list(listOptions).populate(
     "track_artist"
   );
+  tracks.forEach(track => {
+    if(track.track_artist) {
+      renameKey(track.track_artist);
+    }
+  });
   return tracks;
 }
 
@@ -312,9 +318,13 @@ function flattenArtists(albums) {
 
 async function getFullAlbumDetails(albumId) {
   const album = await getPopulatedAlbum(albumId);
-
+  
   if (album.lastfm_retrieval_time === null) {
     await addImagesFromLastFm(album);
+  }
+
+  if(album.album_artist) {
+    album.album_artist.__key = album.album_artist[datastore.KEY];
   }
 
   const [tracks, reviews, comments] = await Promise.all([

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { body, oneOf }= require("express-validator");
 const { CrateService } = require("../../services");
-const { datastore } = require("../../db");
+const { datastore, parseIndexerTransaction } = require("../../db");
 const { checkErrors } = require("./errors");
 
 const getCrateAndCheckAuth = async function (req, res, next) {
@@ -28,13 +28,14 @@ router.get("/", async function (req, res, next) {
 });
 
 router.post("/:id/item", 
-  body('key').isArray(),
+  body('path').isArray(),
   checkErrors,
   getCrateAndCheckAuth, 
   async function(req, res, next) {
     try {
       const crate = req.crate;
-      const key = datastore.key(req.body.key);
+      const path = parseIndexerTransaction(req.body.path);
+      const key = datastore.key(path);
 
       if (crate.items) {
         crate.items.push(key);

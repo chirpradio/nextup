@@ -25,7 +25,7 @@ router.post(
         if (err) {
           return next(err);
         }
-        const body = { email: user.email, roles: user.roles };
+        const body = { email: user.email, roles: user.roles, first_name: user.first_name, last_name: user.last_name };
         const token = jwt.sign({ user: body }, process.env.JWT_SECRET, {
           expiresIn: "6h",
         });

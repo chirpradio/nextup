@@ -62,7 +62,7 @@ function wrapAlbumId(propsValues) {
 albumSchema.pre("findOne", wrapAlbumId);
 
 function wrapAlbumIdPreSave() {  
-  if (this.album_id) {
+  if (this.album_id && !gstore.ds.isInt(this.album_id)) {    
     this.album_id = gstore.ds.int(this.album_id);
   }
 
