@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { body, oneOf }= require("express-validator");
+const { body } = require("express-validator");
 const { CrateService } = require("../../services");
 const { datastore, parseIndexerTransaction } = require("../../db");
 const { checkErrors } = require("./errors");
@@ -11,12 +11,12 @@ const getCrateAndCheckAuth = async function (req, res, next) {
       req.crate = crate;
       next();
     } else {
-      throw new Error('Forbidden');
+      throw new Error("Forbidden");
     }
   } catch (error) {
     next(error);
   }
-}
+};
 
 router.get("/", async function (req, res, next) {
   try {
@@ -27,11 +27,12 @@ router.get("/", async function (req, res, next) {
   }
 });
 
-router.post("/:id/item", 
-  body('path').isArray(),
+router.post(
+  "/:id/item",
+  body("path").isArray(),
   checkErrors,
-  getCrateAndCheckAuth, 
-  async function(req, res, next) {
+  getCrateAndCheckAuth,
+  async function (req, res, next) {
     try {
       const crate = req.crate;
       const path = parseIndexerTransaction(req.body.path);

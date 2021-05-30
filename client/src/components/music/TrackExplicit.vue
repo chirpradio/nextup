@@ -3,10 +3,10 @@
 </template>
 
 <style scoped>
-  .grayscale {
-    filter: grayscale(1);
-    opacity: 25%;
-  }
+.grayscale {
+  filter: grayscale(1);
+  opacity: 25%;
+}
 </style>
 
 <script>
@@ -16,14 +16,18 @@ export default {
     track: Object,
   },
   computed: {
-    explicit () {
-      return this.track && this.track.current_tags && this.track.current_tags.includes("explicit");
+    explicit() {
+      return (
+        this.track &&
+        this.track.current_tags &&
+        this.track.current_tags.includes("explicit")
+      );
     },
-    classObject () {
+    classObject() {
       return {
-        "grayscale": !this.explicit
-      }
+        grayscale: !this.explicit,
+      };
     },
   },
-}
+};
 </script>

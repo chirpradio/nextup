@@ -52,7 +52,7 @@ const albumSchema = new Schema({
   lastfm_retrieval_time: { type: Date },
 });
 
-function wrapAlbumId(propsValues) {  
+function wrapAlbumId(propsValues) {
   if (propsValues.album_id) {
     propsValues.album_id = gstore.ds.int(propsValues.album_id);
   }
@@ -61,8 +61,8 @@ function wrapAlbumId(propsValues) {
 }
 albumSchema.pre("findOne", wrapAlbumId);
 
-function wrapAlbumIdPreSave() {  
-  if (this.album_id && !gstore.ds.isInt(this.album_id)) {    
+function wrapAlbumIdPreSave() {
+  if (this.album_id && !gstore.ds.isInt(this.album_id)) {
     this.album_id = gstore.ds.int(this.album_id);
   }
 

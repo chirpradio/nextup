@@ -1,4 +1,4 @@
-import api from '../../services/api.service';
+import api from "../../services/api.service";
 
 const state = () => ({
   loading: false,
@@ -7,19 +7,19 @@ const state = () => ({
 });
 
 const getters = {
-  loading: state => {
+  loading: (state) => {
     return state.loading;
   },
-  query: state => {
+  query: (state) => {
     return state.query;
   },
-  results: state => {
+  results: (state) => {
     return state.results;
-  }, 
-}
+  },
+};
 
 const actions = {
-  async search ({ commit }, query) {    
+  async search({ commit }, query) {
     commit("loading", true);
     commit("query", query);
     const response = await api.search(query);
@@ -30,30 +30,30 @@ const actions = {
     commit("offset", offset);
     await dispatch("search", state.query);
   },
-}
+};
 
 const mutations = {
-  loading (state, loading) {
+  loading(state, loading) {
     state.loading = loading;
   },
-  query (state, query) {
+  query(state, query) {
     state.query = query;
   },
-  results (state, payload) { 
-    if(payload.type) {
+  results(state, payload) {
+    if (payload.type) {
       state.results[payload.type] = payload.results;
     } else {
       state.results = payload.results;
     }
   },
-  offset (state, offset) {
+  offset(state, offset) {
     state.query.offset = offset;
   },
-}
+};
 
 export default {
   state,
   getters,
   actions,
-  mutations
-}
+  mutations,
+};

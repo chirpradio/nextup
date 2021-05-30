@@ -15,11 +15,11 @@ import DocumentResults from "./document/DocumentResults";
 
 export default {
   name: "EverythingResults",
-  components: { AlbumResults, TrackResults, ArtistResults, DocumentResults, },
+  components: { AlbumResults, TrackResults, ArtistResults, DocumentResults },
   computed: {
-    searchTerm () {
+    searchTerm() {
       return this.$route.query.term;
     },
   },
-}
+};
 </script>

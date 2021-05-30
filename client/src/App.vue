@@ -14,14 +14,28 @@
 }
 
 body {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-h1, h2, h3, h4, h5, h6, button, label, legend, .btn, .navbar, .badge, .breadcrumb, .pagination {
-  font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;  
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+label,
+legend,
+.btn,
+.navbar,
+.badge,
+.breadcrumb,
+.pagination {
+  font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
 }
 
-a { 
+a {
   color: var(--dark-red);
   text-decoration: none;
 }
@@ -38,15 +52,17 @@ button.btn-chirp-red {
 }
 
 button.btn-chirp-red:hover {
- background-color: var(--bright-red);
- color: #fff; 
+  background-color: var(--bright-red);
+  color: #fff;
 }
 
-button.btn-link-chirp-red, a.btn-link-chirp-red {
+button.btn-link-chirp-red,
+a.btn-link-chirp-red {
   color: var(--dark-red);
 }
 
-button.btn-link-chirp-red:hover, a.btn-link-chirp-red:hover {
+button.btn-link-chirp-red:hover,
+a.btn-link-chirp-red:hover {
   color: var(--bright-red);
 }
 
@@ -66,6 +82,6 @@ import NavBar from "./components/NavBar";
 export default {
   components: {
     NavBar,
-  }
-}
+  },
+};
 </script>

@@ -7,46 +7,55 @@
     <form class="mb-3" @submit.prevent="logIn">
       <div class="form-group">
         <label for="email">Email</label>
-        <input id="email" class="form-control" v-model="email" required>
+        <input id="email" class="form-control" v-model="email" required />
       </div>
       <div class="mb-3">
         <label for="password">Password</label>
-        <input id="password" class="form-control" v-model="password" type="password" required>
-      </div>  
-      <button class="btn btn-chirp-red" type="submit">log in</button>      
+        <input
+          id="password"
+          class="form-control"
+          v-model="password"
+          type="password"
+          required
+        />
+      </div>
+      <button class="btn btn-chirp-red" type="submit">log in</button>
     </form>
-    <p v-if="error" class="text-danger">{{errorMessage}}</p>
+    <p v-if="error" class="text-danger">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       error: false,
-      errorMessage: ''
-    }
+      errorMessage: "",
+    };
   },
   methods: {
-    async logIn () {
+    async logIn() {
       try {
         this.error = false;
-        await this.$store.dispatch('logIn', { email: this.email, password: this.password });
-        await this.$store.dispatch('getCrates');
-        this.$router.push(this.$route.query.redirect || '/');
-      } catch(error) {
+        await this.$store.dispatch("logIn", {
+          email: this.email,
+          password: this.password,
+        });
+        await this.$store.dispatch("getCrates");
+        this.$router.push(this.$route.query.redirect || "/");
+      } catch (error) {
         this.error = true;
         switch (error.response.status) {
           case 400:
-            this.errorMessage = 'Invalid username or password';
+            this.errorMessage = "Invalid username or password";
             break;
           default:
-            this.errorMessage = 'Could not log in';
+            this.errorMessage = "Could not log in";
         }
       }
-    }
-  }  
-}
+    },
+  },
+};
 </script>

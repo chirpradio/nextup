@@ -23,29 +23,13 @@ router.get(
 );
 
 // routes
-router.use(
-  "/album",
-  authorizeWithToken,
-  albumRouter
-);
+router.use("/album", authorizeWithToken, albumRouter);
 
-router.use(
-  "/artist",
-  authorizeWithToken,
-  artistRouter
-);
+router.use("/artist", authorizeWithToken, artistRouter);
 
-router.use(
-  "/crate",
-  authorizeWithToken,
-  crateRouter
-);
+router.use("/crate", authorizeWithToken, crateRouter);
 
-router.use(
-  "/search",
-  authorizeWithToken,
-  searchRouter
-);
+router.use("/search", authorizeWithToken, searchRouter);
 
 router.use("/token", tokenRouter);
 

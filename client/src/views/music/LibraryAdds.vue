@@ -1,14 +1,14 @@
 <template>
-  <AlbumCollection 
-    :albums="albums" 
+  <AlbumCollection
+    :albums="albums"
     :loading="loading"
-    :more="more" 
-    @more="getMore" 
+    :more="more"
+    @more="getMore"
   />
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection"
+import AlbumCollection from "../../components/music/AlbumCollection";
 
 export default {
   name: "LibraryAdds",
@@ -17,24 +17,24 @@ export default {
     AlbumCollection,
   },
   computed: {
-    albums () {
+    albums() {
       return this.$store.getters.libraryAdds;
     },
-    loading () {
+    loading() {
       return this.$store.getters.loadingRecentAlbums;
     },
-    more () {
+    more() {
       // Boolean that tells the component whether there are more albums to get
       return this.$store.getters.moreRecentAlbums;
     },
   },
-  mounted () {
+  mounted() {
     this.$store.dispatch("getRecentAlbums");
   },
   methods: {
-    getMore () {
-      this.$store.dispatch("getMoreRecentAlbums");      
+    getMore() {
+      this.$store.dispatch("getMoreRecentAlbums");
     },
-  }
-}
+  },
+};
 </script>

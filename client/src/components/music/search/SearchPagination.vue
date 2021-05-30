@@ -1,10 +1,30 @@
 <template>
   <nav aria-label="Search result pagination">
     <div class="d-inline align-middle">
-      <button class="btn btn-link btn-link-chirp-red" :disabled="onFirstPage" @click="previous()">&laquo;</button>
-      <input class="page-number text-right" type="number" min="1" :max="totalPages" :value="currentPage" @keyup.enter="changePage" :disabled="onlyOnePage" />
-      <span>&nbsp;of {{totalPages}}</span>
-      <button class="btn btn-link btn-link-chirp-red" :disabled="onLastPage" @click="next()">&raquo;</button>
+      <button
+        class="btn btn-link btn-link-chirp-red"
+        :disabled="onFirstPage"
+        @click="previous()"
+      >
+        &laquo;
+      </button>
+      <input
+        class="page-number text-right"
+        type="number"
+        min="1"
+        :max="totalPages"
+        :value="currentPage"
+        @keyup.enter="changePage"
+        :disabled="onlyOnePage"
+      />
+      <span>&nbsp;of {{ totalPages }}</span>
+      <button
+        class="btn btn-link btn-link-chirp-red"
+        :disabled="onLastPage"
+        @click="next()"
+      >
+        &raquo;
+      </button>
     </div>
   </nav>
 </template>
@@ -22,38 +42,38 @@ export default {
     count: Number,
   },
   computed: {
-    offset () {
+    offset() {
       const value = parseInt(this.$route.query.offset, 10);
       return Number.isNaN(value) ? 0 : value;
     },
-    limit () {
+    limit() {
       const value = parseInt(this.$route.query.limit, 10);
       return Number.isNaN(value) ? 50 : value;
     },
-    currentPage () {
+    currentPage() {
       return Math.floor(this.offset / this.limit) + 1;
     },
-    totalPages () {
+    totalPages() {
       return Math.ceil(this.count / this.limit);
     },
-    onFirstPage () {
+    onFirstPage() {
       return this.currentPage === 1;
     },
-    onLastPage () {
+    onLastPage() {
       return this.currentPage === this.totalPages;
     },
-    onlyOnePage () {
+    onlyOnePage() {
       return this.totalPages === 1;
     },
   },
   methods: {
-    previous () {
+    previous() {
       this.go(this.offset - this.limit);
     },
-    next () {
+    next() {
       this.go(this.offset + this.limit);
     },
-    changePage (event) {
+    changePage(event) {
       let newPage;
       newPage = Math.min(event.target.value, this.totalPages);
       newPage = Math.max(newPage, 1);
@@ -62,8 +82,11 @@ export default {
     async go(newOffset) {
       this.$store.commit("offset", newOffset);
       const now = new Date();
-      this.$router.push({query: this.$store.getters.query, params: { timestamp: now.getTime() } });    
+      this.$router.push({
+        query: this.$store.getters.query,
+        params: { timestamp: now.getTime() },
+      });
     },
-  }
-}
+  },
+};
 </script>

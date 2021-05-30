@@ -8,7 +8,7 @@ async function indexHandler(req, res) {
       await AlbumService.listAlbumsByImportDate(
         DateService.getXDaysPrevious(28)
       ),
-    ]);    
+    ]);
 
     const newButNotRotation = newAlbums
       .filter(AlbumService.albumNotInRotation)

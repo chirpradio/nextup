@@ -1,9 +1,9 @@
-import { createApp } from 'vue'
-import { Dropdown } from 'bootstrap';
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import updateTitle from "./mixins/updateTitle"
+import { createApp } from "vue";
+import { Dropdown } from "bootstrap"; // eslint-disable-line no-unused-vars
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import updateTitle from "./mixins/updateTitle";
 import VueGtag from "vue-gtag-next";
 
 createApp(App)
@@ -11,9 +11,9 @@ createApp(App)
   .use(router)
   .use(VueGtag, {
     property: {
-      id: 'G-M6XM24GCTX'
+      id: "G-M6XM24GCTX",
     },
     useDebugger: true,
   })
   .mixin(updateTitle)
-  .mount('#app');
+  .mount("#app");

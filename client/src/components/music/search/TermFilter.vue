@@ -1,8 +1,16 @@
 <template>
-  <form id="filters" v-on:submit.prevent="search"> 
+  <form id="filters" v-on:submit.prevent="search">
     <div class="flex-grow-1 mr-2">
       <label class="sr-only" for="search">Search</label>
-      <input class="form-control w-100" id="search" name="term" type="search" placeholder="search term" v-model="query.term" aria-label="search">
+      <input
+        class="form-control w-100"
+        id="search"
+        name="term"
+        type="search"
+        placeholder="search term"
+        v-model="query.term"
+        aria-label="search"
+      />
     </div>
     <div class="col-auto">
       <button class="btn btn-chirp-red" type="submit">Search</button>
@@ -17,29 +25,29 @@ export default {
     type: String,
   },
   computed: {
-    query () {
+    query() {
       const base = {
         term: "",
         type: this.type,
         offset: 0,
         limit: 50,
       };
-      return Object.assign(base, this.$route.query);      
-    }
+      return Object.assign(base, this.$route.query);
+    },
   },
-  created () {
+  created() {
     this.dispatch();
   },
   watch: {
-    '$route.query': "dispatch",
+    "$route.query": "dispatch",
   },
   methods: {
     search: function () {
       this.$router.push({ query: this.query });
     },
     dispatch: async function () {
-      await this.$store.dispatch('search', this.query);      
-    }
-  }
-}
+      await this.$store.dispatch("search", this.query);
+    },
+  },
+};
 </script>

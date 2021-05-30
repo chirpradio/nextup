@@ -1,12 +1,12 @@
 <template>
-  <Results 
-    type="artists" 
-    linkPath="/library/search/artist" 
-    :results="results" 
+  <Results
+    type="artists"
+    linkPath="/library/search/artist"
+    :results="results"
     :showAllLink="showAllLink"
-    :showHeader="showHeader" 
-    :showPagination="showPagination" >
-
+    :showHeader="showHeader"
+    :showPagination="showPagination"
+  >
     <template v-slot:rows>
       <ArtistResultRows :results="results" />
     </template>
@@ -19,7 +19,7 @@ import Results from "../Results";
 
 export default {
   name: "ArtistResults",
-  components: { ArtistResultRows, Results, },
+  components: { ArtistResultRows, Results },
   props: {
     showAllLink: {
       type: Boolean,
@@ -32,10 +32,10 @@ export default {
     showPagination: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
-    results () {
+    results() {
       const defaultResults = {
         hits: [],
         count: undefined,
@@ -43,6 +43,6 @@ export default {
 
       return this.$store.getters.results.artist || defaultResults;
     },
-  }
-}
+  },
+};
 </script>

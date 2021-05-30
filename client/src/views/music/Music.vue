@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import Breadcrumb from "../../components/music/Breadcrumb"
+import Breadcrumb from "../../components/music/Breadcrumb";
 
 export default {
-  components: { Breadcrumb, },
-}
+  components: { Breadcrumb },
+};
 </script>

@@ -1,5 +1,5 @@
 const { Artist } = require("../models");
-const { datastore, renameKey } = require("../db");
+const { datastore } = require("../db");
 
 function getArtistKey(artistId) {
   let args;
@@ -31,7 +31,7 @@ async function getArtist(key) {
 async function getArtistWithRenamedKey(key) {
   const { entities } = await Artist.query().filter("__key__", key).run({
     showKey: true,
-  });  
+  });
   const artist = entities[0];
   return artist;
 }

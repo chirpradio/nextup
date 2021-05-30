@@ -1,5 +1,7 @@
 <template>
-  <router-link :to="{ name: 'artist', params: { id: artistId } }">{{artist.name}}</router-link>
+  <router-link :to="{ name: 'artist', params: { id: artistId } }">
+    {{ artist.name }}
+  </router-link>
 </template>
 
 <script>
@@ -17,7 +19,7 @@ export default {
     artistId: function () {
       const key = this.artist.__key;
       return key.id || `${key.name}-${key.parent.id}`;
-    }
-  }
-}
+    },
+  },
+};
 </script>

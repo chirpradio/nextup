@@ -1,12 +1,12 @@
 <template>
-  <Results 
-    type="albums" 
-    linkPath="/library/search/album" 
-    :results="results" 
+  <Results
+    type="albums"
+    linkPath="/library/search/album"
+    :results="results"
     :showAllLink="showAllLink"
-    :showHeader="showHeader" 
-    :showPagination="showPagination" >
-
+    :showHeader="showHeader"
+    :showPagination="showPagination"
+  >
     <template v-slot:headings>
       <AlbumResultHeadings class="d-none d-sm-flex" />
     </template>
@@ -23,7 +23,7 @@ import AlbumResultRows from "./AlbumResultRows";
 
 export default {
   name: "AlbumResults",
-  components: { AlbumResultHeadings, AlbumResultRows, Results, },
+  components: { AlbumResultHeadings, AlbumResultRows, Results },
   props: {
     showAllLink: {
       type: Boolean,
@@ -36,10 +36,10 @@ export default {
     showPagination: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
-    results () {
+    results() {
       const defaultResults = {
         hits: [],
         count: undefined,
@@ -47,6 +47,6 @@ export default {
 
       return this.$store.getters.results.album || defaultResults;
     },
-  }
-}
+  },
+};
 </script>

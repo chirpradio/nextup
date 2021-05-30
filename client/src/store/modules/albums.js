@@ -1,4 +1,4 @@
-import api from '../../services/api.service';
+import api from "../../services/api.service";
 
 const state = () => ({
   tagCollections: {
@@ -24,47 +24,50 @@ const state = () => ({
 });
 
 const getters = {
-  recentAlbums: state => {
+  recentAlbums: (state) => {
     return state.recent.albums;
   },
-  moreRecentAlbums: state => {
+  moreRecentAlbums: (state) => {
     return state.recent.more;
   },
-  loadingRecentAlbums: state => {
+  loadingRecentAlbums: (state) => {
     return state.loadingTagCollections.recent;
   },
-  libraryAdds: state => {
-    return state.recent.albums.filter(album => {
-      if(!album.current_tags) {
+  libraryAdds: (state) => {
+    return state.recent.albums.filter((album) => {
+      if (!album.current_tags) {
         return true;
       }
-      return !album.current_tags.includes("heavy_rotation") && !album.current_tags.includes("light_rotation"); 
+      return (
+        !album.current_tags.includes("heavy_rotation") &&
+        !album.current_tags.includes("light_rotation")
+      );
     });
   },
-  taggedAlbums: state => tag => {
+  taggedAlbums: (state) => (tag) => {
     return state.tagCollections[tag].albums;
   },
-  loadingTaggedAlbums: state => tag => {
+  loadingTaggedAlbums: (state) => (tag) => {
     return state.loadingTagCollections[tag];
   },
-  moreAlbumsWithTag: state => tag => {
+  moreAlbumsWithTag: (state) => (tag) => {
     return state.tagCollections[tag].more;
   },
-  albumById: state => id => {
+  albumById: (state) => (id) => {
     return state.albums[id];
-  }
-}
+  },
+};
 
 const actions = {
-  async getRecentAlbums ({ commit, state }) {
-    if(state.recent.albums.length === 0) {
+  async getRecentAlbums({ commit, state }) {
+    if (state.recent.albums.length === 0) {
       commit("loadingRecent", true);
       const response = await api.getRecentAlbums();
       commit("recent", response);
       commit("loadingRecent", false);
     }
   },
-  async getMoreRecentAlbums ({ commit, state }) {
+  async getMoreRecentAlbums({ commit, state }) {
     commit("loadingRecent", true);
     const response = await api.getRecentAlbums({
       offset: state.recent.albums.length,
@@ -72,8 +75,8 @@ const actions = {
     commit("recent", response);
     commit("loadingRecent", false);
   },
-  async getTaggedAlbums ({ commit, state }, tag) {
-    if(state.tagCollections[tag].albums.length === 0) {
+  async getTaggedAlbums({ commit, state }, tag) {
+    if (state.tagCollections[tag].albums.length === 0) {
       commit("loadingTagCollections", {
         tag,
         loading: true,
@@ -90,9 +93,9 @@ const actions = {
         tag,
         loading: false,
       });
-    }  
+    }
   },
-  async getMoreTaggedAlbums ({ commit, state }, tag) {
+  async getMoreTaggedAlbums({ commit, state }, tag) {
     commit("loadingTagCollections", {
       tag,
       loading: true,
@@ -110,45 +113,47 @@ const actions = {
       loading: false,
     });
   },
-  async getAlbum ({ commit, state }, id) {
-    if(!state.albums[id]) {
+  async getAlbum({ commit, state }, id) {
+    if (!state.albums[id]) {
       const response = await api.getAlbum(id);
       commit("albums", response);
     }
-  }
-}
+  },
+};
 
 const mutations = {
-  recent (state, collection) {
-    const more = typeof collection.nextPageCursor === "string";    
+  recent(state, collection) {
+    const more = typeof collection.nextPageCursor === "string";
     const albums = state.recent.albums.concat(collection.albums);
     state.recent = {
       albums,
       more,
     };
   },
-  loadingRecent (state, payload) {
+  loadingRecent(state, payload) {
     state.loadingTagCollections.recent = payload;
   },
-  tagCollections (state, collection) {
-    const more = typeof collection.nextPageCursor === "string";    
-    const albums = state.tagCollections[collection.tag].albums.concat(collection.albums);    
+  tagCollections(state, collection) {
+    const more = typeof collection.nextPageCursor === "string";
+    const albums = state.tagCollections[collection.tag].albums.concat(
+      collection.albums
+    );
     state.tagCollections[collection.tag] = {
       albums,
       more,
-    };    
+    };
   },
-  loadingTagCollections (state, payload) {
+  loadingTagCollections(state, payload) {
     state.loadingTagCollections[payload.tag] = payload.loading;
   },
-  albums (state, album) {
+  albums(state, album) {
     state.albums[album.album_id.value] = album;
-  }
-}
+  },
+};
 
 export default {
   state,
   getters,
   actions,
-  mutations
-}
+  mutations,
+};

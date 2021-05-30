@@ -1,12 +1,12 @@
 <template>
-  <Results 
-    type="reviews" 
-    linkPath="/library/search/review" 
-    :results="results" 
+  <Results
+    type="reviews"
+    linkPath="/library/search/review"
+    :results="results"
     :showAllLink="showAllLink"
-    :showHeader="showHeader" 
-    :showPagination="showPagination" >
-
+    :showHeader="showHeader"
+    :showPagination="showPagination"
+  >
     <template v-slot:headings>
       <DocumentResultHeadings />
     </template>
@@ -23,7 +23,7 @@ import Results from "../Results";
 
 export default {
   name: "DocumentResults",
-  components: { DocumentResultHeadings, DocumentResultRows, Results, },
+  components: { DocumentResultHeadings, DocumentResultRows, Results },
   props: {
     showAllLink: {
       type: Boolean,
@@ -36,10 +36,10 @@ export default {
     showPagination: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
-    results () {
+    results() {
       const defaultResults = {
         hits: [],
         count: undefined,
@@ -47,6 +47,6 @@ export default {
 
       return this.$store.getters.results.document || defaultResults;
     },
-  }
-}
+  },
+};
 </script>

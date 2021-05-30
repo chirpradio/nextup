@@ -1,5 +1,5 @@
 <template>
-  <span>{{duration}}</span>
+  <span>{{ duration }}</span>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
     track: Object,
   },
   computed: {
-    duration () {
+    duration() {
       const inSeconds = this.track.duration_ms / 1000;
       const minutes = Math.trunc(inSeconds / 60);
       const seconds = Math.round(inSeconds % 60)
@@ -18,5 +18,5 @@ export default {
       return `${minutes}:${seconds}`;
     },
   },
-}
+};
 </script>

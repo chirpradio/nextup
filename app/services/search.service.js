@@ -14,7 +14,9 @@ const client = new elasticsearch.Client({
 async function search(params, type = "all", options) {
   const trimmedParams = removeEmptyStrings(params);
   const searchFn =
-    type === "all" ? doMSearch(trimmedParams) : doTypedSearch(trimmedParams, type, options);
+    type === "all"
+      ? doMSearch(trimmedParams)
+      : doTypedSearch(trimmedParams, type, options);
   return await searchFn;
 }
 
@@ -22,7 +24,10 @@ function removeEmptyStrings(obj) {
   return Object.entries(obj)
     .filter(([_, v]) => v !== "")
     .reduce(
-      (acc, [k, v]) => ({ ...acc, [k]: v === Object(v) ? removeEmptyStrings(v) : v }),
+      (acc, [k, v]) => ({
+        ...acc,
+        [k]: v === Object(v) ? removeEmptyStrings(v) : v,
+      }),
       {}
     );
 }
@@ -212,11 +217,15 @@ function buildTrackSearch(params, options) {
 
   queryObj.query.bool.filter = [];
   if (params.track) {
-    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(buildTrackFilters(params));    
+    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(
+      buildTrackFilters(params)
+    );
   }
   if (params.album) {
-    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(buildAlbumFilters(params.album, "album."));
-  }  
+    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(
+      buildAlbumFilters(params.album, "album.")
+    );
+  }
 
   return queryObj;
 }
@@ -303,9 +312,16 @@ function buildQuery(type, field, value) {
 }
 
 function noSearchTermsInParams(params) {
-  const noTerm = !params.hasOwnProperty("term") || params.term === "";
-  const noAlbum = !params.hasOwnProperty("album") || (typeof params.album === 'object' && Object.keys(params.album).length === 0);
-  const noTrack = !params.hasOwnProperty("track") || (typeof params.track === 'object' && Object.keys(params.track).length === 0);
+  const noTerm =
+    !Object.prototype.hasOwnProperty.call(params, "term") || params.term === "";
+  const noAlbum =
+    !Object.prototype.hasOwnProperty.call(params, "album") ||
+    (typeof params.album === "object" &&
+      Object.keys(params.album).length === 0);
+  const noTrack =
+    !Object.prototype.hasOwnProperty.call(params, "track") ||
+    (typeof params.track === "object" &&
+      Object.keys(params.track).length === 0);
   return noTerm && noAlbum && noTrack;
 }
 

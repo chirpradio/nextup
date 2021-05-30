@@ -19,6 +19,6 @@ router.get("/:id/albums", async function (req, res, next) {
   } catch (error) {
     next(error);
   }
-})
+});
 
 module.exports = router;

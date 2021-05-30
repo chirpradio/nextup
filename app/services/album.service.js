@@ -195,8 +195,8 @@ async function listAlbumTracks(album) {
   const { entities: tracks } = await Track.list(listOptions).populate(
     "track_artist"
   );
-  tracks.forEach(track => {
-    if(track.track_artist) {
+  tracks.forEach((track) => {
+    if (track.track_artist) {
       renameKey(track.track_artist);
     }
   });
@@ -237,29 +237,24 @@ async function listAlbumsByCurrentTag(tag) {
 }
 
 function getBaseQuery({ limit = 25, offset = 0 } = {}) {
-  return query = Album.query()
-    .filter("revoked", false)
-    .offset(offset)
-    .limit(limit);
+  return Album.query().filter("revoked", false).offset(offset).limit(limit);
 }
 
 async function runAlbumsQuery(query) {
-  return await query
-    .run(jsonOptions)
-    .populate("album_artist");
+  return await query.run(jsonOptions).populate("album_artist");
 }
 
 function renameKeys(albums) {
-  return albums.map(album => {
+  return albums.map((album) => {
     renameKey(album.album_artist);
     return album;
   });
 }
 
 async function runAndRenameKeys(query) {
-  const { entities, nextPageCursor} = await runAlbumsQuery(query);
+  const { entities, nextPageCursor } = await runAlbumsQuery(query);
   const albums = renameKeys(entities);
-  return { albums, nextPageCursor }; 
+  return { albums, nextPageCursor };
 }
 
 async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
@@ -318,12 +313,12 @@ function flattenArtists(albums) {
 
 async function getFullAlbumDetails(albumId) {
   const album = await getPopulatedAlbum(albumId);
-  
+
   if (album.lastfm_retrieval_time === null) {
     await addImagesFromLastFm(album);
   }
 
-  if(album.album_artist) {
+  if (album.album_artist) {
     album.album_artist.__key = album.album_artist[datastore.KEY];
   }
 

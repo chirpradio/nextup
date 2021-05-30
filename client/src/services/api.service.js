@@ -1,26 +1,34 @@
-import axios from 'axios';
+import axios from "axios";
 import qs from "qs";
 import router from "../router";
 import store from "../store";
 
 const instance = axios.create({
-  baseURL: 'http://localhost:1071/api'
+  baseURL: "http://localhost:1071/api",
 });
 
 function setAuthorizatonHeader(token) {
-  instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-axios.interceptors.response.use((response) => {
-  return response;
-}, (error) => {
-  console.log(error.response.data)
-  if (error.response.status === 401) {
-    store.dispatch('logOut')
-    router.push({ name: 'Log In', query: { redirect: `${window.location.pathname}${window.location.search}` } })
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.log(error.response.data);
+    if (error.response.status === 401) {
+      store.dispatch("logOut");
+      router.push({
+        name: "Log In",
+        query: {
+          redirect: `${window.location.pathname}${window.location.search}`,
+        },
+      });
+    }
+    return Promise.reject(error);
   }
-  return Promise.reject(error)
-});
+);
 
 async function getAndHandleError(getter) {
   try {
@@ -33,12 +41,12 @@ async function getAndHandleError(getter) {
 
 export default {
   async login(email, password) {
-    const response = await instance.post('/token', {
+    const response = await instance.post("/token", {
       email,
-      password
+      password,
     });
 
-    if(response.data.token) {
+    if (response.data.token) {
       setAuthorizatonHeader(response.data.token);
     }
     return response.data;
@@ -47,12 +55,12 @@ export default {
   setAuthorizatonHeader,
 
   async getTaggedAlbums(params) {
-    const getter = instance.get('/album/tag', { params });
+    const getter = instance.get("/album/tag", { params });
     return await getAndHandleError(getter);
   },
 
   async getRecentAlbums(params) {
-    const getter = instance.get('/album/recent', { params });
+    const getter = instance.get("/album/recent", { params });
     return await getAndHandleError(getter);
   },
 
@@ -72,27 +80,23 @@ export default {
   },
 
   async getCrates() {
-    const getter = instance.get('/crate');
+    const getter = instance.get("/crate");
     return await getAndHandleError(getter);
   },
 
   async addToCrate(crateId, path) {
-    try {
-      await instance.post(`/crate/${crateId}/item`, {
-        path,
-      });      
-    } catch (error) {
-      throw error;
-    }
+    await instance.post(`/crate/${crateId}/item`, {
+      path,
+    });
   },
 
   async search(params) {
-    const getter = instance.get(`/search`, { 
-      params, 
+    const getter = instance.get(`/search`, {
+      params,
       paramsSerializer: function (params) {
         return qs.stringify(params, { arrayFormat: "brackets" });
-      }, 
+      },
     });
     return await getAndHandleError(getter);
   },
-}
+};

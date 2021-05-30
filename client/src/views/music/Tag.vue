@@ -1,15 +1,15 @@
 <template>
-  <AlbumCollection 
-    :albums="albums" 
+  <AlbumCollection
+    :albums="albums"
     :loading="loading"
-    :more="more" 
-    @more="getMore" 
+    :more="more"
+    @more="getMore"
   />
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection"
-import formatters from "../../mixins/formatters"
+import AlbumCollection from "../../components/music/AlbumCollection";
+import formatters from "../../mixins/formatters";
 
 export default {
   name: "TagView",
@@ -21,13 +21,13 @@ export default {
   },
   mixins: [formatters],
   computed: {
-    albums () {
+    albums() {
       return this.$store.getters.taggedAlbums(this.tag);
     },
-    loading () {
+    loading() {
       return this.$store.getters.loadingTaggedAlbums(this.tag);
     },
-    more () {
+    more() {
       // Boolean that tells the component whether there are more albums to get
       return this.$store.getters.moreAlbumsWithTag(this.tag);
     },
@@ -35,19 +35,19 @@ export default {
   title: function () {
     return this.formatTag(this.tag);
   },
-  created () {
+  created() {
     this.getTaggedAlbums();
   },
-  watch: {    
-    "tag": "getTaggedAlbums"
+  watch: {
+    tag: "getTaggedAlbums",
   },
   methods: {
-    getTaggedAlbums () {
+    getTaggedAlbums() {
       this.$store.dispatch("getTaggedAlbums", this.tag);
     },
-    getMore () {
-      this.$store.dispatch("getMoreTaggedAlbums", this.tag);      
+    getMore() {
+      this.$store.dispatch("getMoreTaggedAlbums", this.tag);
     },
-  }
-}
+  },
+};
 </script>

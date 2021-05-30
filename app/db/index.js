@@ -6,9 +6,8 @@ const datastore = new Datastore();
 gstore.connect(datastore);
 console.log(`datastore connected to: ${process.env.DATASTORE_PROJECT_ID}`);
 
-
 function parseIndexerTransaction(path) {
-  if(path[0] === "IndexerTransaction") {
+  if (path[0] === "IndexerTransaction") {
     return [path[0], parseInt(path[1], 10), path[2], path[3]];
   } else {
     return path;
@@ -23,8 +22,8 @@ function parseIndexerTransaction(path) {
 */
 function renameKey(obj) {
   let prop;
-  
-  if (obj && obj.hasOwnProperty(datastore.KEY)) {
+
+  if (obj && Object.prototype.hasOwnProperty.call(obj, datastore.KEY)) {
     prop = datastore.KEY;
     obj.__key = obj[prop];
     delete obj[prop];

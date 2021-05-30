@@ -2,51 +2,49 @@
   <div>
     <RecordSpinner v-if="loading" />
     <div v-if="!loading">
-      <h1>{{artist.name}}</h1>
-      <AlbumCollection 
-        :albums="albums"
-        sortBy="year"
-        :hideArtistLinks="true" />
+      <h1 class="mb-3">{{ artist.name }}</h1>
+      <AddToCrate :keyToAdd="artist.__key" class="col-4 col-md-3 mb-3" />
+      <AlbumCollection :albums="albums" sortBy="year" :hideArtistLinks="true" />
     </div>
   </div>
 </template>
 
 <script>
-import AddToCrate from '../../components/AddToCrate.vue';
+import AddToCrate from "../../components/AddToCrate.vue";
 import RecordSpinner from "../../components/RecordSpinner";
 import AlbumCollection from "../../components/music/AlbumCollection";
 
 export default {
   components: { AddToCrate, AlbumCollection, RecordSpinner },
-  data () {
+  data() {
     return {
       loading: true,
-    }
+    };
   },
   props: {
     id: String,
   },
   computed: {
-    artist () {
+    artist() {
       return this.$store.getters.artist(this.id);
     },
-    albums () {
+    albums() {
       return this.$store.getters.artistAlbums(this.id);
     },
   },
-  title () {
+  title() {
     return this.artist ? this.artist.name : "";
   },
-  created () {
+  created() {
     this.getArtist();
   },
   methods: {
-    async getArtist () {
+    async getArtist() {
       this.loading = true;
-      await this.$store.dispatch('getArtist', this.id);
-      await this.$store.dispatch('getArtistAlbums', this.id);
+      await this.$store.dispatch("getArtist", this.id);
+      await this.$store.dispatch("getArtistAlbums", this.id);
       this.loading = false;
     },
-  }
-}
+  },
+};
 </script>
