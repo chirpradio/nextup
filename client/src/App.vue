@@ -5,7 +5,9 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import "bootstrap/scss/bootstrap";
+
 :root {
   --dark-red: #822036;
   --bright-red: #ee0032;
@@ -15,16 +17,18 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-h1, h2, h3, h4, h5, h6, button, label, .btn, .navbar, .badge, .breadcrumb, .pagination {
+h1, h2, h3, h4, h5, h6, button, label, legend, .btn, .navbar, .badge, .breadcrumb, .pagination {
   font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial, sans-serif;  
 }
 
 a { 
   color: var(--dark-red);
+  text-decoration: none;
 }
 
 a:hover {
   color: var(--bright-red);
+  text-decoration: underline;
 }
 
 button.btn-chirp-red {
@@ -53,7 +57,6 @@ button.btn-link-chirp-red:hover, a.btn-link-chirp-red:hover {
 .search_result__col {
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
 }
 </style>
 

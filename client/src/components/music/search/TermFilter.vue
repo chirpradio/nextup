@@ -1,10 +1,10 @@
 <template>
-  <form id="filters" class="form-inline" v-on:submit.prevent="search"> 
-    <div class="form-group flex-fill mr-2">
+  <form id="filters" v-on:submit.prevent="search"> 
+    <div class="flex-grow-1 mr-2">
       <label class="sr-only" for="search">Search</label>
       <input class="form-control w-100" id="search" name="term" type="search" placeholder="search term" v-model="query.term" aria-label="search">
     </div>
-    <div class="form-group mr-2">
+    <div class="col-auto">
       <button class="btn btn-chirp-red" type="submit">Search</button>
     </div>
   </form>

@@ -9,7 +9,7 @@
         <slot name="rows"></slot>
       </div>
       
-      <div v-if="showAllLink && thereAreHits && thereAreMoreHits && !loading" class="border-top py-2 mx-0">
+      <div v-if="showAllLink && thereAreHits && thereAreMoreHits && !loading" class="border-top py-2 ps-4">
         <router-link class="pl-3" :to="{ path: this.linkPath, query: this.$route.query }">view all {{results.count}} {{type}}...</router-link>
       </div>
 

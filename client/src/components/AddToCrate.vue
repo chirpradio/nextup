@@ -1,7 +1,7 @@
 <template>
-  <form class="form-inline">
-    <select class="custom-select custom-select-sm" :class="{ 'col-6': limitWidth }" v-model="selected" @change="add">
-      <option disabled value="">– add to crate –</option>
+  <form>
+    <select class="form-select form-select-sm" :class="{ 'col-6': limitWidth }" v-model="selected" @change="add">
+      <option disabled value="">+ add to crate</option>
       <option v-for="crate in crates" :key="crate.id" :value="crate.id">{{ crate.name }}</option>
     </select>
     <small v-if="added" class="ml-2 text-success">added!</small>

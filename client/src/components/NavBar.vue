@@ -2,14 +2,14 @@
   <nav v-if="isAuthenticated" class="navbar navbar-dark navbar-expand-sm bg-dark">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">NextUp</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbar-content">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item dropdown">
-            <button class="btn btn-link nav-link dropdown-toggle" to="/library" id="music-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-link nav-link dropdown-toggle" to="/library" id="music-menu-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Library
             </button>
             <div class="dropdown-menu" aria-labelledby="music-menu-link">
@@ -25,10 +25,10 @@
           <input class="form-control mr-sm-2" type="search" v-model="term" placeholder="Search" aria-label="Search">        
         </form>
         <div class="dropdown">
-          <button class="btn btn-outline-link navbar-text dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-outline-link navbar-text dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{userName}}
           </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
             <button class="dropdown-item" @click="logOut">log out</button>
           </div>
         </div>

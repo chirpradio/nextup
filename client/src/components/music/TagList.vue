@@ -1,6 +1,6 @@
 <template>
   <ul class="list-inline">
-    <li v-for="tag in tags" :key="tag" class="list-inline-item badge badge-secondary">{{formatTag(tag)}}</li>
+    <li v-for="tag in tags" :key="tag" class="list-inline-item badge rounded-pill bg-dark">{{formatTag(tag)}}</li>
   </ul>
 </template>
 

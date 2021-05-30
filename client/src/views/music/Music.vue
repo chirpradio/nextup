@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <Breadcrumb v-if="!this.$route.meta.hideBreadcrumb" />
     <router-view />
   </div>

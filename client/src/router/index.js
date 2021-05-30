@@ -89,6 +89,7 @@ const routes = [
           },
           props: {
             results: {
+              showAllLink: false,
               showHeader: false,
               showPagination: true,
             },
@@ -104,6 +105,7 @@ const routes = [
           },
           props: {
             results: {
+              showAllLink: false,
               showHeader: false,
               showPagination: true,
             },

@@ -8,7 +8,7 @@
     :showPagination="showPagination" >
 
     <template v-slot:headings>
-      <AlbumResultHeadings />
+      <AlbumResultHeadings class="d-none d-sm-flex" />
     </template>
     <template v-slot:rows>
       <AlbumResultRows :results="results" />

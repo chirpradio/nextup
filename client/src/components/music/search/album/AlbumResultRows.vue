@@ -5,7 +5,7 @@
         <AlbumArtLink :album="hit._source" srcSize="med" />
       </div>
       <div class="col-sm-3 search_result__col">
-        <div v-if="hit._source.is_compilation" class="badge badge-info">Compilation</div>
+        <div v-if="hit._source.is_compilation" class="badge bg-secondary">Compilation</div>
         <ArtistLink v-if="!hit._source.is_compilation" :artist="hit._source.album_artist" />                 
       </div>
       <div class="col-sm-4 search_result__col">        

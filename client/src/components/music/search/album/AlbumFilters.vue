@@ -1,41 +1,41 @@
 <template>
-  <form id="filters" class="form-inline form-row pl-2" v-on:submit.prevent="search"> 
-    <div class="form-group col-lg-2">
+  <form id="filters" class="row pl-2" v-on:submit.prevent="search"> 
+    <div class="col-lg-2">
       <label class="" for="search">Album/artist name</label>
       <input class="form-control w-100" id="search" type="search" v-model="query.term" aria-label="search">
     </div>
-    <div class="form-group col-lg-2 mt-1">
+    <div class="col-lg-2 mt-1">
       <label class="" for="label">Label</label>
       <input class="form-control w-100" id="label" type="search" v-model="query.album.label">
     </div>
-    <div class="form-group col-lg-1 mt-1">
+    <div class="col-lg-1 mt-1">
       <label class="" for="year">Year</label>
       <input class="form-control w-100" id="year" type="number" v-model="query.album.year">
     </div>
-    <div class="form-group col-lg-1 mt-1">
+    <div class="col-lg-1 mt-1">
       <label for="rotation">Rotation</label>
-      <select id="rotation" class="form-control w-100" v-model="query.album.rotation">
+      <select id="rotation" class="form-select" v-model="query.album.rotation">
         <option value="any">Any</option>
         <option value="heavy_rotation">Heavy</option>
         <option value="light_rotation">Light</option>
       </select>
     </div>
-    <div class="form-group col-lg-1 mt-1">
+    <div class="col-lg-2 mt-1">
       <label for="local">Local</label>
-      <select id="local" class="form-control w-100" v-model="query.album.local">
+      <select id="local" class="form-select" v-model="query.album.local">
         <option value="any">Any</option>
         <option value="local_current">Current</option>
         <option value="local_classic">Classic</option>
       </select>
     </div>
-    <div class="form-group col-lg-1 mt-1 mr-1">    
-      <label class="w-100">&nbsp;</label>
-      <label class="badge badge-info ml-1 py-0" for="is_compilation">  
-        <input class="form-control mr-1" id="is_compilation" type="checkbox" v-model="query.album.is_compilation">       
-        Compilation        
-      </label> 
+    <div class="col-lg-1 mt-1 mr-2">    
+      <label for="is_compilation">Compilation</label>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="is_compilation" v-model="query.album.is_compilation">
+        <label class="form-check-label"></label>
+      </div>      
     </div>
-    <div class="form-group col-xl-2 mt-1">
+    <div class="col-lg-2 mt-1">
       <label class="w-100">&nbsp;</label>
       <div class="flex-row">
         <button class="btn btn-chirp-red" type="submit">Search</button>

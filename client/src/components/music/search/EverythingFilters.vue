@@ -1,15 +1,15 @@
 <template>
-  <form id="filters" class="form-inline" v-on:submit.prevent="search"> 
-    <div class="form-group flex-fill mr-2">
-      <label class="sr-only" for="search">Search</label>
-      <input class="form-control w-100" id="search" name="term" type="search" placeholder="search by album, track, or artist name (or words in a review)" v-model="term" aria-label="search">
+  <form id="filters" class="row row-cols-lg-auto" v-on:submit.prevent="search"> 
+    <div class="flex-grow-1 mr-2 mb-3">
+      <label class="visually-hidden" for="search">Search</label>
+      <input class="form-control" id="search" name="term" type="search" placeholder="search by album, track, or artist name" v-model="term" aria-label="search">
     </div>
-    <div class="form-group mr-2">
+    <div class="col-auto">
       <button class="btn btn-chirp-red" type="submit">Search Everything</button>
     </div>
-    <div class="form-group">      
+    <div class="col-auto">      
       <div class="dropdown">
-        <button class="btn btn-link-chirp-red dropdown-toggle" type="button" id="searchByTypeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-link-chirp-red dropdown-toggle" type="button" id="searchByTypeButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Search by Type
         </button>
         <div class="dropdown-menu" aria-labelledby="searchByType">

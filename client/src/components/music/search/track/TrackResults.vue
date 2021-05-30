@@ -8,7 +8,7 @@
     :showPagination="showPagination" >
 
     <template v-slot:headings>
-      <TrackResultHeadings />
+      <TrackResultHeadings class="d-none d-sm-flex" />
     </template>
     <template v-slot:rows>
       <TrackResultRows :results="results" />
