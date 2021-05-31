@@ -5,3 +5,5 @@ node_modules/
 app/env_variables.yaml
 app/routes/api/redoc-static.html
 app/db/test/
+client/dist
+app/client

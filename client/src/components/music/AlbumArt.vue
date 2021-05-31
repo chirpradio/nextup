@@ -15,6 +15,8 @@
 </style>
 
 <script>
+import defaultAlbumArt from "../../assets/default-album-art.png";
+
 export default {
   name: "AlbumArt",
   data() {
@@ -46,7 +48,7 @@ export default {
     imgSrc() {
       const src = this.album[`lastfm_${this.srcSize}_image_url`];
       if (this.broken || !src) {
-        return `${process.env.BASE_URL}default-album-art.png`;
+        return defaultAlbumArt;
       }
       return src;
     },

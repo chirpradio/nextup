@@ -4,10 +4,22 @@ env: standard
 includes:
   - env_variables.yaml
 handlers:
-  - url: /.*
+  - url: /api.*
     secure: always
     redirect_http_response_code: 301
     script: auto
+  - url: /tasks/.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto  
+  - url: /assets
+    static_dir: client/assets
+  - url: /favicon\.ico
+    static_files: client/favicon.ico
+    upload: client/favicon.ico
+  - url: /.*
+    static_files: client/index.html
+    upload: client/index.html
 automatic_scaling:
   max_instances: 2
   max_idle_instances: 1

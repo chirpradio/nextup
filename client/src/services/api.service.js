@@ -4,7 +4,7 @@ import router from "../router";
 import store from "../store";
 
 const instance = axios.create({
-  baseURL: "http://localhost:1071/api",
+  baseURL: process.env.VUE_APP_API_URL,
 });
 
 function setAuthorizatonHeader(token) {

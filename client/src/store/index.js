@@ -32,8 +32,14 @@ const persistCratesInLocalStorage = createPersistedState({
   paths: ["crates.crates", "auth.user"],
 });
 
+const plugins = [persistTokenInCookies, persistCratesInLocalStorage];
+const debug = process.env.NODE_ENV !== "production";
+if (debug) {
+  plugins.push(createLogger());
+}
+
 export default createStore({
-  plugins: [persistTokenInCookies, persistCratesInLocalStorage, createLogger()],
+  plugins,
   modules: {
     auth,
     albums,
