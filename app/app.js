@@ -12,9 +12,6 @@ const cors = require("cors");
 app.use(cors());
 
 require("./config/auth")(app);
-require("./config/flashMessages")(app);
-require("./config/publicFiles")(app, express);
-require("./config/views")(app);
 require("./routes")(app);
 
 module.exports = app;

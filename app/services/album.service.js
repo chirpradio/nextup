@@ -21,20 +21,12 @@ const jsonOptions = {
   },
 };
 
-function albumIsReviewed(album) {
-  return album.is_reviewed;
-}
-
 function albumInRotation(album) {
   return (
     album.current_tags &&
     (album.current_tags.includes("heavy_rotation") ||
       album.current_tags.includes("light_rotation"))
   );
-}
-
-function albumNotInRotation(album) {
-  return !albumInRotation(album);
 }
 
 async function getPopulatedAlbum(albumId) {
@@ -65,26 +57,6 @@ async function getAlbumById(
     runOptions
   );
   return await (populate ? album.populate("album_artist") : album);
-}
-
-async function getPopulatedAlbumByKey(
-  key,
-  { format = "JSON", populate = true } = {}
-) {
-  const runOptions = format === "JSON" ? jsonOptions : options;
-  const album = await Album.findOne(
-    { __key__: key, revoked: false },
-    null,
-    null,
-    runOptions
-  );
-  return await (populate ? album.populate("album_artist") : album);
-}
-
-async function getAlbumByKey(key, { format = "JSON" } = {}) {
-  const runOptions = format === "JSON" ? jsonOptions : options;
-  const response = await Album.query().filter("__key__", key).run(runOptions);
-  return response.entities[0];
 }
 
 async function addImagesFromLastFm(album) {
@@ -130,29 +102,6 @@ async function addImagesFromLastFm(album) {
       console.error(err);
     }
   }
-}
-
-async function getRandomAlbumsWithArt(albums, count) {
-  const indexes = [];
-  const selected = [];
-  const imagePromises = [];
-
-  if (!albums || albums.length === 0) {
-    return selected;
-  }
-
-  while (indexes.length < count) {
-    const index = Math.floor(Math.random() * albums.length);
-    if (!indexes.includes(index)) {
-      indexes.push(index);
-      const album = albums[index];
-      selected.push(album);
-      imagePromises.push(await addImagesFromLastFm(album));
-    }
-  }
-
-  await Promise.all(imagePromises);
-  return selected;
 }
 
 async function listAlbumComments(album) {
@@ -215,15 +164,6 @@ async function sortAlbums(albums) {
 
     return a.title - b.title;
   });
-}
-
-async function listAlbumsByArtist(key) {
-  const query = Album.query()
-    .filter("album_artist", key)
-    .filter("revoked", false);
-  const { entities: albums } = await query.run(options);
-  sortAlbums(albums);
-  return albums;
 }
 
 async function listAlbumsByCurrentTag(tag) {
@@ -289,19 +229,6 @@ async function listAlbumsByImportDate(
   return albums;
 }
 
-async function loadAlbumImages(albums, artist) {
-  const imagePromises = [];
-  albums.forEach((album) => {
-    if (album.lastfm_retrieval_time === null) {
-      album.album_artist = artist;
-      imagePromises.push(addImagesFromLastFm(album));
-    }
-  });
-  if (imagePromises.length > 0) {
-    await Promise.all(imagePromises);
-  }
-}
-
 function flattenArtists(albums) {
   return albums.map((album) => {
     album.artist = album.album_artist
@@ -339,22 +266,13 @@ async function getFullAlbumDetails(albumId) {
 module.exports = {
   albumIsReviewed,
   albumInRotation,
-  albumNotInRotation,
   flattenArtists,
-  getAlbumById,
-  getAlbumByKey,
-  getFullAlbumDetails,
-  getPopulatedAlbum,
-  getPopulatedAlbumByKey,
-  getRandomAlbumsWithArt,
+  getAlbumById,  
+  getFullAlbumDetails,    
   addImagesFromLastFm,
-  listAlbumComments,
-  listAlbumReviews,
-  listAlbumTracks,
-  listAlbumsByArtist,
+  listAlbumTracks,  
   listAlbumsByCurrentTag,
-  listAlbumsByImportDate,
-  loadAlbumImages,
+  listAlbumsByImportDate,  
   options,
   getAlbumsByAlbumArtist,
   getAlbumsWithTag,
