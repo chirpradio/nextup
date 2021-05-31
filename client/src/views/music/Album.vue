@@ -70,8 +70,7 @@
           <div class="row ms-2 flex-fill">
             <div class="col-12 col-md-9">
               <div class="col mb-1">
-                <TrackRecommended :track="track" class="pe-1" />
-                <TrackExplicit :track="track" class="pe-1" />
+                <TrackTag :track="track" class="pe-1" />
                 <span class="fw-bold">{{ track.title }}</span>
                 <span v-if="album.is_compilation">
                   by
@@ -80,9 +79,8 @@
               </div>
               <div class="col mb-1">
                 <TrackDuration :track="track" />
-                &middot;
                 <small class="text-muted fw-light">
-                  {{ track.bit_rate_kbps }}kbps
+                  &middot; {{ track.bit_rate_kbps }}kbps
                 </small>
               </div>
             </div>
@@ -106,8 +104,7 @@ import TagList from "../../components/music/TagList";
 import AlbumArt from "../../components/music/AlbumArt";
 import formatters from "../../mixins/formatters";
 import TrackDuration from "../../components/music/TrackDuration";
-import TrackRecommended from "../../components/music/TrackRecommended";
-import TrackExplicit from "../../components/music/TrackExplicit";
+import TrackTag from "../../components/music/TrackTag";
 
 export default {
   components: {
@@ -117,8 +114,7 @@ export default {
     TagList,
     AlbumArt,
     TrackDuration,
-    TrackRecommended,
-    TrackExplicit,
+    TrackTag,
   },
   data() {
     return {
