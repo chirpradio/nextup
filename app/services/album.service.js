@@ -264,7 +264,6 @@ async function getFullAlbumDetails(albumId) {
 }
 
 module.exports = {
-  albumIsReviewed,
   albumInRotation,
   flattenArtists,
   getAlbumById,  
