@@ -1,5 +1,5 @@
 import api from "../../services/api.service";
-import { decode } from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
 
 const state = () => ({
   token: "",
@@ -9,7 +9,7 @@ const state = () => ({
 const getters = {
   isAuthenticated: (state) => {
     try {
-      const decoded = decode(state.token);
+      const decoded = jwt_decode(state.token);
       if (!decoded || !decoded.exp) {
         return false;
       }
@@ -28,7 +28,7 @@ const actions = {
     const response = await api.login(email, password);
     if (response.token) {
       commit("token", response.token);
-      const decoded = decode(response.token);
+      const decoded = jwt_decode(response.token);
       commit("user", decoded.user);
     } else {
       console.log(response);

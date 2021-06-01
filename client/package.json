@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "report": "vue-cli-service build --report",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
@@ -13,8 +14,8 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.1",
     "core-js": "^3.6.5",
-    "js-cookie": "^2.2.1",
-    "jsonwebtoken": "^8.5.1",
+    "js-cookie": "^2.2.1",    
+    "jwt-decode": "^3.1.2",
     "qs": "^6.5.2",
     "vue": "^3.0.0",
     "vue-gtag-next": "^1.14.0",
