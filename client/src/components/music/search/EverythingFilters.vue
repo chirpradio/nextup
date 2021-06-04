@@ -36,8 +36,16 @@
             }"
           >
             Album
+          </router-link>          
+          <router-link
+            class="dropdown-item"
+            :to="{
+              path: '/library/search/track',
+              query: { term: this.term, type: 'track' },
+            }"
+          >
+            Track
           </router-link>
-          <a class="dropdown-item" href="/library/search/track">Track</a>
         </div>
       </div>
     </div>
@@ -60,6 +68,10 @@ export default {
   },
   methods: {
     search: function () {
+      this.$gtag.event("Search", {
+        event_category: "Library",
+        event_label: "Search Everything",
+      });
       this.$router.push({ query: { term: this.term } });
     },
     dispatch: async function () {
