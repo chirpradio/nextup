@@ -1,9 +1,9 @@
 <template>
-  <form id="filters" v-on:submit.prevent="search">
-    <div class="flex-grow-1 mr-2">
-      <label class="sr-only" for="search">Search</label>
+  <form id="filters" class="row row-cols-lg-auto" @submit.prevent="search">
+    <div class="flex-grow-1 mr-2 mb-3">
+      <label class="visually-hidden" for="search">Search</label>
       <input
-        class="form-control w-100"
+        class="form-control"
         id="search"
         name="term"
         type="search"
@@ -19,8 +19,12 @@
 </template>
 
 <script>
+import formatters from "../../../mixins/formatters";
+import updateTitle from "../../../mixins/updateTitle";
+
 export default {
   name: "TermFilter",
+  mixins: [formatters, updateTitle],
   props: {
     type: String,
   },
@@ -37,6 +41,7 @@ export default {
   },
   created() {
     this.dispatch();
+    this.updateTitle(`${this.capitalizeFirstLetter(this.type)} Search`);
   },
   watch: {
     "$route.query": "dispatch",

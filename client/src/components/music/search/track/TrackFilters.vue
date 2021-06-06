@@ -79,7 +79,7 @@
               <input
                 class="form-check-input"
                 type="checkbox"
-                id="is_compilation"
+                id="is_recommended"
                 v-model="query.track.is_recommended"
               />
               <label class="form-check-label"></label>
@@ -159,6 +159,7 @@
 
 <script>
 import queryMethods from "../../../../mixins/queryMethods";
+import updateTitle from "../../../../mixins/updateTitle";
 
 export default {
   name: "TrackFilters",
@@ -189,11 +190,12 @@ export default {
   },
   created() {
     this.dispatch();
+    this.updateTitle("Track Search");
   },
   watch: {
     "$route.query": "dispatch",
   },
-  mixins: [queryMethods],
+  mixins: [queryMethods, updateTitle],
   methods: {
     search: function () {
       /*

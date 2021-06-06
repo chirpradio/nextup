@@ -13,6 +13,7 @@
 import AddToCrate from "../../components/AddToCrate.vue";
 import RecordSpinner from "../../components/RecordSpinner";
 import AlbumCollection from "../../components/music/AlbumCollection";
+import updateTitle from "../../mixins/updateTitle";
 
 export default {
   components: { AddToCrate, AlbumCollection, RecordSpinner },
@@ -32,18 +33,17 @@ export default {
       return this.$store.getters.artistAlbums(this.id);
     },
   },
-  title() {
-    return this.artist ? this.artist.name : "";
-  },
   created() {
     this.getArtist();
   },
+  mixins: [updateTitle],
   methods: {
     async getArtist() {
       this.loading = true;
       await this.$store.dispatch("getArtist", this.id);
       await this.$store.dispatch("getArtistAlbums", this.id);
       this.loading = false;
+      this.updateTitle(this.artist.name);
     },
   },
 };

@@ -9,10 +9,10 @@
 
 <script>
 import AlbumCollection from "../../components/music/AlbumCollection";
+import updateTitle from "../../mixins/updateTitle";
 
 export default {
-  name: "LibraryAdds",
-  title: "Library Adds",
+  name: "LibraryAdds",  
   components: {
     AlbumCollection,
   },
@@ -30,7 +30,9 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getRecentAlbums");
+    this.updateTitle("Library Adds");
   },
+  mixins: [updateTitle],
   methods: {
     getMore() {
       this.$store.dispatch("getMoreRecentAlbums");

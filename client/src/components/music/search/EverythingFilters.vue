@@ -53,8 +53,11 @@
 </template>
 
 <script>
+import updateTitle from "../../../mixins/updateTitle";
+
 export default {
   name: "EverythingFilters",
+  mixins: [updateTitle],
   data() {
     return {
       term: this.$route.query.term,
@@ -62,6 +65,7 @@ export default {
   },
   created() {
     this.dispatch();
+    this.updateTitle("Search");
   },
   watch: {
     "$route.query": "dispatch",

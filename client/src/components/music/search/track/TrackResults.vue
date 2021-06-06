@@ -20,10 +20,12 @@
 import Results from "../Results";
 import TrackResultHeadings from "./TrackResultHeadings";
 import TrackResultRows from "./TrackResultRows";
+import updateTitle from "../../../../mixins/updateTitle";
 
 export default {
   name: "TrackResults",
   components: { TrackResultHeadings, TrackResultRows, Results },
+  mixins: [updateTitle],
   props: {
     showAllLink: {
       type: Boolean,
@@ -47,6 +49,6 @@ export default {
 
       return this.$store.getters.results.track || defaultResults;
     },
-  },
+  },  
 };
 </script>

@@ -10,6 +10,7 @@
 <script>
 import AlbumCollection from "../../components/music/AlbumCollection";
 import formatters from "../../mixins/formatters";
+import updateTitle from "../../mixins/updateTitle";
 
 export default {
   name: "TagView",
@@ -19,7 +20,7 @@ export default {
   components: {
     AlbumCollection,
   },
-  mixins: [formatters],
+  mixins: [formatters, updateTitle],
   computed: {
     albums() {
       return this.$store.getters.taggedAlbums(this.tag);
@@ -32,11 +33,11 @@ export default {
       return this.$store.getters.moreAlbumsWithTag(this.tag);
     },
   },
-  title: function () {
-    return this.formatTag(this.tag);
-  },
   created() {
-    this.getTaggedAlbums();
+    this.getTaggedAlbums();    
+  },
+  updated() {
+    this.updateTitle(this.formatTag(this.tag));
   },
   watch: {
     tag: "getTaggedAlbums",

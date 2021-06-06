@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <RecordSpinner v-if="loading" />
     <div class="px-6" v-if="!loading">
       <div class="row mb-3">
@@ -103,6 +103,7 @@ import ArtistLink from "../../components/music/ArtistLink";
 import TagList from "../../components/music/TagList";
 import AlbumArt from "../../components/music/AlbumArt";
 import formatters from "../../mixins/formatters";
+import updateTitle from "../../mixins/updateTitle";
 import TrackDuration from "../../components/music/TrackDuration";
 import TrackTag from "../../components/music/TrackTag";
 
@@ -129,18 +130,16 @@ export default {
       return this.$store.getters.albumById(this.id);
     },
   },
-  title() {
-    return this.album ? this.album.title : "";
-  },
   created() {
     this.getAlbum();
   },
-  mixins: [formatters],
+  mixins: [formatters, updateTitle],
   methods: {
     async getAlbum() {
       this.loading = true;
       await this.$store.dispatch("getAlbum", this.id);
       this.loading = false;
+      this.updateTitle(this.album.title);
     },
   },
 };

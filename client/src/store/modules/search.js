@@ -20,11 +20,13 @@ const getters = {
 
 const actions = {
   async search({ commit }, query) {
-    commit("loading", true);
-    commit("query", query);
-    const response = await api.search(query);
-    commit("results", { results: response, type: query.type });
-    commit("loading", false);
+    if(query) {
+      commit("loading", true);
+      commit("query", query);
+      const response = await api.search(query);
+      commit("results", { results: response, type: query.type });
+      commit("loading", false);
+    }
   },
   async setOffset({ commit, dispatch, state }, offset) {
     commit("offset", offset);

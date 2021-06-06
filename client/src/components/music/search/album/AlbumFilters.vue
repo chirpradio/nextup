@@ -73,6 +73,7 @@
 
 <script>
 import queryMethods from "../../../../mixins/queryMethods";
+import updateTitle from "../../../../mixins/updateTitle";
 
 export default {
   name: "AlbumFilters",
@@ -89,11 +90,12 @@ export default {
   },
   created() {
     this.dispatch();
+    this.updateTitle("Album Search");
   },
   watch: {
     "$route.query": "dispatch",
   },
-  mixins: [queryMethods],
+  mixins: [queryMethods, updateTitle],
   methods: {
     search: function () {
       /*

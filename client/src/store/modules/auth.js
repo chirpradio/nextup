@@ -35,7 +35,6 @@ const actions = {
     }
   },
   logOut({ commit }) {
-    console.log("logging out...");
     commit("token", "");
     commit("user", {});
   },

@@ -20,7 +20,7 @@
       <div class="col-auto mb-3">
         <button class="btn btn-chirp-red" type="submit">Search</button>
         <span class="mx-2">or</span>
-        <router-link to="/library/search" class="btn btn-outline-dark">
+        <router-link to="/library/search" class="btn btn-outline-dark" @click="sendRandomizeEvent">
           Randomize
         </router-link>
       </div>
@@ -60,10 +60,10 @@
 
 <script>
 import AlbumCollection from "../../components/music/AlbumCollection";
+import updateTitle from "../../mixins/updateTitle";
 
 export default {
   name: "MusicHome",
-  title: "Music",
   components: {
     AlbumCollection,
   },
@@ -76,12 +76,24 @@ export default {
     this.$store.dispatch("getTaggedAlbums", "heavy_rotation");
     this.$store.dispatch("getTaggedAlbums", "light_rotation");
     this.$store.dispatch("getRecentAlbums");
+    this.updateTitle("Library");
   },
+  mixins: [updateTitle],
   methods: {
     search() {
+      this.$gtag.event("Search", {
+        event_category: "Library",
+        event_label: "Search – Hero",
+      });
       this.$router.push({
         name: "SearchEverything",
         query: { term: this.term },
+      });
+    },
+    sendRandomizeEvent() {
+      this.$gtag.event("Search", {
+        event_category: "Library",
+        event_label: "Randomize",
       });
     },
   },

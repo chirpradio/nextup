@@ -1,5 +1,10 @@
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export default {
   methods: {
+    capitalizeFirstLetter,
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString();
@@ -7,8 +12,8 @@ export default {
     formatTag(value) {
       return value
         .split("_")
-        .map((token) => token.charAt(0).toUpperCase() + token.slice(1))
+        .map(capitalizeFirstLetter)
         .join(" ");
-    },
+    },    
   },
 };

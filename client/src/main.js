@@ -3,7 +3,6 @@ import { Dropdown } from "../node_modules/bootstrap/js/dist/dropdown"; // eslint
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import updateTitle from "./mixins/updateTitle";
 import VueGtag from "vue-gtag-next";
 
 const debug = process.env.NODE_ENV !== "production";
@@ -16,6 +15,5 @@ createApp(App)
       id: "G-M6XM24GCTX",
     },
     useDebugger: debug,
-  })
-  .mixin(updateTitle)
+  })  
   .mount("#app");
