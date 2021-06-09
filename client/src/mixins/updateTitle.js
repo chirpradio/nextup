@@ -4,5 +4,5 @@ export default {
       const suffix = "NextUp";
       document.title = prefix ? `${prefix} – ${suffix}` : suffix;
     },
-  }, 
+  },
 };

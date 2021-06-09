@@ -15,5 +15,5 @@ createApp(App)
       id: "G-M6XM24GCTX",
     },
     useDebugger: debug,
-  })  
+  })
   .mount("#app");

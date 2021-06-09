@@ -10,10 +10,7 @@ export default {
       return date.toLocaleDateString();
     },
     formatTag(value) {
-      return value
-        .split("_")
-        .map(capitalizeFirstLetter)
-        .join(" ");
-    },    
+      return value.split("_").map(capitalizeFirstLetter).join(" ");
+    },
   },
 };

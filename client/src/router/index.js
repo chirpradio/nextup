@@ -8,6 +8,7 @@ import Tag from "../views/music/Tag.vue";
 import LibraryAdds from "../views/music/LibraryAdds.vue";
 import Artist from "../views/music/Artist.vue";
 import Search from "../views/music/Search.vue";
+import RotationAlbums from "../views/reports/RotationAlbums";
 import EverythingFilters from "../components/music/search/EverythingFilters.vue";
 import EverythingResults from "../components/music/search/EverythingResults.vue";
 import AlbumFilters from "../components/music/search/album/AlbumFilters.vue";
@@ -172,6 +173,10 @@ const routes = [
         ],
       },
     ],
+  },
+  {
+    path: "/reports/rotation/albums",
+    component: RotationAlbums,
   },
 ];
 

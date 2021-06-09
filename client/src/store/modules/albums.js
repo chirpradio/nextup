@@ -44,6 +44,24 @@ const getters = {
       );
     });
   },
+  rotationAlbums: (state) => (date) => {
+    return [
+      ...state.tagCollections.heavy_rotation.albums,
+      ...state.tagCollections.light_rotation.albums,
+    ]
+      .filter((album) => new Date(album.import_timestamp) > date)
+      .sort((a, b) => {
+        if (!a.album_artist && !b.album_artist) {
+          return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+        }
+        if (!a.album_artist) return 1;
+        if (!b.album_artist) return -1;
+        return a.album_artist.name.toLowerCase() <
+          b.album_artist.name.toLowerCase()
+          ? -1
+          : 1;
+      });
+  },
   taggedAlbums: (state) => (tag) => {
     return state.tagCollections[tag].albums;
   },
@@ -75,7 +93,7 @@ const actions = {
     commit("recent", response);
     commit("loadingRecent", false);
   },
-  async getTaggedAlbums({ commit, state }, tag) {
+  async getTaggedAlbums({ commit, state }, { tag, limit = 25 } = {}) {
     if (state.tagCollections[tag].albums.length === 0) {
       commit("loadingTagCollections", {
         tag,
@@ -83,6 +101,7 @@ const actions = {
       });
       const response = await api.getTaggedAlbums({
         tag,
+        limit,
         offset: 0,
       });
       commit("tagCollections", {
@@ -95,13 +114,14 @@ const actions = {
       });
     }
   },
-  async getMoreTaggedAlbums({ commit, state }, tag) {
+  async getMoreTaggedAlbums({ commit, state }, { tag, limit = 25 } = {}) {
     commit("loadingTagCollections", {
       tag,
       loading: true,
     });
     const response = await api.getTaggedAlbums({
       tag,
+      limit,
       offset: state.tagCollections[tag].albums.length,
     });
     commit("tagCollections", {

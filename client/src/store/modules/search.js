@@ -20,7 +20,7 @@ const getters = {
 
 const actions = {
   async search({ commit }, query) {
-    if(query) {
+    if (query) {
       commit("loading", true);
       commit("query", query);
       const response = await api.search(query);

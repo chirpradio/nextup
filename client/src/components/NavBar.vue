@@ -54,6 +54,22 @@
               </router-link>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <button
+              class="btn btn-link nav-link dropdown-toggle"
+              id="report-menu-link"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Reports
+            </button>
+            <div class="dropdown-menu" aria-labelledby="report-menu-link">
+              <router-link class="dropdown-item" to="/reports/rotation/albums">
+                Rotation Albums
+              </router-link>
+            </div>
+          </li>
         </ul>
         <form
           id="navbarSearch"
