@@ -34,7 +34,7 @@ export default {
     },
   },
   created() {
-    this.getTaggedAlbums();    
+    this.getTaggedAlbums();
   },
   updated() {
     this.updateTitle(this.formatTag(this.tag));
@@ -44,10 +44,10 @@ export default {
   },
   methods: {
     getTaggedAlbums() {
-      this.$store.dispatch("getTaggedAlbums", this.tag);
+      this.$store.dispatch("getTaggedAlbums", { tag: this.tag });
     },
     getMore() {
-      this.$store.dispatch("getMoreTaggedAlbums", this.tag);
+      this.$store.dispatch("getMoreTaggedAlbums", { tag: this.tag });
     },
   },
 };

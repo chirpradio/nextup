@@ -32,7 +32,7 @@
 import RecordSpinner from "../components/RecordSpinner";
 
 export default {
-  components: { RecordSpinner, },
+  components: { RecordSpinner },
   data() {
     return {
       email: "",
@@ -42,8 +42,8 @@ export default {
     };
   },
   computed: {
-    isAuthenticated() {      
-      return this.$store.getters.isAuthenticated;    
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
         await this.$store.dispatch("logIn", {
           email: this.email,
           password: this.password,
-        });        
+        });
         await this.$store.dispatch("getCrates");
         this.$router.push(this.$route.query.redirect || "/");
       } catch (error) {

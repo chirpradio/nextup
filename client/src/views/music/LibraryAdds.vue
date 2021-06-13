@@ -12,7 +12,7 @@ import AlbumCollection from "../../components/music/AlbumCollection";
 import updateTitle from "../../mixins/updateTitle";
 
 export default {
-  name: "LibraryAdds",  
+  name: "LibraryAdds",
   components: {
     AlbumCollection,
   },
@@ -28,14 +28,17 @@ export default {
       return this.$store.getters.moreRecentAlbums;
     },
   },
-  mounted() {
-    this.$store.dispatch("getRecentAlbums");
+  async mounted() {
     this.updateTitle("Library Adds");
+    await this.$store.dispatch("getRecentAlbums");    
+    while(this.albums.length === 0 && this.more) {
+      await this.getMore();
+    }
   },
   mixins: [updateTitle],
   methods: {
-    getMore() {
-      this.$store.dispatch("getMoreRecentAlbums");
+    async getMore() {
+      await this.$store.dispatch("getMoreRecentAlbums");
     },
   },
 };

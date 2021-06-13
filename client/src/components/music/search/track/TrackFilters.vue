@@ -185,7 +185,9 @@ export default {
       };
     },
     toggleLabel() {
-      return this.filtersOpen ? "▾ close search filters" : "▸ open search filters";
+      return this.filtersOpen
+        ? "▾ close search filters"
+        : "▸ open search filters";
     },
   },
   created() {

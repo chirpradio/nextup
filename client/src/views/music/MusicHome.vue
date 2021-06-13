@@ -20,7 +20,11 @@
       <div class="col-auto mb-3">
         <button class="btn btn-chirp-red" type="submit">Search</button>
         <span class="mx-2">or</span>
-        <router-link to="/library/search" class="btn btn-outline-dark" @click="sendRandomizeEvent">
+        <router-link
+          to="/library/search"
+          class="btn btn-outline-dark"
+          @click="sendRandomizeEvent"
+        >
           Randomize
         </router-link>
       </div>
@@ -73,8 +77,8 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("getTaggedAlbums", "heavy_rotation");
-    this.$store.dispatch("getTaggedAlbums", "light_rotation");
+    this.$store.dispatch("getTaggedAlbums", { tag: "heavy_rotation" });
+    this.$store.dispatch("getTaggedAlbums", { tag: "light_rotation" });
     this.$store.dispatch("getRecentAlbums");
     this.updateTitle("Library");
   },

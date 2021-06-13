@@ -72,7 +72,7 @@ async function addImagesFromLastFm(album) {
         artist: album.album_artist.name,
         album: album.title,
       };
-      console.log("getting images from LastFM", options);
+      
       const data = await lastFm.albumGetInfo(options);
 
       if (

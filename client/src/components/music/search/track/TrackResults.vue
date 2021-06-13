@@ -49,6 +49,6 @@ export default {
 
       return this.$store.getters.results.track || defaultResults;
     },
-  },  
+  },
 };
 </script>

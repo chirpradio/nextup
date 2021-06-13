@@ -36,7 +36,7 @@
             }"
           >
             Album
-          </router-link>          
+          </router-link>
           <router-link
             class="dropdown-item"
             :to="{

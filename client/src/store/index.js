@@ -28,11 +28,11 @@ const persistTokenInCookies = createPersistedState({
   },
 });
 
-const persistCratesInLocalStorage = createPersistedState({
+const persistPathsInLocalStorage = createPersistedState({
   paths: ["crates.crates", "auth.user"],
 });
 
-const plugins = [persistTokenInCookies, persistCratesInLocalStorage];
+const plugins = [persistTokenInCookies, persistPathsInLocalStorage];
 const debug = process.env.NODE_ENV !== "production";
 if (debug) {
   plugins.push(createLogger());
