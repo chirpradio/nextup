@@ -90,6 +90,11 @@ export default {
     });
   },
 
+  async getRotationPlays(params) {
+    const getter = instance.get("/playlist/rotation", { params });
+    return await getAndHandleError(getter);
+  },
+
   async search(params) {
     const getter = instance.get(`/search`, {
       params,

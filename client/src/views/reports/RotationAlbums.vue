@@ -83,6 +83,7 @@ import TagList from "../../components/music/TagList";
 
 export default {
   name: "RotationAlbums",
+  title: "Rotation Albums",
   components: { RecordSpinner, AlbumTitleLink, ArtistLink, TagList },
   data() {
     const date = new Date();

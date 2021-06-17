@@ -68,6 +68,9 @@
               <router-link class="dropdown-item" to="/reports/rotation/albums">
                 Rotation Albums
               </router-link>
+              <router-link class="dropdown-item" to="/reports/rotation/plays">
+                Rotation Plays
+              </router-link>
             </div>
           </li>
         </ul>

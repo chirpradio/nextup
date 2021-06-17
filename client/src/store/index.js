@@ -5,6 +5,7 @@ import auth from "./modules/auth";
 import albums from "./modules/albums";
 import artists from "./modules/artists";
 import crates from "./modules/crates";
+import playlist from "./modules/playlist";
 import search from "./modules/search";
 import api from "../services/api.service";
 
@@ -45,6 +46,7 @@ export default createStore({
     albums,
     artists,
     crates,
+    playlist,
     search,
   },
 });

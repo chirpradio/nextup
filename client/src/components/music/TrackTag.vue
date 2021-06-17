@@ -4,7 +4,7 @@
 
 <style scoped>
 .nopacity {
-  opacity: 0.1;
+  opacity: 0;
 }
 </style>
 

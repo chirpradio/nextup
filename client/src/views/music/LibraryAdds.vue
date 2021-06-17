@@ -30,8 +30,8 @@ export default {
   },
   async mounted() {
     this.updateTitle("Library Adds");
-    await this.$store.dispatch("getRecentAlbums");    
-    while(this.albums.length === 0 && this.more) {
+    await this.$store.dispatch("getRecentAlbums");
+    while (this.albums.length === 0 && this.more) {
       await this.getMore();
     }
   },

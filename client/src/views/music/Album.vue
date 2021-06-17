@@ -68,9 +68,11 @@
           class="list-group-item d-flex align-items-start"
         >
           <div class="row ms-2 flex-fill">
-            <div class="col-12 col-md-9">
+            <div class="col-auto">
+              <TrackTag :track="track" class="pe-1" />
+            </div>
+            <div class="col-12 col-md-6">
               <div class="col mb-1">
-                <TrackTag :track="track" class="pe-1" />
                 <span class="fw-bold">{{ track.title }}</span>
                 <span v-if="album.is_compilation">
                   by

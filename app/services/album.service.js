@@ -21,14 +21,6 @@ const jsonOptions = {
   },
 };
 
-function albumInRotation(album) {
-  return (
-    album.current_tags &&
-    (album.current_tags.includes("heavy_rotation") ||
-      album.current_tags.includes("light_rotation"))
-  );
-}
-
 async function getPopulatedAlbum(albumId) {
   const options = {
     wrapNumbers: {
@@ -72,7 +64,7 @@ async function addImagesFromLastFm(album) {
         artist: album.album_artist.name,
         album: album.title,
       };
-      
+
       const data = await lastFm.albumGetInfo(options);
 
       if (
@@ -152,30 +144,6 @@ async function listAlbumTracks(album) {
   return tracks;
 }
 
-async function sortAlbums(albums) {
-  albums.sort((a, b) => {
-    if (b.year !== a.year) {
-      return b.year - a.year;
-    }
-
-    if (a.title === b.title) {
-      return a.disc_number - b.disc_number;
-    }
-
-    return a.title - b.title;
-  });
-}
-
-async function listAlbumsByCurrentTag(tag) {
-  const query = Album.query()
-    .filter("current_tags", tag)
-    .filter("revoked", false);
-  const { entities: albums } = await query
-    .run(options)
-    .populate("album_artist");
-  return albums;
-}
-
 function getBaseQuery({ limit = 25, offset = 0 } = {}) {
   return Album.query().filter("revoked", false).offset(offset).limit(limit);
 }
@@ -214,30 +182,6 @@ async function getAlbumsImportedSince({ date, limit, offset } = {}) {
   return await runAndRenameKeys(query);
 }
 
-async function listAlbumsByImportDate(
-  date,
-  { format = "ENTITY", populate = true } = {}
-) {
-  const query = Album.query()
-    .filter("import_timestamp", ">=", date)
-    .filter("revoked", false);
-  const runOptions = format === "JSON" ? jsonOptions : options;
-
-  const { entities: albums } = await (populate
-    ? query.run(runOptions).populate("album_artist")
-    : query.run(runOptions));
-  return albums;
-}
-
-function flattenArtists(albums) {
-  return albums.map((album) => {
-    album.artist = album.album_artist
-      ? album.album_artist.name
-      : "Various Artists";
-    return album;
-  });
-}
-
 async function getFullAlbumDetails(albumId) {
   const album = await getPopulatedAlbum(albumId);
 
@@ -264,14 +208,10 @@ async function getFullAlbumDetails(albumId) {
 }
 
 module.exports = {
-  albumInRotation,
-  flattenArtists,
-  getAlbumById,  
-  getFullAlbumDetails,    
+  getAlbumById,
+  getFullAlbumDetails,
   addImagesFromLastFm,
-  listAlbumTracks,  
-  listAlbumsByCurrentTag,
-  listAlbumsByImportDate,  
+  listAlbumTracks,
   options,
   getAlbumsByAlbumArtist,
   getAlbumsWithTag,

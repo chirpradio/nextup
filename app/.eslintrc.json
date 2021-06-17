@@ -20,5 +20,6 @@
     "plugins": ["prettier"],
     "rules": {
         "prettier/prettier": "error"
-    }
+    },
+    "ignorePatterns": ["client/"]
 }
