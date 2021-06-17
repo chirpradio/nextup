@@ -29,7 +29,10 @@ jobs:
     - id: api-docs
       uses: seeebiii/redoc-cli-github-action@v10
       with:
-        args: 'bundle ./app/routes/api/specification.yaml -o ./app/routes/api/redoc-static.html'
+        args: 'bundle ./app/routes/api/specification.yaml -o ./app/routes/api/redoc-static.html'    
+    - id: install-client
+      working-directory: ./client
+      run: npm ci
     - id: build-client
       working-directory: ./client
       run: npm run build
