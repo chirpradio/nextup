@@ -87,7 +87,7 @@ describe("Album model", () => {
       await album.save();
       const isInt = db.gstore.ds.isInt(album.album_id);
       expect(isInt).toBe(true);
-    })
+    });
   });
 });
 

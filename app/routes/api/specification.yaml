@@ -237,6 +237,28 @@ paths:
           description: Item added
         '403':
           description: Forbidden
+  /playlist/rotation:
+    get:
+      security:
+        - Bearer: []
+      summary: Get rotation plays
+      description: Returns playlist tracks from albums in rotation
+      parameters:
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'The number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored. Default: 7 days before the time of the request'
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'The number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored. Default: The current time'
+      responses:
+        '200':
+          description: Successful response 
   /search:
     get:
       security:

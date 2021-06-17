@@ -1,18 +1,24 @@
 const router = require("express").Router();
-const { query } = require('express-validator');
+const { query } = require("express-validator");
 const { checkErrors } = require("./errors");
 const { AlbumService, DateService } = require("../../services");
 
-const validateLimit = query('limit').optional().isInt({ min: 1, max: 100 });
-const validateOffset = query('offset').optional().isInt();
+const validateLimit = query("limit").optional().isInt({ min: 1, max: 100 });
+const validateOffset = query("offset").optional().isInt();
 
-router.get("/tag", 
-  query('tag').isIn(["heavy_rotation", "light_rotation", "local_current", "local_classic"]),
+router.get(
+  "/tag",
+  query("tag").isIn([
+    "heavy_rotation",
+    "light_rotation",
+    "local_current",
+    "local_classic",
+  ]),
   validateLimit,
   validateOffset,
   checkErrors,
   async function (req, res, next) {
-    try {    
+    try {
       const response = await AlbumService.getAlbumsWithTag(req.query);
       res.json(response);
     } catch (error) {
@@ -21,8 +27,9 @@ router.get("/tag",
   }
 );
 
-router.get("/recent", 
-  query('timestamp').optional().isInt(),
+router.get(
+  "/recent",
+  query("timestamp").optional().isInt(),
   validateLimit,
   validateOffset,
   checkErrors,
@@ -32,7 +39,7 @@ router.get("/recent",
       const response = await AlbumService.getAlbumsImportedSince({
         date: date || DateService.getXDaysPrevious(28),
         limit: req.query.limit,
-        offset: req.query.offset
+        offset: req.query.offset,
       });
       res.json(response);
     } catch (error) {

@@ -1,5 +1,4 @@
 const { Crate } = require("../models");
-const { renameKey } = require("../db");
 
 async function getCrate(id) {
   return await Crate.get(id);

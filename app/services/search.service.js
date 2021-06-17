@@ -12,9 +12,24 @@ const client = new elasticsearch.Client({
 });
 
 async function search(params, type = "all", options) {
+  const trimmedParams = removeEmptyStrings(params);
   const searchFn =
-    type === "all" ? doMSearch(params) : doTypedSearch(params, type, options);
+    type === "all"
+      ? doMSearch(trimmedParams)
+      : doTypedSearch(trimmedParams, type, options);
   return await searchFn;
+}
+
+function removeEmptyStrings(obj) {
+  return Object.entries(obj)
+    .filter(([_, v]) => v !== "")
+    .reduce(
+      (acc, [k, v]) => ({
+        ...acc,
+        [k]: v === Object(v) ? removeEmptyStrings(v) : v,
+      }),
+      {}
+    );
 }
 
 async function doMSearch(params) {
@@ -29,10 +44,10 @@ async function doMSearch(params) {
   });
 
   return {
-    artists: getFormattedResultsObject(responses[0]),
-    albums: getFormattedResultsObject(responses[1]),
-    tracks: getFormattedResultsObject(responses[2]),
-    documents: getFormattedResultsObject(responses[3]),
+    artist: getFormattedResultsObject(responses[0]),
+    album: getFormattedResultsObject(responses[1]),
+    track: getFormattedResultsObject(responses[2]),
+    document: getFormattedResultsObject(responses[3]),
   };
 }
 
@@ -200,8 +215,16 @@ function buildTrackSearch(params, options) {
     );
   }
 
+  queryObj.query.bool.filter = [];
   if (params.track) {
-    queryObj.query.bool.filter = buildTrackFilters(params);
+    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(
+      buildTrackFilters(params)
+    );
+  }
+  if (params.album) {
+    queryObj.query.bool.filter = queryObj.query.bool.filter.concat(
+      buildAlbumFilters(params.album, "album.")
+    );
   }
 
   return queryObj;
@@ -230,17 +253,6 @@ function buildTrackFilters(params) {
     }
   }
 
-  if (params.track.album) {
-    const albumFilters = buildAlbumFilters(params.track.album, "album.");
-    if (
-      albumFilters &&
-      Array.isArray(albumFilters) &&
-      albumFilters.length > 0
-    ) {
-      filters.push(albumFilters);
-    }
-  }
-
   return filters;
 }
 
@@ -257,7 +269,7 @@ function buildDocumentSearch(params, { from = 0, size = 10 } = {}) {
     },
     highlight: {
       fields: {
-        "*unsafe_text": {},
+        "unsafe_text*": {},
       },
       number_of_fragments: 3,
       pre_tags: ["<mark>"],
@@ -299,9 +311,22 @@ function buildQuery(type, field, value) {
   return query;
 }
 
+function noSearchTermsInParams(params) {
+  const noTerm =
+    !Object.prototype.hasOwnProperty.call(params, "term") || params.term === "";
+  const noAlbum =
+    !Object.prototype.hasOwnProperty.call(params, "album") ||
+    (typeof params.album === "object" &&
+      Object.keys(params.album).length === 0);
+  const noTrack =
+    !Object.prototype.hasOwnProperty.call(params, "track") ||
+    (typeof params.track === "object" &&
+      Object.keys(params.track).length === 0);
+  return noTerm && noAlbum && noTrack;
+}
+
 async function doTypedSearch(params, index, options) {
-  const emptyParams = Object.keys(params).length === 0;
-  const mainBody = emptyParams
+  const mainBody = noSearchTermsInParams(params)
     ? getRandomQuery()
     : getSearchBody(params, index, options);
   const body = Object.assign(mainBody, options);

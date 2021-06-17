@@ -37,11 +37,12 @@ const playlistEventSchema = new Schema({
   lastfm_url_med_image: { type: String },
   lastfm_url_sm_image: { type: String },
   lastfm_urls_processed: { type: Boolean },
-  modified: { type: Boolean },
+  modified: { type: Date },
   notes: { type: String },
   playlist: { type: Schema.Types.Key, ref: "Playlist", required: true },
   selector: { type: Schema.Types.Key, ref: "User" },
   track: { type: Schema.Types.Key, ref: "Track" },
+  track_number: { type: Number },
 });
 
 module.exports = gstore.model("PlaylistEvent", playlistEventSchema);
