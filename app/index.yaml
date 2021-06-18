@@ -15,6 +15,12 @@ indexes:
   - name: import_timestamp
     direction: desc
 
+- kind: Album
+  properties:
+  - name: current_tags
+  - name: import_timestamp
+    direction: desc
+
 - kind: Artist
   properties:
   - name: revoked

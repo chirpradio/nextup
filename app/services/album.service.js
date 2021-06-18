@@ -171,7 +171,9 @@ async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
 }
 
 async function getAlbumsWithTag({ tag, limit, offset } = {}) {
-  const query = getBaseQuery({ limit, offset }).filter("current_tags", tag);
+  const query = getBaseQuery({ limit, offset })
+    .filter("current_tags", tag)
+    .order("import_timestamp", { descending: true });
   return await runAndRenameKeys(query);
 }
 
