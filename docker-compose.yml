@@ -4,7 +4,7 @@ services:
 
   app:
     image: node:10.20.1
-    command: [ "npx", "nodemon", "--inspect=0.0.0.0", "server.js" ]
+    command: [ "npx", "nodemon", "server.js" ]
     container_name: app
     environment:
       ELASTICSEARCH_DOMAIN: ${ELASTICSEARCH_DOMAIN}

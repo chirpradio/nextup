@@ -54,6 +54,9 @@
               </router-link>
             </div>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/crates">Crates</router-link>
+          </li>
           <li class="nav-item dropdown">
             <button
               class="btn btn-link nav-link dropdown-toggle"

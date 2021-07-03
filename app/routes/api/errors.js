@@ -1,5 +1,10 @@
 const { validationResult } = require("express-validator");
 
+const errorMessages = {
+  BAD_REQUEST: "Bad request",
+  FORBIDDEN: "Forbidden",
+};
+
 function checkErrors(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -13,7 +18,10 @@ function sendErrorCode(error, req, res, next) {
   console.error(error);
   let code = 500;
 
-  if (error.message === "Forbidden") {
+  if (error.message === errorMessages.BAD_REQUEST) {
+    code = 400;
+  }
+  if (error.message === errorMessages.FORBIDDEN) {
     code = 403;
   }
   if (error.code === "ERR_ENTITY_NOT_FOUND") {
@@ -25,5 +33,6 @@ function sendErrorCode(error, req, res, next) {
 
 module.exports = {
   checkErrors,
+  errorMessages,
   sendErrorCode,
 };

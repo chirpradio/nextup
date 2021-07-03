@@ -10,7 +10,7 @@
           <label for="email">Email</label>
           <input id="email" class="form-control" v-model="email" required />
         </div>
-        <div class="mb-3">
+        <div class="mb-3 mt-3">
           <label for="password">Password</label>
           <input
             id="password"
@@ -58,13 +58,10 @@ export default {
         this.$router.push(this.$route.query.redirect || "/");
       } catch (error) {
         this.error = true;
-        switch (error.response.status) {
-          case 400:
-            this.errorMessage = "Invalid username or password";
-            break;
-          default:
-            this.errorMessage = "Could not log in";
-        }
+        this.errorMessage =
+          error.response.status === 400
+            ? "Invalid username or password"
+            : "Could not log in";
       }
     },
   },
