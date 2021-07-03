@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
 
-function setAuthorizatonHeader(token) {
+function setAuthorizationHeader(token) {
   instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
@@ -47,12 +47,12 @@ export default {
     });
 
     if (response.data.token) {
-      setAuthorizatonHeader(response.data.token);
+      setAuthorizationHeader(response.data.token);
     }
     return response.data;
   },
 
-  setAuthorizatonHeader,
+  setAuthorizationHeader,
 
   async getTaggedAlbums(params) {
     const getter = instance.get("/album/tag", { params });
@@ -84,10 +84,42 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async addToCrate(crateId, path) {
-    await instance.post(`/crate/${crateId}/item`, {
-      path,
+  async getCrate(crateId) {
+    const getter = instance.get(`/crate/${crateId}`);
+    return await getAndHandleError(getter);
+  },
+
+  async getCrateItems(crateId, params) {
+    const getter = instance.get(`/crate/${crateId}/items`, { params });
+    return await getAndHandleError(getter);
+  },
+
+  async addToCrate(crateId, params) {
+    await instance.post(`/crate/${crateId}/item`, params);
+  },
+
+  async removeFromCrate(crateId, index) {
+    await instance.delete(`crate/${crateId}/item/${index}`);
+  },
+
+  async reorderItemInCrate(crateId, index, newIndex) {
+    await instance.patch(`/crate/${crateId}/item/${index}/reorder/${newIndex}`);
+  },
+
+  async addCrate(name) {
+    return await instance.post(`/crate/`, {
+      name,
     });
+  },
+
+  async renameCrate(crateId, name) {
+    await instance.patch(`/crate/${crateId}`, {
+      name,
+    });
+  },
+
+  async deleteCrate(crateId) {
+    await instance.delete(`/crate/${crateId}`);
   },
 
   async getRotationPlays(params) {

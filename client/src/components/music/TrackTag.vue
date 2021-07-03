@@ -1,5 +1,5 @@
 <template>
-  <span :class="classObject">{{ icon }}</span>
+  <font-awesome-icon :class="classObject" :icon="icon" size="lg" />
 </template>
 
 <style scoped>
@@ -31,16 +31,18 @@ export default {
     },
     icon() {
       if (this.explicit) {
-        return "🚫";
+        return "ban";
       } else if (this.recommended) {
-        return "⭐️";
+        return "star";
       } else {
-        return "➕";
+        return "star";
       }
     },
     classObject() {
       return {
         nopacity: !this.explicit && !this.recommended,
+        "text-warning": this.recommended,
+        "text-danger": this.explicit,
       };
     },
   },
