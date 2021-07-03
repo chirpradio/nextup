@@ -163,8 +163,9 @@ async function updateFreeformRotationPlays(req, res) {
     const rotationAlbums = [...heavyAlbums.albums, ...lightAlbums.albums];
 
     // get PlaylistTracks since last run
-    const start = DateService.getStartDateFromHTMLValue(req.query.date);
-    const end = DateService.getEndDateFromHTMLValue(req.query.date);
+    const end = new Date();
+    const start = new Date();
+    start.setHours(start.getHours() - 3);
     const playlistTracks = await PlaylistEventService.getTrackEntitiesBetween(
       start,
       end
