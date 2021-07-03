@@ -1,4 +1,4 @@
-require("../db");
+const db = require("../db");
 const Album = require("./album.model");
 
 const albumData = {
@@ -14,6 +14,7 @@ describe("Album model", () => {
     if (album.entityKey.id) {
       await Album.delete(parseInt(album.entityKey.id, 10));
     }
+    album = null;
   });
 
   test.each(["title", "import_timestamp", "album_id", "num_tracks"])(
@@ -71,6 +72,22 @@ describe("Album model", () => {
     album = new Album(albumData);
     await album.save();
     expect(album[property]).toBe(value);
+  });
+
+  describe("album_id", () => {
+    const largeAlbumIdData = {
+      title: "a",
+      import_timestamp: new Date(),
+      album_id: 9007199254740992,
+      num_tracks: 10,
+    };
+
+    test("Should wrap album_id values in a Datastore Integer object to accept values larger than Number.MAX_SAFE_INTEGER", async () => {
+      album = new Album(largeAlbumIdData);
+      await album.save();
+      const isInt = db.gstore.ds.isInt(album.album_id);
+      expect(isInt).toBe(true);
+    });
   });
 });
 

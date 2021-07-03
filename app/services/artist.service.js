@@ -28,12 +28,20 @@ async function getArtist(key) {
   return result.entities[0];
 }
 
+async function getArtistWithRenamedKey(key) {
+  const { entities } = await Artist.query().filter("__key__", key).run({
+    showKey: true,
+  });
+  const artist = entities[0];
+  return artist;
+}
+
 function getKeyValue(artist) {
   if (artist) {
     const key =
       artist.key || artist[datastore.KEY] || artist.entityKey || artist.__key;
 
-    if(key) {
+    if (key) {
       return key.id || `${key.name}-${key.parent.id}`;
     } else {
       console.error(`No key in ${JSON.stringify(artist)}`);
@@ -46,5 +54,6 @@ function getKeyValue(artist) {
 module.exports = {
   getArtist,
   getArtistKey,
+  getArtistWithRenamedKey,
   getKeyValue,
 };

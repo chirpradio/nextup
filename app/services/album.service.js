@@ -1,5 +1,5 @@
 const { Album, Document, Track } = require("../models");
-const { datastore } = require("../db");
+const { datastore, renameKey } = require("../db");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
 
@@ -20,22 +20,6 @@ const jsonOptions = {
     properties: ["album_id"],
   },
 };
-
-function albumIsReviewed(album) {
-  return album.is_reviewed;
-}
-
-function albumInRotation(album) {
-  return (
-    album.current_tags &&
-    (album.current_tags.includes("heavy_rotation") ||
-      album.current_tags.includes("light_rotation"))
-  );
-}
-
-function albumNotInRotation(album) {
-  return !albumInRotation(album);
-}
 
 async function getPopulatedAlbum(albumId) {
   const options = {
@@ -67,26 +51,6 @@ async function getAlbumById(
   return await (populate ? album.populate("album_artist") : album);
 }
 
-async function getPopulatedAlbumByKey(
-  key,
-  { format = "JSON", populate = true } = {}
-) {
-  const runOptions = format === "JSON" ? jsonOptions : options;
-  const album = await Album.findOne(
-    { __key__: key, revoked: false },
-    null,
-    null,
-    runOptions
-  );
-  return await (populate ? album.populate("album_artist") : album);
-}
-
-async function getAlbumByKey(key, { format = "JSON" } = {}) {
-  const runOptions = format === "JSON" ? jsonOptions : options;
-  const response = await Album.query().filter("__key__", key).run(runOptions);
-  return response.entities[0];
-}
-
 async function addImagesFromLastFm(album) {
   if (!album || !album.album_artist) {
     return Promise.resolve();
@@ -100,7 +64,7 @@ async function addImagesFromLastFm(album) {
         artist: album.album_artist.name,
         album: album.title,
       };
-      console.log("getting images from LastFM", options);
+
       const data = await lastFm.albumGetInfo(options);
 
       if (
@@ -130,29 +94,6 @@ async function addImagesFromLastFm(album) {
       console.error(err);
     }
   }
-}
-
-async function getRandomAlbumsWithArt(albums, count) {
-  const indexes = [];
-  const selected = [];
-  const imagePromises = [];
-
-  if (!albums || albums.length === 0) {
-    return selected;
-  }
-
-  while (indexes.length < count) {
-    const index = Math.floor(Math.random() * albums.length);
-    if (!indexes.includes(index)) {
-      indexes.push(index);
-      const album = albums[index];
-      selected.push(album);
-      imagePromises.push(await addImagesFromLastFm(album));
-    }
-  }
-
-  await Promise.all(imagePromises);
-  return selected;
 }
 
 async function listAlbumComments(album) {
@@ -190,100 +131,91 @@ async function listAlbumTracks(album) {
       ["revoked", false],
     ],
     order: { property: "track_num" },
+    showKey: true,
   };
   const { entities: tracks } = await Track.list(listOptions).populate(
     "track_artist"
   );
+  tracks.forEach((track) => {
+    if (track.track_artist) {
+      renameKey(track.track_artist);
+    }
+  });
   return tracks;
 }
 
-async function sortAlbums(albums) {
-  albums.sort((a, b) => {
-    if (b.year !== a.year) {
-      return b.year - a.year;
-    }
-
-    if (a.title === b.title) {
-      return a.disc_number - b.disc_number;
-    }
-
-    return a.title - b.title;
-  });
+function getBaseQuery({ limit = 25, offset = 0 } = {}) {
+  return Album.query().filter("revoked", false).offset(offset).limit(limit);
 }
 
-async function listAlbumsByArtist(key) {
-  const query = Album.query()
-    .filter("album_artist", key)
-    .filter("revoked", false);
-  const { entities: albums } = await query.run(options);
-  sortAlbums(albums);
-  return albums;
+async function runAlbumsQuery(query) {
+  return await query.run(jsonOptions).populate("album_artist");
 }
 
-async function listAlbumsByCurrentTag(tag) {
-  const query = Album.query()
-    .filter("current_tags", tag)
-    .filter("revoked", false);
-  const { entities: albums } = await query
-    .run(options)
-    .populate("album_artist");
-  return albums;
-}
-
-async function listAlbumsByImportDate(
-  date,
-  { format = "ENTITY", populate = true } = {}
-) {
-  const query = Album.query()
-    .filter("import_timestamp", ">=", date)
-    .filter("revoked", false);
-  const runOptions = format === "JSON" ? jsonOptions : options;
-
-  const { entities: albums } = await (populate
-    ? query.run(runOptions).populate("album_artist")
-    : query.run(runOptions));
-  return albums;
-}
-
-async function loadAlbumImages(albums, artist) {
-  const imagePromises = [];
-  albums.forEach((album) => {
-    if (album.lastfm_retrieval_time === null) {
-      album.album_artist = artist;
-      imagePromises.push(addImagesFromLastFm(album));
-    }
-  });
-  if (imagePromises.length > 0) {
-    await Promise.all(imagePromises);
-  }
-}
-
-function flattenArtists(albums) {
+function renameKeys(albums) {
   return albums.map((album) => {
-    album.artist = album.album_artist
-      ? album.album_artist.name
-      : "Various Artists";
+    renameKey(album.album_artist);
     return album;
   });
 }
 
+async function runAndRenameKeys(query) {
+  const { entities, nextPageCursor } = await runAlbumsQuery(query);
+  const albums = renameKeys(entities);
+  return { albums, nextPageCursor };
+}
+
+async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
+  return await runAndRenameKeys(query);
+}
+
+async function getAlbumsWithTag({ tag, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset })
+    .filter("current_tags", tag)
+    .order("import_timestamp", { descending: true });
+  return await runAndRenameKeys(query);
+}
+
+async function getAlbumsImportedSince({ date, limit, offset } = {}) {
+  const query = getBaseQuery({ limit, offset })
+    .filter("import_timestamp", ">=", date)
+    .order("import_timestamp", { descending: true });
+  return await runAndRenameKeys(query);
+}
+
+async function getFullAlbumDetails(albumId) {
+  const album = await getPopulatedAlbum(albumId);
+
+  if (album.lastfm_retrieval_time === null) {
+    await addImagesFromLastFm(album);
+  }
+
+  if (album.album_artist) {
+    album.album_artist.__key = album.album_artist[datastore.KEY];
+  }
+
+  const [tracks, reviews, comments] = await Promise.all([
+    listAlbumTracks(album),
+    listAlbumReviews(album),
+    listAlbumComments(album),
+  ]);
+
+  return {
+    album,
+    tracks,
+    reviews,
+    comments,
+  };
+}
+
 module.exports = {
-  albumIsReviewed,
-  albumInRotation,
-  albumNotInRotation,
-  flattenArtists,
   getAlbumById,
-  getAlbumByKey,
-  getPopulatedAlbum,
-  getPopulatedAlbumByKey,
-  getRandomAlbumsWithArt,
+  getFullAlbumDetails,
   addImagesFromLastFm,
-  listAlbumComments,
-  listAlbumReviews,
   listAlbumTracks,
-  listAlbumsByArtist,
-  listAlbumsByCurrentTag,
-  listAlbumsByImportDate,
-  loadAlbumImages,
   options,
+  getAlbumsByAlbumArtist,
+  getAlbumsWithTag,
+  getAlbumsImportedSince,
 };

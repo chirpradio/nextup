@@ -1,9 +1,12 @@
 const {
   AlbumService,
   ArtistService,
+  DateService,
   DocumentService,
+  PlaylistEventService,
   SearchService,
 } = require("../../services");
+const levenshtein = require("js-levenshtein");
 
 async function updateIndexWithAlbumArtist(artist) {
   await SearchService.update(
@@ -117,7 +120,95 @@ async function reindexTagsHandler(req, res) {
   }
 }
 
+async function matchPlaylistTracktoAlbumTrack(playlistTrack, album) {
+  const albumDistance = levenshtein(
+    playlistTrack.freeform_album_title,
+    album.title
+  );
+  if (albumDistance > 2) {
+    return;
+  }
+
+  let artistDistance;
+  if (!album.is_compilation) {
+    // remove "The" from the beginning of both strings when calculating distance
+    artistDistance = levenshtein(
+      playlistTrack.freeform_artist_name.replace(/^the\s/i, ""),
+      album.album_artist.name.replace(/^the\s/i, "")
+    );
+    if (artistDistance > 2) {
+      return;
+    }
+  }
+
+  const tracks = await AlbumService.listAlbumTracks(album);
+  return tracks.find(
+    (track) => levenshtein(track.title, playlistTrack.freeform_track_title) < 2
+  );
+}
+
+async function updateFreeformRotationPlays(req, res) {
+  try {
+    // get all rotation albums and their tracks
+    const [heavyAlbums, lightAlbums] = await Promise.all([
+      await AlbumService.getAlbumsWithTag({
+        tag: "heavy_rotation",
+        limit: 1000,
+      }),
+      await AlbumService.getAlbumsWithTag({
+        tag: "light_rotation",
+        limit: 1000,
+      }),
+    ]);
+    const rotationAlbums = [...heavyAlbums.albums, ...lightAlbums.albums];
+
+    // get PlaylistTracks since last run
+    const end = new Date();
+    const start = new Date();
+    start.setHours(start.getHours() - 3);
+    const playlistTracks = await PlaylistEventService.getTrackEntitiesBetween(
+      start,
+      end
+    );
+
+    for (const playlistTrack of playlistTracks) {
+      const isFreeform =
+        playlistTrack.freeform_album_title !== null &&
+        playlistTrack.freeform_artist_name !== null;
+      if (isFreeform) {
+        for (const album of rotationAlbums) {
+          const track = await matchPlaylistTracktoAlbumTrack(
+            playlistTrack,
+            album
+          );
+          if (track) {
+            console.log(
+              `Updating PlaylistTrack ${playlistTrack.id} with Track ${track.id}`
+            );
+            playlistTrack.album = track.album;
+            playlistTrack.artist = album.album_artist.__key;
+            playlistTrack.track = track.__key;
+            const { error } = playlistTrack.validate();
+            if (!error) {
+              await playlistTrack.save();
+            } else {
+              console.error(error.errors);
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).end();
+  }
+}
+
 module.exports = {
   reindexAlbumHandler,
   reindexTagsHandler,
+  updateFreeformRotationPlays,
 };

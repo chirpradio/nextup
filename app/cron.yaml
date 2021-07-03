@@ -1,0 +1,5 @@
+cron:
+  - description: "Update freeform rotation plays with proper keys"
+    target: nextup
+    url: /tasks/rotation/plays
+    schedule: every 3 hours

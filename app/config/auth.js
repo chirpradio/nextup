@@ -1,5 +1,7 @@
 const passport = require("passport");
-const Strategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const session = require("express-session");
 const { Datastore } = require("@google-cloud/datastore");
 const { DatastoreStore } = require("@google-cloud/connect-datastore");
@@ -7,7 +9,7 @@ const { User } = require("../models");
 
 module.exports = function configureAuth(app) {
   passport.use(
-    new Strategy(
+    new LocalStrategy(
       {
         usernameField: "email",
         passReqToCallback: true,
@@ -29,6 +31,27 @@ module.exports = function configureAuth(app) {
         } catch (err) {
           req.flash("errorMessages", ["Invalid username or password"]);
           return done(null, false);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    new JwtStrategy(
+      {
+        secretOrKey: process.env.JWT_SECRET,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      },
+      async function (jwtPayload, done) {
+        try {
+          const user = await User.findOne({ email: jwtPayload.user.email });
+          if (user) {
+            return done(null, user);
+          } else {
+            return done(null, false);
+          }
+        } catch (err) {
+          return done(err, false);
         }
       }
     )
@@ -64,20 +87,4 @@ module.exports = function configureAuth(app) {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
-  app.all("*", function requireAuth(req, res, next) {
-    const exemptPaths = ["/auth/login", "/auth/logout", "/favicon.ico"];
-    const desiredUrl = req.originalUrl;
-    const canContinue =
-      req.isAuthenticated() ||
-      exemptPaths.includes(desiredUrl) ||
-      desiredUrl.startsWith("/tasks");
-
-    if (canContinue) {
-      next();
-    } else {
-      req.session.desiredUrl = desiredUrl;
-      res.redirect("/auth/login");
-    }
-  });
 };
