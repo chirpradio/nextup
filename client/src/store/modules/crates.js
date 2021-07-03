@@ -136,6 +136,7 @@ const mutations = {
               label: item.label,
             },
             notes: item.notes,
+            kind: "CrateItem",
           };
           if (Number.isInteger(index)) {
             crate.items.splice(index, 0, normalizedItem);
