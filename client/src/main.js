@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { Collapse } from "../node_modules/bootstrap/js/dist/collapse"; // eslint-disable-line no-unused-vars
 import { Dropdown } from "../node_modules/bootstrap/js/dist/dropdown"; // eslint-disable-line no-unused-vars
 import App from "./App.vue";
 import router from "./router";
