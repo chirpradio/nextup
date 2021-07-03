@@ -11,10 +11,9 @@
       <span v-if="element.track && element.album" class="me-1">&middot;</span>
       <span v-if="element.album" class="me-1 fst-italic"
         >{{ element.album.title }}</span
-      >
-      <span v-if="element.album && element.album.label" class="me-1">&middot;</span>
-      <span v-if="element.album && element.album.label" class="me-1"
-        >{{ element.album.label }}</span
+      >      
+      <span v-if="element.album && element.album.label" class="me-1 text-muted"
+        >&middot; {{ element.album.label }}</span
       >
     </div>
     <div class="text-muted">{{ element.notes }}</div>

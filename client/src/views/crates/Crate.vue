@@ -41,7 +41,7 @@
               :element="element"
               class="col-12 flex-grow-1 col-md-6"
             />
-            <div v-if="element.track" class="col-1 mb-1">
+            <div v-if="element.track" class="col-1 mb-1 text-end">
               <TrackDuration :track="element.track" />
             </div>
             <div class="col-auto">
