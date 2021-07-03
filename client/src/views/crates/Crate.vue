@@ -120,12 +120,6 @@
           <div class="modal-body">
             <form>
               <div class="row mb-3">
-                <label for="track" class="col-2 col-form-label">Track</label>
-                <div class="col-10">
-                  <input id="track" class="form-control" v-model="item.track" />
-                </div>
-              </div>
-              <div class="row mb-3">
                 <label for="artist" class="col-2 col-form-label">Artist</label>
                 <div class="col-10">
                   <input
@@ -135,6 +129,12 @@
                   />
                 </div>
               </div>
+              <div class="row mb-3">
+                <label for="track" class="col-2 col-form-label">Track</label>
+                <div class="col-10">
+                  <input id="track" class="form-control" v-model="item.track" />
+                </div>
+              </div>        
               <div class="row mb-3">
                 <label for="album" class="col-2 col-form-label">Album</label>
                 <div class="col-10">
