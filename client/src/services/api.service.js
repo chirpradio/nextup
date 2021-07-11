@@ -89,8 +89,8 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async getCrateItems(crateId, params) {
-    const getter = instance.get(`/crate/${crateId}/items`, { params });
+  async getCrateItems(crateId) {
+    const getter = instance.get(`/crate/${crateId}/items`);
     return await getAndHandleError(getter);
   },
 

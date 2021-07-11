@@ -15,10 +15,6 @@ const getters = {
   loadingCrates: (state) => {
     return state.loadingCrates;
   },
-  moreCrateItems: (state) => (id) => {
-    const crate = state.crates.find((crate) => crate.id === id);
-    return crate.totalItems > crate.items.length;
-  },
 };
 
 function findCrate(crates, crateId) {
@@ -47,7 +43,7 @@ const actions = {
     commit("crate", response);
     commit("loadingCrates", false);
   },
-  async getCrateItems({ commit, state, dispatch }, { crateId, more }) {
+  async getCrateItems({ commit, state, dispatch }, { crateId }) {
     let crate = findCrate(state.crates, crateId);
     if (!crate) {
       await dispatch("getCrates");
@@ -57,12 +53,8 @@ const actions = {
         crate = findCrate(state.crates, crateId);
       }
     }
-    if (more || crate.items.length === 0) {
-      const response = await api.getCrateItems(crateId, {
-        offset: crate.items.length,
-      });
-      commit("crateItems", { crateId, response });
-    }
+    const response = await api.getCrateItems(crateId);
+    commit("crateItems", { crateId, response });
   },
   async addToCrate({ commit }, { crateId, params }) {
     await api.addToCrate(crateId, params);

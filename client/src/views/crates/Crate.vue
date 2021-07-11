@@ -15,10 +15,7 @@
         Delete crate
       </button>
     </div>
-    <div v-if="showTotal" class="mb-3 text-muted">
-      Showing {{ items.length }} of {{ crate.totalItems }}
-    </div>
-    <div v-if="crate" class="mb-3">
+    <div v-if="showList" class="mb-3">
       <button class="btn btn-chirp-red btn-sm" @click="showAddModal">
         Add an item
       </button>
@@ -26,7 +23,7 @@
     <draggable
       v-if="showList"
       :list="crate.items"
-      item-key="element"
+      item-key="element.encodedKey"
       @change="onMove"
       tag="ol"
       class="list-group list-group-flush"
@@ -61,17 +58,6 @@
       </template>
     </draggable>
     <div v-if="!showList && !loading">This crate is empty</div>
-    <div class="row mt-3">
-      <div class="d-grid col-12">
-        <button
-          v-if="more && !loading"
-          class="btn btn-chirp-red"
-          @click="loadMore"
-        >
-          Load {{ howMany }} more
-        </button>
-      </div>
-    </div>
     <RecordSpinner v-if="loading" />
 
     <div id="deleteModal" class="modal">
@@ -265,12 +251,6 @@ export default {
     crate() {
       return this.$store.getters.crate(this.id);
     },
-    more() {
-      return this.crate && this.crate.totalItems > this.crate.items.length;
-    },
-    howMany() {
-      return Math.min(this.crate.totalItems - this.crate.items.length, 100);
-    },
     name() {
       if (this.crate) {
         return this.crate.name || "<No name>";
@@ -280,9 +260,6 @@ export default {
     },
     showList() {
       return this.crate && this.crate.items && this.crate.items.length;
-    },
-    showTotal() {
-      return this.crate && this.crate.items && this.crate.items.length > 100;
     },
     items: {
       get() {
