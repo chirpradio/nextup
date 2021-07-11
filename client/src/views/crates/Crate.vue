@@ -7,6 +7,8 @@
         :text="name"
         class="flex-grow-1"
         @save="renameCrate"
+        aria-label="Edit crate name"
+        title="Edit crate name"
       />
       <span v-if="!crate" class="flex-grow-1"></span>
       <button class="btn btn-link-chirp-red btn-sm" @click="showDeleteModal">
@@ -34,22 +36,24 @@
         <li class="list-group-item d-flex align-items-start">
           <div class="row flex-fill">
             <div class="handle col-auto">
-              <font-awesome-icon icon="grip-lines" />
-            </div>
+              <font-awesome-icon icon="grip-lines" />            
+            </div>            
+            <div class="col-1 mb-1 text-end">
+              <TrackDuration v-if="element.track" :track="element.track" />
+            </div>  
             <component
               :is="getKind(element)"
               :element="element"
               class="col-12 flex-grow-1 col-md-6"
-            />
-            <div v-if="element.track" class="col-1 mb-1 text-end">
-              <TrackDuration :track="element.track" />
-            </div>
-            <div class="col-auto">
+            />                 
+            <div class="col-1">
               <button
                 class="btn btn-link-chirp-red btn-sm"
                 @click="removeItem(index)"
+                aria-label="Remove from crate"
+                title="Remove from crate"
               >
-                Remove
+                <font-awesome-icon icon="times" />
               </button>
             </div>
           </div>
