@@ -152,6 +152,29 @@
                 </div>
               </div>
               <div class="row mb-3">
+                <label class="col-2 col-form-label">Category</label>
+                <div class="col-10">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="localRadios" id="localNone" v-model="item.category" value="" checked>
+                    <label class="form-check-label" for="localRadios">
+                      None
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="localRadios" id="localClassic" v-model="item.category" value="local_classic">
+                    <label class="form-check-label" for="localRadios">
+                      Local Classic
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="localRadios" id="localCurrent" v-model="item.category" value="local_current">
+                    <label class="form-check-label" for="localRadios">
+                      Local Current
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
                 <label for="notes" class="col-2 col-form-label">Notes</label>
                 <div class="col-10">
                   <input id="notes" class="form-control" v-model="item.notes" />
@@ -234,6 +257,7 @@ export default {
         album: "",
         label: "",
         notes: "",
+        category: "",
       },
     };
   },
@@ -332,6 +356,7 @@ export default {
         album: "",
         label: "",
         notes: "",
+        category: "",
       };
     },
     deleteCrate() {
@@ -343,9 +368,15 @@ export default {
       this.adding = true;
 
       try {
+        const newItem = { ...this.item };
+        if(newItem.category !== "") {
+          newItem.categories = [newItem.category];
+        }
+        delete newItem.category;     
+
         await this.$store.dispatch("addToCrate", {
           crateId: this.id,
-          params: { item: this.item, index: 0 },
+          params: { item: newItem, index: 0 },
         });
         this.hideAddModal();
       } catch (error) {

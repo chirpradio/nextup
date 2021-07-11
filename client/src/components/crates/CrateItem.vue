@@ -16,13 +16,17 @@
         >&middot; {{ element.album.label }}</span
       >
     </div>
+    <TagList class="mb-1" :tags="element.categories" />
     <div class="text-muted">{{ element.notes }}</div>
   </div>
 </template>
 
 <script>
+import TagList from "../music/TagList";
+
 export default {
   name: "CrateItem",
+  components: { TagList, },
   props: {
     element: Object,
   },

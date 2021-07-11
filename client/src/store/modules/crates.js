@@ -136,6 +136,7 @@ const mutations = {
               label: item.label,
             },
             notes: item.notes,
+            categories: item.categories,
             kind: "CrateItem",
           };
           if (Number.isInteger(index)) {
