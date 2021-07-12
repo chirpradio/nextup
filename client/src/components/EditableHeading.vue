@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex">
     <component :is="tag" v-if="!editing" class="d-inline">{{
       value
     }}</component>
@@ -9,6 +9,7 @@
       v-if="editing"
       class="p-0 m-0"
       :class="inputClasses"
+      :size="size"
     />
     <button class="btn btn-link-chirp-red" v-if="!editing" @click="edit" aria-label="edit">
       <font-awesome-icon icon="edit" />
@@ -42,15 +43,14 @@ export default {
     inputClasses() {
       const classObj = {};
       classObj[this.tag] = true;
-
-      const columns = Math.min(Math.round(this.text.length / 4), 10);
-      classObj[`col-${columns}`] = true;
-
       return classObj;
     },
     tag() {
       return `h${this.headingLevel}`;
     },
+    size() {
+      return Math.min(this.value.length, 50);
+    }
   },
   methods: {
     edit() {

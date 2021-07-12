@@ -1,25 +1,24 @@
 <template>
   <div class="container-fluid">
-    <div class="d-flex mb-3">
+    <div class="d-flex mb-3 sticky-top py-2 bg-white align-items-center">
       <EditableHeading
         v-if="crate"
         :headingLevel="1"
-        :text="name"
-        class="flex-grow-1"
+        :text="name"        
         @save="renameCrate"
         aria-label="Edit crate name"
         title="Edit crate name"
+        class="me-3"
       />
-      <span v-if="!crate" class="flex-grow-1"></span>
+      <button v-if="!loading" class="btn btn-chirp-red btn-sm h-50" @click="showAddModal">
+        Add an item
+      </button>
+      <span class="flex-grow-1"></span>
       <button class="btn btn-link-chirp-red btn-sm" @click="showDeleteModal">
         Delete crate
       </button>
     </div>
-    <div v-if="showList" class="mb-3">
-      <button class="btn btn-chirp-red btn-sm" @click="showAddModal">
-        Add an item
-      </button>
-    </div>
+    
     <draggable
       v-if="showList"
       :list="crate.items"

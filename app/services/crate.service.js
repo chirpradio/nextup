@@ -84,7 +84,9 @@ async function populateEntities(entities) {
 
 function normalizeItem(item) {
   let album, artist, track, notes;
+  let categories = [];
   const key = item[datastore.KEY] || item.__key;
+  const encodedKey = Buffer.from(JSON.stringify(key)).toString("base64");
   const kind = key.kind;
 
   switch (kind) {
@@ -98,6 +100,7 @@ function normalizeItem(item) {
     case "Album":
       album = renameKey(item);
       artist = renameKey(item.album_artist);
+      categories = album.current_tags;
       break;
     case "Artist":
       artist = renameKey(item);
@@ -122,6 +125,7 @@ function normalizeItem(item) {
         };
       }
       notes = item.notes;
+      categories = item.categories;
   }
 
   return {
@@ -130,34 +134,40 @@ function normalizeItem(item) {
     track,
     notes,
     kind,
+    categories,
+    encodedKey,
   };
 }
 
-async function getItems(crate, { limit, offset } = {}) {
+async function getItems(crate) {
   const orderedEntities = [];
   const orderedItems = [];
   if (crate && crate.items && crate.items.length) {
-    const itemIndexes = crate.order.slice(offset, limit + offset);
-    const keys = [];
-    for (const itemIndex of itemIndexes) {
-      keys.push(crate.items[itemIndex - 1]);
-    }
-    if (keys.length === 0) {
-      return orderedItems;
-    }
+    let allKeys = [];
+    let entities = [];
 
-    // This method is the easiest way to get a mixed set of entities
-    const [entities] = await datastore.get(keys, queryOptions);
+    while (entities.length < crate.items.length) {
+      let keysToGet = [];
+      for (const itemIndex of crate.order.slice(
+        entities.length,
+        entities.length + 1000
+      )) {
+        keysToGet.push(crate.items[itemIndex - 1]);
+        allKeys.push(crate.items[itemIndex - 1]);
+      }
 
-    /*
-      Populate the related albums and artists for each album and track
-      Since we're using Datastore directly in the above query, we can't
-      use gstore-node .populate() to do the work for us
-    */
-    await populateEntities(entities);
+      // The datastore.get method is the easiest way to get a mixed set of entities
+      const [latestEntities] = await datastore.get(keysToGet, queryOptions);
+      /*
+        Since we're using Datastore directly in the above query, we can't
+        use gstore-node .populate() to retrieve all related albums and artists
+      */
+      await populateEntities(latestEntities);
+      entities = [...entities, ...latestEntities];
+    }
 
     // Order the items to return
-    for (const key of keys) {
+    for (const key of allKeys) {
       const keyStr = JSON.stringify(key);
       const entity = entities.find(
         (entity) => JSON.stringify(entity[datastore.KEY]) === keyStr

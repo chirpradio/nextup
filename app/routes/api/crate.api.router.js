@@ -99,19 +99,12 @@ router.delete(
 router.get(
   "/:id/items",
   validateId,
-  validateLimit,
-  validateOffset,
   getCrateAndCheckAuth,
   checkErrors,
   async function (req, res, next) {
     try {
-      const limit = req.query.limit || 100;
-      const offset = req.query.offset || 0;
       const crate = req.crate;
-      const orderedItems = await CrateService.getItems(crate, {
-        limit,
-        offset,
-      });
+      const orderedItems = await CrateService.getItems(crate);
       res.json(orderedItems);
     } catch (error) {
       next(error);

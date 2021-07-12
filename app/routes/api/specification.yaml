@@ -25,6 +25,10 @@ components:
           type: string
         track:
           type: string
+        categories:
+          type: array
+        encodedKey:
+          type: string
     Key:      
       properties:
         key: 
