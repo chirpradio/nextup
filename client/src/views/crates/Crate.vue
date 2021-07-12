@@ -352,7 +352,7 @@ export default {
 
         await this.$store.dispatch("addToCrate", {
           crateId: this.id,
-          params: { item: newItem, index: 0 },
+          params: { item: newItem },
         });
         this.hideAddModal();
       } catch (error) {
