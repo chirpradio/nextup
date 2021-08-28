@@ -16,6 +16,7 @@ import {
   faEdit,
   faCheckSquare,
   faTimes,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -28,6 +29,7 @@ library.add(
   faBan,
   faEdit,
   faTimes,
+  faCircle,
 );
 
 const debug = process.env.NODE_ENV !== "production";
