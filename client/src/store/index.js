@@ -31,7 +31,7 @@ const persistTokenInCookies = createPersistedState({
 });
 
 const persistPathsInLocalStorage = createPersistedState({
-  paths: ["auth.user"],
+  paths: ["auth.user", "crates.mostRecent"],
 });
 
 const plugins = [persistTokenInCookies, persistPathsInLocalStorage];
