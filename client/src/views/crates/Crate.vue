@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div ref="container" class="container-fluid">
     <div class="d-flex mb-3 sticky-top py-2 bg-white align-items-center">
       <EditableHeading
         v-if="crate"
@@ -337,6 +337,10 @@ export default {
       this.$store.dispatch("deleteCrate", { crateId: this.id });
       this.$router.push({ path: "/crates" });
     },
+    scrollToBottom() {
+      const el = document.scrollingElement;
+      el.scrollTo(0, el.scrollHeight);
+    },
     async addItem() {
       this.adding = true;
 
@@ -351,11 +355,12 @@ export default {
           crateId: this.id,
           params: { item: newItem },
         });
-        this.hideAddModal();
+        this.hideAddModal();        
+        
       } catch (error) {
         this.addError = true;
       }
-
+      this.scrollToBottom();
       this.adding = false;
     },
     async renameCrate(event) {

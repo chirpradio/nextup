@@ -1,7 +1,7 @@
 <template>
   <nav
     v-if="isAuthenticated"
-    class="navbar navbar-dark navbar-expand-sm fixed-top bg-dark"
+    class="navbar navbar-dark navbar-expand-sm bg-dark"
   >
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">NextUp</router-link>
@@ -112,6 +112,16 @@
     </div>
   </nav>
 </template>
+
+<style scoped>
+/* 
+  Position above Bootstrap's sticky elements
+  See: https://getbootstrap.com/docs/5.0/layout/z-index/ 
+*/
+.dropdown-menu {
+  z-index: 1035;
+}
+</style>
 
 <script>
 export default {

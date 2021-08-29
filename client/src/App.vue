@@ -8,10 +8,6 @@
 <style lang="scss">
 @import "bootstrap/scss/bootstrap";
 
-.main-view {
-  margin-top: 3.5rem;
-}
-
 :root {
   --dark-red: #822036;
   --bright-red: #ee0032;
