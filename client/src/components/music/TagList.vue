@@ -52,7 +52,7 @@ export default {
   mixins: [formatters],
   computed: {
     filteredTags() {
-      return this.tags.filter(tag => allowedTags.includes(tag));
+      return this.tags?.filter(tag => allowedTags.includes(tag)).sort((a, b) => a < b ? -1 : 1);
     },
   },
   methods: {
