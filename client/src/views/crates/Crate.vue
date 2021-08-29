@@ -33,7 +33,7 @@
           <div class="row flex-fill">
             <div class="handle col-auto">
               <font-awesome-icon icon="grip-lines" />            
-            </div>            
+            </div>        
             <div class="col-1 mb-1 text-end">
               <TrackDuration v-if="element.track" :track="element.track" />
             </div>  
@@ -214,6 +214,7 @@ import AlbumItem from "../../components/crates/AlbumItem";
 import ArtistItem from "../../components/crates/ArtistItem";
 import CrateItem from "../../components/crates/CrateItem";
 import TrackItem from "../../components/crates/TrackItem";
+import updateTitle from "../../mixins/updateTitle";
 
 let deleteModal, addModal;
 
@@ -252,11 +253,13 @@ export default {
       return this.$store.getters.crate(this.id);
     },
     name() {
+      let name = "";
       if (this.crate) {
-        return this.crate.name || "<No name>";
-      } else {
-        return "";
+        name = this.crate.name || "<No name>";
       }
+
+      this.updateTitle(name);
+      return name;
     },
     showList() {
       return this.crate && this.crate.items && this.crate.items.length;
@@ -281,6 +284,7 @@ export default {
     deleteModal = new Modal(document.getElementById("deleteModal"));
     addModal = new Modal(document.getElementById("addModal"));
   },
+  mixins: [updateTitle],
   methods: {
     artistName(item) {
       if (item.artist) {
