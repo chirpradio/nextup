@@ -81,7 +81,7 @@ const actions = {
   },
   async renameCrate({ commit }, { crateId, name }) {
     await api.renameCrate(crateId, name);
-    commit("renameCrate", { crateId });
+    commit("renameCrate", { crateId, name });
   },
   async deleteCrate({ commit }, { crateId }) {
     commit("deleteCrate", { crateId });
