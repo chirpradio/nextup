@@ -1,7 +1,7 @@
 <template>
   <nav
     v-if="isAuthenticated"
-    class="navbar navbar-dark navbar-expand-sm bg-dark"
+    class="navbar navbar-dark navbar-expand-sm fixed-top bg-dark"
   >
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">NextUp</router-link>
@@ -86,7 +86,7 @@
             class="form-control mr-sm-2"
             type="search"
             v-model="term"
-            placeholder="Search"
+            placeholder="Search the library"
             aria-label="Search"
           />
         </form>

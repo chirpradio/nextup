@@ -1,12 +1,16 @@
 <template>
   <div>
     <NavBar />
-    <router-view class="container-fluid py-3" />
+    <router-view class="container-fluid py-3 main-view" />
   </div>
 </template>
 
 <style lang="scss">
 @import "bootstrap/scss/bootstrap";
+
+.main-view {
+  margin-top: 3.5rem;
+}
 
 :root {
   --dark-red: #822036;
