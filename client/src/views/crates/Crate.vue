@@ -11,7 +11,7 @@
         class="me-3"
       />
       <button v-if="!loading" class="btn btn-chirp-red btn-sm h-50" @click="showAddModal">
-        Add an item
+        Add your own item
       </button>
       <span class="flex-grow-1"></span>
       <button class="btn btn-link-chirp-red btn-sm" @click="showDeleteModal">
@@ -98,7 +98,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Add an item</h5>
+            <h5 class="modal-title">Add your own item</h5>
             <button
               type="button"
               class="btn-close"
@@ -107,6 +107,7 @@
             ></button>
           </div>
           <div class="modal-body">
+            <p class="text-muted">Add something to your crate that's not in the CHIRP library</p>
             <form>
               <div class="row mb-3">
                 <label for="artist" class="col-2 col-form-label">Artist</label>
