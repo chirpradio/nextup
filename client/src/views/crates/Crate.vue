@@ -34,7 +34,7 @@
             <div class="handle col-auto">
               <font-awesome-icon icon="grip-lines" />            
             </div>        
-            <div class="col-1 mb-1 text-end">
+            <div class="col-1 mb-1 text-end numeral">
               <TrackDuration v-if="element.track" :track="element.track" />
             </div>  
             <component

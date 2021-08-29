@@ -75,6 +75,11 @@ a.btn-link-chirp-red:hover {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.numeral {
+  font-family: "Times New Roman", Times, serif;
+}
+
 </style>
 
 <script>
