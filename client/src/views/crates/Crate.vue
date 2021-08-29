@@ -298,14 +298,6 @@ export default {
     getKind(item) {
       return item.kind === "CrateItem" ? item.kind : `${item.kind}Item`;
     },
-    async loadMore() {
-      this.loading = true;
-      await this.$store.dispatch("getCrateItems", {
-        crateId: this.id,
-        more: true,
-      });
-      this.loading = false;
-    },
     async removeItem(index) {
       await this.$store.dispatch("removeItem", {
         crateId: this.id,

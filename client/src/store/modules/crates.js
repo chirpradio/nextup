@@ -53,8 +53,10 @@ const actions = {
         crate = findCrate(state.crates, crateId);
       }
     }
-    const response = await api.getCrateItems(crateId);
-    commit("crateItems", { crateId, response });
+    if(crate.items.length === 0) {
+      const response = await api.getCrateItems(crateId);
+      commit("crateItems", { crateId, response });
+    }
   },
   async addToCrate({ commit }, { crateId, params }) {
     await api.addToCrate(crateId, params);
