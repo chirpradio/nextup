@@ -17,6 +17,8 @@ const crateItemSchema = new Schema({
   track: { type: String },
   categories: {
     type: Array,
+    required: true,
+    default: [],
     validate: {
       rule: validateCategories,
       args: [
