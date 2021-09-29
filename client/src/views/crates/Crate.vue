@@ -10,7 +10,7 @@
         title="Edit crate name"
         class="me-3"
       />
-      <button v-if="!loading" class="btn btn-chirp-red btn-sm h-50" @click="showAddModal">
+      <button v-if="!loading" class="btn btn-outline-chirp-red btn-sm h-50" @click="showAddModal">
         Add your own item
       </button>
       <span class="flex-grow-1"></span>

@@ -13,19 +13,20 @@
 
 <style scoped>
 .heavy_rotation {
-  color: #cb3f30;
+  color: rgba(255, 0, 0, 0.67);
 }
 
 .light_rotation {
-  color: #5f9676;
+  /* color: rgb(34, 133, 34); */
+  color: rgba(0, 128, 0, 0.67);
 }
 
 .local_classic {
-  color: #ffbe40;
+  color: #ffbf40ac;
 }
 
 .local_current {
-  color: #0e7c7c;
+  color: rgba(0, 0, 255, 0.67);
 }
 </style>
 
