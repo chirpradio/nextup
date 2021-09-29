@@ -10,6 +10,7 @@
       class="p-0 m-0"
       :class="inputClasses"
       :size="size"
+      @keydown.enter="save"
     />
     <button class="btn btn-link-chirp-red" v-if="!editing" @click="edit" aria-label="edit">
       <font-awesome-icon icon="edit" />
