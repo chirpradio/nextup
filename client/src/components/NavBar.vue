@@ -54,7 +54,7 @@
               </router-link>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="isAuthorized('crates')">
             <router-link class="nav-link" to="/crates">Crates</router-link>
           </li>
           <li class="nav-item dropdown">
@@ -141,6 +141,9 @@ export default {
     },
   },
   methods: {
+    isAuthorized(feature) {
+      return this.$store.getters.isAuthorized(feature);
+    },
     logOut() {
       this.$store.dispatch("logOut");
       this.$router.push("/login");
