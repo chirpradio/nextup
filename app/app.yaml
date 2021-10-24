@@ -1,5 +1,5 @@
 service: nextup
-runtime: nodejs10
+runtime: nodejs16
 env: standard
 includes:
   - env_variables.yaml
