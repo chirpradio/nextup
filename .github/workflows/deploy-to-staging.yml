@@ -37,7 +37,7 @@ jobs:
       working-directory: ./client
       run: npm run build
     - id: deploy
-      uses: GoogleCloudPlatform/github-actions/appengine-deploy@master
+      uses: google-github-actions/deploy-appengine@main
       with:
         credentials: ${{ secrets.gcp_credentials }}
         deliverables: ./app/app.yaml
