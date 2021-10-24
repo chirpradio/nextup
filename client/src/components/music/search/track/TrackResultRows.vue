@@ -25,7 +25,7 @@
       </div>
       <div class="col-sm-3 search_result__col d-flex align-items-stretch">
         <TrackTag :track="hit._source" class="pe-1" />
-        <span>{{hit._source.title}}</span>
+        <span>{{ hit._source.title }}</span>
       </div>
       <div class="col-sm-1 search_result__col text-end numeral">
         <TrackDuration :track="hit._source" />

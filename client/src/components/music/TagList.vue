@@ -3,7 +3,15 @@
     <li
       v-for="tag in filteredTags"
       :key="tag"
-      class="list-inline-item badge rounded-pill bg-light border fw-normal text-body"
+      class="
+        list-inline-item
+        badge
+        rounded-pill
+        bg-light
+        border
+        fw-normal
+        text-body
+      "
     >
       <font-awesome-icon :class="getCircleClass(tag)" icon="circle" size="sm" />
       {{ formatTag(tag) }}
@@ -38,7 +46,7 @@ const allowedTags = [
   "local_classic",
   "heavy_rotation",
   "light_rotation",
-]
+];
 
 export default {
   name: "TagList",
@@ -53,7 +61,9 @@ export default {
   mixins: [formatters],
   computed: {
     filteredTags() {
-      return this.tags?.filter(tag => allowedTags.includes(tag)).sort((a, b) => a < b ? -1 : 1);
+      return this.tags
+        ?.filter((tag) => allowedTags.includes(tag))
+        .sort((a, b) => (a < b ? -1 : 1));
     },
   },
   methods: {
@@ -61,7 +71,7 @@ export default {
       let classObj = {};
       classObj[tag] = true;
       return classObj;
-    }
-  }
+    },
+  },
 };
 </script>

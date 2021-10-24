@@ -1,24 +1,30 @@
 <template>
-  <div ref="container" class="container-fluid">
-    <div class="d-flex mb-3 sticky-top py-2 bg-white align-items-center">
-      <EditableHeading
-        v-if="crate"
-        :headingLevel="1"
-        :text="name"        
-        @save="renameCrate"
-        aria-label="Edit crate name"
-        title="Edit crate name"
-        class="me-3"
-      />
-      <button v-if="!loading" class="btn btn-outline-chirp-red btn-sm h-50" @click="showAddModal">
-        Add your own item
-      </button>
+  <div ref="container" class="px-0">
+    <div class="d-flex mb-3 sticky-top py-2 px-2 bg-white align-items-center">
+      <div class="d-flex align-items-center flex-grow-1">
+        <EditableHeading
+          v-if="crate"
+          :headingLevel="1"
+          :text="name"
+          @save="renameCrate"
+          aria-label="Edit crate name"
+          title="Edit crate name"
+          class="me-3"
+        />
+        <button
+          v-if="!loading"
+          class="btn btn-outline-chirp-red btn-sm h-50"
+          @click="showAddModal"
+        >
+          Add your own item
+        </button>
+      </div>
       <span class="flex-grow-1"></span>
       <button class="btn btn-link-chirp-red btn-sm" @click="showDeleteModal">
         Delete crate
       </button>
     </div>
-    
+
     <draggable
       v-if="showList"
       :list="crate.items"
@@ -29,19 +35,19 @@
       handle=".handle"
     >
       <template #item="{ element, index }">
-        <li class="list-group-item d-flex align-items-start">
-          <div class="row flex-fill">
+        <li class="list-group-item">
+          <div class="row g-2">
             <div class="handle col-auto">
-              <font-awesome-icon icon="grip-lines" />            
-            </div>        
-            <div class="col-1 mb-1 text-end numeral">
+              <font-awesome-icon icon="grip-lines" size="xs" />
+            </div>
+            <div class="col-1 me-2 text-end numeral crate_item__duration">
               <TrackDuration v-if="element.track" :track="element.track" />
-            </div>  
+            </div>
             <component
               :is="getKind(element)"
               :element="element"
-              class="col-12 flex-grow-1 col-md-6"
-            />                 
+              class="col crate_item__details"
+            />
             <div class="col-1">
               <button
                 class="btn btn-link-chirp-red btn-sm"
@@ -107,7 +113,9 @@
             ></button>
           </div>
           <div class="modal-body">
-            <p class="text-muted">Add something to your crate that's not in the CHIRP library</p>
+            <p class="text-muted">
+              Add something to your crate that's not in the CHIRP library
+            </p>
             <form>
               <div class="row mb-3">
                 <label for="artist" class="col-2 col-form-label">Artist</label>
@@ -124,7 +132,7 @@
                 <div class="col-10">
                   <input id="track" class="form-control" v-model="item.track" />
                 </div>
-              </div>        
+              </div>
               <div class="row mb-3">
                 <label for="album" class="col-2 col-form-label">Album</label>
                 <div class="col-10">
@@ -141,19 +149,41 @@
                 <label class="col-2 col-form-label">Category</label>
                 <div class="col-10">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="localRadios" id="localNone" v-model="item.category" value="" checked>
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="localRadios"
+                      id="localNone"
+                      v-model="item.category"
+                      value=""
+                      checked
+                    />
                     <label class="form-check-label" for="localRadios">
                       None
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="localRadios" id="localClassic" v-model="item.category" value="local_classic">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="localRadios"
+                      id="localClassic"
+                      v-model="item.category"
+                      value="local_classic"
+                    />
                     <label class="form-check-label" for="localRadios">
                       Local Classic
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="localRadios" id="localCurrent" v-model="item.category" value="local_current">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="localRadios"
+                      id="localCurrent"
+                      v-model="item.category"
+                      value="local_current"
+                    />
                     <label class="form-check-label" for="localRadios">
                       Local Current
                     </label>
@@ -195,6 +225,21 @@
 </template>
 
 <style scoped>
+@media (max-width: 576px) {
+  .crate_item__duration,
+  .crate_item__details {
+    font-size: 0.9rem;
+  }
+
+  .crate_item__details {
+    word-break: break-word;
+  }
+
+  .crate_item__duration {
+    padding: 0;
+  }
+}
+
 .handle {
   cursor: move;
 }
@@ -346,17 +391,16 @@ export default {
 
       try {
         const newItem = { ...this.item };
-        if(newItem.category !== "") {
+        if (newItem.category !== "") {
           newItem.categories = [newItem.category];
         }
-        delete newItem.category;     
+        delete newItem.category;
 
         await this.$store.dispatch("addToCrate", {
           crateId: this.id,
           params: { item: newItem },
         });
-        this.hideAddModal();        
-        
+        this.hideAddModal();
       } catch (error) {
         this.addError = true;
       }

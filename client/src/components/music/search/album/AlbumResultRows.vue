@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import AddToCrate from "../../../AddToCrate"
+import AddToCrate from "../../../AddToCrate";
 import AlbumArtLink from "../../AlbumArtLink";
 import AlbumTitleLink from "../../AlbumTitleLink";
 import ArtistLink from "../../ArtistLink";

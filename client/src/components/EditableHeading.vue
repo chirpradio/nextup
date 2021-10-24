@@ -12,10 +12,20 @@
       :size="size"
       @keydown.enter="save"
     />
-    <button class="btn btn-link-chirp-red" v-if="!editing" @click="edit" aria-label="edit">
+    <button
+      class="btn btn-link-chirp-red"
+      v-if="!editing"
+      @click="edit"
+      aria-label="edit"
+    >
       <font-awesome-icon icon="edit" />
     </button>
-    <button class="btn btn-link-chirp-red" v-if="editing" @click="save" aria-label="save">
+    <button
+      class="btn btn-link-chirp-red"
+      v-if="editing"
+      @click="save"
+      aria-label="save"
+    >
       <font-awesome-icon icon="check-square" />
     </button>
   </div>
@@ -51,7 +61,7 @@ export default {
     },
     size() {
       return Math.min(this.value.length, 50);
-    }
+    },
   },
   methods: {
     edit() {

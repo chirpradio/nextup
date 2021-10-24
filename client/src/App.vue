@@ -89,7 +89,6 @@ button.btn-outline-chirp-red:hover {
 .numeral {
   font-family: "Times New Roman", Times, serif;
 }
-
 </style>
 
 <script>

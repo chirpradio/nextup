@@ -29,7 +29,7 @@ library.add(
   faBan,
   faEdit,
   faTimes,
-  faCircle,
+  faCircle
 );
 
 const debug = process.env.NODE_ENV !== "production";

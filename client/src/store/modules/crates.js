@@ -57,7 +57,7 @@ const actions = {
         crate = findCrate(state.crates, crateId);
       }
     }
-    if(crate.items.length === 0) {
+    if (crate.items.length === 0) {
       const response = await api.getCrateItems(crateId);
       commit("crateItems", { crateId, response });
     }

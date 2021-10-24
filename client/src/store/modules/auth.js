@@ -28,7 +28,7 @@ const getters = {
   },
   isAuthorized: (state) => (feature) => {
     return state.features[feature]?.users?.includes(state.user.email);
-  }
+  },
 };
 
 const actions = {
