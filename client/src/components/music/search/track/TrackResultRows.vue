@@ -23,11 +23,15 @@
         <AlbumTitleLink :album="hit._source.album" />
         <TagList :tags="hit._source.album.current_tags" />
       </div>
-      <div class="col-sm-4 search_result__col">
-        <TrackTitle :track="hit._source" />
+      <div class="col-sm-3 search_result__col d-flex align-items-stretch">
+        <TrackTag :track="hit._source" class="pe-1" />
+        <span>{{ hit._source.title }}</span>
+      </div>
+      <div class="col-sm-1 search_result__col text-end numeral">
+        <TrackDuration :track="hit._source" />
       </div>
       <div class="col-sm-1 search_result__col">
-        <TrackDuration :track="hit._source" />
+        <AddToCrate :keyToAdd="hit._source.__key" />
       </div>
     </div>
   </div>
@@ -38,18 +42,20 @@ import AlbumArtLink from "../../AlbumArtLink";
 import AlbumTitleLink from "../../AlbumTitleLink";
 import ArtistLink from "../../ArtistLink";
 import TagList from "../../TagList";
-import TrackTitle from "../../TrackTitle";
 import TrackDuration from "../../TrackDuration";
+import AddToCrate from "../../../AddToCrate";
+import TrackTag from "../../TrackTag";
 
 export default {
   name: "TrackResultRows",
   components: {
+    AddToCrate,
     AlbumArtLink,
     AlbumTitleLink,
     ArtistLink,
     TagList,
     TrackDuration,
-    TrackTitle,
+    TrackTag,
   },
   props: {
     results: {

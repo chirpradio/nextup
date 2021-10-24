@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
+  version: 1.1.0
   title: NextUp API
   description: An API for working with the CHIRP Radio music library
 servers:
@@ -24,6 +24,10 @@ components:
         notes:
           type: string
         track:
+          type: string
+        categories:
+          type: array
+        encodedKey:
           type: string
     Key:      
       properties:
@@ -76,7 +80,9 @@ paths:
       security:
         - Bearer: []
       summary: Get albums with a tag
-      description: Returns albums with a given tag            
+      description: Returns albums with a given tag  
+      tags:
+        - Albums          
       parameters:
         - name: tag
           in: query
@@ -113,6 +119,8 @@ paths:
         - Bearer: []
       summary: Get recently added albums
       description: Returns albums added after a given date and time that aren't in rotation ("library adds")
+      tags:
+        - Albums
       parameters:
         - name: timestamp
           in: query
@@ -145,6 +153,8 @@ paths:
         - Bearer: []
       summary: Get an album
       description: Returns an album, including the artist, tracks, reviews, and comments            
+      tags:
+        - Albums
       parameters:
         - name: album_id
           in: path
@@ -161,7 +171,9 @@ paths:
       security:
         - Bearer: []
       summary: Get an artist
-      description: Returns an artist         
+      description: Returns an artist 
+      tags:
+        - Artists        
       parameters:
         - name: id
           in: path
@@ -185,7 +197,9 @@ paths:
       security:
         - Bearer: []
       summary: Get an artist's albums
-      description: Returns an artist's albums        
+      description: Returns an artist's albums   
+      tags:
+        - Artists     
       parameters:
         - name: id
           in: path
@@ -209,32 +223,208 @@ paths:
       security:
         - Bearer: []
       summary: List crates
+      tags:
+        - Crates
       description: Lists all crates owned by the authorized user            
       responses:
         '200':
           description: Successful response
-  /crate/:id/item:
+  /crate/:id:
+    get:
+      security:
+        - Bearer: []
+      summary: Get a crate  
+      tags:
+        - Crates 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer   
+      responses:
+        '200':
+          description: Successful response
+        '403':
+          description: Forbidden
     post:
       security:
         - Bearer: []
-      summary: Add an item to a crate
-      description: Add a track, album, or artist to a crate by its key, or add a custom item
+      summary: Add a crate
+      tags:
+        - Crates
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
-      requestBody:        
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: '#/components/schemas/Key'
-                # - $ref: '#/components/schemas/CrateItem'
+        - name: name
+          in: body
+          schema:
+            type: string
+      responses: 
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a crate
+      tags:
+        - Crates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: name
+          in: body
+          schema:
+            type: string
+      responses: 
+        '200':
+          description: Successful response
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete a crate
+      tags:
+        - Crates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '200':
+          description: Successful response
+        '403':
+          description: Forbidden
+  /crate/:id/items:
+    get:
+      security:
+        - Bearer: []
+      summary: Get items in a crate
+      description: Get albums, tracks, and artists in a crate
+      tags:
+        - Crates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+          description: The number of items to return 
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+          description: The index of the first item to return. Use with limit to get the next set of items.
       responses:
         '200':
-          description: Item added
+          description: Successful response
+        '400':
+          description: Bad request
+  /crate/:id/item:  
+      post:
+        security:
+          - Bearer: []
+        summary: Add an item to a crate
+        description: Add a track, album, or artist to a crate by its key, or add a custom item
+        tags:
+          - Crates
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+        requestBody:        
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Key'
+                    name: path                  
+                  - $ref: '#/components/schemas/CrateItem'
+        responses:
+          '200':
+            description: Item added
+          '403':
+            description: Forbidden
+      delete:
+        security:
+          - Bearer: []
+        summary: Remove an item from a crate
+        description: Remove the item at the specified index from the crate
+        tags:
+          - Crates
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+          - name: index
+            in: path
+            required: true
+            schema:
+              type: integer
+            description: Zero-based index of the item to remove (i.e., the first item is 0)
+        responses:
+          '200':
+            description: Item added
+          '400':
+            description: Bad request
+          '403':
+            description: Forbidden
+  /crate/:id/item/:index/reorder/:newIndex:
+    patch:
+      security:
+        - Bearer: []
+      summary: Reorder an item in a crate
+      description: Move an item from one index to another
+      tags:
+        - Crates
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: index
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Zero-based index of the item to reorder (i.e., the first item is 0)
+        - name: newIndex
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: New zero-based index for the item (i.e., the second item is 1)
+      responses:
+        '200':
+          description: Item reordered
         '403':
           description: Forbidden
   /playlist/rotation:
@@ -243,6 +433,8 @@ paths:
         - Bearer: []
       summary: Get rotation plays
       description: Returns playlist tracks from albums in rotation
+      tags:
+        - Playlist
       parameters:
         - name: start
           in: query

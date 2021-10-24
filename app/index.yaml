@@ -25,7 +25,7 @@ indexes:
   properties:
   - name: revoked
   - name: name
-
+ 
 - kind: PlaylistEvent
   properties:
   - name: class

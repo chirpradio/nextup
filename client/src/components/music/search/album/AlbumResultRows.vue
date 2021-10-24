@@ -17,17 +17,21 @@
           :artist="hit._source.album_artist"
         />
       </div>
-      <div class="col-sm-4 search_result__col">
+      <div class="col-sm-3 search_result__col">
         <AlbumTitleLink :album="hit._source" />
         <TagList :tags="hit._source.current_tags" />
       </div>
       <div class="col-sm-3 search_result__col">{{ hit._source.label }}</div>
       <div class="col-sm-1 search_result__col">{{ hit._source.year }}</div>
+      <div class="col-sm-1 search_result__col">
+        <AddToCrate :keyToAdd="hit._source.__key" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import AddToCrate from "../../../AddToCrate";
 import AlbumArtLink from "../../AlbumArtLink";
 import AlbumTitleLink from "../../AlbumTitleLink";
 import ArtistLink from "../../ArtistLink";
@@ -35,7 +39,7 @@ import TagList from "../../TagList";
 
 export default {
   name: "AlbumResultRows",
-  components: { AlbumArtLink, AlbumTitleLink, ArtistLink, TagList },
+  components: { AddToCrate, AlbumArtLink, AlbumTitleLink, ArtistLink, TagList },
   props: {
     results: {
       type: Object,

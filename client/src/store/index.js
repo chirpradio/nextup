@@ -22,15 +22,16 @@ const persistTokenInCookies = createPersistedState({
       }),
     removeItem: (key) => Cookies.remove(key),
   },
-  rehydrated: (store) => {
+  rehydrated: async function (store) {
     if (store.getters.isAuthenticated) {
-      api.setAuthorizatonHeader(store.state.auth.token);
+      api.setAuthorizationHeader(store.state.auth.token);
+      await store.dispatch("getCrates");
     }
   },
 });
 
 const persistPathsInLocalStorage = createPersistedState({
-  paths: ["crates.crates", "auth.user"],
+  paths: ["auth.user", "crates.mostRecent"],
 });
 
 const plugins = [persistTokenInCookies, persistPathsInLocalStorage];

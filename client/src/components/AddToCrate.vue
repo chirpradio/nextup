@@ -1,20 +1,38 @@
 <template>
-  <form>
-    <select
-      class="form-select form-select-sm"
-      :class="{ 'col-6': limitWidth }"
-      v-model="selected"
-      @change="add"
-    >
-      <option disabled value="">+ add to crate</option>
-      <option v-for="crate in crates" :key="crate.id" :value="crate.id">
-        {{ crate.name }}
-      </option>
-    </select>
-    <small v-if="added" class="ml-2 text-success">added!</small>
-    <small v-if="error" class="ml-2 text-danger">error</small>
+  <form class="row g-2">
+    <div class="col-11">
+      <select
+        class="form-select form-select-sm"
+        v-model="selected"
+        @change="add"
+      >
+        <option disabled value="">+ add to crate</option>
+        <optgroup v-if="mostRecent" label="Most recent">
+          <option :value="mostRecent.id">{{ mostRecent.name }}</option>
+        </optgroup>
+        <optgroup label="A-Z">
+          <option v-for="crate in crates" :key="crate.id" :value="crate.id">
+            {{ crate.name }}
+          </option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="col-1">
+      <font-awesome-icon
+        v-if="added"
+        icon="check-circle"
+        class="text-success"
+      />
+      <font-awesome-icon
+        v-if="error"
+        icon="exclamation-circle"
+        class="text-danger"
+      />
+    </div>
   </form>
 </template>
+
+<style scoped></style>
 
 <script>
 export default {
@@ -36,6 +54,9 @@ export default {
     crates() {
       return this.$store.getters.crates;
     },
+    mostRecent() {
+      return this.$store.getters.mostRecent;
+    },
   },
   methods: {
     async add() {
@@ -44,13 +65,17 @@ export default {
       try {
         await this.$store.dispatch("addToCrate", {
           crateId: this.selected,
-          path: this.keyToAdd.path,
+          params: {
+            path: this.keyToAdd.path,
+          },
         });
         this.added = true;
       } catch (error) {
         this.error = true;
+        setTimeout(() => (this.error = false), 2000);
       }
       this.selected = "";
+      setTimeout(() => (this.added = false), 2000);
     },
   },
 };

@@ -17,17 +17,16 @@ function parseIndexerTransaction(path) {
 /*
   gstore-node sometimes returns an entity's key as the property "__key",
   and sometimes as a Symbol that can be accessed with datastore.KEY. The
-  Symbol version does not serialize to JSON. This function renames the Symbol 
-  property to a "__key" property.
+  Symbol version does not serialize to JSON. By default this function renames 
+  the Symbol property to a "__key" property.
 */
 function renameKey(obj) {
-  let prop;
-
-  if (obj && Object.prototype.hasOwnProperty.call(obj, datastore.KEY)) {
-    prop = datastore.KEY;
+  const prop = datastore.KEY;
+  if (obj && Object.prototype.hasOwnProperty.call(obj, prop)) {
     obj.__key = obj[prop];
     delete obj[prop];
   }
+  return obj;
 }
 
 module.exports = {
