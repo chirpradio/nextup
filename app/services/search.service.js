@@ -9,6 +9,7 @@ if (process.env.ELASTICSEARCH_USERNAME && process.env.ELASTICSEARCH_PASSWORD) {
 
 const client = new elasticsearch.Client({
   host,
+  ssl: { rejectUnauthorized: false, pfx: [] },
 });
 
 async function search(params, type = "all", options) {
