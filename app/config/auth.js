@@ -25,11 +25,9 @@ module.exports = function configureAuth(app) {
           if (user.authenticate(password)) {
             return done(null, user);
           } else {
-            req.flash("errorMessages", ["Invalid username or password"]);
             return done(null, false);
           }
         } catch (err) {
-          req.flash("errorMessages", ["Invalid username or password"]);
           return done(null, false);
         }
       }
