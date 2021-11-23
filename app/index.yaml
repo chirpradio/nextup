@@ -38,7 +38,7 @@ indexes:
   - name: timestamp
     direction: desc
 
-kind: Track
+- kind: Track
   properties:
   - name: album
   - name: revoked
@@ -54,3 +54,9 @@ kind: Track
   - name: duration_ms
   - name: title
   - name: track_artist
+
+- kind: TrafficLogEntry
+  properties:
+  - name: dow
+  - name: hour
+  - name: created

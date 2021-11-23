@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.1.0
+  version: 1.3.0
   title: NextUp API
   description: An API for working with the CHIRP Radio music library
 servers:
@@ -29,12 +29,119 @@ components:
           type: array
         encodedKey:
           type: string
-    Key:      
+    Key:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        kind:
+          type: string
+        path:
+          type: array
+        required:
+          - kind
+          - path
+    KeyPath:      
       properties:
         key: 
           type: array
       # example:
       #   key: ["IndexerTransaction", {"type":"DatastoreInt","value":"1603156624060411"}, "Track", "djdb/t:vol01/20201019-201216/8259b9a4fa17078443fdd04109e42db952946aeb"]
+    Spot:
+      properties:
+        __key:
+          $ref: '#/components/schemas/Key'
+          readOnly: true
+        id:          
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        active:
+          type: boolean
+        title:
+          type: string
+        type:
+          type: string
+          enum: [Live Read Promo, Recorded Promo, Live Read PSA, Recorded PSA, Underwriting Spot, Pledge Liner, Station ID,]       
+      required:
+        - title
+        - type
+    SpotCopy:
+      properties:
+        id:          
+          type: integer
+          readOnly: true
+        author:
+          type: object
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:          
+          type: string
+          format: date-time
+          readOnly: true
+        __key:
+          $ref: '#/components/schemas/Key'
+          readOnly: true
+        body:
+          type: string
+        expire_on:
+          type: string
+          format: date-time
+        start_on:
+          type: string
+          format: date-time
+      required:
+        - body
+    TrafficLogEntry:
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        log_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        reader:
+          $ref: '#/components/schemas/Key'
+          readOnly: true
+          nullable: true
+        readtime:
+          type: string
+          format: date-time
+          nullable: true 
+        spot:
+          $ref: '#/components/schemas/Spot'
+        spot_copy:
+          $ref: '#/components/schemas/SpotCopy'
+        scheduled:
+          $ref: '#/components/schemas/Key'
+        dow: 
+          type: integer
+        hour: 
+          type: integer
+        slot: 
+          type: integer
+    ArrayOfSpots:
+      type: array
+      items:
+        $ref: '#/components/schemas/Spot'
+    ArrayOfTrafficLogEntries:
+      type: array
+      items:
+        $ref: '#/components/schemas/TrafficLogEntry'
 paths:
   /token:
     post:
@@ -229,7 +336,7 @@ paths:
       responses:
         '200':
           description: Successful response
-  /crate/:id:
+  /crate/{id}:
     get:
       security:
         - Bearer: []
@@ -308,7 +415,7 @@ paths:
           description: Successful response
         '403':
           description: Forbidden
-  /crate/:id/items:
+  /crate/{id}/items:
     get:
       security:
         - Bearer: []
@@ -343,7 +450,7 @@ paths:
           description: Successful response
         '400':
           description: Bad request
-  /crate/:id/item:  
+  /crate/{id}/item:  
       post:
         security:
           - Bearer: []
@@ -362,7 +469,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Key'
+                  - $ref: '#/components/schemas/KeyPath'
                     name: path                  
                   - $ref: '#/components/schemas/CrateItem'
         responses:
@@ -391,12 +498,12 @@ paths:
             description: Zero-based index of the item to remove (i.e., the first item is 0)
         responses:
           '200':
-            description: Item added
+            description: Item removed
           '400':
             description: Bad request
           '403':
             description: Forbidden
-  /crate/:id/item/:index/reorder/:newIndex:
+  /crate/{id}/item/{index}/reorder/{newIndex}:
     patch:
       security:
         - Bearer: []
@@ -539,4 +646,253 @@ paths:
           required: false
           schema:
             type: boolean
-          
+  /spot:
+    get:
+      security:
+        - Bearer: []
+      summary: List spots
+      tags:
+        - Spots
+      description: List all spots
+      parameters:
+        - name: active
+          in: query
+          required: false
+          default: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfSpots'
+    post:
+      security:
+        - Bearer: []
+      summary: Add a spot  
+      description:
+        Only users with the traffic log admin role can add spots.
+      tags:
+        - Spots 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      requestBody:        
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Spot'  
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+  /spot/{spot_id}:
+    get:
+      security:
+        - Bearer: []
+      summary: Get a spot  
+      tags:
+        - Spots 
+      parameters:
+        - name: spot_id
+          in: path
+          required: true
+          schema:
+            type: integer   
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Spot'
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a spot
+      description:
+        Only users with the traffic log admin role can update spots.
+      tags:
+        - Spots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete a spot
+      description:
+        Only users with the traffic log admin role can delete a spot.
+      tags:
+        - Spots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden
+  /spot/{spot_id}/copy:  
+      post:
+        security:
+          - Bearer: []
+        summary: Add copy to a spot
+        description: 
+          Add a bit of copy that could be read for a given spot.
+          Only users with the traffic log admin role can add copy.
+        tags:
+          - Spots
+        parameters:
+          - name: spot_id
+            in: path
+            required: true
+            schema:
+              type: integer
+        requestBody:        
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpotCopy'
+        responses:
+          '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SpotCopy'
+          '400':
+            description: Bad request
+          '403':
+            description: Forbidden
+  /spot/copy/{id}:
+    patch:
+      security:
+        - Bearer: []
+      summary: Update copy
+      description:
+        Only users with the traffic log admin role can update copy.
+      tags:
+        - Spots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses: 
+        '204':
+          description: No Content
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete copy 
+      description:
+          Only users with the traffic log admin role can delete copy.      
+      tags:
+        - Spots
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content        
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /traffic-log:
+    get:
+      security:
+        - Bearer: []
+      summary: List traffic log entries
+      tags:
+        - Traffic Log
+      description: 
+        Returns a list of traffic log entries for the next three hours, starting at the top of the current hour.
+        Entries that have already been read have values for "logtime", "readtime", "reader", or "__key".
+        Entries still to be read have a random copy but no values for those properties. They can be posted to the API to be saved to the database.       
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfTrafficLogEntries'
+    post:
+      security:
+        - Bearer: []
+      summary: Add an entry to the log  
+      description:
+        Mark the copy for a timeslot as read
+      tags:
+        - Traffic Log 
+      requestBody:        
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficLogEntry'  
+      responses:
+        '201':
+          description: Created
+          content:            
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficLogEntry'
+  /traffic-log/report:
+    get:
+      security:
+        - Bearer: []
+      summary: Download CSV of entries
+      tags:
+        - Traffic Log
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema: 
+                type: string
+        '403':
+          description: Forbidden

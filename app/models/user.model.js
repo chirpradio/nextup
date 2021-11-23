@@ -41,4 +41,8 @@ userSchema.methods.isMusicDirector = function () {
   return this.roles.includes("music_director");
 };
 
+userSchema.methods.isTrafficLogAdmin = function () {
+  return this.roles.includes("traffic_log_admin");
+};
+
 module.exports = gstore.model("User", userSchema);

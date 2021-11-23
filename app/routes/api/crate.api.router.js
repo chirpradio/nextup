@@ -1,16 +1,11 @@
 const router = require("express").Router();
-const { body, param, query } = require("express-validator");
+const { body, param } = require("express-validator");
 const { CrateService } = require("../../services");
 const { datastore, parseIndexerTransaction } = require("../../db");
 const { checkErrors, errorMessages } = require("./errors");
+const { validateId } = require("./validators");
 
-const validateLimit = query("limit")
-  .optional()
-  .isInt({ min: 1, max: 100 })
-  .toInt();
-const validateOffset = query("offset").optional().isInt({ min: 0 }).toInt();
 const validateName = body("name").optional().isString();
-const validateId = param("id").isInt({ min: 0 }).toInt();
 const validateIndex = param("index").isInt({ min: 0 }).toInt();
 const validateNewIndex = param("newIndex").isInt({ min: 0 }).toInt();
 
