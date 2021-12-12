@@ -235,6 +235,7 @@ async function addEntry(data, user) {
   data.readtime = now;
   // matches DJDB
   data.log_date = DateTime.now()
+    .minus({ days: 1 })
     .setZone("America/Chicago")
     .set({ hour: 18, minute: 0, second: 0, millisecond: 0 })
     .toJSDate();
