@@ -136,4 +136,54 @@ export default {
     });
     return await getAndHandleError(getter);
   },
+
+  async getSpots() {
+    const getter = instance.get("/spot");
+    return await getAndHandleError(getter);
+  },
+
+  async getSpot(spotId) {
+    const getter = instance.get(`/spot/${spotId}`);
+    return await getAndHandleError(getter);
+  },
+
+  async addSpot(title, type) {
+    return await instance.post(`/spot/`, {
+      title,
+      type,
+    });
+  },
+
+  async updateSpot(spotId, data) {
+    await instance.patch(`/spot/${spotId}`, data);
+  },
+
+  async deleteSpot(spotId) {
+    await instance.delete(`/spot/${spotId}`);
+  },
+
+  async addCopyToSpot(spotId, body, { expire_on, start_on } = {}) {
+    return await instance.post(`/spot/${spotId}/copy`, {
+      body,
+      expire_on,
+      start_on,
+    });
+  },
+
+  async updateCopy(copyId, data) {
+    await instance.patch(`/spot/copy/${copyId}`, data);
+  },
+
+  async deleteCopy(copyId) {
+    await instance.delete(`/spot/copy/${copyId}`);
+  },
+
+  async getTrafficLog() {
+    const getter = instance.get("/traffic-log");
+    return await getAndHandleError(getter);
+  },
+
+  async addTrafficLogEntry(data) {
+    await instance.post("/traffic-log", data);
+  },
 };
