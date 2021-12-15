@@ -7,6 +7,7 @@ import artists from "./modules/artists";
 import crates from "./modules/crates";
 import playlist from "./modules/playlist";
 import search from "./modules/search";
+import spots from "./modules/spots";
 import api from "../services/api.service";
 
 const DAYS_BEFORE_TOKEN_EXPIRES = 0.25;
@@ -49,5 +50,6 @@ export default createStore({
     crates,
     playlist,
     search,
+    spots,
   },
 });
