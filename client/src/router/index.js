@@ -12,6 +12,7 @@ import Crates from "../views/crates/Crates.vue";
 import Crate from "../views/crates/Crate.vue";
 import RotationAlbums from "../views/reports/RotationAlbums";
 import RotationPlays from "../views/reports/RotationPlays";
+import TrafficLog from "../views/traffic-log/TrafficLog.vue";
 import EverythingFilters from "../components/music/search/EverythingFilters.vue";
 import EverythingResults from "../components/music/search/EverythingResults.vue";
 import AlbumFilters from "../components/music/search/album/AlbumFilters.vue";
@@ -21,6 +22,7 @@ import TrackResults from "../components/music/search/track/TrackResults.vue";
 import ArtistResults from "../components/music/search/artist/ArtistResults.vue";
 import DocumentResults from "../components/music/search/document/DocumentResults.vue";
 import TermFilter from "../components/music/search/TermFilter.vue";
+import Spots from "../views/traffic-log/Spots.vue";
 
 import store from "../store";
 import formatters from "../mixins/formatters";
@@ -190,6 +192,8 @@ const routes = [
     component: Crates,
   },
   { path: "/crates/:id", name: "crate", component: Crate, props: true },
+  { path: "/traffic-log", component: TrafficLog },
+  { path: "/traffic-log/spots", component: Spots },
 ];
 
 const router = createRouter({

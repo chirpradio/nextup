@@ -15,6 +15,9 @@ const getters = {
   spots: (state) => {
     return state.spots;
   },
+  loadingSpots: (state) => {
+    return state.loadingSpots;
+  },
   spot: (state) => (id) => {
     return state.spots.find((element) => element.id === id);
   },
