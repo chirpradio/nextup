@@ -24,6 +24,8 @@ services:
       - ./app:/usr/src/app
       - ~/.config:/root/.config
     working_dir: /usr/src/app
+    profiles:
+      - api
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
@@ -40,6 +42,8 @@ services:
       - 9200:9200
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    profiles:
+      - es
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.2.0
@@ -48,7 +52,8 @@ services:
       ELASTICSEARCH_HOSTS: http://es:9200
     ports: 
       - 5601:5601
+    profiles:
+      - es
 
 volumes:
   esdata:
-    external: true
