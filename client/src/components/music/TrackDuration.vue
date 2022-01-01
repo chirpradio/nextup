@@ -10,9 +10,13 @@ export default {
   },
   computed: {
     duration() {
+      if (!this.track || !this.track.duration_ms) {
+        return "";
+      }
+
       const inSeconds = this.track.duration_ms / 1000;
-      const minutes = Math.trunc(inSeconds / 60);
-      const seconds = Math.round(inSeconds % 60)
+      let minutes = Math.trunc(inSeconds / 60);
+      let seconds = Math.floor(inSeconds % 60)
         .toString()
         .padStart(2, "0");
       return `${minutes}:${seconds}`;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <router-view class="container-fluid py-3" />
+    <router-view class="container-fluid py-3 main-view" />
   </div>
 </template>
 
@@ -58,13 +58,23 @@ button.btn-chirp-red:hover {
 }
 
 button.btn-link-chirp-red,
+button.btn-outline-chirp-red,
 a.btn-link-chirp-red {
   color: var(--dark-red);
 }
 
 button.btn-link-chirp-red:hover,
+button.btn-outline-chirp-red:hover,
 a.btn-link-chirp-red:hover {
   color: var(--bright-red);
+}
+
+button.btn-outline-chirp-red {
+  border-color: var(--dark-red);
+}
+
+button.btn-outline-chirp-red:hover {
+  border-color: var(--bright-red);
 }
 
 .no_overflow {
@@ -74,6 +84,10 @@ a.btn-link-chirp-red:hover {
 .search_result__col {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.numeral {
+  font-family: "Times New Roman", Times, serif;
 }
 </style>
 

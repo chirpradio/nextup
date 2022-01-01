@@ -4,6 +4,11 @@ import jwt_decode from "jwt-decode";
 const state = () => ({
   token: "",
   user: {},
+  features: {
+    crates: {
+      users: ["billykalb@gmail.com", "lund5000@gmail.com"],
+    },
+  },
 });
 
 const getters = {
@@ -20,6 +25,9 @@ const getters = {
       console.error(error);
       return false;
     }
+  },
+  isAuthorized: (state) => (feature) => {
+    return state.features[feature]?.users?.includes(state.user.email);
   },
 };
 

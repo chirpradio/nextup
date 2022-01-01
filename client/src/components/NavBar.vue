@@ -54,6 +54,9 @@
               </router-link>
             </div>
           </li>
+          <li class="nav-item" v-if="isAuthorized('crates')">
+            <router-link class="nav-link" to="/crates">Crates</router-link>
+          </li>
           <li class="nav-item dropdown">
             <button
               class="btn btn-link nav-link dropdown-toggle"
@@ -83,7 +86,7 @@
             class="form-control mr-sm-2"
             type="search"
             v-model="term"
-            placeholder="Search"
+            placeholder="Search the library"
             aria-label="Search"
           />
         </form>
@@ -110,6 +113,16 @@
   </nav>
 </template>
 
+<style scoped>
+/* 
+  Position above Bootstrap's sticky elements
+  See: https://getbootstrap.com/docs/5.0/layout/z-index/ 
+*/
+.dropdown-menu {
+  z-index: 1035;
+}
+</style>
+
 <script>
 export default {
   name: "NavBar",
@@ -128,6 +141,9 @@ export default {
     },
   },
   methods: {
+    isAuthorized(feature) {
+      return this.$store.getters.isAuthorized(feature);
+    },
     logOut() {
       this.$store.dispatch("logOut");
       this.$router.push("/login");
