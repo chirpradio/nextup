@@ -13,6 +13,7 @@ const state = () => ({
         "tony@chirpradio.org",
         "jenn@chirpradio.org",
         "buesary@gmail.com",
+        "jlizak@chirpradio.org",
       ],
     },
   },
