@@ -6,6 +6,12 @@ const datastore = new Datastore();
 gstore.connect(datastore);
 console.log(`datastore connected to: ${process.env.DATASTORE_PROJECT_ID}`);
 
+/*
+  Most albums and artists are imported with an "IndexerTransaction" ancestor
+  that must be included in queries. This function ensures that the id value
+  for that part of the path is parsed into an integer so the query will run
+  successfully.
+*/
 function parseIndexerTransaction(path) {
   if (path[0] === "IndexerTransaction") {
     return [path[0], parseInt(path[1], 10), path[2], path[3]];

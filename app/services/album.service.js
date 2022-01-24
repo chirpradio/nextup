@@ -209,8 +209,19 @@ async function getFullAlbumDetails(albumId) {
   };
 }
 
+async function getAlbumsByKeys(keys) {
+  const result = await datastore.get(keys, {
+    wrapNumbers: {
+      integerTypeCastFunction: datastore.int,
+      properties: ["album_id"],
+    },
+  });
+  return result[0].map(renameKey);
+}
+
 module.exports = {
   getAlbumById,
+  getAlbumsByKeys,
   getFullAlbumDetails,
   addImagesFromLastFm,
   listAlbumTracks,

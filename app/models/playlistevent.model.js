@@ -1,5 +1,7 @@
-const gstore = require("../db").gstore;
+const { datastore, gstore } = require("../db");
 const { Schema } = gstore;
+
+let PLAYLIST_KEY;
 
 function validateArray(obj, validator, validItems) {
   if (Array.isArray(obj)) {
@@ -28,7 +30,12 @@ const playlistEventSchema = new Schema({
       args: [["PlaylistEvent", "PlaylistTrack", "PlaylistBreak"]],
     },
   },
-  established: { type: Date, required: true },
+  established: {
+    type: Date,
+    required: true,
+    default: gstore.defaultValues.NOW,
+    write: false,
+  },
   freeform_album_title: { type: String },
   freeform_artist_name: { type: String },
   freeform_label: { type: String },
@@ -37,12 +44,31 @@ const playlistEventSchema = new Schema({
   lastfm_url_med_image: { type: String },
   lastfm_url_sm_image: { type: String },
   lastfm_urls_processed: { type: Boolean },
-  modified: { type: Date },
+  modified: { type: Date, default: gstore.defaultValues.NOW },
   notes: { type: String },
-  playlist: { type: Schema.Types.Key, ref: "Playlist", required: true },
+  playlist: {
+    type: Schema.Types.Key,
+    ref: "Playlist",
+    required: true,
+  },
   selector: { type: Schema.Types.Key, ref: "User" },
   track: { type: Schema.Types.Key, ref: "Track" },
-  track_number: { type: Number },
+  track_number: { type: Number, default: 1 },
 });
+
+/*
+  There is only one Playlist entity in the Datastore, but
+  the id differs between environments.
+*/
+async function setDefaultPlaylist() {
+  if (!PLAYLIST_KEY) {
+    const result = await datastore.createQuery("Playlist").limit(1).run();
+    PLAYLIST_KEY = result[0][0][datastore.KEY];
+  }
+
+  this.playlist = PLAYLIST_KEY;
+  return Promise.resolve();
+}
+playlistEventSchema.pre("save", setDefaultPlaylist);
 
 module.exports = gstore.model("PlaylistEvent", playlistEventSchema);
