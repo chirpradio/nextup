@@ -4,13 +4,15 @@
       <h1 class="flex-grow-1">My Crates</h1>
       <button class="btn btn-chirp-red" @click="showModal">Add a crate</button>
     </div>
+    <div v-if="!loading && mostRecent">
+      <h2>Most recent</h2>
+      <ul class="list-group list-group-flush">
+        <CratePreview :crate="mostRecent" />
+      </ul>
+    </div>
+    <h2>All crates</h2>
     <ul v-if="!loading && crates.length" class="list-group list-group-flush">
-      <CratePreview
-        v-for="crate in crates"
-        :key="crate.id"
-        :crate="crate"
-        class="list-group-item"
-      />
+      <CratePreview v-for="crate in crates" :key="crate.id" :crate="crate" />
     </ul>
     <RecordSpinner v-if="loading" />
 
@@ -91,6 +93,9 @@ export default {
     },
     loading() {
       return this.$store.getters.loadingCrates;
+    },
+    mostRecent() {
+      return this.$store.getters.mostRecent;
     },
     preventAdd() {
       return this.newCrateName === "";
