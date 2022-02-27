@@ -30,35 +30,37 @@
       </div>
     </form>
 
-    <AlbumCollection
-      class="row"
-      heading="Heavy Rotation"
-      :albums="$store.getters.taggedAlbums('heavy_rotation')"
-      :loading="$store.getters.loadingTaggedAlbums('heavy_rotation')"
-      :limit="4"
-      tag="heavy_rotation"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'tag', params: { tag: 'heavy_rotation' } }"
-    />
-    <AlbumCollection
-      class="row"
-      heading="Light Rotation"
-      :albums="$store.getters.taggedAlbums('light_rotation')"
-      :loading="$store.getters.loadingTaggedAlbums('light_rotation')"
-      :limit="4"
-      tag="light_rotation"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'tag', params: { tag: 'light_rotation' } }"
-    />
-    <AlbumCollection
-      class="row"
-      heading="Library Adds"
-      :albums="$store.getters.libraryAdds"
-      :loading="$store.getters.loadingRecentAlbums"
-      :limit="4"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'LibraryAdds' }"
-    />
+    <div class="row">
+      <AlbumCollection
+        class="col-12 col-md-6 mb-4"
+        heading="Heavy Rotation"
+        :albums="$store.getters.taggedAlbums('heavy_rotation')"
+        :loading="$store.getters.loadingTaggedAlbums('heavy_rotation')"
+        :limit="4"
+        tag="heavy_rotation"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'tag', params: { tag: 'heavy_rotation' } }"
+      />
+      <AlbumCollection
+        class="col-12 col-md-6 mb-4"
+        heading="Light Rotation"
+        :albums="$store.getters.taggedAlbums('light_rotation')"
+        :loading="$store.getters.loadingTaggedAlbums('light_rotation')"
+        :limit="4"
+        tag="light_rotation"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'tag', params: { tag: 'light_rotation' } }"
+      />
+      <AlbumCollection
+        class="col-12 col-md-6"
+        heading="Library Adds"
+        :albums="$store.getters.libraryAdds"
+        :loading="$store.getters.loadingRecentAlbums"
+        :limit="4"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'LibraryAdds' }"
+      />
+    </div>
   </div>
 </template>
 
