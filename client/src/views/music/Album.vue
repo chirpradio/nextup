@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid px-0 px-md-2">
     <RecordSpinner v-if="loading" />
     <div class="px-6" v-if="!loading">
       <div class="row mb-3">
@@ -27,9 +27,8 @@
           <TagList :tags="album.current_tags" />
         </div>
       </div>
-      <div class="row">
-        <AddToCrate :keyToAdd="album.key" class="col-md-4" />
-      </div>
+
+      <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
 
       <h3 class="visually-hidden">Reviews</h3>
       <figure
@@ -47,32 +46,36 @@
         </figcaption>
       </figure>
 
-      <div v-if="album.comments && album.comments.length">
+      <div class="col-xl-9" v-if="album.comments && album.comments.length">
         <h4>Comments</h4>
-        <ul class="list-unstyled">
-          <li v-for="comment in album.comments" :key="comment.id">
-            <span v-html="comment.unsafe_text"></span>
-            ({{ comment.author.first_name }} {{ comment.author.last_name }},
-            {{ formatDate(comment.created) }})
-          </li>
-        </ul>
+        <figure v-for="comment in album.comments" :key="comment.id">
+          <blockquote>
+            <p v-html="comment.unsafe_text"></p>
+          </blockquote>
+          <figcaption v-if="comment.author" class="blockquote-footer">
+            {{ comment.author.first_name }} {{ comment.author.last_name }} ({{
+              formatDate(comment.created)
+            }})
+          </figcaption>
+        </figure>
       </div>
 
-      <h3>Tracks</h3>
+      <h3 class="mt-3">Tracks</h3>
       <ol
-        class="list-group list-group-numbered list-group-flush col-12 col-md-9"
+        class="list-group list-group-unstyled list-group-flush col-12 col-md-9"
       >
         <li
           v-for="track in album.tracks"
           :key="track.id"
-          class="list-group-item d-flex align-items-start"
+          class="list-group-item d-flex align-items-start px-1"
         >
-          <div class="row ms-2 flex-fill">
-            <div class="col-auto">
-              <TrackTag :track="track" class="pe-1" />
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="col mb-1">
+          <div class="d-flex flex-column flex-md-row">
+            <span class="track-number">{{ track.track_num }}.</span>
+            <TrackTag :track="track" class="mt-1 ms-md-1" />
+          </div>
+          <div class="d-flex flex-fill flex-column flex-md-row ms-2">
+            <div class="me-auto">
+              <div class="mb-1">
                 <span class="fw-bold">{{ track.title }}</span>
                 <span v-if="album.is_compilation">
                   by
@@ -89,7 +92,13 @@
             <AddToCrate
               :keyToAdd="track.__key"
               :limitWidth="true"
-              class="col-12 col-md-3"
+              class="flex-shrink-1 mt-md-0"
+            />
+            <PlayButton
+              :album="album"
+              :categories="album.current_tags"
+              :track="track"
+              class="mt-2 mt-md-0"
             />
           </div>
         </li>
@@ -97,6 +106,13 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+.track-number {
+  min-width: 1.36em;
+  text-align: center;
+}
+</style>
 
 <script>
 import AddToCrate from "../../components/AddToCrate.vue";
@@ -108,6 +124,7 @@ import formatters from "../../mixins/formatters";
 import updateTitle from "../../mixins/updateTitle";
 import TrackDuration from "../../components/music/TrackDuration";
 import TrackTag from "../../components/music/TrackTag";
+import PlayButton from "../../components/music/PlayButton";
 
 export default {
   components: {
@@ -118,6 +135,7 @@ export default {
     AlbumArt,
     TrackDuration,
     TrackTag,
+    PlayButton,
   },
   data() {
     return {

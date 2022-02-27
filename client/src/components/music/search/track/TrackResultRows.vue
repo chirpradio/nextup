@@ -8,7 +8,7 @@
       <div class="col-sm-1 search_result__col no_overflow">
         <AlbumArtLink :album="hit._source.album" srcSize="med" />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-sm-2 search_result__col">
         <div
           v-if="hit._source.album.is_compilation && hit._source.track_artist"
         >
@@ -19,7 +19,7 @@
           :artist="hit._source.album.album_artist"
         />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-sm-2 search_result__col">
         <AlbumTitleLink :album="hit._source.album" />
         <TagList :tags="hit._source.album.current_tags" />
       </div>
@@ -27,11 +27,17 @@
         <TrackTag :track="hit._source" class="pe-1" />
         <span>{{ hit._source.title }}</span>
       </div>
-      <div class="col-sm-1 search_result__col text-end numeral">
+      <div class="col-sm-1 search_result__col text-sm-end numeral">
         <TrackDuration :track="hit._source" />
       </div>
-      <div class="col-sm-1 search_result__col">
+      <div class="col-sm-3 search_result__col d-flex flex-column flex-xl-row">
         <AddToCrate :keyToAdd="hit._source.__key" />
+        <PlayButton
+          :album="hit._source.album"
+          :categories="hit._source.album.current_tags"
+          :track="hit._source"
+          class="mt-2 mt-xl-0"
+        />
       </div>
     </div>
   </div>
@@ -45,6 +51,7 @@ import TagList from "../../TagList";
 import TrackDuration from "../../TrackDuration";
 import AddToCrate from "../../../AddToCrate";
 import TrackTag from "../../TrackTag";
+import PlayButton from "../../PlayButton";
 
 export default {
   name: "TrackResultRows",
@@ -56,6 +63,7 @@ export default {
     TagList,
     TrackDuration,
     TrackTag,
+    PlayButton,
   },
   props: {
     results: {

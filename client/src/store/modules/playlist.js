@@ -1,6 +1,7 @@
 import api from "../../services/api.service";
 
 const state = () => ({
+  onAir: false,
   rotationPlays: {
     plays: [],
     start: undefined,
@@ -9,12 +10,21 @@ const state = () => ({
 });
 
 const getters = {
+  onAir: (state) => {
+    return state.onAir;
+  },
   rotationPlays: (state) => {
     return state.rotationPlays.plays;
   },
 };
 
 const actions = {
+  async addFreeformPlaylistTrack(_, data) {
+    await api.addFreeformPlaylistTrack(data);
+  },
+  async addPlaylistTrack(_, data) {
+    await api.addPlaylistTrack(data);
+  },
   async getRotationPlays({ commit, state }, { start, end } = {}) {
     if (
       state.rotationPlays.start !== start ||
@@ -24,9 +34,15 @@ const actions = {
       commit("rotationPlays", { response });
     }
   },
+  async setOnAir({ commit }, value) {
+    commit("onAir", value);
+  },
 };
 
 const mutations = {
+  onAir(state, payload) {
+    state.onAir = payload;
+  },
   rotationPlays(state, payload) {
     state.rotationPlays = payload.response;
   },

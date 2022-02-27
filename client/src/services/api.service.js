@@ -122,6 +122,14 @@ export default {
     await instance.delete(`/crate/${crateId}`);
   },
 
+  async addPlaylistTrack(data) {
+    return await instance.post("/playlist/track", data);
+  },
+
+  async addFreeformPlaylistTrack(data) {
+    return await instance.post("/playlist/freeform", data);
+  },
+
   async getRotationPlays(params) {
     const getter = instance.get("/playlist/rotation", { params });
     return await getAndHandleError(getter);

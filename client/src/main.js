@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import { Collapse } from "../node_modules/bootstrap/js/dist/collapse"; // eslint-disable-line no-unused-vars
 import { Dropdown } from "../node_modules/bootstrap/js/dist/dropdown"; // eslint-disable-line no-unused-vars
-import { Modal } from "../node_modules/bootstrap/js/dist/modal"; // eslint-disable-line no-unused-vars
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -17,6 +16,7 @@ import {
   faCheckSquare,
   faTimes,
   faCircle,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -29,7 +29,8 @@ library.add(
   faBan,
   faEdit,
   faTimes,
-  faCircle
+  faCircle,
+  faPlay
 );
 
 const debug = process.env.NODE_ENV !== "production";

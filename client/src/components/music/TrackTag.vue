@@ -1,10 +1,10 @@
 <template>
-  <font-awesome-icon :class="classObject" :icon="icon" size="lg" />
+  <font-awesome-icon :class="classObject" :icon="icon" />
 </template>
 
 <style scoped>
-.nopacity {
-  opacity: 0;
+.hidden {
+  visibility: hidden;
 }
 </style>
 
@@ -40,7 +40,7 @@ export default {
     },
     classObject() {
       return {
-        nopacity: !this.explicit && !this.recommended,
+        hidden: !this.explicit && !this.recommended,
         "text-warning": this.recommended,
         "text-danger": this.explicit,
       };

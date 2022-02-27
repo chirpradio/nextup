@@ -1,12 +1,12 @@
 <template>
-  <form class="row g-2">
-    <div class="col-11">
+  <form class="add-to-crate row">
+    <div class="col-11 mt-0">
       <select
         class="form-select form-select-sm"
         v-model="selected"
         @change="add"
       >
-        <option disabled value="">+ add to crate</option>
+        <option disabled value="">+ Add to crate</option>
         <optgroup v-if="mostRecent" label="Most recent">
           <option :value="mostRecent.id">{{ mostRecent.name }}</option>
         </optgroup>
@@ -32,7 +32,11 @@
   </form>
 </template>
 
-<style scoped></style>
+<style>
+.add-to-crate {
+  max-width: 11.25em;
+}
+</style>
 
 <script>
 export default {
