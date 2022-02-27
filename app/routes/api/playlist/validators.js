@@ -13,7 +13,7 @@ const validateAlbum = body("album").isArray().customSanitizer(toKey);
 const validateArtist = body("artist").isArray().customSanitizer(toKey);
 const validateCategories = body("categories").isArray();
 const validateFreeformTrackTitle = body("track.title").isString();
-const validateLabel = body("label").isString();
+const validateLabel = body("label").isString().optional({ nullable: true });
 const validateRole = function (req, res, next) {
   try {
     if (req.user.isDJ() || req.user.isMusicDirector()) {

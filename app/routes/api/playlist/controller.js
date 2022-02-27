@@ -22,6 +22,15 @@ function replaceAlbumKeysWithAlbums(events, albums) {
   });
 }
 
+async function deleteTrack(req, res, next) {
+  try {
+    await PlaylistEventService.deleteTrack(req.params.id);
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getPlaylistEvents(req, res, next) {
   try {
     // default range: last three hours to now
@@ -55,9 +64,11 @@ async function postPlaylistBreak(req, res, next) {
 
 async function postPlaylistTrack(req, res, next) {
   try {
-    await PlaylistEventService.addTrack(req.body, req.user.entityKey);
-    // TODO: pub/sub
-    res.sendStatus(201);
+    const track = await PlaylistEventService.addTrack(
+      req.body,
+      req.user.entityKey
+    );
+    res.status(201).json(track);
   } catch (error) {
     next(error);
   }
@@ -65,9 +76,11 @@ async function postPlaylistTrack(req, res, next) {
 
 async function postFreeformPlaylistTrack(req, res, next) {
   try {
-    await PlaylistEventService.addFreeformTrack(req.body, req.user.entityKey);
-    // TODO: pub/sub
-    res.sendStatus(201);
+    const track = await PlaylistEventService.addFreeformTrack(
+      req.body,
+      req.user.entityKey
+    );
+    res.status(201).json(track);
   } catch (error) {
     next(error);
   }
@@ -108,10 +121,22 @@ async function getRotationPlays(req, res, next) {
   }
 }
 
+async function updateTrack(req, res, next) {
+  try {
+    const notes = req.body.notes;
+    await PlaylistEventService.updateTrack(req.params.id, { notes });
+    res.sendStatus(200);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
+  deleteTrack,
   getPlaylistEvents,
   getRotationPlays,
   postFreeformPlaylistTrack,
   postPlaylistBreak,
   postPlaylistTrack,
+  updateTrack,
 };

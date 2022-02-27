@@ -554,6 +554,52 @@ paths:
           description: Item added
         '403':
           description: Forbidden
+  /playlist/:id:
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete break or track
+      description: 
+        Delete a track or break from the playlist.
+        Only DJs and music directors can delete from the playlist.
+      tags:
+        - Playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      responses:
+        '200':
+          description: Deleted
+        '403':
+          description: Forbidden
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a track
+      description: 
+        Update a track on the playlist.
+        Only DJs and music directors can update the playlist.
+      tags:
+        - Playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+        - name: notes
+          in: body
+          required: true
+          schema:
+            type: string 
+      responses:
+        '200':
+          description: Updated
+        '403':
+          description: Forbidden
   /playlist/rotation:
     get:
       security:

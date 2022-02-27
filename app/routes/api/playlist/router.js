@@ -44,6 +44,10 @@ router.post(
   controller.postFreeformPlaylistTrack
 );
 
+router.delete("/:id", validateRole, checkErrors, controller.deleteTrack);
+
+router.patch("/:id", validateRole, checkErrors, controller.updateTrack);
+
 router.get(
   "/rotation",
   validateStart,

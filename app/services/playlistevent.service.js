@@ -1,5 +1,7 @@
 const { PlaylistEvent } = require("../models");
-const { datastore } = require("../db");
+const { datastore, gstore } = require("../db");
+const PubSubService = require("./pubsub");
+const TOPIC = PubSubService.topicIds.PLAYLIST_EVENT;
 
 function getTrackOptions({ start, end, category, type = "track" } = {}) {
   const options = {
@@ -51,13 +53,20 @@ async function addBreak() {
   await breakEntity.save();
 }
 
+async function publish(message) {
+  await PubSubService.publish(TOPIC, message);
+}
+
 async function addTrack(
   { album, artist, categories, label, notes, track } = {},
   user
 ) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+
   const playlistTrack = new PlaylistEvent({
     album,
-    artist, // track_artist when compilation?
+    artist,
     categories,
     class: ["PlaylistEvent", "PlaylistTrack"],
     freeform_label: label,
@@ -65,13 +74,29 @@ async function addTrack(
     selector: user,
     track,
   });
-  await playlistTrack.save();
+  await playlistTrack.save(transaction);
+
+  const plain = playlistTrack.plain({
+    showKey: true,
+  });
+  await publish(
+    JSON.stringify({
+      action: "added",
+      track: plain,
+    })
+  );
+
+  await transaction.commit();
+  return plain;
 }
 
 async function addFreeformTrack(
   { album, artist, categories, notes, track } = {},
   user
 ) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+
   const freeformTrack = new PlaylistEvent({
     categories,
     class: ["PlaylistEvent", "PlaylistTrack"],
@@ -82,13 +107,67 @@ async function addFreeformTrack(
     notes,
     selector: user,
   });
-  await freeformTrack.save();
+  await freeformTrack.save(transaction);
+
+  const plain = freeformTrack.plain({
+    showKey: true,
+  });
+  await publish(
+    JSON.stringify({
+      action: "added",
+      track: plain,
+    })
+  );
+
+  await transaction.commit();
+  return plain;
+}
+
+async function deleteTrack(id) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+  const event = await PlaylistEvent.get(id);
+  const plain = event.plain({
+    showKey: true,
+  });
+  await PlaylistEvent.delete(id, null, null, transaction);
+  await publish(
+    JSON.stringify({
+      action: "deleted",
+      track: plain,
+    })
+  );
+  await transaction.commit();
+}
+
+async function updateTrack(id, { notes } = {}) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+  const event = await PlaylistEvent.update(
+    id,
+    { notes },
+    null,
+    null,
+    transaction
+  );
+  const plain = event.plain({
+    showKey: true,
+  });
+  await publish(
+    JSON.stringify({
+      action: "updated",
+      track: plain,
+    })
+  );
+  await transaction.commit();
 }
 
 module.exports = {
   addBreak,
   addFreeformTrack,
   addTrack,
+  deleteTrack,
   getTracksBetweenDates,
   getTrackEntitiesBetween,
+  updateTrack,
 };
