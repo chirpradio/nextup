@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="px-0">
-    <div class="d-flex mb-3 sticky-top py-2 px-2 bg-white align-items-center">
+    <div class="d-flex mb-3 py-2 px-2 bg-white align-items-center">
       <div class="d-flex align-items-center flex-grow-1">
         <EditableHeading
           v-if="crate"
@@ -38,7 +38,7 @@
         <li class="list-group-item">
           <div class="row g-2">
             <div class="handle col-auto">
-              <font-awesome-icon icon="grip-lines" size="xs" />
+              <font-awesome-icon icon="grip-lines" size="md" />
             </div>
             <div class="col-1 me-2 text-end numeral crate_item__duration">
               <TrackDuration v-if="element.track" :track="element.track" />
@@ -246,6 +246,12 @@
 
 .small-spinner {
   height: 2rem;
+}
+
+.sortable-ghost {
+  background-color: var(--bright-red);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 </style>
 
