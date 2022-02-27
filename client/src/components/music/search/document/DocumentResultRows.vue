@@ -6,7 +6,7 @@
       class="row border-top py-2 mx-0"
     >
       <div class="col-sm-1 search_result__col">
-        <AlbumArt :album="hit._source.subject" size="med" />
+        <AlbumArt :album="hit._source.subject" size="sm" />
       </div>
       <div class="col-sm-3 search_result__col">
         <div
