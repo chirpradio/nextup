@@ -5,10 +5,10 @@
       <button class="btn btn-chirp-red" @click="showModal">Add a crate</button>
     </div>
 
-    <div v-if="!loading && mostRecent" class="mb-3">
-      <h2>Most recent</h2>
+    <div v-if="!loading && lastAddedTo" class="mb-3">
+      <h2>Last added to</h2>
       <ul class="list-group list-group-flush">
-        <CratePreview :crate="mostRecent" />
+        <CratePreview :crate="lastAddedTo" />
       </ul>
     </div>
 
@@ -116,8 +116,8 @@ export default {
     loading() {
       return this.$store.getters.loadingCrates;
     },
-    mostRecent() {
-      return this.$store.getters.mostRecent;
+    lastAddedTo() {
+      return this.$store.getters.lastAddedTo;
     },
     preventAdd() {
       return this.newCrateName === "";

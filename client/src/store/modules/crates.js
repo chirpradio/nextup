@@ -3,7 +3,7 @@ import api from "../../services/api.service";
 const state = () => ({
   crates: [],
   loadingCrates: false,
-  mostRecent: null,
+  lastAddedTo: null,
 });
 
 const getters = {
@@ -16,8 +16,8 @@ const getters = {
   loadingCrates: (state) => {
     return state.loadingCrates;
   },
-  mostRecent: (state) => {
-    return state.mostRecent;
+  lastAddedTo: (state) => {
+    return state.lastAddedTo;
   },
 };
 
@@ -65,7 +65,7 @@ const actions = {
   async addToCrate({ commit }, { crateId, params }) {
     await api.addToCrate(crateId, params);
     commit("addItem", { crateId, params });
-    commit("mostRecent", { crateId });
+    commit("lastAddedTo", { crateId });
   },
   async removeItem({ commit }, { crateId, index }) {
     commit("removeItem", { crateId, index });
@@ -169,9 +169,9 @@ const mutations = {
     );
     state.crates.splice(index, 1);
   },
-  mostRecent(state, payload) {
+  lastAddedTo(state, payload) {
     const crate = findCrate(state.crates, payload.crateId);
-    state.mostRecent = crate;
+    state.lastAddedTo = crate;
   },
 };
 
