@@ -33,7 +33,7 @@
     <div class="row">
       <AlbumCollection
         class="col-12 col-md-6 mb-4"
-        heading="Heavy Rotation"
+        heading="Heavy Rotation ›"
         :albums="$store.getters.taggedAlbums('heavy_rotation')"
         :loading="$store.getters.loadingTaggedAlbums('heavy_rotation')"
         :limit="4"
@@ -43,7 +43,7 @@
       />
       <AlbumCollection
         class="col-12 col-md-6 mb-4"
-        heading="Light Rotation"
+        heading="Light Rotation ›"
         :albums="$store.getters.taggedAlbums('light_rotation')"
         :loading="$store.getters.loadingTaggedAlbums('light_rotation')"
         :limit="4"
@@ -53,7 +53,7 @@
       />
       <AlbumCollection
         class="col-12 col-md-6"
-        heading="Library Adds"
+        heading="Library Adds ›"
         :albums="$store.getters.libraryAdds"
         :loading="$store.getters.loadingRecentAlbums"
         :limit="4"
