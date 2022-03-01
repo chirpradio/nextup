@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="row">
-        <AddToCrate :keyToAdd="album.key" class="col-md-4" />
+        <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
       </div>
 
       <h3 class="visually-hidden">Reviews</h3>
