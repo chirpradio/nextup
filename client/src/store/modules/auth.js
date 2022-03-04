@@ -6,7 +6,15 @@ const state = () => ({
   user: {},
   features: {
     crates: {
-      users: ["billykalb@gmail.com", "lund5000@gmail.com"],
+      users: [
+        "billykalb@gmail.com",
+        "lund5000@gmail.com",
+        "mike@nikolich.com",
+        "tony@chirpradio.org",
+        "jenn@chirpradio.org",
+        "buesary@gmail.com",
+        "jlizak@chirpradio.org",
+      ],
     },
   },
 });
