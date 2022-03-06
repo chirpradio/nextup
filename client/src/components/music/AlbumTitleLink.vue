@@ -1,5 +1,6 @@
 <template>
   <router-link
+    class="text-break"
     :to="{ name: 'album', params: { id: album.album_id.value } }"
     :title="albumTitle"
   >

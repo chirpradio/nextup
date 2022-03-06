@@ -1,5 +1,8 @@
 <template>
-  <router-link :to="{ name: 'artist', params: { id: artistId } }">
+  <router-link
+    class="text-break"
+    :to="{ name: 'artist', params: { id: artistId } }"
+  >
     {{ artist.name }}
   </router-link>
 </template>
