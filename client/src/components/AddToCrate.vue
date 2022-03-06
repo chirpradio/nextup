@@ -7,8 +7,8 @@
         @change="add"
       >
         <option disabled value="">+ add to crate</option>
-        <optgroup v-if="mostRecent" label="Most recent">
-          <option :value="mostRecent.id">{{ mostRecent.name }}</option>
+        <optgroup v-if="lastAddedTo" label="Last added to">
+          <option :value="lastAddedTo.id">{{ lastAddedTo.name }}</option>
         </optgroup>
         <optgroup label="A-Z">
           <option v-for="crate in crates" :key="crate.id" :value="crate.id">
@@ -54,8 +54,8 @@ export default {
     crates() {
       return this.$store.getters.crates;
     },
-    mostRecent() {
-      return this.$store.getters.mostRecent;
+    lastAddedTo() {
+      return this.$store.getters.lastAddedTo;
     },
   },
   methods: {

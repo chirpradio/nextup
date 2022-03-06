@@ -1,13 +1,11 @@
 <template>
-  <li>
-    <div>
-      <router-link
-        :to="{ name: 'crate', params: { id: crate.id } }"
-        :title="name"
-        >{{ name }}</router-link
-      >
-    </div>
-    <span>{{ crate.totalItems }} {{ itemLabel }}</span>
+  <li class="list-group-item">
+    <router-link
+      :to="{ name: 'crate', params: { id: crate.id } }"
+      :title="name"
+      >{{ name }}</router-link
+    >
+    <span class="ms-2 text-muted">{{ crate.totalItems }} {{ itemLabel }}</span>
   </li>
 </template>
 
