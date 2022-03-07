@@ -21,9 +21,14 @@ async function getAlbumById(req, res, next) {
   }
 }
 
+async function addReviewsToAlbum(album) {
+  album.reviews = await AlbumService.listAlbumReviews(album);
+}
+
 async function getAlbumsWithTag(req, res, next) {
   try {
     const response = await AlbumService.getAlbumsWithTag(req.query);
+    await Promise.all(response.albums.map(addReviewsToAlbum));
     res.json(response);
   } catch (error) {
     next(error);
