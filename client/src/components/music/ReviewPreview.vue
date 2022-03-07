@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.review" class="px-0 px-sm-3 lead">
+  <div v-if="this.review" class="px-0 px-sm-3 py-0 py-sm-2 lead">
     <span>{{author}} writes: </span>
     <span v-html="excerpt" class="text-muted"></span>
     <router-link      
