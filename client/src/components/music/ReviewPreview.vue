@@ -1,6 +1,6 @@
 <template>
-  <div v-if="this.review" class="px-0 px-sm-3 py-0 py-sm-2 lead">
-    <span>{{author}} writes: </span>
+  <div v-if="this.review" class="px-0 px-sm-3 py-0 py-sm-2 lead text-muted">
+    <span>{{author}} writes </span>
     <span v-html="excerpt" class="text-muted"></span>
     <router-link      
       :to="{ name: 'album', params: { id: album.album_id.value } }"
@@ -28,7 +28,7 @@ export default {
     excerpt() {
       const excerpt = this.review.unsafe_text.slice(0, MAX_CHARACTERS);
       const index = excerpt.lastIndexOf(" ");
-      return excerpt.slice(0, index) + "...";
+      return `“${excerpt.slice(0, index)}...”`;
     },
     author() {
       if (this.review.author_name) {
