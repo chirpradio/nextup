@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="px-0">
-    <div class="d-flex mb-3 py-2 px-2 bg-white align-items-center">
+    <div class="d-flex mb-3 py-2 px-3 bg-white align-items-center">
       <div class="d-flex align-items-center flex-grow-1">
         <EditableHeading
           v-if="crate"
@@ -62,7 +62,18 @@
         </li>
       </template>
     </draggable>
-    <div v-if="!showList && !loading">This crate is empty</div>
+    <div v-if="!showList && !loading" class="ps-3">This crate is empty</div>
+    <div class="row g-2 mt-1 pt-1 border-top">
+      <div class="col-12 ps-4">
+        <button
+          v-if="!loading"
+          class="btn btn-outline-chirp-red"
+          @click="showAddModal"
+        >
+          Add your own item
+        </button>
+      </div>
+    </div>
     <RecordSpinner v-if="loading" />
     <AddCrateItemModal :crateId="id" ref="addModal" @added="scrollToBottom" />
 
