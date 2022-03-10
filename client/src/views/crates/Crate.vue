@@ -37,8 +37,8 @@
       <template #item="{ element, index }">
         <li class="list-group-item">
           <div class="row g-2">
-            <div class="handle col-auto">
-              <font-awesome-icon icon="grip-lines" size="md" />
+            <div class="crate_item__handle col-auto">
+              <font-awesome-icon icon="grip-lines" />
             </div>
             <div class="col-1 me-2 text-end numeral crate_item__duration">
               <TrackDuration v-if="element.track" :track="element.track" />
@@ -103,7 +103,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 @media (max-width: 576px) {
   .crate_item__duration,
   .crate_item__details {
@@ -119,7 +119,7 @@
   }
 }
 
-.handle {
+.crate_item__handle {
   cursor: move;
 }
 
