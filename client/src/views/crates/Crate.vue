@@ -32,7 +32,7 @@
       @change="onMove"
       tag="ol"
       class="list-group list-group-flush"
-      handle=".handle"
+      handle=".crate_item__handle"
     >
       <template #item="{ element, index }">
         <li class="list-group-item">
