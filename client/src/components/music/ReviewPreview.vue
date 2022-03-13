@@ -1,7 +1,7 @@
 <template>
-  <div v-if="this.review" class="px-0 px-sm-3 py-0 py-sm-2 lead text-muted">
+  <div v-if="this.review" class="px-0 px-sm-3 py-0 py-sm-2 lead text-muted fs-6">
     <span>{{author}} writes </span>
-    <span v-html="excerpt" class="text-muted"></span>
+    <span v-html="excerpt"></span>
     <router-link      
       :to="{ name: 'album', params: { id: album.album_id.value } }"
     >
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-const MAX_CHARACTERS = 300;
+const MAX_CHARACTERS = 500;
 
 export default {
   props: {
