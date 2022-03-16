@@ -9,9 +9,16 @@ async function getConstraintsForSpot(key) {
   return result.entities;
 }
 
-async function getAllCopyForSpot(key) {
-  const result = await SpotCopy.query().filter("spot", key).run();
-  return result.entities;
+async function getAllCopyForSpot(key, includeExpired = false) {
+  const options = {
+    filters: [["spot", key]],
+  };
+  if (includeExpired === false) {
+    options.filters.push(["expire_on", null]);
+  }
+
+  const { entities: copy } = await SpotCopy.list(options);
+  return copy;
 }
 
 async function getSpot(id) {
@@ -26,13 +33,22 @@ async function getSpot(id) {
   return plain;
 }
 
-async function listSpots(active = true) {
+async function listSpots(active = true, includeCopy = true) {
   const options = {
     format: "ENTITY",
     filters: ["active", active],
   };
   const { entities: spots } = await Spot.list(options);
-  return spots.map((spot) => spot.plain({ showKey: true }));
+  const response = await Promise.all(
+    spots.map(async function (spot) {
+      const plain = spot.plain({ showKey: true });
+      if (includeCopy) {
+        plain.copy = await getAllCopyForSpot(plain.__key);
+      }
+      return plain;
+    })
+  );
+  return response;
 }
 
 async function addSpotToConstraint(spot, id, transaction) {
