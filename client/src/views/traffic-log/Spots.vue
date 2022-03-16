@@ -10,17 +10,21 @@
   </div>
 </template>
 
-<script setup>
-/* eslint-disable no-unused-vars */
-import { computed, onMounted } from "vue";
-import { useStore } from "vuex";
+<script>
 import RecordSpinner from "../../components/RecordSpinner.vue";
 
-const store = useStore();
-const spots = computed(() => store.getters["spots/spots"]);
-const loading = computed(() => store.getters["spots/loadingSpots"]);
-
-onMounted(() => {
-  store.dispatch("spots/getSpots");
-});
+export default {
+  components: { RecordSpinner },
+  computed: {
+    loading() {
+      return this.$store.getters["spots/loadingSpots"];
+    },
+    spots() {
+      return this.$store.getters["spots/spots"];
+    },
+  },
+  mounted() {
+    this.$store.dispatch("spots/getSpots");
+  },
+};
 </script>
