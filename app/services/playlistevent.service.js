@@ -54,6 +54,7 @@ async function addBreak() {
 }
 
 async function publish(message) {
+  console.log(message);
   await PubSubService.publish(TOPIC, message);
 }
 
@@ -61,9 +62,6 @@ async function addTrack(
   { album, artist, categories, label, notes, track } = {},
   user
 ) {
-  const transaction = gstore.transaction();
-  await transaction.run();
-
   const playlistTrack = new PlaylistEvent({
     album,
     artist,
@@ -74,7 +72,7 @@ async function addTrack(
     selector: user,
     track,
   });
-  await playlistTrack.save(transaction);
+  await playlistTrack.save();
 
   const plain = playlistTrack.plain({
     showKey: true,
@@ -86,7 +84,6 @@ async function addTrack(
     })
   );
 
-  await transaction.commit();
   return plain;
 }
 
@@ -94,9 +91,6 @@ async function addFreeformTrack(
   { album, artist, categories, notes, track } = {},
   user
 ) {
-  const transaction = gstore.transaction();
-  await transaction.run();
-
   const freeformTrack = new PlaylistEvent({
     categories,
     class: ["PlaylistEvent", "PlaylistTrack"],
@@ -107,7 +101,7 @@ async function addFreeformTrack(
     notes,
     selector: user,
   });
-  await freeformTrack.save(transaction);
+  await freeformTrack.save();
 
   const plain = freeformTrack.plain({
     showKey: true,
@@ -119,7 +113,6 @@ async function addFreeformTrack(
     })
   );
 
-  await transaction.commit();
   return plain;
 }
 
