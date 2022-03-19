@@ -22,6 +22,10 @@ const state = () => ({
 const getters = {
   isAuthenticated: (state) => {
     try {
+      if (!state.token) {
+        return false;
+      }
+
       const decoded = jwt_decode(state.token);
       if (!decoded || !decoded.exp) {
         return false;
