@@ -1,6 +1,7 @@
 <template>
   <svg
     class="record-spinner"
+    :class="classObj"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     version="1.1"
@@ -23,7 +24,17 @@
 </template>
 
 <style>
-.record-spinner {
+.record-spinner--xs {
+  height: 16px;
+  width: 16px;
+}
+
+.record-spinner--sm {
+  height: 20px;
+  width: 20px;
+}
+
+.record-spinner--lg {
   height: 100px;
   width: 100px;
 }
@@ -39,3 +50,21 @@
   animation: spin 1.8s linear infinite;
 }
 </style>
+
+<script>
+export default {
+  props: {
+    size: {
+      type: String,
+      default: "lg",
+    },
+  },
+  computed: {
+    classObj() {
+      const obj = {};
+      obj[`record-spinner--${this.size}`] = true;
+      return obj;
+    },
+  },
+};
+</script>
