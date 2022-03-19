@@ -31,7 +31,8 @@ th,
 .navbar,
 .badge,
 .breadcrumb,
-.pagination {
+.pagination,
+.font-sans {
   font-family: Futura, "Trebuchet MS", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
 }
