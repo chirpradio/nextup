@@ -5,33 +5,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import VueGtag from "vue-gtag-next";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faGripLines,
-  faCheckCircle,
-  faExclamationCircle,
-  faStar,
-  faBan,
-  faEdit,
-  faCheckSquare,
-  faTimes,
-  faCircle,
-  faPlay,
-} from "@fortawesome/free-solid-svg-icons";
+import {} from "./icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(
-  faGripLines,
-  faCheckCircle,
-  faCheckSquare,
-  faExclamationCircle,
-  faStar,
-  faBan,
-  faEdit,
-  faTimes,
-  faCircle,
-  faPlay
-);
 
 const debug = process.env.NODE_ENV !== "production";
 
