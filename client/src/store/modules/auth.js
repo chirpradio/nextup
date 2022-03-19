@@ -16,6 +16,9 @@ const state = () => ({
         "jlizak@chirpradio.org",
       ],
     },
+    playlist: {
+      roles: ["dj"],
+    },
   },
 });
 
@@ -39,7 +42,16 @@ const getters = {
     }
   },
   isAuthorized: (state) => (feature) => {
-    return state.features[feature]?.users?.includes(state.user.email);
+    const permitted = state.features[feature];
+    if (permitted.users) {
+      return permitted.users.includes(state.user.email);
+    } else if (permitted.roles) {
+      const commonRoles = permitted.roles.filter((role) =>
+        state.user.roles.includes(role)
+      );
+      return commonRoles.length > 0;
+    }
+    return false;
   },
 };
 
