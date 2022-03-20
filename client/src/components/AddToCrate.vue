@@ -20,12 +20,12 @@
     <div class="col-1">
       <font-awesome-icon
         v-if="added"
-        icon="check-circle"
+        icon="circle-check"
         class="text-success"
       />
       <font-awesome-icon
         v-if="error"
-        icon="exclamation-circle"
+        icon="circle-exclamation"
         class="text-danger"
       />
     </div>

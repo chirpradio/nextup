@@ -111,7 +111,7 @@ export default {
       if (this.added) {
         return "check-circle";
       } else if (this.error) {
-        return "times";
+        return "xmark";
       } else {
         return "play";
       }

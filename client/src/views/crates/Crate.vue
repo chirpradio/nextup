@@ -55,7 +55,7 @@
                 aria-label="Remove from crate"
                 title="Remove from crate"
               >
-                <font-awesome-icon icon="times" />
+                <font-awesome-icon icon="xmark" />
               </button>
             </div>
           </div>
