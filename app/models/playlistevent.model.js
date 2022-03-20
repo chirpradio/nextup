@@ -1,4 +1,4 @@
-const { datastore, gstore } = require("../db");
+const { datastore, gstore, getPlaylistKey } = require("../db");
 const { Schema } = gstore;
 
 let PLAYLIST_KEY;
@@ -56,17 +56,8 @@ const playlistEventSchema = new Schema({
   track_number: { type: Number, default: 1 },
 });
 
-/*
-  There is only one Playlist entity in the Datastore, but
-  the id differs between environments.
-*/
 async function setDefaultPlaylist() {
-  if (!PLAYLIST_KEY) {
-    const result = await datastore.createQuery("Playlist").limit(1).run();
-    PLAYLIST_KEY = result[0][0][datastore.KEY];
-  }
-
-  this.playlist = PLAYLIST_KEY;
+  this.playlist = await getPlaylistKey();
   return Promise.resolve();
 }
 playlistEventSchema.pre("save", setDefaultPlaylist);

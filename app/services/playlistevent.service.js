@@ -1,11 +1,12 @@
 const { PlaylistEvent } = require("../models");
-const { datastore, gstore } = require("../db");
+const { gstore, getPlaylistKey } = require("../db");
 const PubSubService = require("./pubsub");
 const TOPIC = PubSubService.topicIds.PLAYLIST_EVENT;
 
-function getTrackOptions({ start, end, category, type = "track" } = {}) {
+async function getTrackOptions({ start, end, category, type = "track" } = {}) {
+  const playlist = await getPlaylistKey();
   const options = {
-    filters: [["playlist", datastore.key(["Playlist", 24001])]],
+    filters: [["playlist", playlist]],
   };
 
   if (start) {
@@ -25,7 +26,7 @@ function getTrackOptions({ start, end, category, type = "track" } = {}) {
 }
 
 async function getTracksBetweenDates(options = {}) {
-  const trackOptions = getTrackOptions(options);
+  const trackOptions = await getTrackOptions(options);
   const { entities: tracks } = await PlaylistEvent.list(trackOptions)
     .populate("artist", "name")
     .populate("track", "title")
@@ -34,10 +35,11 @@ async function getTracksBetweenDates(options = {}) {
 }
 
 async function getTrackEntitiesBetween(start, end) {
+  const playlist = await getPlaylistKey();
   const { entities } = await PlaylistEvent.list({
     filters: [
       ["class", "PlaylistTrack"],
-      ["playlist", datastore.key(["Playlist", 24001])],
+      ["playlist", playlist],
       ["established", ">", start],
       ["established", "<", end],
     ],
@@ -51,6 +53,9 @@ async function addBreak() {
     class: ["PlaylistEvent", "PlaylistBreak"],
   });
   await breakEntity.save();
+  return breakEntity.plain({
+    showKey: true,
+  });
 }
 
 async function publish(message) {
