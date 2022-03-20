@@ -123,11 +123,18 @@ export default {
   },
 
   async addPlaylistTrack(data) {
-    return await instance.post("/playlist/track", data);
+    const response = await instance.post("/playlist/track", data);
+    return response.data;
   },
 
   async addFreeformPlaylistTrack(data) {
-    return await instance.post("/playlist/freeform", data);
+    const response = await instance.post("/playlist/freeform", data);
+    return response.data;
+  },
+
+  async addBreak() {
+    const response = await instance.post("/playlist/break");
+    return response.data;
   },
 
   async getRotationPlays(params) {

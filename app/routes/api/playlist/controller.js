@@ -55,8 +55,8 @@ async function getPlaylistEvents(req, res, next) {
 
 async function postPlaylistBreak(req, res, next) {
   try {
-    await PlaylistEventService.addBreak();
-    res.sendStatus(201);
+    const event = await PlaylistEventService.addBreak();
+    res.status(201).json(event);
   } catch (error) {
     next(error);
   }
