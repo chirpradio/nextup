@@ -39,6 +39,10 @@
   width: 100px;
 }
 
+.record-spinner--reverse {
+  fill: white;
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);
@@ -58,11 +62,16 @@ export default {
       type: String,
       default: "lg",
     },
+    reverse: {
+      type: Boolean,
+      default: false,
+    }
   },
   computed: {
     classObj() {
       const obj = {};
       obj[`record-spinner--${this.size}`] = true;
+      obj["record-spinner--reverse"] = this.reverse;
       return obj;
     },
   },
