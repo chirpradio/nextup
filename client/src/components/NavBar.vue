@@ -55,7 +55,14 @@
             </div>
           </li>
           <li class="nav-item" v-if="isAuthorized('crates')">
-            <router-link class="nav-link" to="/crates">Crates</router-link>
+            <router-link class="nav-link" active-class="active" to="/crates"
+              >Crates</router-link
+            >
+          </li>
+          <li class="nav-item" v-if="isAuthorized('playlist')">
+            <router-link class="nav-link" active-class="active" to="/playlist"
+              >Playlist</router-link
+            >
           </li>
           <li class="nav-item dropdown">
             <button

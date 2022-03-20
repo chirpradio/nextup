@@ -10,6 +10,7 @@ import Artist from "../views/music/Artist.vue";
 import Search from "../views/music/Search.vue";
 import Crates from "../views/crates/Crates.vue";
 import Crate from "../views/crates/Crate.vue";
+import Playlist from "../views/playlist/Playlist.vue";
 import RotationAlbums from "../views/reports/RotationAlbums";
 import RotationPlays from "../views/reports/RotationPlays";
 import EverythingFilters from "../components/music/search/EverythingFilters.vue";
@@ -190,6 +191,7 @@ const routes = [
     component: Crates,
   },
   { path: "/crates/:id", name: "crate", component: Crate, props: true },
+  { path: "/playlist", name: "playlist", component: Playlist },
 ];
 
 const router = createRouter({
