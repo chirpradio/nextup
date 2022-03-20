@@ -1,6 +1,9 @@
 import api from "../../services/api.service";
 
 const state = () => ({
+  adding: false,
+  events: [],
+  lastUpdated: undefined,
   onAir: false,
   rotationPlays: {
     plays: [],
@@ -10,6 +13,15 @@ const state = () => ({
 });
 
 const getters = {
+  adding: (state) => {
+    return state.adding;
+  },
+  events: (state) => {
+    return state.events;
+  },
+  lastUpdated: (state) => {
+    return state.lastUpdated;
+  },
   onAir: (state) => {
     return state.onAir;
   },
@@ -19,11 +31,28 @@ const getters = {
 };
 
 const actions = {
-  async addFreeformPlaylistTrack(_, data) {
-    await api.addFreeformPlaylistTrack(data);
+  async addBreak({ commit, dispatch, state }) {
+    commit("adding", true);
+    await api.addBreak();
+    commit("adding", false);
+    dispatch("getPlaylistEvents", { start: state.lastUpdated });
   },
-  async addPlaylistTrack(_, data) {
+  async addFreeformPlaylistTrack({ commit, dispatch, state }, data) {
+    commit("adding", true);
+    await api.addFreeformPlaylistTrack(data);
+    commit("adding", false);
+    dispatch("getPlaylistEvents", { start: state.lastUpdated });
+  },
+  async addPlaylistTrack({ commit, dispatch, state }, data) {
+    commit("adding", true);
     await api.addPlaylistTrack(data);
+    commit("adding", false);
+    dispatch("getPlaylistEvents", { start: state.lastUpdated });
+  },
+  async getPlaylistEvents({ commit }, { start, end } = {}) {
+    const response = await api.getPlaylistEvents({ start, end });
+    commit("events", response.data);
+    commit("lastUpdated");
   },
   async getRotationPlays({ commit, state }, { start, end } = {}) {
     if (
@@ -40,6 +69,18 @@ const actions = {
 };
 
 const mutations = {
+  adding(state, payload) {
+    state.adding = payload;
+  },
+  addEvent(state, payload) {
+    state.events.push(payload);
+  },
+  events(state, payload) {
+    state.events = [...state.events, ...payload];
+  },
+  lastUpdated(state) {
+    state.lastUpdated = Date.now();
+  },
   onAir(state, payload) {
     state.onAir = payload;
   },

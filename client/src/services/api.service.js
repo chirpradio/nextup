@@ -122,6 +122,22 @@ export default {
     await instance.delete(`/crate/${crateId}`);
   },
 
+  async getPlaylistEvents({ start, end } = {}) {
+    const options = {};
+    if (start || end) {
+      const params = {};
+      if (start) {
+        params.start = start;
+      }
+      if (end) {
+        params.end = end;
+      }
+      options.params = params;
+    }
+
+    return await instance.get("/playlist", options);
+  },
+
   async addPlaylistTrack(data) {
     const response = await instance.post("/playlist/track", data);
     return response.data;
