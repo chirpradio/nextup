@@ -1,11 +1,6 @@
 <template>
   <router-link :to="{ name: 'album', params: { id: album.album_id.value } }">
-    <AlbumArt
-      :album="album"
-      :srcSize="srcSize"
-      :imgSize="imgSize"
-      class="img-thumbnail"
-    />
+    <AlbumArt :album="album" :srcSize="srcSize" class="img-thumbnail" />
   </router-link>
 </template>
 
@@ -17,10 +12,6 @@ export default {
   components: { AlbumArt },
   props: {
     album: Object,
-    imgSize: {
-      type: String,
-      default: "med",
-    },
     srcSize: {
       type: String,
       default: "lg",
