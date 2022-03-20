@@ -109,7 +109,7 @@ export default {
     },
     icon() {
       if (this.added) {
-        return "check-circle";
+        return "circle-check";
       } else if (this.error) {
         return "xmark";
       } else {
