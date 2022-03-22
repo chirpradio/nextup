@@ -11,8 +11,15 @@
         />
       </div>
       <div class="col col-lg-3">
-        <LoadingButton class="me-2" icon="play" label="Add track" />
         <LoadingButton
+          v-if="onAir"
+          class="me-2"
+          icon="play"
+          label="Add track"
+          @click="addTrack"
+        />
+        <LoadingButton
+          v-if="onAir"
           icon="plus"
           label="Add break"
           :loading="adding"
@@ -26,10 +33,13 @@
         <component :is="getComponent(event)" :track="event" class="py-2" />
       </li>
     </ol>
+
+    <AddTrackModal ref="addTrackModal" />
   </div>
 </template>
 
 <script>
+import AddTrackModal from "../../components/playlist/AddTrackModal.vue";
 import LoadingButton from "../../components/LoadingButton.vue";
 import PlaylistBreak from "../../components/playlist/PlaylistBreak.vue";
 import PlaylistTrack from "../../components/playlist/PlaylistTrack.vue";
@@ -38,6 +48,7 @@ import updateTitle from "../../mixins/updateTitle";
 
 export default {
   components: {
+    AddTrackModal,
     LoadingButton,
     PlaylistBreak,
     PlaylistTrack,
@@ -57,6 +68,9 @@ export default {
     },
     lastUpdated() {
       return this.$store.getters.lastUpdated;
+    },
+    onAir() {
+      return this.$store.state.playlist.onAir;
     },
     sorted() {
       const copy = [...this.events];
@@ -93,6 +107,9 @@ export default {
     },
     addBreak() {
       this.$store.dispatch("addBreak");
+    },
+    addTrack() {
+      this.$refs.addTrackModal.show();
     },
   },
 };
