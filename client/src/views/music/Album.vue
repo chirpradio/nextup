@@ -5,9 +5,7 @@
       <div class="row mb-3">
         <AlbumCard :album="album" :firstHeadingLevel="1" :linkToAlbum="false" />
       </div>
-      <div class="row">
-        <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
-      </div>
+      <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
 
       <h3 class="visually-hidden">Reviews</h3>
       <figure

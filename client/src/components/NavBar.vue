@@ -123,7 +123,7 @@
                   id="onAirCheck"
                   v-model="onAir"
                 />
-                <label class="form-check-label ms-2" for="onAirChek"
+                <label class="form-check-label ms-2" for="onAirCheck"
                   >on air
                 </label>
               </div>
