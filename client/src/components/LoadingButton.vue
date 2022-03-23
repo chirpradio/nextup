@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="classes" :disabled="loading">
+  <button class="btn btn-sm" :class="classes" :disabled="loading">
     <font-awesome-icon v-if="!loading" :icon="icon" />
     <RecordSpinner
       v-if="loading"

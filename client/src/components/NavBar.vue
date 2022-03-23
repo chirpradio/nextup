@@ -86,7 +86,7 @@
         </ul>
         <form
           id="navbarSearch"
-          class="form-inline my-2 my-lg-0"
+          class="form-inline my-2 my-lg-0 me-2"
           v-on:submit.prevent="search"
         >
           <input
@@ -97,41 +97,7 @@
             aria-label="Search"
           />
         </form>
-        <div class="dropdown">
-          <button
-            class="btn btn-outline-link navbar-text dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            data-bs-reference="parent"
-            data-bs-auto-close="outside"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {{ userName }}
-          </button>
-          <div
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="dropdownMenuButton"
-          >
-            <form class="dropdown-item">
-              <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  id="onAirCheck"
-                  v-model="onAir"
-                />
-                <label class="form-check-label ms-2" for="onAirCheck"
-                  >on air
-                </label>
-              </div>
-            </form>
-            <li><hr class="dropdown-divider"></li>
-            <button class="dropdown-item" @click="logOut">log out</button>
-          </div>
-        </div>
+        <button class="btn btn-outline-light" @click="logOut">log out</button>
       </div>
     </div>
   </nav>
@@ -158,14 +124,6 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
-    },
-    onAir: {
-      get() {
-        return this.$store.state.onAir;
-      },
-      set(value) {
-        this.$store.commit("onAir", value);
-      },
     },
     userName() {
       const user = this.$store.state.auth.user;

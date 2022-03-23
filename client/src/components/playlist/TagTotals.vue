@@ -1,18 +1,30 @@
 <template>
-  <ul class="tag-totals list-inline">
-    <li class="list-inline-item me-4">
-      <TagTotal tag="heavy_rotation" :total="heavyRotation" :expected="2" />
-    </li>
-    <li class="list-inline-item me-4">
-      <TagTotal tag="light_rotation" :total="lightRotation" :expected="3" />
-    </li>
-    <li class="list-inline-item me-4">
-      <TagTotal tag="local_classic" :total="localClassic" :expected="1" />
-    </li>
-    <li class="list-inline-item">
-      <TagTotal tag="local_current" :total="localCurrent" :expected="1" />
-    </li>
-  </ul>
+  <div class="tag-totals d-flex justify-content-between justify-content-lg-end">
+    <TagTotal
+      class="me-3"
+      tag="heavy_rotation"
+      :total="heavyRotation"
+      :expected="2"
+    />
+    <TagTotal
+      class="me-3"
+      tag="light_rotation"
+      :total="lightRotation"
+      :expected="3"
+    />
+    <TagTotal
+      class="me-3"
+      tag="local_classic"
+      :total="localClassic"
+      :expected="1"
+    />
+    <TagTotal
+      class="me-3"
+      tag="local_current"
+      :total="localCurrent"
+      :expected="1"
+    />
+  </div>
 </template>
 
 <style>

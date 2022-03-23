@@ -1,34 +1,46 @@
 <template>
   <div>
-    <div class="row g-2 mb-3 border-bottom">
-      <div class="col-auto col-lg-2">
-        <LoadingButton
-          icon="rotate-right"
-          label="Update"
-          :outline="true"
-          :loading="loading"
-          @click="update"
-        />
+    <div class="row mb-2">
+      <div class="col-12 d-flex text-end">
+        <span class="font-sans me-2">ON AIR</span>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="onAirCheck"
+            v-model="onAir"
+          />
+        </div>
       </div>
-      <div class="col col-lg-3">
-        <LoadingButton
-          v-if="onAir"
-          class="me-2"
-          icon="play"
-          label="Add track"
-          @click="addTrack"
-        />
-        <LoadingButton
-          v-if="onAir"
-          icon="plus"
-          label="Add break"
-          :loading="adding"
-          @click="addBreak"
-        />
-      </div>
-      <TagTotals class="col-12 col-lg-7 text-lg-end" />
     </div>
-    <ol class="list-group list-group-flush list-unstyled">
+    <div class="row g-2 mb-2">
+      <LoadingButton
+        class="col h-50 me-1"
+        icon="rotate-right"
+        label="Update"
+        :outline="true"
+        :loading="loading"
+        @click="update"
+      />
+      <LoadingButton
+        class="col h-50 me-1"
+        :class="addButtonClasses"
+        icon="play"
+        label="Add track"
+        @click="addTrack"
+      />
+      <LoadingButton
+        class="col h-50"
+        :class="addButtonClasses"
+        icon="plus"
+        label="Add break"
+        :loading="adding"
+        @click="addBreak"
+      />
+      <TagTotals class="col-12 col-lg-6 text-lg-end" />
+    </div>
+    <ol class="list-group list-group-flush list-unstyled border-top">
       <li v-for="event in sorted" :key="event.id">
         <component :is="getComponent(event)" :track="event" class="py-2" />
       </li>
@@ -37,6 +49,12 @@
     <AddTrackModal ref="addTrackModal" />
   </div>
 </template>
+
+<style>
+.on-air__label {
+  font-size: 0.875rem;
+}
+</style>
 
 <script>
 import AddTrackModal from "../../components/playlist/AddTrackModal.vue";
@@ -56,12 +74,13 @@ export default {
   },
   data() {
     return {
+      adding: false,
       loading: false,
     };
   },
   computed: {
-    adding() {
-      return this.$store.getters.adding;
+    addButtonClasses() {
+      return this.onAir ? { visible: true } : { invisible: true };
     },
     events() {
       return this.$store.getters.events;
@@ -69,8 +88,13 @@ export default {
     lastUpdated() {
       return this.$store.getters.lastUpdated;
     },
-    onAir() {
-      return this.$store.state.playlist.onAir;
+    onAir: {
+      get() {
+        return this.$store.getters.onAir;
+      },
+      set(value) {
+        this.$store.commit("onAir", value);
+      },
     },
     sorted() {
       const copy = [...this.events];
@@ -105,8 +129,10 @@ export default {
       });
       this.loading = false;
     },
-    addBreak() {
-      this.$store.dispatch("addBreak");
+    async addBreak() {
+      this.adding = true;
+      await this.$store.dispatch("addBreak");
+      this.adding = false;
     },
     addTrack() {
       this.$refs.addTrackModal.show();

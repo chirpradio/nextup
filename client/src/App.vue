@@ -78,6 +78,11 @@ button.btn-outline-chirp-red:hover {
   border-color: var(--bright-red);
 }
 
+.form-check-input:checked {
+  background-color: var(--bright-red);
+  border-color: var(--bright-red);
+}
+
 .no_overflow {
   text-overflow: clip;
 }
