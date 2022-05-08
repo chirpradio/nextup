@@ -33,8 +33,9 @@
 </template>
 
 <style>
-.add-to-crate {
-  max-width: 11.25em;
+.add-to-crate select {
+  color: var(--dark-red);
+  border-color: var(--dark-red);
 }
 </style>
 

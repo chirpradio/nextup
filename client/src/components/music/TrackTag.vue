@@ -1,17 +1,15 @@
 <template>
-  <font-awesome-icon :class="classObject" :icon="icon" />
+  <font-awesome-icon :class="classes" :icon="icon" />
 </template>
-
-<style scoped>
-.hidden {
-  visibility: hidden;
-}
-</style>
 
 <script>
 export default {
-  name: "TrackExplicit",
+  name: "TrackTag",
   props: {
+    displayWhenSmall: {
+      type: Boolean,
+      default: true,
+    },
     track: Object,
   },
   computed: {
@@ -38,12 +36,31 @@ export default {
         return "star";
       }
     },
-    classObject() {
-      return {
-        hidden: !this.explicit && !this.recommended,
+    classes() {
+      const classes = {
         "text-warning": this.recommended,
         "text-danger": this.explicit,
       };
+
+      const empty = !this.explicit && !this.recommended;
+      if (empty === true) {
+        const emptyClassName = this.getEmptyClassName();
+        classes[emptyClassName] = true;
+      }
+
+      return classes;
+    },
+  },
+  methods: {
+    getEmptyClassName() {
+      if (this.displayWhenSmall === false) {
+        const smallOrBelow = window.matchMedia("(max-width: 767px)");
+        if (smallOrBelow.matches === true) {
+          return "d-none";
+        }
+      }
+
+      return "invisible";
     },
   },
 };
