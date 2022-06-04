@@ -13,7 +13,7 @@
       <figure
         v-for="review in album.reviews"
         :key="review.id"
-        class="row col-xl-9 py-3"
+        class="row col-lg-8 py-3"
       >
         <blockquote class="blockquote">
           <p v-html="review.unsafe_text"></p>

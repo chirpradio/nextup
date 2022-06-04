@@ -10,7 +10,7 @@ async function getAlbumById(req, res, next) {
     } = await AlbumService.getFullAlbumDetails(req.params.album_id);
 
     const response = album.entityData;
-    response.key = album.entityKey;
+    response.__key = album.entityKey;
     response.tracks = tracks;
     response.reviews = reviews;
     response.comments = comments;
