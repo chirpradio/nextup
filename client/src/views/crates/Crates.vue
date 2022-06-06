@@ -1,17 +1,36 @@
 <template>
   <div class="container-fluid">
-    <div class="d-flex">
+    <div class="d-flex flex-column flex-sm-row align-items-sm-center mb-3">
       <h1 class="flex-grow-1">My Crates</h1>
       <button class="btn btn-chirp-red" @click="showModal">Add a crate</button>
     </div>
+
+    <div v-if="!loading && lastAddedTo" class="mb-3">
+      <h2>Last added to</h2>
+      <ul class="list-group list-group-flush">
+        <CratePreview :crate="lastAddedTo" />
+      </ul>
+    </div>
+
+    <div
+      v-if="!loading"
+      class="d-flex flex-column flex-sm-row align-items-sm-center"
+    >
+      <h2>All crates</h2>
+      <form class="ms-0 ms-sm-2">
+        <input
+          type="search"
+          class="form-control"
+          v-model="filterText"
+          placeholder="filter by name"
+        />
+      </form>
+    </div>
+
     <ul v-if="!loading && crates.length" class="list-group list-group-flush">
-      <CratePreview
-        v-for="crate in crates"
-        :key="crate.id"
-        :crate="crate"
-        class="list-group-item"
-      />
+      <CratePreview v-for="crate in crates" :key="crate.id" :crate="crate" />
     </ul>
+
     <RecordSpinner v-if="loading" />
 
     <div id="addCrateModal" class="modal">
@@ -81,16 +100,24 @@ export default {
   },
   data() {
     return {
-      newCrateName: "",
       adding: false,
+      filterText: "",
+      newCrateName: "",
     };
   },
   computed: {
     crates() {
-      return this.$store.getters.crates;
+      const crates = this.$store.getters.crates;
+      if (this.filterText) {
+        return crates.filter((crate) => crate.name.includes(this.filterText));
+      }
+      return crates;
     },
     loading() {
       return this.$store.getters.loadingCrates;
+    },
+    lastAddedTo() {
+      return this.$store.getters.lastAddedTo;
     },
     preventAdd() {
       return this.newCrateName === "";

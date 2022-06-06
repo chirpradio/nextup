@@ -4,18 +4,7 @@ import jwt_decode from "jwt-decode";
 const state = () => ({
   token: "",
   user: {},
-  features: {
-    crates: {
-      users: [
-        "billykalb@gmail.com",
-        "lund5000@gmail.com",
-        "mike@nikolich.com",
-        "tony@chirpradio.org",
-        "jenn@chirpradio.org",
-        "buesary@gmail.com",
-      ],
-    },
-  },
+  features: {},
 });
 
 const getters = {

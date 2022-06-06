@@ -4,6 +4,8 @@
     :loading="loading"
     :more="more"
     @more="getMore"
+    sortBy="album_artist.name"
+    :showReview="true"
   />
 </template>
 
@@ -11,6 +13,8 @@
 import AlbumCollection from "../../components/music/AlbumCollection";
 import formatters from "../../mixins/formatters";
 import updateTitle from "../../mixins/updateTitle";
+
+const limit = 100;
 
 export default {
   name: "TagView",
@@ -44,10 +48,10 @@ export default {
   },
   methods: {
     getTaggedAlbums() {
-      this.$store.dispatch("getTaggedAlbums", { tag: this.tag });
+      this.$store.dispatch("getTaggedAlbums", { tag: this.tag, limit });
     },
     getMore() {
-      this.$store.dispatch("getMoreTaggedAlbums", { tag: this.tag });
+      this.$store.dispatch("getMoreTaggedAlbums", { tag: this.tag, limit });
     },
   },
 };

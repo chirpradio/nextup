@@ -3,39 +3,17 @@
     <RecordSpinner v-if="loading" />
     <div class="px-6" v-if="!loading">
       <div class="row mb-3">
-        <div class="col-md-2 mb-3">
-          <AlbumArt :album="album" imgSize="fluid" srcSize="lg" />
-        </div>
-        <div class="col-md-10">
-          <h1>{{ album.title }}</h1>
-          <h2>
-            <span
-              v-if="album.is_compilation"
-              class="badge rounded-pill bg-secondary"
-            >
-              Compilation
-            </span>
-            <span v-if="!album.is_compilation">
-              by
-              <ArtistLink :artist="album.album_artist" />
-            </span>
-          </h2>
-          <p>
-            {{ album.year }} · {{ album.label }}
-            <span v-if="album.disc_number">· Disc {{ album.disc_number }}</span>
-          </p>
-          <TagList :tags="album.current_tags" />
-        </div>
+        <AlbumCard :album="album" :firstHeadingLevel="1" :linkToAlbum="false" />
       </div>
       <div class="row">
-        <AddToCrate :keyToAdd="album.key" class="col-md-4" />
+        <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
       </div>
 
       <h3 class="visually-hidden">Reviews</h3>
       <figure
         v-for="review in album.reviews"
         :key="review.id"
-        class="row col-xl-9 py-3"
+        class="row col-lg-8 py-3"
       >
         <blockquote class="blockquote">
           <p v-html="review.unsafe_text"></p>
@@ -102,20 +80,18 @@
 import AddToCrate from "../../components/AddToCrate.vue";
 import RecordSpinner from "../../components/RecordSpinner";
 import ArtistLink from "../../components/music/ArtistLink";
-import TagList from "../../components/music/TagList";
-import AlbumArt from "../../components/music/AlbumArt";
 import formatters from "../../mixins/formatters";
 import updateTitle from "../../mixins/updateTitle";
 import TrackDuration from "../../components/music/TrackDuration";
 import TrackTag from "../../components/music/TrackTag";
+import AlbumCard from "../../components/music/AlbumCard";
 
 export default {
   components: {
+    AlbumCard,
     AddToCrate,
     RecordSpinner,
     ArtistLink,
-    TagList,
-    AlbumArt,
     TrackDuration,
     TrackTag,
   },

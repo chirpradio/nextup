@@ -2,15 +2,25 @@
   <img :src="imgSrc" :class="classObject" @error="onError" />
 </template>
 
-<style scoped>
+<style>
+.album_art__sm {
+  height: 34px;
+  width: 34px;
+}
+
 .album_art__med {
-  height: 4.5rem;
-  width: 4.5rem;
+  height: 64px;
+  width: 64px;
 }
 
 .album_art__lg {
-  height: 11.5rem;
-  width: 11.5rem;
+  height: 174px;
+  width: 174px;
+}
+
+.album_art__xl {
+  height: 272px;
+  width: 272px;
 }
 </style>
 
@@ -24,25 +34,15 @@ export default {
   },
   props: {
     album: Object,
-    imgSize: {
-      type: String,
-      default: "med",
-    },
     srcSize: {
       type: String,
-      default: "lg",
+      default: "med",
     },
   },
   computed: {
     classObject() {
       const obj = {};
-
-      if (this.imgSize === "fluid") {
-        obj["img-fluid"] = true;
-      } else {
-        obj[`album_art__${this.imgSize}`] = true;
-      }
-
+      obj[`album_art__${this.srcSize}`] = true;
       return obj;
     },
     imgSrc() {

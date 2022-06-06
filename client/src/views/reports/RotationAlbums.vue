@@ -42,17 +42,7 @@
           >
             <div class="row">
               <div class="col">
-                <span
-                  v-if="album.is_compilation"
-                  class="badge rounded-pill bg-secondary"
-                >
-                  Compilation
-                </span>
-                <ArtistLink
-                  class="col"
-                  v-if="!album.is_compilation"
-                  :artist="album.album_artist"
-                />
+                <ArtistName :album="album" />
               </div>
               <AlbumTitleLink class="col" :album="album" />
               <div class="col">{{ album.label }}</div>
@@ -78,13 +68,13 @@
 <script>
 import RecordSpinner from "../../components/RecordSpinner";
 import AlbumTitleLink from "../../components/music/AlbumTitleLink";
-import ArtistLink from "../../components/music/ArtistLink";
+import ArtistName from "../../components/music/ArtistName";
 import TagList from "../../components/music/TagList";
 
 export default {
   name: "RotationAlbums",
   title: "Rotation Albums",
-  components: { RecordSpinner, AlbumTitleLink, ArtistLink, TagList },
+  components: { RecordSpinner, AlbumTitleLink, ArtistName, TagList },
   data() {
     const date = new Date();
     date.setDate(date.getDate() - 7);

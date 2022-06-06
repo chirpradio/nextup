@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="px-0">
-    <div class="d-flex mb-3 sticky-top py-2 px-2 bg-white align-items-center">
+    <div class="d-flex mb-3 py-2 px-3 bg-white align-items-center">
       <div class="d-flex align-items-center flex-grow-1">
         <EditableHeading
           v-if="crate"
@@ -32,13 +32,13 @@
       @change="onMove"
       tag="ol"
       class="list-group list-group-flush"
-      handle=".handle"
+      handle=".crate_item__handle"
     >
       <template #item="{ element, index }">
         <li class="list-group-item">
           <div class="row g-2">
-            <div class="handle col-auto">
-              <font-awesome-icon icon="grip-lines" size="xs" />
+            <div class="crate_item__handle col-auto">
+              <font-awesome-icon icon="grip-lines" />
             </div>
             <div class="col-1 me-2 text-end numeral crate_item__duration">
               <TrackDuration v-if="element.track" :track="element.track" />
@@ -62,8 +62,20 @@
         </li>
       </template>
     </draggable>
-    <div v-if="!showList && !loading">This crate is empty</div>
+    <div v-if="!showList && !loading" class="ps-3">This crate is empty</div>
+    <div class="row g-2 mt-1 pt-1 border-top">
+      <div class="col-12 ps-4">
+        <button
+          v-if="!loading"
+          class="btn btn-outline-chirp-red"
+          @click="showAddModal"
+        >
+          Add your own item
+        </button>
+      </div>
+    </div>
     <RecordSpinner v-if="loading" />
+    <AddCrateItemModal :crateId="id" ref="addModal" @added="scrollToBottom" />
 
     <div id="deleteModal" class="modal">
       <div class="modal-dialog">
@@ -99,132 +111,10 @@
         </div>
       </div>
     </div>
-
-    <div id="addModal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add your own item</h5>
-            <button
-              type="button"
-              class="btn-close"
-              @click="hideAddModal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p class="text-muted">
-              Add something to your crate that's not in the CHIRP library
-            </p>
-            <form>
-              <div class="row mb-3">
-                <label for="artist" class="col-2 col-form-label">Artist</label>
-                <div class="col-10">
-                  <input
-                    id="artist"
-                    class="form-control"
-                    v-model="item.artist"
-                  />
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="track" class="col-2 col-form-label">Track</label>
-                <div class="col-10">
-                  <input id="track" class="form-control" v-model="item.track" />
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="album" class="col-2 col-form-label">Album</label>
-                <div class="col-10">
-                  <input id="album" class="form-control" v-model="item.album" />
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="label" class="col-2 col-form-label">Label</label>
-                <div class="col-10">
-                  <input id="label" class="form-control" v-model="item.label" />
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label class="col-2 col-form-label">Category</label>
-                <div class="col-10">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="localRadios"
-                      id="localNone"
-                      v-model="item.category"
-                      value=""
-                      checked
-                    />
-                    <label class="form-check-label" for="localRadios">
-                      None
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="localRadios"
-                      id="localClassic"
-                      v-model="item.category"
-                      value="local_classic"
-                    />
-                    <label class="form-check-label" for="localRadios">
-                      Local Classic
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="localRadios"
-                      id="localCurrent"
-                      v-model="item.category"
-                      value="local_current"
-                    />
-                    <label class="form-check-label" for="localRadios">
-                      Local Current
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <label for="notes" class="col-2 col-form-label">Notes</label>
-                <div class="col-10">
-                  <input id="notes" class="form-control" v-model="item.notes" />
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <span v-if="addError" class="text-danger">There was an error</span>
-            <button
-              v-if="!adding"
-              type="button"
-              class="btn btn-light"
-              @click="hideAddModal"
-            >
-              Cancel
-            </button>
-            <button
-              v-if="!adding"
-              type="button"
-              class="btn btn-chirp-red"
-              @click="addItem"
-            >
-              Add item
-            </button>
-            <RecordSpinner v-if="adding" class="small-spinner" />
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 @media (max-width: 576px) {
   .crate_item__duration,
   .crate_item__details {
@@ -240,12 +130,14 @@
   }
 }
 
-.handle {
+.crate_item__handle {
   cursor: move;
 }
 
-.small-spinner {
-  height: 2rem;
+.sortable-ghost {
+  background-color: var(--bright-red);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 </style>
 
@@ -259,9 +151,10 @@ import AlbumItem from "../../components/crates/AlbumItem";
 import ArtistItem from "../../components/crates/ArtistItem";
 import CrateItem from "../../components/crates/CrateItem";
 import TrackItem from "../../components/crates/TrackItem";
+import AddCrateItemModal from "../../components/crates/AddCrateItemModal.vue";
 import updateTitle from "../../mixins/updateTitle";
 
-let deleteModal, addModal;
+let deleteModal;
 
 export default {
   name: "Crate",
@@ -274,6 +167,7 @@ export default {
     ArtistItem,
     CrateItem,
     TrackItem,
+    AddCrateItemModal,
   },
   props: {
     id: String,
@@ -281,16 +175,6 @@ export default {
   data() {
     return {
       loading: false,
-      adding: false,
-      addError: false,
-      item: {
-        track: "",
-        artist: "",
-        album: "",
-        label: "",
-        notes: "",
-        category: "",
-      },
     };
   },
   computed: {
@@ -327,7 +211,6 @@ export default {
   },
   mounted() {
     deleteModal = new Modal(document.getElementById("deleteModal"));
-    addModal = new Modal(document.getElementById("addModal"));
   },
   mixins: [updateTitle],
   methods: {
@@ -363,19 +246,7 @@ export default {
       deleteModal.hide();
     },
     showAddModal() {
-      addModal.show();
-    },
-    hideAddModal() {
-      addModal.hide();
-      this.addError = false;
-      this.item = {
-        track: "",
-        artist: "",
-        album: "",
-        label: "",
-        notes: "",
-        category: "",
-      };
+      this.$refs.addModal.show();
     },
     deleteCrate() {
       this.hideDeleteModal();
@@ -385,27 +256,6 @@ export default {
     scrollToBottom() {
       const el = document.scrollingElement;
       el.scrollTo(0, el.scrollHeight);
-    },
-    async addItem() {
-      this.adding = true;
-
-      try {
-        const newItem = { ...this.item };
-        if (newItem.category !== "") {
-          newItem.categories = [newItem.category];
-        }
-        delete newItem.category;
-
-        await this.$store.dispatch("addToCrate", {
-          crateId: this.id,
-          params: { item: newItem },
-        });
-        this.hideAddModal();
-      } catch (error) {
-        this.addError = true;
-      }
-      this.scrollToBottom();
-      this.adding = false;
     },
     async renameCrate(event) {
       this.$store.dispatch("renameCrate", {
