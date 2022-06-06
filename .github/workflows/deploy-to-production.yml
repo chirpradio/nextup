@@ -15,7 +15,7 @@ jobs:
     - id: checkout
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: main
     - id: setup-env-variables
       uses: bluwy/substitute-string-action@v1
       with:
