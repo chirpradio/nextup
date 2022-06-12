@@ -1,0 +1,56 @@
+name: Deploy to Dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to deploy
+        required: true
+      version:
+        description: Version name or number
+        required: false
+        default: live
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - id: auth
+      uses: google-github-actions/auth@v0
+      with:
+        workload_identity_provider: ''
+        service_account: ''
+    - id: checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.branch }}
+    - id: setup-env-variables
+      uses: bluwy/substitute-string-action@v1
+      with:
+        _input-file: ./app/env_variables.yaml
+        _output-file: ./app/env_variables.yaml
+        _format-key: '%%key%%'
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        SESSION_LENGTH: ${{ secrets.SESSION_LENGTH }}
+        ELASTICSEARCH_DOMAIN: ${{ secrets.ELASTICSEARCH_DOMAIN }}
+        ELASTICSEARCH_USERNAME: ${{ secrets.ELASTICSEARCH_USERNAME }}
+        ELASTICSEARCH_PASSWORD: ${{ secrets.ELASTICSEARCH_PASSWORD }}
+        DATASTORE_PROJECT_ID: ${{ steps.auth.outputs.project_id }}
+        LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+    - id: api-docs
+      uses: seeebiii/redoc-cli-github-action@v10
+      with:
+        args: 'bundle ./app/routes/api/specification.yaml -o ./app/routes/api/redoc-static.html'
+    - id: install-client
+      working-directory: ./client
+      run: npm ci
+    - id: build-client
+      working-directory: ./client
+      run: npm run build
+    - id: deploy
+      uses: google-github-actions/deploy-appengine@main
+      with:
+        deliverables: ./app/app.yaml
+        version: ${{ github.event.inputs.version }}
+        promote: true
