@@ -65,7 +65,7 @@ export default {
     reverse: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     classObj() {

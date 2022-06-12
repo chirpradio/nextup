@@ -22,7 +22,7 @@ import PlayedTime from "./PlayedTime.vue";
 import TagList from "../music/TagList.vue";
 
 export default {
-  components: { PlayedTime, TagList, },
+  components: { PlayedTime, TagList },
   props: {
     track: Object,
   },
@@ -40,5 +40,5 @@ export default {
       return this.track.freeform_label || this.track.album.label;
     },
   },
-}
+};
 </script>
