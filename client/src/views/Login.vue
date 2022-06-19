@@ -20,11 +20,11 @@
             required
           />
         </div>
-        <button class="btn btn-chirp-red" type="submit">log in</button>
+        <button class="btn btn-chirp-red" type="submit" :disabled="authenticating">log in</button>
       </form>
       <p v-if="error" class="text-danger">{{ errorMessage }}</p>
     </div>
-    <RecordSpinner v-if="isAuthenticated" />
+    <RecordSpinner v-if="showSpinner" />
   </div>
 </template>
 
@@ -39,16 +39,21 @@ export default {
       password: "",
       error: false,
       errorMessage: "",
+      authenticating: false,
     };
   },
   computed: {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     },
+    showSpinner() {
+      return this.isAuthenticated || this.authenticating;
+    }
   },
   methods: {
     async logIn() {
       try {
+        this.authenticating = true;
         this.error = false;
         await this.$store.dispatch("logIn", {
           email: this.email,
@@ -57,6 +62,7 @@ export default {
         await this.$store.dispatch("getCrates");
         this.$router.push(this.$route.query.redirect || "/");
       } catch (error) {
+        this.authenticating = false;
         this.error = true;
         this.errorMessage =
           error.response.status === 400
