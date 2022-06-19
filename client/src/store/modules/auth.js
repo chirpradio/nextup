@@ -18,7 +18,6 @@ const getters = {
       const now = new Date().getTime() / 1000;
       return decoded.exp && decoded.exp > now;
     } catch (error) {
-      console.error(error);
       return false;
     }
   },
