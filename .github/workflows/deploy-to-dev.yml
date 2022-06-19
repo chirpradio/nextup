@@ -18,8 +18,8 @@ jobs:
     - id: auth
       uses: google-github-actions/auth@v0
       with:
-        workload_identity_provider: ''
-        service_account: ''
+        workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
+        service_account: chirpradiodev@appspot.gserviceaccount.com
     - id: checkout
       uses: actions/checkout@v2
       with:
