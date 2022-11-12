@@ -17,6 +17,8 @@
 <script>
 import Modal from "../Modal.vue";
 import CustomTrackForm from "../CustomTrackForm.vue";
+import { mapStores } from "pinia";
+import { useCratesStore } from "../../stores/crates";
 
 const ADDED = "added";
 
@@ -32,6 +34,9 @@ export default {
       error: false,
     };
   },
+  computed: {
+    ...mapStores(useCratesStore),
+  },
   methods: {
     show() {
       this.$refs.modal.show();
@@ -44,7 +49,7 @@ export default {
       this.adding = true;
 
       try {
-        await this.$store.dispatch("addToCrate", {
+        await this.cratesStore.addToCrate({
           crateId: this.crateId,
           params: { item: this.$refs.form.item },
         });

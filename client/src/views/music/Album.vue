@@ -95,12 +95,14 @@
 import AddToCrate from "../../components/AddToCrate.vue";
 import RecordSpinner from "../../components/RecordSpinner";
 import ArtistLink from "../../components/music/ArtistLink";
-import formatters from "../../mixins/formatters";
-import updateTitle from "../../mixins/updateTitle";
 import TrackDuration from "../../components/music/TrackDuration";
 import TrackTag from "../../components/music/TrackTag";
 import PlayButton from "../../components/music/PlayButton";
 import AlbumCard from "../../components/music/AlbumCard";
+import formatters from "../../mixins/formatters";
+import updateTitle from "../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "../../stores/albums";
 
 export default {
   components: {
@@ -121,8 +123,9 @@ export default {
     id: String,
   },
   computed: {
+    ...mapStores(useAlbumsStore),
     album() {
-      return this.$store.getters.albumById(this.id);
+      return this.albumsStore.albumById(this.id);
     },
   },
   created() {
@@ -132,7 +135,7 @@ export default {
   methods: {
     async getAlbum() {
       this.loading = true;
-      await this.$store.dispatch("getAlbum", this.id);
+      await this.albumsStore.getAlbum(this.id);
       this.loading = false;
       this.updateTitle(this.album.title);
     },

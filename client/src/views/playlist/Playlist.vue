@@ -8,7 +8,6 @@
             class="form-check-input"
             type="checkbox"
             role="switch"
-            id="onAirCheck"
             v-model="onAir"
           />
         </div>
@@ -63,6 +62,8 @@ import PlaylistBreak from "../../components/playlist/PlaylistBreak.vue";
 import PlaylistTrack from "../../components/playlist/PlaylistTrack.vue";
 import TagTotals from "../../components/playlist/TagTotals.vue";
 import updateTitle from "../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "../../stores/playlist";
 
 export default {
   components: {
@@ -79,32 +80,27 @@ export default {
     };
   },
   computed: {
+    ...mapStores(usePlaylistStore),
     addButtonClasses() {
-      return this.onAir ? { visible: true } : { invisible: true };
+      return this.playlistStore.onAir ? { visible: true } : { invisible: true };
     },
     events() {
-      return this.$store.getters.events;
+      return this.playlistStore.events;
     },
     lastUpdated() {
-      return this.$store.getters.lastUpdated;
+      return this.playlistStore.lastUpdated;
     },
     onAir: {
       get() {
-        return this.$store.getters.onAir;
+        return this.playlistStore.onAir;
       },
       set(value) {
-        this.$store.commit("onAir", value);
+        this.playlistStore.onAir = value;
       },
     },
     sorted() {
       const copy = [...this.events];
-      return copy.sort((a, b) => {
-        if (a.established < b.established) {
-          return 1;
-        }
-
-        return -1;
-      });
+      return copy.sort((a, b) => a.established < b.established ? 1 : -1);
     },
   },
   mixins: [updateTitle],
@@ -124,14 +120,14 @@ export default {
     },
     async update() {
       this.loading = true;
-      await this.$store.dispatch("getPlaylistEvents", {
-        start: this.lastUpdated,
+      await this.playlistStore.getPlaylistEvents({
+        start: this.playlistStore.lastUpdated,
       });
       this.loading = false;
     },
     async addBreak() {
       this.adding = true;
-      await this.$store.dispatch("addBreak");
+      await this.playlistStore.addBreak();
       this.adding = false;
     },
     addTrack() {

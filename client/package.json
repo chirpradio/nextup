@@ -21,13 +21,13 @@
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.15",
+    "pinia": "^2.0.23",
+    "pinia-plugin-persistedstate": "^2.3.0",
     "qs": "^6.5.2",
-    "vue": "^3.0.0",
+    "vue": "^3.2.11",
     "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.0.0-0",
-    "vuedraggable": "^4.0.3",
-    "vuex": "^4.0.0-0",
-    "vuex-persistedstate": "^4.0.0-beta.3"
+    "vuedraggable": "^4.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

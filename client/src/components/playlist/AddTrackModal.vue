@@ -15,6 +15,8 @@
 <script>
 import Modal from "../Modal.vue";
 import CustomTrackForm from "../CustomTrackForm.vue";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "../../stores/playlist";
 
 export default {
   components: { Modal, CustomTrackForm },
@@ -24,6 +26,9 @@ export default {
       error: false,
       disabled: true,
     };
+  },
+  computed: {
+    ...mapStores(usePlaylistStore),
   },
   methods: {
     show() {
@@ -38,7 +43,7 @@ export default {
           this.error = false;
           this.adding = true;
           const item = this.$refs.form.item;
-          await this.$store.dispatch("addFreeformPlaylistTrack", {
+          await this.playlistStore.addFreeformPlaylistTrack({
             album: {
               title: item.album,
               label: item.label,

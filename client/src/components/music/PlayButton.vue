@@ -110,6 +110,9 @@
 </style>
 
 <script>
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "../../stores/playlist";
+
 export default {
   props: {
     album: Object,
@@ -136,6 +139,7 @@ export default {
     };
   },
   computed: {
+    ...mapStores(usePlaylistStore),
     trackOrAlbumArtist() {
       return this.album.is_compilation
         ? this.track.track_artist
@@ -175,7 +179,7 @@ export default {
       }
     },
     onAir() {
-      return this.$store.state.playlist.onAir;
+      return this.playlistStore.onAir;
     },
   },
   created() {
@@ -216,7 +220,7 @@ export default {
       this.confirmed = true;
       try {
         if (this.type === "track") {
-          await this.$store.dispatch("addPlaylistTrack", {
+          await this.playlistStore.addPlaylistTrack({
             album: this.album.__key.path,
             artist: this.trackOrAlbumArtist.__key.path,
             categories: this.categories || [],
@@ -225,7 +229,7 @@ export default {
             notes: this.playNotes,
           });
         } else if (this.type === "freeform") {
-          await this.$store.dispatch("addFreeformPlaylistTrack", {
+          await this.playlistStore.addFreeformPlaylistTrack({
             album: this.album,
             artist: this.artist,
             categories: this.categories || [],

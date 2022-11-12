@@ -16,6 +16,8 @@
 <script>
 import ArtistResultRows from "./ArtistResultRows";
 import Results from "../Results";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../../stores/search";
 
 export default {
   name: "ArtistResults",
@@ -35,13 +37,14 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useSearchStore),
     results() {
       const defaultResults = {
         hits: [],
         count: undefined,
       };
 
-      return this.$store.getters.results.artist || defaultResults;
+      return this.searchStore.results.artist || defaultResults;
     },
   },
 };

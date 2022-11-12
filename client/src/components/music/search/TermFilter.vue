@@ -21,6 +21,8 @@
 <script>
 import formatters from "../../../mixins/formatters";
 import updateTitle from "../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../stores/search";
 
 export default {
   name: "TermFilter",
@@ -29,6 +31,7 @@ export default {
     type: String,
   },
   computed: {
+    ...mapStores(useSearchStore),
     query() {
       const base = {
         term: "",
@@ -51,7 +54,7 @@ export default {
       this.$router.push({ query: this.query });
     },
     dispatch: async function () {
-      await this.$store.dispatch("search", this.query);
+      await this.searchStore.search(this.query);
     },
   },
 };

@@ -40,6 +40,9 @@
 </style>
 
 <script>
+import { mapStores } from 'pinia';
+import { useCratesStore } from '../stores/crates';
+
 export default {
   data() {
     return {
@@ -56,11 +59,12 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useCratesStore),
     crates() {
-      return this.$store.getters.crates;
+      return this.cratesStore.crates;
     },
     lastAddedTo() {
-      return this.$store.getters.lastAddedTo;
+      return this.cratesStore.lastAddedTo;
     },
   },
   methods: {
@@ -68,7 +72,7 @@ export default {
       this.added = false;
       this.error = false;
       try {
-        await this.$store.dispatch("addToCrate", {
+        await this.cratesStore.addToCrate({
           crateId: this.selected,
           params: {
             path: this.keyToAdd.path,

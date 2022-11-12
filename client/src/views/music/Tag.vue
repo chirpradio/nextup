@@ -12,6 +12,8 @@
 import AlbumCollection from "../../components/music/AlbumCollection";
 import formatters from "../../mixins/formatters";
 import updateTitle from "../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "../../stores/albums";
 
 const limit = 100;
 
@@ -25,15 +27,16 @@ export default {
   },
   mixins: [formatters, updateTitle],
   computed: {
+    ...mapStores(useAlbumsStore),
     albums() {
-      return this.$store.getters.taggedAlbums(this.tag);
+      return this.albumsStore.taggedAlbums(this.tag);
     },
     loading() {
-      return this.$store.getters.loadingTaggedAlbums(this.tag);
+      return this.albumsStore.loadingTaggedAlbums(this.tag);
     },
     more() {
       // Boolean that tells the component whether there are more albums to get
-      return this.$store.getters.moreAlbumsWithTag(this.tag);
+      return this.albumsStore.moreAlbumsWithTag(this.tag);
     },
   },
   created() {
@@ -47,10 +50,10 @@ export default {
   },
   methods: {
     getTaggedAlbums() {
-      this.$store.dispatch("getTaggedAlbums", { tag: this.tag, limit });
+      this.albumsStore.getTaggedAlbums({ tag: this.tag, limit });
     },
     getMore() {
-      this.$store.dispatch("getMoreTaggedAlbums", { tag: this.tag, limit });
+      this.albumsStore.getMoreTaggedAlbums({ tag: this.tag, limit });
     },
   },
 };

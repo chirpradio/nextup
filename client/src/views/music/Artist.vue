@@ -14,6 +14,8 @@ import AddToCrate from "../../components/AddToCrate.vue";
 import RecordSpinner from "../../components/RecordSpinner";
 import AlbumCollection from "../../components/music/AlbumCollection";
 import updateTitle from "../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useArtistsStore } from "../../stores/artists";
 
 export default {
   components: { AddToCrate, AlbumCollection, RecordSpinner },
@@ -26,11 +28,12 @@ export default {
     id: String,
   },
   computed: {
+    ...mapStores(useArtistsStore),
     artist() {
-      return this.$store.getters.artist(this.id);
+      return this.artistsStore.artist(this.id);
     },
     albums() {
-      return this.$store.getters.artistAlbums(this.id);
+      return this.artistsStore.artistAlbums(this.id);
     },
   },
   created() {
@@ -40,8 +43,8 @@ export default {
   methods: {
     async getArtist() {
       this.loading = true;
-      await this.$store.dispatch("getArtist", this.id);
-      await this.$store.dispatch("getArtistAlbums", this.id);
+      await this.artistsStore.getArtist(this.id);
+      await this.artistsStore.getArtistAlbums(this.id);
       this.loading = false;
       this.updateTitle(this.artist.name);
     },

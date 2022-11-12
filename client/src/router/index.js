@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
+import formatters from "../mixins/formatters";
+
 import Login from "../views/Login.vue";
 import Album from "../views/music/Album.vue";
 import MusicHome from "../views/music/MusicHome.vue";
@@ -23,8 +25,7 @@ import ArtistResults from "../components/music/search/artist/ArtistResults.vue";
 import DocumentResults from "../components/music/search/document/DocumentResults.vue";
 import TermFilter from "../components/music/search/TermFilter.vue";
 
-import store from "../store";
-import formatters from "../mixins/formatters";
+import { useAuthStore } from "../stores/auth";
 
 const routes = [
   {
@@ -207,7 +208,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== "Log In" && !store.getters.isAuthenticated) {
+  const authStore = useAuthStore();
+  if (to.name !== "Log In" && !authStore.isAuthenticated) {
     next({ name: "Log In", query: { redirect: to.fullPath } });
   } else {
     next();

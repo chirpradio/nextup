@@ -114,6 +114,9 @@
 </style>
 
 <script>
+import { mapStores } from "pinia";
+import { useAuthStore } from "../stores/auth";
+
 export default {
   name: "NavBar",
   data() {
@@ -122,20 +125,21 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useAuthStore),
     isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+      return this.authStore.isAuthenticated;
     },
     userName() {
-      const user = this.$store.state.auth.user;
+      const user = this.authStore.user;
       return `${user.first_name} ${user.last_name}`;
     },
   },
   methods: {
     isAuthorized(feature) {
-      return this.$store.getters.isAuthorized(feature);
+      return this.authStore.isAuthorized(feature);
     },
     logOut() {
-      this.$store.dispatch("logOut");
+      this.authStore.logOut();
       this.$router.push("/login");
     },
     search() {

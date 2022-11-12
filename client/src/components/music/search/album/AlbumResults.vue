@@ -20,6 +20,8 @@
 import Results from "../Results";
 import AlbumResultHeadings from "./AlbumResultHeadings";
 import AlbumResultRows from "./AlbumResultRows";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../../stores/search";
 
 export default {
   name: "AlbumResults",
@@ -39,13 +41,14 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useSearchStore),
     results() {
       const defaultResults = {
         hits: [],
         count: undefined,
       };
 
-      return this.$store.getters.results.album || defaultResults;
+      return this.searchStore.results.album || defaultResults;
     },
   },
 };

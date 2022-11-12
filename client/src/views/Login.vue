@@ -30,6 +30,8 @@
 
 <script>
 import RecordSpinner from "../components/RecordSpinner";
+import { mapStores } from "pinia";
+import { useAuthStore } from "../stores/auth";
 
 export default {
   components: { RecordSpinner },
@@ -42,19 +44,19 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useAuthStore),
     isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+      return this.authStore.isAuthenticated;
     },
   },
   methods: {
     async logIn() {
       try {
         this.error = false;
-        await this.$store.dispatch("logIn", {
+        await this.authStore.logIn({
           email: this.email,
           password: this.password,
-        });
-        await this.$store.dispatch("getCrates");
+        });        
         this.$router.push(this.$route.query.redirect || "/");
       } catch (error) {
         this.error = true;

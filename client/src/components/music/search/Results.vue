@@ -35,6 +35,8 @@
 <script>
 import RecordSpinner from "../../RecordSpinner";
 import SearchPagination from "./SearchPagination";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../stores/search";
 
 export default {
   components: { RecordSpinner, SearchPagination },
@@ -64,8 +66,9 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useSearchStore),
     loading() {
-      return this.$store.getters.loading;
+      return this.searchStore.loading;
     },
     thereAreHits() {
       return this.results.hits && this.results.hits.length;

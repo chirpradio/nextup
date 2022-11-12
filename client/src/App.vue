@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <NavBar />
+  <NavBar />
+  <main>
     <router-view class="container-fluid py-3 main-view" />
-  </div>
+  </main>
 </template>
 
 <style lang="scss">
@@ -103,6 +103,6 @@ import NavBar from "./components/NavBar";
 export default {
   components: {
     NavBar,
-  },
+  }
 };
 </script>

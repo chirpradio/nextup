@@ -41,6 +41,8 @@
 
 <script>
 import TagTotal from "../playlist/TagTotal.vue";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "../../stores/playlist";
 
 function topOfHourIso() {
   const date = new Date();
@@ -60,10 +62,11 @@ function countBy(events, tag) {
 export default {
   components: { TagTotal },
   computed: {
+    ...mapStores(usePlaylistStore),
     events() {
-      const iso = topOfHourIso();
-      return this.$store.getters.events.filter(
-        (event) => event.established > iso
+      const topOfHour = topOfHourIso();
+      return this.playlistStore.events.filter(
+        (event) => event.established > topOfHour
       );
     },
     heavyRotation() {

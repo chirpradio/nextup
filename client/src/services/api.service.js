@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 import router from "../router";
-import store from "../store";
+import { useAuthStore } from "../stores/auth";
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
@@ -18,7 +18,8 @@ axios.interceptors.response.use(
   (error) => {
     console.log(error.response.data);
     if (error.response.status === 401) {
-      store.dispatch("logOut");
+      const authStore = useAuthStore();
+      authStore.logOut();
       router.push({
         name: "Log In",
         query: {

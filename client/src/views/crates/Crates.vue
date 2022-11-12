@@ -84,10 +84,12 @@
 </style>
 
 <script>
-import CratePreview from "./CratePreview";
+import CratePreview from "../../components/crates/CratePreview";
 import RecordSpinner from "../../components/RecordSpinner";
 import updateTitle from "../../mixins/updateTitle";
 import Modal from "../../../node_modules/bootstrap/js/dist/modal";
+import { mapStores } from "pinia";
+import { useCratesStore } from "../../stores/crates";
 
 let addModal;
 
@@ -95,8 +97,11 @@ export default {
   name: "Crates",
   components: { CratePreview, RecordSpinner },
   mixins: [updateTitle],
-  created() {
+  async created() {
     this.updateTitle("My Crates");
+    if (this.cratesStore.crates.length === 0) {
+      await this.cratesStore.getCrates();
+    }
   },
   data() {
     return {
@@ -106,18 +111,19 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useCratesStore),
     crates() {
-      const crates = this.$store.getters.crates;
+      const crates = this.cratesStore.crates;
       if (this.filterText) {
         return crates.filter((crate) => crate.name.includes(this.filterText));
       }
       return crates;
     },
     loading() {
-      return this.$store.getters.loadingCrates;
+      return this.cratesStore.loadingCrates;
     },
     lastAddedTo() {
-      return this.$store.getters.lastAddedTo;
+      return this.cratesStore.lastAddedTo;
     },
     preventAdd() {
       return this.newCrateName === "";
@@ -135,7 +141,7 @@ export default {
     },
     async onAddCrate() {
       this.adding = true;
-      const crate = await this.$store.dispatch("addCrate", {
+      const crate = await this.cratesStore.addCrate({
         name: this.newCrateName,
       });
       addModal.hide();

@@ -153,6 +153,8 @@ import CrateItem from "../../components/crates/CrateItem";
 import TrackItem from "../../components/crates/TrackItem";
 import AddCrateItemModal from "../../components/crates/AddCrateItemModal.vue";
 import updateTitle from "../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useCratesStore } from "../../stores/crates";
 
 let deleteModal;
 
@@ -178,8 +180,9 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useCratesStore),
     crate() {
-      return this.$store.getters.crate(this.id);
+      return this.cratesStore.crate(this.id);
     },
     name() {
       let name = "";
@@ -198,13 +201,14 @@ export default {
         return this.crate.items;
       },
       set(value) {
-        this.$store.commit("allCrateItems", { crateId: this.id, items: value });
+        console.log("set items", value);
+        // this.$store.commit("allCrateItems", { crateId: this.id, items: value });
       },
     },
   },
   created: async function () {
     this.loading = true;
-    await this.$store.dispatch("getCrateItems", {
+    await this.cratesStore.getCrateItems({
       crateId: this.id,
     });
     this.loading = false;
@@ -227,13 +231,13 @@ export default {
       return item.kind === "CrateItem" ? item.kind : `${item.kind}Item`;
     },
     async removeItem(index) {
-      await this.$store.dispatch("removeItem", {
+      await this.cratesStore.removeItem({
         crateId: this.id,
         index,
       });
     },
     async onMove(evt) {
-      await this.$store.dispatch("reorderItem", {
+      await this.cratesStore.reorderItem({
         crateId: this.id,
         index: evt.moved.oldIndex,
         newIndex: evt.moved.newIndex,
@@ -250,7 +254,7 @@ export default {
     },
     deleteCrate() {
       this.hideDeleteModal();
-      this.$store.dispatch("deleteCrate", { crateId: this.id });
+      this.cratesStore.deleteCrate({ crateId: this.id });
       this.$router.push({ path: "/crates" });
     },
     scrollToBottom() {
@@ -258,7 +262,7 @@ export default {
       el.scrollTo(0, el.scrollHeight);
     },
     async renameCrate(event) {
-      this.$store.dispatch("renameCrate", {
+      this.cratesStore.renameCrate({
         crateId: this.id,
         name: event.value,
       });
