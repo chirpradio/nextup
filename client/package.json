@@ -23,6 +23,7 @@
     "lodash": "^4.17.15",
     "pinia": "^2.0.23",
     "pinia-plugin-persistedstate": "^2.3.0",
+    "pinia-shared-state": "^0.2.10",
     "qs": "^6.5.2",
     "vue": "^3.2.11",
     "vue-gtag-next": "^1.14.0",

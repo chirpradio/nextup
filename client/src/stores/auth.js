@@ -87,5 +87,5 @@ export const useAuthStore = defineStore('auth', {
         api.setAuthorizationHeader(store.token);
       }      
     },
-  }
+  },
 });

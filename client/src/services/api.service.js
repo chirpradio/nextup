@@ -11,7 +11,7 @@ function setAuthorizationHeader(token) {
   instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -32,12 +32,8 @@ axios.interceptors.response.use(
 );
 
 async function getAndHandleError(getter) {
-  try {
-    const response = await getter;
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await getter;
+  return response.data;
 }
 
 export default {
@@ -96,7 +92,8 @@ export default {
   },
 
   async addToCrate(crateId, params) {
-    await instance.post(`/crate/${crateId}/item`, params);
+    const response = await instance.post(`/crate/${crateId}/item`, params);
+    return response.data;
   },
 
   async removeFromCrate(crateId, index) {

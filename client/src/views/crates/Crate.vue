@@ -27,7 +27,7 @@
 
     <draggable
       v-if="showList"
-      :list="crate.items"
+      :list="items"
       item-key="element.encodedKey"
       @change="onMove"
       tag="ol"
@@ -184,6 +184,9 @@ export default {
     crate() {
       return this.cratesStore.crate(this.id);
     },
+    items() {
+      return this.cratesStore.crateItems(this.id);
+    },  
     name() {
       let name = "";
       if (this.crate) {
@@ -194,16 +197,7 @@ export default {
       return name;
     },
     showList() {
-      return this.crate && this.crate.items && this.crate.items.length;
-    },
-    items: {
-      get() {
-        return this.crate.items;
-      },
-      set(value) {
-        console.log("set items", value);
-        // this.$store.commit("allCrateItems", { crateId: this.id, items: value });
-      },
+      return this.crate && this.items && this.items.length;
     },
   },
   created: async function () {

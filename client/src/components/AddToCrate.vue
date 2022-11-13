@@ -67,6 +67,11 @@ export default {
       return this.cratesStore.lastAddedTo;
     },
   },
+  async created() {
+    if (this.cratesStore.crates.length === 0) {
+      await this.cratesStore.getCrates();
+    }
+  },
   methods: {
     async add() {
       this.added = false;
