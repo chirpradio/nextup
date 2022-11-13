@@ -71,7 +71,7 @@
   );
   background-size: 200% 100%;
   background-position: right bottom;
-  transition: all 0.25s linear;
+  transition: all 0.25s linear !important;
 }
 
 @media (min-width: 768px) {
@@ -84,7 +84,7 @@
 .play-button__holding {
   color: white !important;
   background-position: left bottom;
-  transition: all 2.25s linear;
+  transition: all 2.25s linear !important;
 }
 
 .play-button__menu {
