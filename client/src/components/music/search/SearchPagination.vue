@@ -36,8 +36,8 @@ input.page-number {
 </style>
 
 <script>
-import { mapStores } from 'pinia';
-import { useSearchStore } from '../../../stores/search';
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../stores/search";
 
 export default {
   name: "SearchPagination",

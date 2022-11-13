@@ -56,7 +56,7 @@ export default {
         await this.authStore.logIn({
           email: this.email,
           password: this.password,
-        });        
+        });
         this.$router.push(this.$route.query.redirect || "/");
       } catch (error) {
         this.error = true;

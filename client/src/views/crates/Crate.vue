@@ -186,7 +186,7 @@ export default {
     },
     items() {
       return this.cratesStore.crateItems(this.id);
-    },  
+    },
     name() {
       let name = "";
       if (this.crate) {

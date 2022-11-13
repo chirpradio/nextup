@@ -70,7 +70,7 @@ import RecordSpinner from "@/components/RecordSpinner.vue";
 import RotationPlayRow from "@/components/reports/RotationPlayRow.vue";
 import { mapStores } from "pinia";
 import { useAlbumsStore } from "@/stores/albums";
-import { usePlaylistStore} from "@/stores/playlist";
+import { usePlaylistStore } from "@/stores/playlist";
 
 function sortByPlayCountThenLocal(a, b) {
   // sort by play count first

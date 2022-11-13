@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 import api from "../services/api.service";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     token: "",
     user: {},
@@ -26,16 +26,16 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => {
-      try {        
+      try {
         if (state.token === "") {
           return false;
         }
-  
+
         const decoded = jwt_decode(state.token);
         if (!decoded || !decoded.exp) {
           return false;
         }
-  
+
         const now = new Date().getTime() / 1000;
         return decoded.exp && decoded.exp > now;
       } catch (error) {
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', {
       const permitted = state.features[feature];
       if (permitted.users) {
         return permitted.users.includes(state.user.email);
-      } else if (permitted.roles) {        
+      } else if (permitted.roles) {
         const commonRoles = permitted.roles.filter((role) =>
           state.user.roles.includes(role)
         );
@@ -85,7 +85,7 @@ export const useAuthStore = defineStore('auth', {
     afterRestore: ({ store }) => {
       if (store.isAuthenticated) {
         api.setAuthorizationHeader(store.token);
-      }      
+      }
     },
   },
 });

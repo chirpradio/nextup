@@ -40,8 +40,8 @@
 </style>
 
 <script>
-import { mapStores } from 'pinia';
-import { useCratesStore } from '../stores/crates';
+import { mapStores } from "pinia";
+import { useCratesStore } from "../stores/crates";
 
 export default {
   data() {

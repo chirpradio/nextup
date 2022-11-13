@@ -78,14 +78,14 @@ export const useAlbumsStore = defineStore("albums", {
   },
   actions: {
     async getRecentAlbums(offset = 0) {
-      if (this.recent.albums.length === 0 || offset > 0) {        
+      if (this.recent.albums.length === 0 || offset > 0) {
         this.loadingTagCollections.recent = true;
         const response = await api.getRecentAlbums({
           offset,
         });
         this.recent = {
           albums: this.recent.albums.concat(response.albums),
-          more: typeof response.nextPageCursor === "string"
+          more: typeof response.nextPageCursor === "string",
         };
         this.loadingTagCollections.recent = false;
       }
@@ -98,7 +98,7 @@ export const useAlbumsStore = defineStore("albums", {
     async getTaggedAlbums({ tag, limit = 25, offset = 0 } = {}) {
       if (this.tagCollections[tag].albums.length === 0 || offset > 0) {
         this.loadingTagCollections[tag] = true;
-        
+
         const response = await api.getTaggedAlbums({
           tag,
           limit,
@@ -106,9 +106,7 @@ export const useAlbumsStore = defineStore("albums", {
         });
 
         const more = typeof response.nextPageCursor === "string";
-        const albums = this.tagCollections[tag].albums.concat(
-          response.albums
-        );
+        const albums = this.tagCollections[tag].albums.concat(response.albums);
         this.tagCollections[tag] = {
           albums,
           more,
@@ -130,5 +128,5 @@ export const useAlbumsStore = defineStore("albums", {
         this.albums[album.album_id.value] = album;
       }
     },
-  }
+  },
 });

@@ -1,5 +1,9 @@
 <template>
-  <form id="filters" class="row row-cols-lg-auto" v-on:submit.prevent="updateQuery">
+  <form
+    id="filters"
+    class="row row-cols-lg-auto"
+    v-on:submit.prevent="updateQuery"
+  >
     <div class="flex-grow-1 mr-2 mb-3">
       <label class="visually-hidden" for="search">Search</label>
       <input
@@ -74,7 +78,7 @@ export default {
   },
   computed: {
     ...mapStores(useSearchStore),
-  },  
+  },
   methods: {
     updateQuery: function () {
       this.$gtag.event("Search", {

@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 import api from "../services/api.service";
 
-export const usePlaylistStore = defineStore('playlist', {
+export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     adding: false,
     events: [],

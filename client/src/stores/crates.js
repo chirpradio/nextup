@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 import api from "../services/api.service";
 
 function findCrate(crates, crateId) {
@@ -14,7 +14,7 @@ function sortCrates(crates) {
   });
 }
 
-export const useCratesStore = defineStore('crates', {
+export const useCratesStore = defineStore("crates", {
   state: () => ({
     crates: [],
     items: {},
@@ -22,7 +22,7 @@ export const useCratesStore = defineStore('crates', {
     lastAddedTo: null,
   }),
   getters: {
-    crate: (state) => (id) => { 
+    crate: (state) => (id) => {
       return findCrate(state.crates, id);
     },
     crateItems: (state) => (id) => {
@@ -32,14 +32,14 @@ export const useCratesStore = defineStore('crates', {
   actions: {
     async getCrates() {
       this.loadingCrates = true;
-      const response = await api.getCrates();      
+      const response = await api.getCrates();
       this.crates = response;
       sortCrates(this.crates);
       this.loadingCrates = false;
     },
     async getCrate({ crateId }) {
       this.loadingCrates = true;
-      const crate = await api.getCrate(crateId);      
+      const crate = await api.getCrate(crateId);
       this.items[crateId] = [];
       crate.order = crate.order || [];
       this.crates.push(crate);
@@ -57,25 +57,23 @@ export const useCratesStore = defineStore('crates', {
       crate.name = name;
     },
     async deleteCrate({ crateId }) {
-      const index = this.crates.findIndex(
-        (element) => element.id === crateId
-      );
+      const index = this.crates.findIndex((element) => element.id === crateId);
       this.crates.splice(index, 1);
       await api.deleteCrate(crateId);
     },
     async getCrateItems({ crateId }) {
-      const items = await api.getCrateItems(crateId);        
+      const items = await api.getCrateItems(crateId);
       this.items[crateId] = items;
     },
     async addToCrate({ crateId, params }) {
       const items = await api.addToCrate(crateId, params);
       this.items[crateId] = items;
-      
+
       const crate = findCrate(this.crates, crateId);
       crate.totalItems++;
       this.lastAddedTo = crate;
     },
-    async removeItem({ crateId, index }) {      
+    async removeItem({ crateId, index }) {
       const crate = findCrate(this.crates, crateId);
       this.items[crateId].splice(index, 1);
       crate.totalItems--;

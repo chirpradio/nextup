@@ -100,7 +100,7 @@ export default {
     },
     sorted() {
       const copy = [...this.events];
-      return copy.sort((a, b) => a.established < b.established ? 1 : -1);
+      return copy.sort((a, b) => (a.established < b.established ? 1 : -1));
     },
   },
   mixins: [updateTitle],

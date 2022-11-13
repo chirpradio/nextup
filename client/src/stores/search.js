@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import api from "../services/api.service";
 
-export const useSearchStore = defineStore('search', {
+export const useSearchStore = defineStore("search", {
   state: () => ({
     loading: false,
     query: {},
@@ -19,7 +19,7 @@ export const useSearchStore = defineStore('search', {
         } else {
           this.results = results;
         }
-        
+
         this.loading = false;
       }
     },
@@ -27,5 +27,5 @@ export const useSearchStore = defineStore('search', {
       this.query.offset = offset;
       await this.search(this.query);
     },
-  }
+  },
 });
