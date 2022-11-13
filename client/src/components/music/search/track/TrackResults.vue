@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Results from "../Results.vue";
+import Results from "../ResultsTemplate.vue";
 import TrackResultHeadings from "./TrackResultHeadings.vue";
 import TrackResultRows from "./TrackResultRows.vue";
 import updateTitle from "../../../../mixins/updateTitle";

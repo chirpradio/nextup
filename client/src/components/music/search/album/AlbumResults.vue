@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Results from "../Results.vue";
+import Results from "../ResultsTemplate.vue";
 import AlbumResultHeadings from "./AlbumResultHeadings.vue";
 import AlbumResultRows from "./AlbumResultRows.vue";
 import { mapStores } from "pinia";

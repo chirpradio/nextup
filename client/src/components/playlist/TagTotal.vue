@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Tag from "../music/Tag.vue";
+import Tag from "../music/TagBadge.vue";
 
 export default {
   components: { Tag },

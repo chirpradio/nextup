@@ -15,6 +15,6 @@
 
 <script>
 export default {
-  name: "Search",
+  name: "SearchView",
 };
 </script>

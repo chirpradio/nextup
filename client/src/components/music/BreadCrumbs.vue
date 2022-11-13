@@ -24,7 +24,7 @@ function getBreadcrumb(match, route) {
 }
 
 export default {
-  name: "Breadcrumb",
+  name: "BreadCrumbs",
   props: {
     heading: {
       type: String,

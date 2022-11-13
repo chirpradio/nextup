@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Modal from "../Modal.vue";
+import Modal from "../ModalDialog.vue";
 import CustomTrackForm from "../CustomTrackForm.vue";
 import { mapStores } from "pinia";
 import { useCratesStore } from "../../stores/crates";

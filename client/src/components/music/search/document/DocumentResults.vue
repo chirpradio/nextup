@@ -19,7 +19,7 @@
 <script>
 import DocumentResultHeadings from "./DocumentResultHeadings.vue";
 import DocumentResultRows from "./DocumentResultRows.vue";
-import Results from "../Results.vue";
+import Results from "../ResultsTemplate.vue";
 import { mapStores } from "pinia";
 import { useSearchStore } from "@/stores/search";
 

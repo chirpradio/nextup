@@ -42,7 +42,7 @@
 
 <script>
 import { Modal } from "bootstrap";
-import RecordSpinner from "../components/RecordSpinner.vue";
+import RecordSpinner from "./RecordSpinner.vue";
 
 const CONFIRM = "confirm";
 

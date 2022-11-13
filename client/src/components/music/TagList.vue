@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Tag from "./Tag.vue";
+import Tag from "./TagBadge.vue";
 
 const allowedTags = [
   "local_current",
@@ -34,8 +34,12 @@ export default {
       };
     },
     filteredTags() {
+      if (!this.tags) {
+        return [];
+      }
+
       return this.tags
-        ?.filter((tag) => allowedTags.includes(tag))
+        .filter((tag) => allowedTags.includes(tag))
         .sort((a, b) => (a < b ? -1 : 1));
     },
   },

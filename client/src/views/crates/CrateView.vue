@@ -159,7 +159,7 @@ import { useCratesStore } from "@/stores/crates";
 let deleteModal;
 
 export default {
-  name: "Crate",
+  name: "CrateView",
   components: {
     EditableHeading,
     RecordSpinner,

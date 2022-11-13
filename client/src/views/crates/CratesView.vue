@@ -94,7 +94,7 @@ import { useCratesStore } from "@/stores/crates";
 let addModal;
 
 export default {
-  name: "Crates",
+  name: "CratesView",
   components: { CratePreview, RecordSpinner },
   mixins: [updateTitle],
   async created() {
