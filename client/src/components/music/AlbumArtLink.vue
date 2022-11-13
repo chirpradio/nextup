@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AlbumArt from "./AlbumArt";
+import AlbumArt from "./AlbumArt.vue";
 
 export default {
   name: "AlbumArtLink",

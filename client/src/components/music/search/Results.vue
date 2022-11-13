@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import RecordSpinner from "../../RecordSpinner";
-import SearchPagination from "./SearchPagination";
+import RecordSpinner from "../../RecordSpinner.vue";
+import SearchPagination from "./SearchPagination.vue";
 import { mapStores } from "pinia";
-import { useSearchStore } from "../../../stores/search";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   components: { RecordSpinner, SearchPagination },

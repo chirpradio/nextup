@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import AddToCrate from "../../components/AddToCrate.vue";
-import RecordSpinner from "../../components/RecordSpinner";
-import AlbumCollection from "../../components/music/AlbumCollection";
-import updateTitle from "../../mixins/updateTitle";
+import AddToCrate from "@/components/AddToCrate.vue";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import AlbumCollection from "@/components/music/AlbumCollection.vue";
+import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
-import { useArtistsStore } from "../../stores/artists";
+import { useArtistsStore } from "@/stores/artists";
 
 export default {
   components: { AddToCrate, AlbumCollection, RecordSpinner },

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Breadcrumb from "../../components/music/Breadcrumb";
+import Breadcrumb from "@/components/music/Breadcrumb.vue";
 
 export default {
   components: { Breadcrumb },

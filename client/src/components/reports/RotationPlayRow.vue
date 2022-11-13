@@ -61,9 +61,9 @@
 </style>
 
 <script>
-import AlbumTitleLink from "../music/AlbumTitleLink";
-import ArtistLink from "../music/ArtistLink";
-import TagList from "../music/TagList";
+import AlbumTitleLink from "../music/AlbumTitleLink.vue";
+import ArtistLink from "../music/ArtistLink.vue";
+import TagList from "../music/TagList.vue";
 
 export default {
   name: "RotationPlayRow",

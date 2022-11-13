@@ -142,19 +142,19 @@
 </style>
 
 <script>
-import EditableHeading from "../../components/EditableHeading";
-import RecordSpinner from "../../components/RecordSpinner";
-import TrackDuration from "../../components/music/TrackDuration";
+import EditableHeading from "@/components/EditableHeading.vue";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import TrackDuration from "@/components/music/TrackDuration.vue";
 import draggable from "vuedraggable";
-import Modal from "../../../node_modules/bootstrap/js/dist/modal";
-import AlbumItem from "../../components/crates/AlbumItem";
-import ArtistItem from "../../components/crates/ArtistItem";
-import CrateItem from "../../components/crates/CrateItem";
-import TrackItem from "../../components/crates/TrackItem";
-import AddCrateItemModal from "../../components/crates/AddCrateItemModal.vue";
-import updateTitle from "../../mixins/updateTitle";
+import { Modal } from "bootstrap";
+import AlbumItem from "@/components/crates/AlbumItem.vue";
+import ArtistItem from "@/components/crates/ArtistItem.vue";
+import CrateItem from "@/components/crates/CrateItem.vue";
+import TrackItem from "@/components/crates/TrackItem.vue";
+import AddCrateItemModal from "@/components/crates/AddCrateItemModal.vue";
+import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
-import { useCratesStore } from "../../stores/crates";
+import { useCratesStore } from "@/stores/crates";
 
 let deleteModal;
 

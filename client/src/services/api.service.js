@@ -4,7 +4,7 @@ import router from "../router";
 import { useAuthStore } from "../stores/auth";
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 function setAuthorizationHeader(token) {

@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import AlbumCard from "./AlbumCard";
-import RecordSpinner from "../RecordSpinner";
+import AlbumCard from "./AlbumCard.vue";
+import RecordSpinner from "../RecordSpinner.vue";
 import { get, shuffle, sortBy } from "lodash";
 
 function compareByProperty(array, prop) {

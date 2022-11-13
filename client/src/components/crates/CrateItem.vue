@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import TagList from "../music/TagList";
-import PlayButton from "../music/PlayButton";
+import TagList from "../music/TagList.vue";
+import PlayButton from "../music/PlayButton.vue";
 
 export default {
   name: "CrateItem",

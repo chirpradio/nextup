@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import RecordSpinner from "../components/RecordSpinner";
+import RecordSpinner from "../components/RecordSpinner.vue";
 import { mapStores } from "pinia";
-import { useAuthStore } from "../stores/auth";
+import { useAuthStore } from "@/stores/auth";
 
 export default {
   components: { RecordSpinner },

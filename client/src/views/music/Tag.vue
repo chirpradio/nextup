@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection";
-import formatters from "../../mixins/formatters";
-import updateTitle from "../../mixins/updateTitle";
+import AlbumCollection from "@/components/music/AlbumCollection.vue";
+import formatters from "@/mixins/formatters";
+import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
-import { useAlbumsStore } from "../../stores/albums";
+import { useAlbumsStore } from "@/stores/albums";
 
 const limit = 100;
 

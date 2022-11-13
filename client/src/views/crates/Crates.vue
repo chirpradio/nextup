@@ -84,12 +84,12 @@
 </style>
 
 <script>
-import CratePreview from "../../components/crates/CratePreview";
-import RecordSpinner from "../../components/RecordSpinner";
-import updateTitle from "../../mixins/updateTitle";
-import Modal from "../../../node_modules/bootstrap/js/dist/modal";
+import CratePreview from "@/components/crates/CratePreview.vue";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import updateTitle from "@/mixins/updateTitle";
+import { Modal } from "bootstrap";
 import { mapStores } from "pinia";
-import { useCratesStore } from "../../stores/crates";
+import { useCratesStore } from "@/stores/crates";
 
 let addModal;
 

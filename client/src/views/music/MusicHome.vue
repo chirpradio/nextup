@@ -65,10 +65,10 @@
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection";
-import updateTitle from "../../mixins/updateTitle";
+import AlbumCollection from "@/components/music/AlbumCollection.vue";
+import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
-import { useAlbumsStore } from "../../stores/albums";
+import { useAlbumsStore } from "@/stores/albums";
 
 export default {
   name: "MusicHome",

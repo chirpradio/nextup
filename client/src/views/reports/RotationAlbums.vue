@@ -66,12 +66,12 @@
 </template>
 
 <script>
-import RecordSpinner from "../../components/RecordSpinner";
-import AlbumTitleLink from "../../components/music/AlbumTitleLink";
-import ArtistLink from "../../components/music/ArtistLink";
-import TagList from "../../components/music/TagList";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import AlbumTitleLink from "@/components/music/AlbumTitleLink.vue";
+import ArtistLink from "@/components/music/ArtistLink.vue";
+import TagList from "@/components/music/TagList.vue";
 import { mapStores } from "pinia";
-import { useAlbumsStore } from "../../stores/albums";
+import { useAlbumsStore } from "@/stores/albums";
 
 export default {
   name: "RotationAlbums",

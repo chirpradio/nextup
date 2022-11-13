@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import ArtistResultRows from "./ArtistResultRows";
-import Results from "../Results";
+import ArtistResultRows from "./ArtistResultRows.vue";
+import Results from "../Results.vue";
 import { mapStores } from "pinia";
-import { useSearchStore } from "../../../../stores/search";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "ArtistResults",

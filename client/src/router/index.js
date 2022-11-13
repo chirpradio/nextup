@@ -13,8 +13,8 @@ import Search from "../views/music/Search.vue";
 import Crates from "../views/crates/Crates.vue";
 import Crate from "../views/crates/Crate.vue";
 import Playlist from "../views/playlist/Playlist.vue";
-import RotationAlbums from "../views/reports/RotationAlbums";
-import RotationPlays from "../views/reports/RotationPlays";
+import RotationAlbums from "../views/reports/RotationAlbums.vue";
+import RotationPlays from "../views/reports/RotationPlays.vue";
 import EverythingFilters from "../components/music/search/EverythingFilters.vue";
 import EverythingResults from "../components/music/search/EverythingResults.vue";
 import AlbumFilters from "../components/music/search/album/AlbumFilters.vue";
@@ -196,7 +196,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   parseQuery(query) {
     return qs.parse(query);

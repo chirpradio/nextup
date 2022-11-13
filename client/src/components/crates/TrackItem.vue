@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import ArtistLink from "../music/ArtistLink";
-import CrateAlbumSpans from "./CrateAlbumSpans";
-import TagList from "../music/TagList";
-import PlayButton from "../music/PlayButton";
+import ArtistLink from "../music/ArtistLink.vue";
+import CrateAlbumSpans from "./CrateAlbumSpans.vue";
+import TagList from "../music/TagList.vue";
+import PlayButton from "../music/PlayButton.vue";
 
 export default {
   name: "TrackItem",

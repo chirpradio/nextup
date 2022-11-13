@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import Results from "../Results";
-import TrackResultHeadings from "./TrackResultHeadings";
-import TrackResultRows from "./TrackResultRows";
+import Results from "../Results.vue";
+import TrackResultHeadings from "./TrackResultHeadings.vue";
+import TrackResultRows from "./TrackResultRows.vue";
 import updateTitle from "../../../../mixins/updateTitle";
 import { mapStores } from "pinia";
-import { useSearchStore } from "../../../../stores/search";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "TrackResults",

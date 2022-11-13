@@ -48,9 +48,9 @@
 </style>
 
 <script>
-import AlbumArt from "../../AlbumArt";
-import AlbumTitleLink from "../../AlbumTitleLink";
-import ArtistLink from "../../ArtistLink";
+import AlbumArt from "../../AlbumArt.vue";
+import AlbumTitleLink from "../../AlbumTitleLink.vue";
+import ArtistLink from "../../ArtistLink.vue";
 
 const startsWithCapital = new RegExp("^[A-Z]");
 const endsWithSentenceBoundary = new RegExp("[.!?]$");

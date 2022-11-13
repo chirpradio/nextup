@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ArtistLink from "../../ArtistLink";
+import ArtistLink from "../../ArtistLink.vue";
 
 export default {
   name: "ArtistResultRows",

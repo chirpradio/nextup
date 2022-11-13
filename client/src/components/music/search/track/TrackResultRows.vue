@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import AlbumArtLink from "../../AlbumArtLink";
-import AlbumTitleLink from "../../AlbumTitleLink";
-import ArtistLink from "../../ArtistLink";
-import TagList from "../../TagList";
-import TrackDuration from "../../TrackDuration";
-import AddToCrate from "../../../AddToCrate";
-import TrackTag from "../../TrackTag";
-import PlayButton from "../../PlayButton";
+import AlbumArtLink from "../../AlbumArtLink.vue";
+import AlbumTitleLink from "../../AlbumTitleLink.vue";
+import ArtistLink from "../../ArtistLink.vue";
+import TagList from "../../TagList.vue";
+import TrackDuration from "../../TrackDuration.vue";
+import AddToCrate from "../../../AddToCrate.vue";
+import TrackTag from "../../TrackTag.vue";
+import PlayButton from "../../PlayButton.vue";
 
 export default {
   name: "TrackResultRows",

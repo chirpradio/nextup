@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import Results from "../Results";
-import AlbumResultHeadings from "./AlbumResultHeadings";
-import AlbumResultRows from "./AlbumResultRows";
+import Results from "../Results.vue";
+import AlbumResultHeadings from "./AlbumResultHeadings.vue";
+import AlbumResultRows from "./AlbumResultRows.vue";
 import { mapStores } from "pinia";
-import { useSearchStore } from "../../../../stores/search";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "AlbumResults",

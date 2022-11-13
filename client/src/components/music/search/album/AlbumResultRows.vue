@@ -31,11 +31,11 @@
 </template>
 
 <script>
-import AddToCrate from "../../../AddToCrate";
-import AlbumArtLink from "../../AlbumArtLink";
-import AlbumTitleLink from "../../AlbumTitleLink";
-import ArtistLink from "../../ArtistLink";
-import TagList from "../../TagList";
+import AddToCrate from "../../../AddToCrate.vue";
+import AlbumArtLink from "../../AlbumArtLink.vue";
+import AlbumTitleLink from "../../AlbumTitleLink.vue";
+import ArtistLink from "../../ArtistLink.vue";
+import TagList from "../../TagList.vue";
 
 export default {
   name: "AlbumResultRows",

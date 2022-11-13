@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import DocumentResultHeadings from "./DocumentResultHeadings";
-import DocumentResultRows from "./DocumentResultRows";
-import Results from "../Results";
+import DocumentResultHeadings from "./DocumentResultHeadings.vue";
+import DocumentResultRows from "./DocumentResultRows.vue";
+import Results from "../Results.vue";
 import { mapStores } from "pinia";
-import { useSearchStore } from "../../../../stores/search";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "DocumentResults",
