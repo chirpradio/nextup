@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite serve",
-    "build": "vite build",
-    "report": "vite build --report",
+    "build": "vite build --emptyOutDir",    
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {

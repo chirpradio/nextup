@@ -1,37 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
-
-import Login from "../views/LoginView.vue";
-import Album from "../views/music/AlbumView.vue";
-import MusicHome from "../views/music/MusicHome.vue";
-import Music from "../views/music/MusicView.vue";
-import Tag from "../views/music/TagView.vue";
-import LibraryAdds from "../views/music/LibraryAdds.vue";
-import Artist from "../views/music/ArtistView.vue";
-import Search from "../views/music/SearchView.vue";
-import Crates from "../views/crates/CratesView.vue";
-import Crate from "../views/crates/CrateView.vue";
-import Playlist from "../views/playlist/PlaylistView.vue";
-import RotationAlbums from "../views/reports/RotationAlbums.vue";
-import RotationPlays from "../views/reports/RotationPlays.vue";
-import EverythingFilters from "../components/music/search/EverythingFilters.vue";
-import EverythingResults from "../components/music/search/EverythingResults.vue";
-import AlbumFilters from "../components/music/search/album/AlbumFilters.vue";
-import AlbumResults from "../components/music/search/album/AlbumResults.vue";
-import TrackFilters from "../components/music/search/track/TrackFilters.vue";
-import TrackResults from "../components/music/search/track/TrackResults.vue";
-import ArtistResults from "../components/music/search/artist/ArtistResults.vue";
-import DocumentResults from "../components/music/search/document/DocumentResults.vue";
-import TermFilter from "../components/music/search/TermFilter.vue";
-
 import { useAuthStore } from "../stores/auth";
 
 const routes = [
   {
     path: "/login",
     name: "Log In",
-    component: Login,
+    component: () => import("../views/LoginView.vue"),
   },
   {
     path: "/",
@@ -40,7 +16,7 @@ const routes = [
   {
     path: "/library",
     alias: "/music",
-    component: Music,
+    component: () => import("../views/music/MusicView.vue"),
     meta: {
       breadcrumb: "Library",
     },
@@ -48,7 +24,7 @@ const routes = [
       {
         path: "",
         name: "MusicHome",
-        component: MusicHome,
+        component: () => import("../views/music/MusicHome.vue"),
         meta: {
           breadcrumb: "Home",
           hideBreadcrumb: true,
@@ -57,7 +33,7 @@ const routes = [
       {
         path: "tag/:tag",
         name: "tag",
-        component: Tag,
+        component: () => import("../views/music/TagView.vue"),
         props: true,
         meta: {
           breadcrumb: (route) => formatters.methods.formatTag(route.params.tag),
@@ -66,7 +42,7 @@ const routes = [
       {
         path: "library_adds",
         name: "LibraryAdds",
-        component: LibraryAdds,
+        component: () => import("../views/music/LibraryAdds.vue"),
         meta: {
           breadcrumb: "Library Adds",
         },
@@ -74,21 +50,21 @@ const routes = [
       {
         path: "album/:id",
         name: "album",
-        component: Album,
+        component: () => import("../views/music/AlbumView.vue"),
         props: true,
         meta: { hideBreadcrumb: true },
       },
       {
         path: "artist/:id",
         name: "artist",
-        component: Artist,
+        component: () => import("../views/music/ArtistView.vue"),
         props: true,
         meta: { hideBreadcrumb: true },
       },
       {
         path: "search",
         name: "Search",
-        component: Search,
+        component: () => import ("../views/music/SearchView.vue"),
         meta: {
           breadcrumb: "Search",
         },
@@ -97,15 +73,15 @@ const routes = [
             path: "",
             name: "SearchEverything",
             components: {
-              filters: EverythingFilters,
-              results: EverythingResults,
+              filters: () => import("../components/music/search/EverythingFilters.vue"),
+              results: () => import("../components/music/search/EverythingResults.vue"),
             },
           },
           {
             path: "album",
             components: {
-              filters: AlbumFilters,
-              results: AlbumResults,
+              filters: () => import("../components/music/search/album/AlbumFilters.vue"),
+              results: () => import("../components/music/search/album/AlbumResults.vue"),
             },
             props: {
               results: {
@@ -121,8 +97,8 @@ const routes = [
           {
             path: "track",
             components: {
-              filters: TrackFilters,
-              results: TrackResults,
+              filters: () => import("../components/music/search/track/TrackFilters.vue"),
+              results: () => import("../components/music/search/track/TrackResults.vue"),
             },
             props: {
               results: {
@@ -138,8 +114,8 @@ const routes = [
           {
             path: "artist",
             components: {
-              filters: TermFilter,
-              results: ArtistResults,
+              filters: () => import("../components/music/search/TermFilter.vue"),
+              results: () => import("../components/music/search/artist/ArtistResults.vue"),
             },
             meta: {
               breadcrumb: "Artist",
@@ -158,8 +134,8 @@ const routes = [
           {
             path: "review",
             components: {
-              filters: TermFilter,
-              results: DocumentResults,
+              filters: () => import("../components/music/search/TermFilter.vue"),
+              results: () => import("../components/music/search/document/DocumentResults.vue"),
             },
             meta: {
               breadcrumb: "Review",
@@ -181,18 +157,27 @@ const routes = [
   },
   {
     path: "/reports/rotation/albums",
-    component: RotationAlbums,
+    component: () => import("../views/reports/RotationAlbums.vue"),
   },
   {
     path: "/reports/rotation/plays",
-    component: RotationPlays,
+    component: () => import("../views/reports/RotationPlays.vue"),
   },
   {
     path: "/crates",
-    component: Crates,
+    component: () => import("../views/crates/CratesView.vue"),
   },
-  { path: "/crates/:id", name: "crate", component: Crate, props: true },
-  { path: "/playlist", name: "playlist", component: Playlist },
+  { 
+    path: "/crates/:id", 
+    name: "crate", 
+    component: () => import("../views/crates/CrateView.vue"), 
+    props: true 
+  },
+  { 
+    path: "/playlist", 
+    name: "playlist", 
+    component: () => import("../views/playlist/PlaylistView.vue") 
+  },
 ];
 
 const router = createRouter({
