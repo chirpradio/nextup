@@ -13,6 +13,7 @@ import {
   faRotateRight,
   faPlus,
   faPen,
+  faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -28,5 +29,6 @@ library.add(
   faPlay,
   faRotateRight,
   faPlus,
-  faPen
+  faPen,
+  faRightToBracket
 );
