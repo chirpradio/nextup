@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "qs";
 import router from "../router";
 import { useAuthStore } from "../stores/auth";
 
@@ -156,12 +155,9 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async search(params) {
-    const getter = instance.get(`/search`, {
+  async search(params) {    
+    const getter = instance.get("/search", {
       params,
-      paramsSerializer: function (params) {
-        return qs.stringify(params, { arrayFormat: "brackets" });
-      },
     });
     return await getAndHandleError(getter);
   },
