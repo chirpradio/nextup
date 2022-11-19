@@ -42,6 +42,7 @@ $primary: #822036;
 // @import "~bootstrap/scss/offcanvas"; // Requires transitions
 // @import "~bootstrap/scss/placeholders";
 
+@import "~bootstrap/scss/helpers/ratio";
 
 // Utilities
 @import "~bootstrap/scss/utilities/api";
@@ -136,4 +137,3 @@ button.btn-outline-chirp-red:hover {
 .numeral {
   font-family: "Times New Roman", Times, serif;
 }
-
