@@ -20,7 +20,7 @@
         <ArtistName :album="album" :includeBy="true" />
       </component>
       <p class="my-2">
-        {{ album.year }} &middot; {{ album.label }}
+        {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
       <TagList :tags="album.current_tags" />
