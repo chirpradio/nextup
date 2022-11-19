@@ -27,7 +27,7 @@
     "vue": "^3.2.45",
     "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.1.6",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",

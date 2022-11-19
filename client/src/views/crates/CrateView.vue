@@ -202,6 +202,7 @@ export default {
   },
   created: async function () {
     this.loading = true;
+    await this.cratesStore.getCrate({ crateId: this.id });
     await this.cratesStore.getCrateItems({
       crateId: this.id,
     });

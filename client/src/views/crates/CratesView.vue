@@ -99,9 +99,7 @@ export default {
   mixins: [updateTitle],
   async created() {
     this.updateTitle("My Crates");
-    if (this.cratesStore.crates.length === 0) {
-      await this.cratesStore.getCrates();
-    }
+    await this.cratesStore.getCrates();
   },
   data() {
     return {
