@@ -1,13 +1,13 @@
 <template>
-  <span class="track_title" :class="classObject">{{ track.title }}</span>
+  <span class="track-title" :class="classObject">{{ track.title }}</span>
 </template>
 
 <style>
-.track_title {
+.track-title {
   position: relative;
 }
 
-.track_title::before {
+.track-title::before {
   content: " ";
   display: inline-block;
   font-size: 0.75em;

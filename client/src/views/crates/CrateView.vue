@@ -32,21 +32,21 @@
       @change="onMove"
       tag="ol"
       class="list-group list-group-flush"
-      handle=".crate_item__handle"
+      handle=".crate-item__handle"
     >
       <template #item="{ element, index }">
         <li class="list-group-item">
           <div class="row g-2">
-            <div class="crate_item__handle col-auto">
+            <div class="crate-item__handle col-auto">
               <font-awesome-icon icon="grip-lines" />
             </div>
-            <div class="col-1 me-2 text-end numeral crate_item__duration">
+            <div class="col-1 me-2 text-end numeral crate-item__duration">
               <TrackDuration v-if="element.track" :track="element.track" />
             </div>
             <component
               :is="getKind(element)"
               :element="element"
-              class="col crate_item__details"
+              class="col crate-item__details"
             />
             <div class="col-1">
               <button
@@ -116,21 +116,21 @@
 
 <style>
 @media (max-width: 576px) {
-  .crate_item__duration,
-  .crate_item__details {
+  .crate-item__duration,
+  .crate-item__details {
     font-size: 0.9rem;
   }
 
-  .crate_item__details {
+  .crate-item__details {
     word-break: break-word;
   }
 
-  .crate_item__duration {
+  .crate-item__duration {
     padding: 0;
   }
 }
 
-.crate_item__handle {
+.crate-item__handle {
   cursor: move;
 }
 

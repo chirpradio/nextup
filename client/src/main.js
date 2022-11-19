@@ -1,6 +1,5 @@
 import { createApp } from "vue";
-import { Collapse } from "bootstrap"; // eslint-disable-line no-unused-vars
-import { Dropdown } from "bootstrap"; // eslint-disable-line no-unused-vars
+import { Collapse, Dropdown } from "bootstrap"; // eslint-disable-line no-unused-vars
 import store from "./stores";
 import router from "./router";
 import VueGtag from "vue-gtag-next";

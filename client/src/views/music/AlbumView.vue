@@ -7,7 +7,7 @@
       </div>
       <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
 
-      <h3 class="visually-hidden">Reviews</h3>
+      <h3 class="d-none">Reviews</h3>
       <figure
         v-for="review in album.reviews"
         :key="review.id"

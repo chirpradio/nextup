@@ -49,12 +49,6 @@
   </div>
 </template>
 
-<style>
-.on-air__label {
-  font-size: 0.875rem;
-}
-</style>
-
 <script>
 import AddTrackModal from "../../components/playlist/AddTrackModal.vue";
 import LoadingButton from "../../components/LoadingButton.vue";

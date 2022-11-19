@@ -1,7 +1,7 @@
 <template>
   <form id="filters" class="row row-cols-lg-auto" @submit.prevent="search">
     <div class="flex-grow-1 mr-2 mb-3">
-      <label class="visually-hidden" for="search">Search</label>
+      <label class="d-none" for="search">Search</label>
       <input
         class="form-control"
         id="search"

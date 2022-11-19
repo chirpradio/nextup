@@ -25,7 +25,7 @@
       :disabled="disabled"
     >
       <font-awesome-icon icon="pen" class="me-1" size="sm" />
-      <span class="visually-hidden">toggle dropdown</span>
+      <span class="d-none">toggle dropdown</span>
     </button>
     <div class="dropdown-menu play-button__menu p-2">
       <label class="form-label" for="notes">Note</label>

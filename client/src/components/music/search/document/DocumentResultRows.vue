@@ -5,10 +5,10 @@
       :key="hit._id"
       class="row border-top py-2 mx-0"
     >
-      <div class="col-sm-1 search_result__col">
+      <div class="col-sm-1 search-result__col">
         <AlbumArt :album="hit._source.subject" size="sm" />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-sm-3 search-result__col">
         <div
           v-if="hit._source.subject.is_compilation"
           class="badge bg-secondary"
@@ -20,10 +20,10 @@
           :artist="hit._source.subject.album_artist"
         />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-sm-3 search-result__col">
         <AlbumTitleLink :album="hit._source.subject" />
       </div>
-      <div v-if="hit.highlight" class="col-sm-5 search_result__col">
+      <div v-if="hit.highlight" class="col-sm-5 search-result__col">
         <ul
           v-if="hit.highlight['unsafe_text.normalized']"
           class="list-unstyled"
