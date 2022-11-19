@@ -8,20 +8,10 @@ export const useAuthStore = defineStore("auth", {
     token: "",
     user: {},
     features: {
-      crates: {
-        users: [
-          "billykalb@gmail.com",
-          "lund5000@gmail.com",
-          "mike@nikolich.com",
-          "tony@chirpradio.org",
-          "jenn@chirpradio.org",
-          "buesary@gmail.com",
-          "jlizak@chirpradio.org",
-        ],
-      },
-      playlist: {
-        roles: ["dj"],
-      },
+      // template: {
+      //   users: [],
+      //   roles: [],
+      // },
     },
   }),
   getters: {
@@ -45,14 +35,16 @@ export const useAuthStore = defineStore("auth", {
     },
     isAuthorized: (state) => (feature) => {
       const permitted = state.features[feature];
-      if (permitted.users) {
+
+      if (permitted?.users) {
         return permitted.users.includes(state.user.email);
-      } else if (permitted.roles) {
+      } else if (permitted?.roles) {
         const commonRoles = permitted.roles.filter((role) =>
           state.user.roles.includes(role)
         );
         return commonRoles.length > 0;
       }
+
       return false;
     },
   },
