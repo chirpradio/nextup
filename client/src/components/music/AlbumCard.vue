@@ -1,12 +1,12 @@
 <template>
-  <article class="d-flex flex-column flex-sm-row pt-2 pb-3 border-bottom">
-    <div class="flex-shrink-0">
+  <article
+    class="d-flex flex-column flex-sm-row pt-2 pb-3"
+    :class="containerClass"
+  >
+    <div>
       <AlbumArtLink :album="album" :srcSize="albumArtSrcSize" />
     </div>
-    <div
-      class="album-details flex-shrink-0 ms-sm-3 pt-2 px-0"
-      :class="detailsClass"
-    >
+    <div class="album-details ms-sm-4 pt-2 px-0" :class="detailsClass">
       <component :is="firstHeading">
         <router-link
           v-if="linkToAlbum"
@@ -25,28 +25,9 @@
       </p>
       <TagList :tags="album.current_tags" />
     </div>
-    <ReviewPreview v-if="showReview" class="flex-shrink-1" :album="album" />
+    <ReviewPreview v-if="showReview" class="w-100" :album="album" />
   </article>
 </template>
-
-<style>
-@media (max-width: 576px) {
-  .album-details,
-  .album-details__with_preview {
-    width: 100%;
-  }
-}
-
-@media (min-width: 576px) {
-  .album-details {
-    width: 50%;
-  }
-
-  .album-details__with_preview {
-    width: 33%;
-  }
-}
-</style>
 
 <script>
 import AlbumArtLink from "./AlbumArtLink.vue";
@@ -61,6 +42,10 @@ export default {
     albumArtSrcSize: {
       type: String,
       default: "lg",
+    },
+    border: {
+      type: Boolean,
+      default: true,
     },
     firstHeadingLevel: {
       type: Number,
@@ -83,9 +68,15 @@ export default {
     secondHeading() {
       return `h${this.firstHeadingLevel + 1}`;
     },
+    containerClass() {
+      return {
+        "border-bottom": this.border,
+      };
+    },
     detailsClass() {
       return {
-        "album-details__with_preview": this.showReview,
+        "w-50": this.showReview,
+        "w-100": !this.showReview,
       };
     },
   },
