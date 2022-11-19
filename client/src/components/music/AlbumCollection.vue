@@ -12,6 +12,7 @@
         :key="album.album_id"
         :album="album"
         :hideArtistLink="hideArtistLinks"
+        :showReview="showReview"
       />
       <button
         v-if="more && !loading"
@@ -54,6 +55,10 @@ export default {
     more: Boolean,
     sortBy: [String, Array],
     seeAllLink: Object,
+    showReview: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     sortedAlbums() {

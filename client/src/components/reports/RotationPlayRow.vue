@@ -8,17 +8,7 @@
     </td>
     <td scope="row me-2">{{ index + 1 }}.</td>
     <td>
-      <span
-        v-if="play.album.is_compilation"
-        class="badge rounded-pill bg-secondary"
-      >
-        Compilation
-      </span>
-      <ArtistLink
-        class="col"
-        v-if="!play.album.is_compilation"
-        :artist="play.album.album_artist"
-      />
+      <ArtistName :album="play.album" />
     </td>
     <td><AlbumTitleLink class="col" :album="play.album" /></td>
     <td>{{ play.album.label }}</td>
@@ -62,12 +52,12 @@
 
 <script>
 import AlbumTitleLink from "../music/AlbumTitleLink.vue";
-import ArtistLink from "../music/ArtistLink.vue";
+import ArtistName from "../music/ArtistName.vue";
 import TagList from "../music/TagList.vue";
 
 export default {
   name: "RotationPlayRow",
-  components: { AlbumTitleLink, ArtistLink, TagList },
+  components: { AlbumTitleLink, ArtistName, TagList },
   data() {
     return {
       open: false,

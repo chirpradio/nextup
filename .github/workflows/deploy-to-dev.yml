@@ -14,16 +14,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-    - id: auth
-      uses: google-github-actions/auth@v0
-      with:
-        workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
-        service_account: chirpradiodev@appspot.gserviceaccount.com
     - id: checkout
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.inputs.branch }}
+    - id: auth
+      uses: google-github-actions/auth@v0
+      with:
+        workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
+        service_account: github@chirpradiodev.iam.gserviceaccount.com   
     - id: setup-env-variables
       uses: bluwy/substitute-string-action@v1
       with:

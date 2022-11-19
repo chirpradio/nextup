@@ -54,7 +54,7 @@
               </router-link>
             </div>
           </li>
-          <li class="nav-item" v-if="isAuthorized('crates')">
+          <li class="nav-item">
             <router-link class="nav-link" active-class="active" to="/crates"
               >Crates</router-link
             >

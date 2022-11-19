@@ -115,7 +115,7 @@ async function listAlbumReviews(album) {
   const options = {
     filters: [
       ["doctype", "review"],
-      ["subject", album.entityKey],
+      ["subject", album.entityKey || album.__key],
       ["is_hidden", false],
       ["revoked", false],
     ],
@@ -228,6 +228,7 @@ module.exports = {
   getAlbumsByKeys,
   getFullAlbumDetails,
   addImagesFromLastFm,
+  listAlbumReviews,
   listAlbumTracks,
   options,
   getAlbumsByAlbumArtist,

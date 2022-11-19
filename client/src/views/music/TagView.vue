@@ -5,6 +5,7 @@
     :more="more"
     @more="getMore"
     sortBy="album_artist.name"
+    :showReview="true"
   />
 </template>
 

@@ -31,6 +31,11 @@ indexes:
   - name: class
   - name: established
 
+- kind: PlaylistEvent
+  properties:
+  - name: categories
+  - name: established
+
 - kind: TagEdit
   properties:
   - name: added
@@ -38,7 +43,7 @@ indexes:
   - name: timestamp
     direction: desc
 
-kind: Track
+- kind: Track
   properties:
   - name: album
   - name: revoked

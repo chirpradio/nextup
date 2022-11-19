@@ -25,11 +25,11 @@
       </div>
       <div v-if="hit.highlight" class="col-sm-5 search-result__col">
         <ul
-          v-if="hit.highlight['unsafe_text.normalized']"
+          v-if="hit.highlight['unsafe_text']"
           class="list-unstyled"
         >
           <li
-            v-for="fragment in hit.highlight['unsafe_text.normalized']"
+            v-for="fragment in hit.highlight['unsafe_text']"
             :key="fragment"
             class="mb-1 text-muted whitespace-initial"
           >

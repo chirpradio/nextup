@@ -3,6 +3,7 @@ const { Schema } = gstore;
 
 const documentSchema = new Schema({
   author: { type: Schema.Types.Key, ref: "User", required: true },
+  author_name: { type: String },
   created: { type: Date, required: true },
   doctype: { type: String, required: true },
   is_hidden: { type: Boolean, required: true, default: false },
@@ -14,8 +15,6 @@ const documentSchema = new Schema({
 
 /**
   properties intentionally left out:
-  - author_name: only eight reviews are by users with no User record,
-                  not worth the added confusion
   - timestamp: seems to always match created value
   - title: null for all records
 **/
