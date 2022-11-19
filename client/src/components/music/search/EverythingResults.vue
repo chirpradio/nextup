@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import AlbumResults from "./album/AlbumResults";
-import TrackResults from "./track/TrackResults";
-import ArtistResults from "./artist/ArtistResults";
-import DocumentResults from "./document/DocumentResults";
+import AlbumResults from "./album/AlbumResults.vue";
+import TrackResults from "./track/TrackResults.vue";
+import ArtistResults from "./artist/ArtistResults.vue";
+import DocumentResults from "./document/DocumentResults.vue";
 
 export default {
   name: "EverythingResults",

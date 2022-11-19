@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AlbumTitleLink from "../music/AlbumTitleLink";
+import AlbumTitleLink from "../music/AlbumTitleLink.vue";
 
 export default {
   name: "CrateAlbumSpans",

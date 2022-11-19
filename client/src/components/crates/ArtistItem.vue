@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ArtistLink from "../music/ArtistLink";
+import ArtistLink from "@/components/music/ArtistLink.vue";
 
 export default {
   name: "ArtistItem",

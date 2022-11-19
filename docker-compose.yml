@@ -28,6 +28,8 @@ services:
       - api
 
   elasticsearch:
+    # Our Elasticsearch provider Bonsai runs 7.2
+    # But 7.10 was the closest version we could get running on an M1 Mac
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     container_name: es
     environment:

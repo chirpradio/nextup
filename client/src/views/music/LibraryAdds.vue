@@ -8,8 +8,10 @@
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection";
-import updateTitle from "../../mixins/updateTitle";
+import AlbumCollection from "@/components/music/AlbumCollection.vue";
+import updateTitle from "@/mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "@/stores/albums";
 
 export default {
   name: "LibraryAdds",
@@ -17,20 +19,21 @@ export default {
     AlbumCollection,
   },
   computed: {
+    ...mapStores(useAlbumsStore),
     albums() {
-      return this.$store.getters.libraryAdds;
+      return this.albumsStore.libraryAdds;
     },
     loading() {
-      return this.$store.getters.loadingRecentAlbums;
+      return this.albumsStore.loadingRecentAlbums;
     },
     more() {
       // Boolean that tells the component whether there are more albums to get
-      return this.$store.getters.moreRecentAlbums;
+      return this.albumsStore.moreRecentAlbums;
     },
   },
   async mounted() {
     this.updateTitle("Library Adds");
-    await this.$store.dispatch("getRecentAlbums");
+    await this.albumsStore.getRecentAlbums();
     while (this.albums.length === 0 && this.more) {
       await this.getMore();
     }
@@ -38,7 +41,7 @@ export default {
   mixins: [updateTitle],
   methods: {
     async getMore() {
-      await this.$store.dispatch("getMoreRecentAlbums");
+      await this.albumsStore.getMoreRecentAlbums();
     },
   },
 };

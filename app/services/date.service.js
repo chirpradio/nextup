@@ -12,8 +12,15 @@ function getXDaysPrevious(x) {
   return date;
 }
 
+function getXHoursPrevious(x) {
+  const date = new Date();
+  date.setHours(date.getHours() - x);
+  return date;
+}
+
 module.exports = {
   getEndDateFromHTMLValue,
   getStartDateFromHTMLValue,
   getXDaysPrevious,
+  getXHoursPrevious,
 };

@@ -209,8 +209,23 @@ async function getFullAlbumDetails(albumId) {
   };
 }
 
+async function getAlbumsByKeys(keys) {
+  if (!Array.isArray(keys) || keys.length === 0) {
+    return [];
+  }
+
+  const result = await datastore.get(keys, {
+    wrapNumbers: {
+      integerTypeCastFunction: datastore.int,
+      properties: ["album_id"],
+    },
+  });
+  return result[0].map(renameKey);
+}
+
 module.exports = {
   getAlbumById,
+  getAlbumsByKeys,
   getFullAlbumDetails,
   addImagesFromLastFm,
   listAlbumReviews,

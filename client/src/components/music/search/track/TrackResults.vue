@@ -17,10 +17,12 @@
 </template>
 
 <script>
-import Results from "../Results";
-import TrackResultHeadings from "./TrackResultHeadings";
-import TrackResultRows from "./TrackResultRows";
+import Results from "../ResultsTemplate.vue";
+import TrackResultHeadings from "./TrackResultHeadings.vue";
+import TrackResultRows from "./TrackResultRows.vue";
 import updateTitle from "../../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "TrackResults",
@@ -41,13 +43,14 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useSearchStore),
     results() {
       const defaultResults = {
         hits: [],
         count: undefined,
       };
 
-      return this.$store.getters.results.track || defaultResults;
+      return this.searchStore.results.track || defaultResults;
     },
   },
 };
