@@ -9,6 +9,7 @@
             :firstHeadingLevel="1"
             :linkToAlbum="false"
             :border="false"
+            albumArtSrcSize="xl"
           />
         </div>
         <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
