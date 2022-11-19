@@ -24,10 +24,7 @@
         <AlbumTitleLink :album="hit._source.subject" />
       </div>
       <div v-if="hit.highlight" class="col-sm-5 search-result__col">
-        <ul
-          v-if="hit.highlight['unsafe_text']"
-          class="list-unstyled"
-        >
+        <ul v-if="hit.highlight['unsafe_text']" class="list-unstyled">
           <li
             v-for="fragment in hit.highlight['unsafe_text']"
             :key="fragment"

@@ -155,7 +155,7 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async search(params) {    
+  async search(params) {
     const getter = instance.get("/search", {
       params,
     });

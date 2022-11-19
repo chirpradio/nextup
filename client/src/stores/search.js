@@ -20,7 +20,7 @@ export const useSearchStore = defineStore("search", {
           this.results = results;
         }
 
-        this.loading = false;        
+        this.loading = false;
       }
     },
     async setOffset(offset) {
