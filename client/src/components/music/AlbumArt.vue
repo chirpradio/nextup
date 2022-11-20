@@ -1,5 +1,5 @@
 <template>
-  <img :src="imgSrc" :class="classObject" @error="onError" />
+  <img :src="imgSrc" @error="onError" />
 </template>
 
 <script>
