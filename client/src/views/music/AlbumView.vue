@@ -15,76 +15,27 @@
         <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
 
         <h3 class="d-none">Reviews</h3>
-        <figure v-for="review in album.reviews" :key="review.id" class="py-3">
-          <blockquote class="blockquote">
-            <p v-html="review.unsafe_text"></p>
-          </blockquote>
-          <figcaption v-if="review.author" class="blockquote-footer mt-2">
-            {{ review.author.first_name }} {{ review.author.last_name }} ({{
-              formatDate(review.created)
-            }})
-          </figcaption>
-        </figure>
+        <DocumentFigure
+          v-for="review in album.reviews"
+          :key="review.id"
+          :document="review"
+          class="py-3"
+        />
 
-        <div class="col-xl-9" v-if="album.comments && album.comments.length">
+        <div v-if="album.comments && album.comments.length">
           <h4>Comments</h4>
-          <figure v-for="comment in album.comments" :key="comment.id">
-            <blockquote>
-              <p v-html="comment.unsafe_text"></p>
-            </blockquote>
-            <figcaption v-if="comment.author" class="blockquote-footer">
-              {{ comment.author.first_name }} {{ comment.author.last_name }} ({{
-                formatDate(comment.created)
-              }})
-            </figcaption>
-          </figure>
+          <DocumentFigure
+            v-for="comment in album.comments"
+            :key="comment.id"
+            :document="comment"
+            :compact="true"
+          />
         </div>
       </div>
 
-      <div class="col col-xl-6 bg-light bg-opacity-75">
+      <div class="col col-xl-6 mt-3 mt-xl-0 bg-light bg-opacity-75">
         <h3 class="d-lg-none mt-3">Tracks</h3>
-        <ol
-          class="list-group list-group-unstyled list-group-flush p-1 py-lg-3 px-lg-2 me-lg-4"
-        >
-          <li
-            v-for="track in album.tracks"
-            :key="track.id"
-            class="list-group-item d-flex align-items-start px-1 bg-transparent"
-          >
-            <div class="d-flex flex-column flex-xl-row">
-              <span class="track-number">{{ track.track_num }}.</span>
-              <TrackTag :track="track" class="mt-2 mt-xl-1 ms-lg-1" />
-            </div>
-            <div class="d-flex flex-fill flex-column flex-lg-row ms-2">
-              <div class="me-auto mb-2 mb-lg-0">
-                <div class="mb-1 me-2">
-                  <span class="fw-bold">{{ track.title }}</span>
-                  <span v-if="album.is_compilation">
-                    by
-                    <ArtistLink :artist="track.track_artist" />
-                  </span>
-                </div>
-                <div class="col mb-1">
-                  <TrackDuration :track="track" />
-                  <small class="text-muted fw-light">
-                    &middot; {{ track.bit_rate_kbps }}kbps
-                  </small>
-                </div>
-              </div>
-              <AddToCrate
-                :keyToAdd="track.__key"
-                :limitWidth="true"
-                class="mt-lg-0 col col-lg-3"
-              />
-              <PlayButton
-                :album="album"
-                :categories="album.current_tags"
-                :track="track"
-                class="mt-2 mb-2 mt-lg-0 mb-lg-0 col-11 col-lg-auto"
-              />
-            </div>
-          </li>
-        </ol>
+        <TrackList :album="album" class="p-1 py-lg-3 px-lg-2 me-lg-4" />
       </div>
     </div>
   </div>
@@ -100,12 +51,9 @@
 <script>
 import AddToCrate from "@/components/AddToCrate.vue";
 import RecordSpinner from "@/components/RecordSpinner.vue";
-import ArtistLink from "@/components/music/ArtistLink.vue";
-import TrackDuration from "@/components/music/TrackDuration.vue";
-import TrackTag from "@/components/music/TrackTag.vue";
-import PlayButton from "@/components/music/PlayButton.vue";
 import AlbumCard from "@/components/music/AlbumCard.vue";
-import formatters from "@/mixins/formatters";
+import TrackList from "@/components/music/TrackList.vue";
+import DocumentFigure from "../../components/music/DocumentFigure.vue";
 import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
 import { useAlbumsStore } from "@/stores/albums";
@@ -114,11 +62,9 @@ export default {
   components: {
     AlbumCard,
     AddToCrate,
+    DocumentFigure,
     RecordSpinner,
-    ArtistLink,
-    TrackDuration,
-    TrackTag,
-    PlayButton,
+    TrackList,
   },
   data() {
     return {
@@ -137,7 +83,7 @@ export default {
   created() {
     this.getAlbum();
   },
-  mixins: [formatters, updateTitle],
+  mixins: [updateTitle],
   methods: {
     async getAlbum() {
       this.loading = true;
