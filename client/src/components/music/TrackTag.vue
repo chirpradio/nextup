@@ -1,8 +1,15 @@
 <template>
-  <font-awesome-icon :class="classes" :icon="icon" />
+  <font-awesome-icon
+    :class="classes"
+    :icon="icon"
+    :title="text"
+    :aria-label="text"
+  />
 </template>
 
 <script>
+import trackMixins from "@/mixins/track";
+
 export default {
   name: "TrackTag",
   props: {
@@ -12,20 +19,13 @@ export default {
     },
     track: Object,
   },
+  mixins: [trackMixins],
   computed: {
     explicit() {
-      return (
-        this.track &&
-        this.track.current_tags &&
-        this.track.current_tags.includes("explicit")
-      );
+      return this.isExplicit(this.track);
     },
     recommended() {
-      return (
-        this.track &&
-        this.track.current_tags &&
-        this.track.current_tags.includes("recommended")
-      );
+      return this.isRecommended(this.track);
     },
     icon() {
       if (this.explicit) {
@@ -35,6 +35,15 @@ export default {
       } else {
         return "star";
       }
+    },
+    text() {
+      if (this.explicit) {
+        return "explicit";
+      } else if (this.recommended) {
+        return "recommended";
+      }
+
+      return "";
     },
     classes() {
       const classes = {
