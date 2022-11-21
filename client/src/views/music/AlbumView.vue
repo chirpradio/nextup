@@ -41,13 +41,6 @@
   </div>
 </template>
 
-<style scoped>
-.track-number {
-  min-width: 1.36em;
-  text-align: center;
-}
-</style>
-
 <script>
 import AddToCrate from "@/components/AddToCrate.vue";
 import RecordSpinner from "@/components/RecordSpinner.vue";
