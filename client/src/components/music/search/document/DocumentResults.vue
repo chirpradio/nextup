@@ -17,9 +17,11 @@
 </template>
 
 <script>
-import DocumentResultHeadings from "./DocumentResultHeadings";
-import DocumentResultRows from "./DocumentResultRows";
-import Results from "../Results";
+import DocumentResultHeadings from "./DocumentResultHeadings.vue";
+import DocumentResultRows from "./DocumentResultRows.vue";
+import Results from "../ResultsTemplate.vue";
+import { mapStores } from "pinia";
+import { useSearchStore } from "@/stores/search";
 
 export default {
   name: "DocumentResults",
@@ -39,13 +41,14 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useSearchStore),
     results() {
       const defaultResults = {
         hits: [],
         count: undefined,
       };
 
-      return this.$store.getters.results.document || defaultResults;
+      return this.searchStore.results.document || defaultResults;
     },
   },
 };

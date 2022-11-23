@@ -1,24 +1,24 @@
 import axios from "axios";
-import qs from "qs";
 import router from "../router";
-import store from "../store";
+import { useAuthStore } from "../stores/auth";
 
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 function setAuthorizationHeader(token) {
   instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     console.log(error.response.data);
     if (error.response.status === 401) {
-      store.dispatch("logOut");
+      const authStore = useAuthStore();
+      authStore.logOut();
       router.push({
         name: "Log In",
         query: {
@@ -31,12 +31,8 @@ axios.interceptors.response.use(
 );
 
 async function getAndHandleError(getter) {
-  try {
-    const response = await getter;
-    return response.data;
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await getter;
+  return response.data;
 }
 
 export default {
@@ -95,7 +91,8 @@ export default {
   },
 
   async addToCrate(crateId, params) {
-    await instance.post(`/crate/${crateId}/item`, params);
+    const response = await instance.post(`/crate/${crateId}/item`, params);
+    return response.data;
   },
 
   async removeFromCrate(crateId, index) {
@@ -122,17 +119,45 @@ export default {
     await instance.delete(`/crate/${crateId}`);
   },
 
+  async getPlaylistEvents({ start, end } = {}) {
+    const options = {};
+    if (start || end) {
+      const params = {};
+      if (start) {
+        params.start = start;
+      }
+      if (end) {
+        params.end = end;
+      }
+      options.params = params;
+    }
+
+    return await instance.get("/playlist", options);
+  },
+
+  async addPlaylistTrack(data) {
+    const response = await instance.post("/playlist/track", data);
+    return response.data;
+  },
+
+  async addFreeformPlaylistTrack(data) {
+    const response = await instance.post("/playlist/freeform", data);
+    return response.data;
+  },
+
+  async addBreak() {
+    const response = await instance.post("/playlist/break");
+    return response.data;
+  },
+
   async getRotationPlays(params) {
     const getter = instance.get("/playlist/rotation", { params });
     return await getAndHandleError(getter);
   },
 
   async search(params) {
-    const getter = instance.get(`/search`, {
+    const getter = instance.get("/search", {
       params,
-      paramsSerializer: function (params) {
-        return qs.stringify(params, { arrayFormat: "brackets" });
-      },
     });
     return await getAndHandleError(getter);
   },

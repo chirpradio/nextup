@@ -1,33 +1,31 @@
 <template>
-  <font-awesome-icon :class="classObject" :icon="icon" size="lg" />
+  <font-awesome-icon
+    :class="classes"
+    :icon="icon"
+    :title="text"
+    :aria-label="text"
+  />
 </template>
 
-<style scoped>
-.nopacity {
-  opacity: 0;
-}
-</style>
-
 <script>
+import trackMixins from "@/mixins/track";
+
 export default {
-  name: "TrackExplicit",
+  name: "TrackTag",
   props: {
+    displayWhenSmall: {
+      type: Boolean,
+      default: true,
+    },
     track: Object,
   },
+  mixins: [trackMixins],
   computed: {
     explicit() {
-      return (
-        this.track &&
-        this.track.current_tags &&
-        this.track.current_tags.includes("explicit")
-      );
+      return this.isExplicit(this.track);
     },
     recommended() {
-      return (
-        this.track &&
-        this.track.current_tags &&
-        this.track.current_tags.includes("recommended")
-      );
+      return this.isRecommended(this.track);
     },
     icon() {
       if (this.explicit) {
@@ -38,12 +36,40 @@ export default {
         return "star";
       }
     },
-    classObject() {
-      return {
-        nopacity: !this.explicit && !this.recommended,
+    text() {
+      if (this.explicit) {
+        return "explicit";
+      } else if (this.recommended) {
+        return "recommended";
+      }
+
+      return "";
+    },
+    classes() {
+      const classes = {
         "text-warning": this.recommended,
         "text-danger": this.explicit,
       };
+
+      const empty = !this.explicit && !this.recommended;
+      if (empty === true) {
+        const emptyClassName = this.getEmptyClassName();
+        classes[emptyClassName] = true;
+      }
+
+      return classes;
+    },
+  },
+  methods: {
+    getEmptyClassName() {
+      if (this.displayWhenSmall === false) {
+        const smallOrBelow = window.matchMedia("(max-width: 767px)");
+        if (smallOrBelow.matches === true) {
+          return "d-none";
+        }
+      }
+
+      return "invisible";
     },
   },
 };

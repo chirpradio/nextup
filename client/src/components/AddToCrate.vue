@@ -1,14 +1,14 @@
 <template>
-  <form class="row g-2">
-    <div class="col-11">
+  <form class="add-to-crate row">
+    <div class="col-11 mt-0">
       <select
         class="form-select form-select-sm"
         v-model="selected"
         @change="add"
       >
         <option disabled value="">+ add to crate</option>
-        <optgroup v-if="mostRecent" label="Most recent">
-          <option :value="mostRecent.id">{{ mostRecent.name }}</option>
+        <optgroup v-if="lastAddedTo" label="Last added to">
+          <option :value="lastAddedTo.id">{{ lastAddedTo.name }}</option>
         </optgroup>
         <optgroup label="A-Z">
           <option v-for="crate in crates" :key="crate.id" :value="crate.id">
@@ -20,21 +20,29 @@
     <div class="col-1">
       <font-awesome-icon
         v-if="added"
-        icon="check-circle"
+        icon="circle-check"
         class="text-success"
       />
       <font-awesome-icon
         v-if="error"
-        icon="exclamation-circle"
+        icon="circle-exclamation"
         class="text-danger"
       />
     </div>
   </form>
 </template>
 
-<style scoped></style>
+<style>
+.add-to-crate select {
+  color: var(--dark-red);
+  border-color: var(--dark-red);
+}
+</style>
 
 <script>
+import { mapStores } from "pinia";
+import { useCratesStore } from "../stores/crates";
+
 export default {
   data() {
     return {
@@ -51,19 +59,25 @@ export default {
     },
   },
   computed: {
+    ...mapStores(useCratesStore),
     crates() {
-      return this.$store.getters.crates;
+      return this.cratesStore.crates;
     },
-    mostRecent() {
-      return this.$store.getters.mostRecent;
+    lastAddedTo() {
+      return this.cratesStore.lastAddedTo;
     },
+  },
+  async created() {
+    if (this.cratesStore.crates.length === 0) {
+      await this.cratesStore.getCrates();
+    }
   },
   methods: {
     async add() {
       this.added = false;
       this.error = false;
       try {
-        await this.$store.dispatch("addToCrate", {
+        await this.cratesStore.addToCrate({
           crateId: this.selected,
           params: {
             path: this.keyToAdd.path,

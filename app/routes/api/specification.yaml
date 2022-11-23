@@ -142,6 +142,54 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/TrafficLogEntry'
+    PlaylistTrack:
+      properties:
+        artist:
+          type: array
+        album:
+          type: array
+        track:
+          type: array
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - heavy_rotation
+              - light_rotation
+              - local_classic
+              - local_current
+        notes: 
+          type: string
+    FreeformPlaylistTrack:
+      properties:
+        artist:
+          type: object
+          properties:
+            name:
+              type: string
+        album:
+          type: object
+          properties:
+            title:
+              type: string
+            label:
+              type: string         
+        track:
+          type: object
+          properties:
+            title: string
+        notes:
+          type: string
+        categories:
+          type: array
+          items:
+            type: string
+            enum:
+              - heavy_rotation
+              - light_rotation
+              - local_classic
+              - local_current
 paths:
   /token:
     post:
@@ -532,6 +580,131 @@ paths:
       responses:
         '200':
           description: Item reordered
+        '403':
+          description: Forbidden
+  /playlist:
+    get:
+      security:
+        - Bearer: []
+      summary: Get playlist events
+      description: Returns the most recently played tracks and breaks
+      tags:
+        - Playlist
+      parameters:      
+        - name: start
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'The number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored. Default: 3 hours before the time of the request'
+        - name: end
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 'The number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored. Default: The current time'
+      responses:
+        '200':
+          description: Successful response  
+  /playlist/break:
+    post:
+      security:
+        - Bearer: []
+      summary: Add playlist break
+      description: 
+        Adds a break to the playlist.
+        Only DJs and music directors can add to the playlist.
+      tags:
+        - Playlist
+      responses:
+        '201':
+          description: Item added
+        '403':
+          description: Forbidden
+  /playlist/track:
+    post:
+      security:
+        - Bearer: []
+      summary: Add playlist track
+      description: 
+        Adds a track to the playlist.
+        Only DJs and music directors can add to the playlist.
+      tags:
+        - Playlist
+      requestBody:        
+        content:
+          application/json:
+            schema:              
+              - $ref: '#/components/schemas/PlaylistTrack'
+      responses:
+        '201':
+          description: Item added
+        '403':
+          description: Forbidden
+  /playlist/freeform:
+    post:
+      security:
+        - Bearer: []
+      summary: Add freeform playlist track
+      description: 
+        Adds a freeform track to the playlist.
+        Only DJs and music directors can add to the playlist.
+      tags:
+        - Playlist
+      requestBody:        
+        content:
+          application/json:
+            schema:              
+              - $ref: '#/components/schemas/FreeformPlaylistTrack'
+      responses:
+        '201':
+          description: Item added
+        '403':
+          description: Forbidden
+  /playlist/:id:
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete break or track
+      description: 
+        Delete a track or break from the playlist.
+        Only DJs and music directors can delete from the playlist.
+      tags:
+        - Playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      responses:
+        '200':
+          description: Deleted
+        '403':
+          description: Forbidden
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a track
+      description: 
+        Update a track on the playlist.
+        Only DJs and music directors can update the playlist.
+      tags:
+        - Playlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+        - name: notes
+          in: body
+          required: true
+          schema:
+            type: string 
+      responses:
+        '200':
+          description: Updated
         '403':
           description: Forbidden
   /playlist/rotation:

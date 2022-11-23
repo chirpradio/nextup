@@ -1,7 +1,7 @@
 <template>
   <form id="filters" class="row row-cols-lg-auto" @submit.prevent="search">
     <div class="flex-grow-1 mr-2 mb-3">
-      <label class="visually-hidden" for="search">Search</label>
+      <label class="d-none" for="search">Search</label>
       <input
         class="form-control"
         id="search"
@@ -21,6 +21,8 @@
 <script>
 import formatters from "../../../mixins/formatters";
 import updateTitle from "../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../stores/search";
 
 export default {
   name: "TermFilter",
@@ -29,6 +31,7 @@ export default {
     type: String,
   },
   computed: {
+    ...mapStores(useSearchStore),
     query() {
       const base = {
         term: "",
@@ -51,7 +54,7 @@ export default {
       this.$router.push({ query: this.query });
     },
     dispatch: async function () {
-      await this.$store.dispatch("search", this.query);
+      await this.searchStore.search(this.query);
     },
   },
 };

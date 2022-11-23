@@ -42,17 +42,7 @@
           >
             <div class="row">
               <div class="col">
-                <span
-                  v-if="album.is_compilation"
-                  class="badge rounded-pill bg-secondary"
-                >
-                  Compilation
-                </span>
-                <ArtistLink
-                  class="col"
-                  v-if="!album.is_compilation"
-                  :artist="album.album_artist"
-                />
+                <ArtistName :album="album" />
               </div>
               <AlbumTitleLink class="col" :album="album" />
               <div class="col">{{ album.label }}</div>
@@ -65,26 +55,18 @@
   </div>
 </template>
 
-<style scoped>
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
-
 <script>
-import RecordSpinner from "../../components/RecordSpinner";
-import AlbumTitleLink from "../../components/music/AlbumTitleLink";
-import ArtistLink from "../../components/music/ArtistLink";
-import TagList from "../../components/music/TagList";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import AlbumTitleLink from "@/components/music/AlbumTitleLink.vue";
+import ArtistName from "@/components/music/ArtistName.vue";
+import TagList from "@/components/music/TagList.vue";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "@/stores/albums";
 
 export default {
   name: "RotationAlbums",
   title: "Rotation Albums",
-  components: { RecordSpinner, AlbumTitleLink, ArtistLink, TagList },
+  components: { RecordSpinner, AlbumTitleLink, ArtistName, TagList },
   data() {
     const date = new Date();
     date.setDate(date.getDate() - 7);
@@ -96,6 +78,7 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useAlbumsStore),
     htmlList() {
       const tokens = this.rotationAlbums.map((album) => {
         const artistName = album.is_compilation
@@ -132,7 +115,7 @@ export default {
       },
     },
     rotationAlbums() {
-      return this.$store.getters.rotationAlbums(this.since);
+      return this.albumsStore.rotationAlbums(this.since);
     },
   },
   created() {
@@ -140,23 +123,23 @@ export default {
   },
   methods: {
     async loadAllTaggedAlbums() {
-      await this.$store.dispatch("getTaggedAlbums", {
+      await this.albumsStore.getTaggedAlbums({
         tag: "heavy_rotation",
         limit: 100,
       });
-      while (this.$store.getters.moreAlbumsWithTag("heavy_rotation")) {
-        await this.$store.dispatch("getMoreTaggedAlbums", {
+      while (this.albumsStore.moreAlbumsWithTag("heavy_rotation")) {
+        await this.albumsStore.getMoreTaggedAlbums({
           tag: "heavy_rotation",
           limit: 100,
         });
       }
 
-      await this.$store.dispatch("getTaggedAlbums", {
+      await this.albumsStore.getTaggedAlbums({
         tag: "light_rotation",
         limit: 100,
       });
-      while (this.$store.getters.moreAlbumsWithTag("light_rotation")) {
-        await this.$store.dispatch("getMoreTaggedAlbums", {
+      while (this.albumsStore.moreAlbumsWithTag("light_rotation")) {
+        await this.albumsStore.getMoreTaggedAlbums({
           tag: "light_rotation",
           limit: 100,
         });

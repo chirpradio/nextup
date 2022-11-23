@@ -1,22 +1,23 @@
 <template>
-  <div class="album-collection pb-3">
+  <div class="pb-3">
     <h1 v-if="heading">
-      {{ heading }}
       <router-link v-if="seeAllLink" :to="seeAllLink">
-        <small>see all</small>
+        {{ heading }}
       </router-link>
     </h1>
-    <div class="row px-2">
+    <div class="px-2">
       <AlbumCard
+        class="mb-3"
         v-for="album in sortedAlbums"
         :key="album.album_id"
         :album="album"
         :hideArtistLink="hideArtistLinks"
+        :showReview="showReview"
       />
       <button
         v-if="more && !loading"
         type="button"
-        class="btn btn-chirp-red mt-2"
+        class="btn btn-lg btn-chirp-red mt-2"
         @click="getMore"
       >
         show more albums
@@ -26,49 +27,18 @@
   </div>
 </template>
 
-<style>
-.album-collection {
-  min-height: 30rem;
-}
-</style>
-
 <script>
-import AlbumCard from "./AlbumCard";
-import RecordSpinner from "../RecordSpinner";
+import AlbumCard from "./AlbumCard.vue";
+import RecordSpinner from "../RecordSpinner.vue";
+import { get, shuffle, sortBy } from "lodash";
 
-function shuffle(array) {
-  let m = array.length,
-    t,
-    i;
-
-  // While there remain elements to shuffle…
-  while (m) {
-    // Pick a remaining element…
-    i = Math.floor(Math.random() * m--);
-
-    // And swap it with the current element.
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
-  }
-
-  return array;
-}
-
-function compare(prop, a, b) {
-  if (a[prop] < b[prop]) {
-    return 1;
-  }
-  if (a[prop] > b[prop]) {
-    return -1;
-  }
-  return 0;
-}
-
-function compareByProperty(prop) {
-  return (a, b) => {
-    return compare(prop, a, b);
-  };
+function compareByProperty(array, prop) {
+  return sortBy(array, [
+    function (album) {
+      const value = get(album, prop);
+      return typeof value === "string" ? value.toLowerCase() : null;
+    },
+  ]);
 }
 
 export default {
@@ -85,6 +55,10 @@ export default {
     more: Boolean,
     sortBy: [String, Array],
     seeAllLink: Object,
+    showReview: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     sortedAlbums() {
@@ -96,7 +70,7 @@ export default {
       if (this.sortBy && this.sortBy === "shuffle") {
         sorted = shuffle(sorted);
       } else if (this.sortBy && typeof this.sortBy === "string") {
-        sorted.sort(compareByProperty(this.sortBy));
+        sorted = compareByProperty(sorted, this.sortBy);
       }
 
       if (this.limit) {

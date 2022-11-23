@@ -6,7 +6,7 @@
       v-on:submit.prevent="search"
     >
       <div class="flex-grow-1 mb-3">
-        <label class="visually-hidden" for="search">Search</label>
+        <label class="d-none" for="search">Search</label>
         <input
           class="form-control"
           id="search"
@@ -30,41 +30,45 @@
       </div>
     </form>
 
-    <AlbumCollection
-      class="row"
-      heading="Heavy Rotation"
-      :albums="$store.getters.taggedAlbums('heavy_rotation')"
-      :loading="$store.getters.loadingTaggedAlbums('heavy_rotation')"
-      :limit="4"
-      tag="heavy_rotation"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'tag', params: { tag: 'heavy_rotation' } }"
-    />
-    <AlbumCollection
-      class="row"
-      heading="Light Rotation"
-      :albums="$store.getters.taggedAlbums('light_rotation')"
-      :loading="$store.getters.loadingTaggedAlbums('light_rotation')"
-      :limit="4"
-      tag="light_rotation"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'tag', params: { tag: 'light_rotation' } }"
-    />
-    <AlbumCollection
-      class="row"
-      heading="Library Adds"
-      :albums="$store.getters.libraryAdds"
-      :loading="$store.getters.loadingRecentAlbums"
-      :limit="4"
-      sortBy="shuffle"
-      :seeAllLink="{ name: 'LibraryAdds' }"
-    />
+    <div class="row">
+      <AlbumCollection
+        class="col-12 col-md-6 mb-4"
+        heading="Heavy Rotation ›"
+        :albums="albumsStore.taggedAlbums('heavy_rotation')"
+        :loading="albumsStore.loadingTaggedAlbums('heavy_rotation')"
+        :limit="4"
+        tag="heavy_rotation"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'tag', params: { tag: 'heavy_rotation' } }"
+      />
+      <AlbumCollection
+        class="col-12 col-md-6 mb-4"
+        heading="Light Rotation ›"
+        :albums="albumsStore.taggedAlbums('light_rotation')"
+        :loading="albumsStore.loadingTaggedAlbums('light_rotation')"
+        :limit="4"
+        tag="light_rotation"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'tag', params: { tag: 'light_rotation' } }"
+      />
+      <AlbumCollection
+        class="col-12 col-md-6"
+        heading="Library Adds ›"
+        :albums="albumsStore.libraryAdds"
+        :loading="albumsStore.loadingRecentAlbums"
+        :limit="4"
+        sortBy="shuffle"
+        :seeAllLink="{ name: 'LibraryAdds' }"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import AlbumCollection from "../../components/music/AlbumCollection";
-import updateTitle from "../../mixins/updateTitle";
+import AlbumCollection from "@/components/music/AlbumCollection.vue";
+import updateTitle from "@/mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "@/stores/albums";
 
 export default {
   name: "MusicHome",
@@ -76,10 +80,13 @@ export default {
       term: "",
     };
   },
+  computed: {
+    ...mapStores(useAlbumsStore),
+  },
   mounted() {
-    this.$store.dispatch("getTaggedAlbums", { tag: "heavy_rotation" });
-    this.$store.dispatch("getTaggedAlbums", { tag: "light_rotation" });
-    this.$store.dispatch("getRecentAlbums");
+    this.albumsStore.getTaggedAlbums({ tag: "heavy_rotation" });
+    this.albumsStore.getTaggedAlbums({ tag: "light_rotation" });
+    this.albumsStore.getRecentAlbums();
     this.updateTitle("Library");
   },
   mixins: [updateTitle],

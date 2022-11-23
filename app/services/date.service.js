@@ -1,6 +1,5 @@
 const { DateTime } = require("luxon");
 const DEFAULT_FORMAT = "luxon";
-const HTML_DATE_INPUT_FORMAT = "yyyy-MM-DD";
 const CHICAGO_TIME_ZONE = "America/Chicago";
 
 function currentChicagoDateTime(format) {
@@ -75,6 +74,12 @@ function getXDaysPrevious(x) {
   return date;
 }
 
+function getXHoursPrevious(x) {
+  const date = new Date();
+  date.setHours(date.getHours() - x);
+  return date;
+}
+
 module.exports = {
   currentChicagoDateTime,
   currentChicagoWeekday,
@@ -84,4 +89,5 @@ module.exports = {
   getXDaysPrevious,
   startOfChicagoDayFromHTMLValue,
   fullChicagoISOFromISODate,
+  getXHoursPrevious,
 };

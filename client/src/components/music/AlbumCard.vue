@@ -1,45 +1,84 @@
 <template>
-  <div class="card col-md-3 pt-2 border-light">
-    <AlbumArtLink :album="album" class="card-img-top" imgSize="lg" />
-    <div class="card-body pt-2 pb-4 px-0">
-      <h3 class="card-title">
+  <article
+    class="d-flex flex-column flex-sm-row pt-2 pb-3"
+    :class="containerClass"
+  >
+    <div>
+      <AlbumArtLink :album="album" :srcSize="albumArtSrcSize" />
+    </div>
+    <div class="album-details ms-sm-4 pt-2 px-0" :class="detailsClass">
+      <component :is="firstHeading">
         <router-link
+          v-if="linkToAlbum"
           :to="{ name: 'album', params: { id: album.album_id.value } }"
         >
           {{ album.title }}
         </router-link>
-      </h3>
-      <h4 v-if="!hideArtistLink" class="card-subtitle">
-        <span
-          v-if="album.is_compilation"
-          class="badge rounded-pill bg-secondary"
-        >
-          Compilation
-        </span>
-        <span v-if="!album.is_compilation">
-          by
-          <ArtistLink :artist="album.album_artist" />
-        </span>
-      </h4>
+        <span v-if="!linkToAlbum">{{ album.title }}</span>
+      </component>
+      <component :is="secondHeading" v-if="!hideArtistLink">
+        <ArtistName :album="album" :includeBy="true" />
+      </component>
       <p class="my-2">
-        {{ album.year }} &middot; {{ album.label }}
+        {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
       <TagList :tags="album.current_tags" />
     </div>
-  </div>
+    <ReviewPreview v-if="showReview" class="w-100" :album="album" />
+  </article>
 </template>
 
 <script>
 import AlbumArtLink from "./AlbumArtLink.vue";
-import ArtistLink from "./ArtistLink.vue";
+import ArtistName from "./ArtistName.vue";
+import ReviewPreview from "./ReviewPreview.vue";
 import TagList from "./TagList.vue";
 
 export default {
-  components: { ArtistLink, TagList, AlbumArtLink },
+  components: { ArtistName, TagList, AlbumArtLink, ReviewPreview },
   props: {
     album: Object,
+    albumArtSrcSize: {
+      type: String,
+      default: "lg",
+    },
+    border: {
+      type: Boolean,
+      default: true,
+    },
+    firstHeadingLevel: {
+      type: Number,
+      default: 2,
+    },
     hideArtistLink: Boolean,
+    linkToAlbum: {
+      type: Boolean,
+      default: true,
+    },
+    showReview: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    firstHeading() {
+      return `h${this.firstHeadingLevel}`;
+    },
+    secondHeading() {
+      return `h${this.firstHeadingLevel + 1}`;
+    },
+    containerClass() {
+      return {
+        "border-bottom": this.border,
+      };
+    },
+    detailsClass() {
+      return {
+        "w-50": this.showReview,
+        "w-100": !this.showReview,
+      };
+    },
   },
 };
 </script>
