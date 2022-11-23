@@ -20,7 +20,6 @@
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "luxon": "^3.1.0",
     "pinia": "^2.0.23",
     "pinia-plugin-persistedstate": "^2.3.0",
     "pinia-shared-state": "^0.2.10",
