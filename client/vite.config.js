@@ -43,7 +43,11 @@ export default defineConfig({
           "crates": [
             "./src/views/crates/CratesView.vue",
             "./src/views/crates/CrateView.vue",            
-          ],         
+          ], 
+          "traffic-log": [
+            "./src/views/traffic-log/SpotsView.vue",
+            "./src/views/traffic-log/TrafficLog.vue",
+          ],       
           "reports": [
             "./src/views/reports/RotationAlbums.vue",
             "./src/views/reports/RotationPlays.vue",
