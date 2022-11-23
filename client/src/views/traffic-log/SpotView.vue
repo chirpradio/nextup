@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Spots</h1>
+    <h1>{{ spot.title }}</h1>
     <RecordSpinner v-if="loading" />
     <ul v-if="!loading" class="list-group">
       <li v-for="spot in spots" :key="spot.id" class="list-group-item">
@@ -12,19 +12,22 @@
 
 <script>
 import RecordSpinner from "../../components/RecordSpinner.vue";
+import { mapStores } from "pinia";
+import { useSpotsStore } from "@/stores/spots";
 
 export default {
   components: { RecordSpinner },
   computed: {
-    loading() {
-      return this.$store.getters["spots/loadingSpots"];
-    },
+    ...mapStores(useSpotsStore),
     spots() {
-      return this.$store.getters["spots/spots"];
+      return this.spotsStore.spots;
+    },
+    loading() {
+      return this.spotsStore.loadingSpots;
     },
   },
   mounted() {
-    this.$store.dispatch("spots/getSpots");
+    this.spotsStore.getSpots();
   },
 };
 </script>

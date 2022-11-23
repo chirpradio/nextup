@@ -1,6 +1,6 @@
 import api from "../../services/api.service";
 
-function findSpot (state, id) {
+function findSpot(state, id) {
   return state.spots.find((element) => element.id === id);
 }
 
@@ -121,9 +121,11 @@ const mutations = {
   },
   addTrafficLogEntry(state, payload) {
     const entry = state.trafficLog.find((element) => {
-      return element.dow === payload.dow &&
+      return (
+        element.dow === payload.dow &&
         element.hour === payload.hour &&
-        element.slot === payload.slot;
+        element.slot === payload.slot
+      );
     });
     Object.assign(entry, payload.response);
   },

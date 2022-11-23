@@ -14,24 +14,19 @@
 </template>
 
 <script>
-import { computed, onMounted } from "vue";
-import { useStore } from "vuex";
+import { mapStores } from "pinia";
+import { useSpotsStore } from "@/stores/spots";
 
 export default {
-  setup() {
-    const store = useStore();
-    const trafficLog = computed(() => {
-      const log = store.getters["spots/trafficLog"];
+  computed: {
+    ...mapStores(useSpotsStore),
+    trafficLog() {
+      const log = this.spotsStore.trafficLog;
       return log ? log.filter((entry) => entry.spot) : [];
-    });
-
-    onMounted(() => {
-      store.dispatch("spots/getTrafficLog");
-    });
-
-    return {
-      trafficLog,
-    };
+    },
+  },
+  mounted() {
+    this.spotsStore.getTrafficLog();
   },
 };
 </script>
