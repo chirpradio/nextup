@@ -6,7 +6,9 @@ const DocumentService = require("./document.service");
 const PlaylistEventService = require("./playlistevent.service");
 const PubSubService = require("./pubsub");
 const SearchService = require("./search.service");
+const SpotService = require("./spot.service");
 const TagEditService = require("./tagedit.service");
+const TrafficLogService = require("./trafficLog.service");
 
 module.exports = {
   AlbumService,
@@ -17,5 +19,7 @@ module.exports = {
   PlaylistEventService,
   PubSubService,
   SearchService,
+  SpotService,
   TagEditService,
+  TrafficLogService,
 };

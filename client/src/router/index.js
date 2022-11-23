@@ -190,6 +190,14 @@ const routes = [
     name: "playlist",
     component: () => import("../views/playlist/PlaylistView.vue"),
   },
+  {
+    path: "/traffic-log",
+    component: () => import("../views/traffic-log/TrafficLog.vue"),
+  },
+  {
+    path: "/traffic-log/spots",
+    component: () => import("../views/traffic-log/SpotsView.vue"),
+  },
 ];
 
 const router = createRouter({

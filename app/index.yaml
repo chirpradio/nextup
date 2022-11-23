@@ -59,3 +59,9 @@ indexes:
   - name: duration_ms
   - name: title
   - name: track_artist
+
+- kind: TrafficLogEntry
+  properties:
+  - name: dow
+  - name: hour
+  - name: created
