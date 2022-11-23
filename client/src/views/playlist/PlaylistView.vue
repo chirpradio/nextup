@@ -103,6 +103,7 @@ export default {
     if (this.events.length === 0) {
       this.update();
     }
+    this.playlistStore.pollRotationPlays();
   },
   methods: {
     getComponent(event) {

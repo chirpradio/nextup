@@ -71,7 +71,6 @@
 
 @media (min-width: 768px) {
   .play-button {
-    width: 10em;
     min-width: 10em;
   }
 }
@@ -164,13 +163,13 @@ export default {
     },
     label() {
       if (this.added) {
-        return "Added";
+        return "added";
       } else if (this.holding) {
-        return "Adding...";
+        return "adding...";
       } else if (this.error) {
-        return "Error";
+        return "error";
       } else {
-        return "Hold to play";
+        return "hold to play";
       }
     },
     onAir() {

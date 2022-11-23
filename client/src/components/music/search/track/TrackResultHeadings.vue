@@ -11,6 +11,6 @@
 
 <style scoped>
 .track-heading {
-  padding-left: 1.75em;
+  padding-left: 2em;
 }
 </style>

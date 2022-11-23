@@ -29,8 +29,8 @@ $primary: #822036;
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
 @import "~bootstrap/scss/modal"; // Requires transitions
+@import "~bootstrap/scss/alert";
 
-// @import "~bootstrap/scss/alert";
 // @import "~bootstrap/scss/progress";
 // @import "~bootstrap/scss/toasts";
 // @import "~bootstrap/scss/accordion";
@@ -66,6 +66,7 @@ h4,
 h5,
 h6,
 button,
+select,
 label,
 legend,
 th,

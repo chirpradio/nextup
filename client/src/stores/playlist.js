@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import api from "../services/api.service";
 
+let intervalID;
+
 export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     adding: false,
@@ -13,6 +15,14 @@ export const usePlaylistStore = defineStore("playlist", {
       end: undefined,
     },
   }),
+  getters: {
+    recentPlay: (state) => (album) => {
+      const idToFind = album.id || album.__key?.name;
+      return state.rotationPlays.plays.find(
+        (play) => play.album?.name === idToFind
+      );
+    },
+  },
   actions: {
     async addBreak() {
       this.adding = true;
@@ -37,12 +47,15 @@ export const usePlaylistStore = defineStore("playlist", {
       this.events = [...this.events, ...response.data];
       this.lastUpdated = Date.now();
     },
-    async getRotationPlays({ start, end } = {}) {
-      if (
-        this.rotationPlays.start !== start ||
-        this.rotationPlays.end !== end
-      ) {
-        this.rotationPlays = await api.getRotationPlays({ start, end });
+    async getRecentRotationPlays() {
+      const start = new Date();
+      start.setHours(start.getHours() - 6);
+      this.rotationPlays = await api.getRotationPlays({ start: start.getTime() });
+    },
+    async pollRotationPlays() {
+      this.getRecentRotationPlays();
+      if (!intervalID) {
+        intervalID = setInterval(this.getRecentRotationPlays, 5 * 60 * 1000); // every five minutes
       }
     },
   },

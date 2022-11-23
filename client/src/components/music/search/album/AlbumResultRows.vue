@@ -19,11 +19,11 @@
       </div>
       <div class="col-md-3 search-result__col">
         <AlbumTitleLink :album="hit._source" />
-        <TagList :tags="hit._source.current_tags" />
+        <TagList :tags="hit._source.current_tags" class="mt-1" />
       </div>
       <div class="col-md-2 search-result__col">{{ hit._source.label }}</div>
       <div class="col-md-1 search-result__col">{{ hit._source.year }}</div>
-      <div class="col-md-3 search-result__col mt-2 mt-2-sm">
+      <div class="col-md-3 search-result__col mt-2 mt-md-0">
         <AddToCrate :keyToAdd="hit._source.__key" />
       </div>
     </div>

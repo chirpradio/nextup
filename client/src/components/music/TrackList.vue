@@ -32,6 +32,7 @@
           class="mt-lg-0 col col-lg-3"
         />
         <PlayButton
+          v-if="!recentPlay"
           :album="album"
           :categories="album.current_tags"
           :track="track"
@@ -56,6 +57,8 @@ import PlayButton from "./PlayButton.vue";
 import TrackDuration from "./TrackDuration.vue";
 import ArtistLink from "./ArtistLink.vue";
 import trackMixins from "@/mixins/track";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "@/stores/playlist";
 
 export default {
   components: {
@@ -67,6 +70,12 @@ export default {
   },
   props: {
     album: Object,
+  },
+  computed: {
+    ...mapStores(usePlaylistStore),
+    recentPlay() {
+      return this.playlistStore.recentPlay(this.album);
+    },
   },
   mixins: [trackMixins],
   methods: {
