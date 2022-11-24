@@ -15,6 +15,9 @@ import {
   faPen,
   faRightToBracket,
   faCirclePause,
+  faArrowLeft,
+  faCheck,
+  faSquareCaretLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -32,5 +35,8 @@ library.add(
   faPlus,
   faPen,
   faRightToBracket,
-  faCirclePause
+  faCirclePause,
+  faArrowLeft,
+  faCheck,
+  faSquareCaretLeft
 );

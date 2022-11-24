@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="row mb-2">
-      <div class="col-12 d-flex text-end">
+    <div class="d-flex mb-2">
+      <div class="d-flex flex-fill text-end">
         <span class="font-sans me-2">ON AIR</span>
         <div class="form-check form-switch">
           <input
@@ -12,12 +12,22 @@
           />
         </div>
       </div>
+      <button
+        class="btn btn-link-chirp-red"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#trafficLog"
+        role="button"
+        aria-controls="trafficLog"
+      >
+        <font-awesome-icon icon="square-caret-left" />
+        open traffic log
+      </button>
     </div>
     <div class="row g-2 mb-2">
       <LoadingButton
         class="col h-50 me-1"
         icon="rotate-right"
-        label="Update"
+        label="update"
         :outline="true"
         :loading="loading"
         @click="update"
@@ -26,14 +36,14 @@
         class="col h-50 me-1"
         :class="addButtonClasses"
         icon="play"
-        label="Add track"
+        label="add track"
         @click="addTrack"
       />
       <LoadingButton
         class="col h-50"
         :class="addButtonClasses"
         icon="plus"
-        label="Add break"
+        label="add break"
         :loading="adding"
         @click="addBreak"
       />
@@ -46,8 +56,21 @@
     </ol>
 
     <AddTrackModal ref="addTrackModal" />
+    <TrafficLog id="trafficLog" />
   </div>
 </template>
+
+<style>
+#trafficLog {
+  width: 90%;
+}
+
+@media (min-width: 768px) {
+  #trafficLog {
+    width: 750px;
+  }
+}
+</style>
 
 <script>
 import AddTrackModal from "../../components/playlist/AddTrackModal.vue";
@@ -58,6 +81,7 @@ import TagTotals from "../../components/playlist/TagTotals.vue";
 import updateTitle from "../../mixins/updateTitle";
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "../../stores/playlist";
+import TrafficLog from "../../components/playlist/TrafficLog.vue";
 
 export default {
   components: {
@@ -66,6 +90,7 @@ export default {
     PlaylistBreak,
     PlaylistTrack,
     TagTotals,
+    TrafficLog,
   },
   data() {
     return {

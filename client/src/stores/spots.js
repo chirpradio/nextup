@@ -7,6 +7,7 @@ export const useSpotsStore = defineStore("spots", {
     loadingSpots: false,
     trafficLog: [],
     loadingTrafficLog: false,
+    addingToLog: false,
   }),
   getters: {
     spot: (state) => (id) => {
@@ -62,16 +63,11 @@ export const useSpotsStore = defineStore("spots", {
       this.trafficLog = response;
       this.loadingTrafficLog = false;
     },
-    async addTrafficLogEntry(data) {
-      const response = await api.addTrafficLogEntry(data);
-      const entry = this.trafficLog.find((element) => {
-        return (
-          element.dow === response.dow &&
-          element.hour === response.hour &&
-          element.slot === response.slot
-        );
-      });
+    async addTrafficLogEntry(entry) {
+      this.addingToLog = true;
+      const response = await api.addTrafficLogEntry(entry);
       Object.assign(entry, response);
+      this.addingToLog = false;
     },
   },
 });

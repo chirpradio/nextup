@@ -1,12 +1,7 @@
 <template>
-  <button class="btn btn-sm" :class="classes" :disabled="loading">
+  <button class="btn" :class="classes" :disabled="loading">
     <font-awesome-icon v-if="!loading" :icon="icon" />
-    <RecordSpinner
-      v-if="loading"
-      size="xs"
-      :reverse="!outline"
-      class="nudge-up"
-    />
+    <RecordSpinner v-if="loading" size="xs" class="nudge-up" />
     {{ label }}
   </button>
 </template>
@@ -26,6 +21,10 @@ export default {
   props: {
     icon: String,
     label: String,
+    small: {
+      type: Boolean,
+      default: false,
+    },
     outline: {
       type: Boolean,
       default: false,
@@ -37,12 +36,11 @@ export default {
   },
   computed: {
     classes() {
-      const obj = {};
-      const colorClass = this.outline
-        ? "btn-outline-chirp-red"
-        : "btn-chirp-red";
-      obj[colorClass] = true;
-      return obj;
+      return {
+        "btn-outline-chirp-red": this.outline,
+        "btn-chirp-red": !this.outline,
+        "btn-sm": this.small,
+      };
     },
   },
 };

@@ -208,7 +208,8 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async addTrafficLogEntry(data) {
-    await instance.post("/traffic-log", data);
+  async addTrafficLogEntry(entry) {
+    const response = await instance.post("/traffic-log", entry);
+    return response.data;
   },
 };
