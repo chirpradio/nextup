@@ -9,7 +9,7 @@
           label="refresh"
           :loading="loading"
           class="ms-2 mb-2"
-          small="true"
+          :small="true"
           @click="refresh"
         />
       </div>
@@ -32,7 +32,7 @@
           <div class="col" :class="titleClass(entry)">
             {{ entry.spot.title }}
             <button
-              class="btn"
+              class="btn align-baseline"
               :class="linkClass(entry)"
               @click="select(entry)"
             >

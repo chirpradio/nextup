@@ -5,9 +5,20 @@
     </div>
     <div class="col-10">
       <div class="d-flex flex-column flex-grow-1">
-        <div class="mb-1">
-          <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
-          <span class="fst-italic">{{ album }}</span>
+        <div>
+          <span class="fw-bold">{{ artist }}</span> “{{ title }}” from 
+          <button
+            v-if="!freeform"
+            class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#albumPreview"
+            role="button"
+            aria-controls="albumPreview"
+            @click="emitSelected"
+          >
+            <font-awesome-icon icon="square-caret-left" />
+            {{ album }}
+          </button>
           <span class="text-muted"> ({{ label }})</span>
         </div>
         <TagList :tags="track.categories" class="mb-1" />
@@ -20,6 +31,8 @@
 <script>
 import PlayedTime from "./PlayedTime.vue";
 import TagList from "../music/TagList.vue";
+
+const SELECTED = "selected";
 
 export default {
   components: { PlayedTime, TagList },
@@ -39,6 +52,15 @@ export default {
     label() {
       return this.track.freeform_label || this.track.album.label;
     },
+    freeform() {
+      return this.track.freeform_track_title;
+    },  
   },
+  emits: [SELECTED],
+  methods: {
+    emitSelected() {
+      this.$emit(SELECTED, { album_id: this.track.album.album_id});
+    }
+  }
 };
 </script>

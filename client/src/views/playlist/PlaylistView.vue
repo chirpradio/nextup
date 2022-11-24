@@ -51,23 +51,24 @@
     </div>
     <ol class="list-group list-group-flush list-unstyled border-top">
       <li v-for="event in sorted" :key="event.id">
-        <component :is="getComponent(event)" :track="event" class="py-2" />
+        <component :is="getComponent(event)" :track="event" class="py-2" @selected="updateSelected" />
       </li>
     </ol>
 
     <AddTrackModal ref="addTrackModal" />
-    <TrafficLog id="trafficLog" />
+    <TrafficLog id="trafficLog" class="drawer" />
+    <AlbumPreview id="albumPreview" class="drawer" :album_id="selectedAlbumId" />
   </div>
 </template>
 
 <style>
-#trafficLog {
-  width: 90%;
+.drawer {
+  width: 90% !important;
 }
 
 @media (min-width: 768px) {
-  #trafficLog {
-    width: 750px;
+  .drawer {
+    width: 750px !important;
   }
 }
 </style>
@@ -82,6 +83,7 @@ import updateTitle from "../../mixins/updateTitle";
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "../../stores/playlist";
 import TrafficLog from "../../components/playlist/TrafficLog.vue";
+import AlbumPreview from "../../components/playlist/AlbumPreview.vue";
 
 export default {
   components: {
@@ -91,11 +93,13 @@ export default {
     PlaylistTrack,
     TagTotals,
     TrafficLog,
-  },
+    AlbumPreview
+},
   data() {
     return {
       adding: false,
       loading: false,
+      selectedAlbumId: null,
     };
   },
   computed: {
@@ -153,6 +157,9 @@ export default {
     addTrack() {
       this.$refs.addTrackModal.show();
     },
+    updateSelected(evt) {
+      this.selectedAlbumId = evt.album_id.value;
+    }
   },
 };
 </script>
