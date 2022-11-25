@@ -23,7 +23,7 @@
         <AlbumTitleLink :album="hit._source.album" />
         <TagList :tags="hit._source.album.current_tags" class="mt-1" />
       </div>
-      <div class="col-md-3 search-result__col d-flex align-items-stretch">
+      <div class="col search-result__col d-flex align-items-stretch">
         <TrackTag
           :track="hit._source"
           :display-when-small="false"
@@ -35,12 +35,19 @@
       <div class="col-md-1 search-result__col text-md-end numeral">
         <TrackDuration :track="hit._source" />
       </div>
-      <div class="col-md-3 search-result__col d-flex flex-column mt-2 mt-md-0">
+      <div class="col-auto search-result__col actions d-flex mt-2 mt-md-0">
         <TrackResultActions :track="hit._source" :album="hit._source.album" />
       </div>
+      <div class="col-md-1"></div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.actions {
+  height: fit-content;
+}
+</style>
 
 <script>
 import AlbumArtLink from "../../AlbumArtLink.vue";

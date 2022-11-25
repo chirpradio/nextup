@@ -11,36 +11,36 @@
     <div class="offcanvas-body pt-0">
       <RecordSpinner v-if="loading" />
       <div class="row" v-if="album">
-        <div class="col-12">          
-            <AlbumCard
-              :album="album"
-              :firstHeadingLevel="1"
-              :linkToAlbum="true"
-              :border="false"
-              albumArtSrcSize="xl"
-            />          
+        <div class="col-12">
+          <AlbumCard
+            :album="album"
+            :firstHeadingLevel="1"
+            :linkToAlbum="true"
+            :border="false"
+            albumArtSrcSize="xl"
+          />
 
-            <h3 class="visually-hidden">Reviews</h3>
+          <h3 class="visually-hidden">Reviews</h3>
+          <DocumentFigure
+            v-for="review in album.reviews"
+            :key="review.id"
+            :document="review"
+            class="py-3"
+          />
+
+          <div v-if="album.comments && album.comments.length">
+            <h4>Comments</h4>
             <DocumentFigure
-              v-for="review in album.reviews"
-              :key="review.id"
-              :document="review"
-              class="py-3"
+              v-for="comment in album.comments"
+              :key="comment.id"
+              :document="comment"
+              :compact="true"
             />
-
-            <div v-if="album.comments && album.comments.length">
-              <h4>Comments</h4>
-              <DocumentFigure
-                v-for="comment in album.comments"
-                :key="comment.id"
-                :document="comment"
-                :compact="true"
-              />
-            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -54,7 +54,7 @@ import { useAlbumsStore } from "@/stores/albums";
 export default {
   components: { AlbumCard, DocumentFigure, RecordSpinner },
   props: {
-    album_id: String
+    album_id: String,
   },
   computed: {
     ...mapStores(useAlbumsStore),
@@ -72,7 +72,7 @@ export default {
       this.loading = true;
       await this.albumsStore.getAlbum(newId);
       this.loading = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>

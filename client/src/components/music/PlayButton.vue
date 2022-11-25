@@ -1,7 +1,7 @@
 <template>
   <div v-if="onAir" class="btn-group">
     <button
-      class="btn btn-sm btn-outline-chirp-red play-button h-fit-content"
+      class="btn btn-sm btn-outline-chirp-red play-button fit-content"
       data-reference="parent"
       :class="buttonClasses"
       :disabled="disabled"
@@ -46,8 +46,9 @@
 </template>
 
 <style>
-.h-fit-content {
+.fit-content {
   height: fit-content;
+  width: fit-content;
 }
 
 .play-button__toggle .svg-inline--fa {
@@ -56,7 +57,7 @@
 }
 
 .play-button {
-  width: 80%;
+  min-width: 8em;
   text-align: left;
   background: var(--bright-red);
   background-image: linear-gradient(
@@ -71,7 +72,7 @@
 
 @media (min-width: 768px) {
   .play-button {
-    min-width: 10em;
+    /* min-width: 10em; */
   }
 }
 

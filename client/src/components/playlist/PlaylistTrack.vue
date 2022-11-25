@@ -6,7 +6,7 @@
     <div class="col-10">
       <div class="d-flex flex-column flex-grow-1">
         <div>
-          <span class="fw-bold">{{ artist }}</span> “{{ title }}” from 
+          <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
           <button
             v-if="!freeform"
             class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
@@ -54,13 +54,13 @@ export default {
     },
     freeform() {
       return this.track.freeform_track_title;
-    },  
+    },
   },
   emits: [SELECTED],
   methods: {
     emitSelected() {
-      this.$emit(SELECTED, { album_id: this.track.album.album_id});
-    }
-  }
+      this.$emit(SELECTED, { album_id: this.track.album.album_id });
+    },
+  },
 };
 </script>

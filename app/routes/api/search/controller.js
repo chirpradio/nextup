@@ -1,11 +1,7 @@
 const { SearchService } = require("../../../services");
 
 module.exports = {
-  async handleSearch(
-    req,
-    res,
-    next
-  ) {
+  async handleSearch(req, res, next) {
     try {
       const from = req.query.offset || 0;
       const size = req.query.limit || 50;
@@ -17,5 +13,5 @@ module.exports = {
     } catch (error) {
       next(error);
     }
-  }
+  },
 };

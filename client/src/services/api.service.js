@@ -15,7 +15,7 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error.response.data);
+    console.dir(error.response);
     if (error.response.status === 401) {
       const authStore = useAuthStore();
       authStore.logOut();

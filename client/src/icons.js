@@ -18,6 +18,8 @@ import {
   faArrowLeft,
   faCheck,
   faSquareCaretLeft,
+  faCirclePlus,
+  faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -38,5 +40,7 @@ library.add(
   faCirclePause,
   faArrowLeft,
   faCheck,
-  faSquareCaretLeft
+  faSquareCaretLeft,
+  faCirclePlus,
+  faCompactDisc
 );

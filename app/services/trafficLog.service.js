@@ -232,14 +232,14 @@ async function addEntry(data, user) {
   data.spot_copy = checkForKey("spot_copy", data.spot_copy);
   data.reader = user;
   const now = new Date();
-  data.readtime = now; 
+  data.readtime = now;
   // matches DJDB
   data.log_date = DateTime.now()
     .minus({ days: 1 })
     .setZone("America/Chicago")
     .set({ hour: 18, minute: 0, second: 0, millisecond: 0 })
     .toJSDate();
-  
+
   const entry = new TrafficLogEntry(data);
   await entry.save();
   await entry.populate(["spot", "spot_copy"]);

@@ -51,13 +51,22 @@
     </div>
     <ol class="list-group list-group-flush list-unstyled border-top">
       <li v-for="event in sorted" :key="event.id">
-        <component :is="getComponent(event)" :track="event" class="py-2" @selected="updateSelected" />
+        <component
+          :is="getComponent(event)"
+          :track="event"
+          class="py-2"
+          @selected="updateSelected"
+        />
       </li>
     </ol>
 
     <AddTrackModal ref="addTrackModal" />
     <TrafficLog id="trafficLog" class="drawer" />
-    <AlbumPreview id="albumPreview" class="drawer" :album_id="selectedAlbumId" />
+    <AlbumPreview
+      id="albumPreview"
+      class="drawer"
+      :album_id="selectedAlbumId"
+    />
   </div>
 </template>
 
@@ -93,8 +102,8 @@ export default {
     PlaylistTrack,
     TagTotals,
     TrafficLog,
-    AlbumPreview
-},
+    AlbumPreview,
+  },
   data() {
     return {
       adding: false,
@@ -159,7 +168,7 @@ export default {
     },
     updateSelected(evt) {
       this.selectedAlbumId = evt.album_id.value;
-    }
+    },
   },
 };
 </script>
