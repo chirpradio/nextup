@@ -8,6 +8,7 @@ const PubSubService = require("./pubsub");
 const SearchService = require("./search.service");
 const SpotService = require("./spot.service");
 const TagEditService = require("./tagedit.service");
+const TrackService = require("./track.service");
 const TrafficLogService = require("./trafficLog.service");
 
 module.exports = {
@@ -21,5 +22,6 @@ module.exports = {
   SearchService,
   SpotService,
   TagEditService,
+  TrackService,
   TrafficLogService,
 };

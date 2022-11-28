@@ -65,6 +65,14 @@ export default {
     return await getAndHandleError(getter);
   },
 
+  async updateTrackTags(album_id, track_num, tags) {
+    const response = await instance.patch(
+      `/album/${album_id.value}/track/${track_num}`,
+      { tags }
+    );
+    return response.data;
+  },
+
   async getArtist(id) {
     const getter = instance.get(`/artist/${id}`);
     return await getAndHandleError(getter);
