@@ -18,8 +18,8 @@ jobs:
     - id: auth
       uses: google-github-actions/auth@v1
       with:
-        workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
-        service_account: github@chirpradiodev.iam.gserviceaccount.com   
+        workload_identity_provider: projects/292714882487/locations/global/workloadIdentityPools/integrations/providers/github-provider
+        service_account: github@chirpradio-hrd.iam.gserviceaccount.com   
     - id: setup-env-variables
       uses: bluwy/substitute-string-action@v2
       with:
