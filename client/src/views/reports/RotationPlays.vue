@@ -70,7 +70,7 @@ import RecordSpinner from "@/components/RecordSpinner.vue";
 import RotationPlayRow from "@/components/reports/RotationPlayRow.vue";
 import { mapStores } from "pinia";
 import { useAlbumsStore } from "@/stores/albums";
-import { usePlaylistStore } from "@/stores/playlist";
+import { useReportsStore } from "@/stores/reports";
 
 function sortByPlayCountThenLocal(a, b) {
   // sort by play count first
@@ -112,7 +112,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useAlbumsStore, usePlaylistStore),
+    ...mapStores(useAlbumsStore, useReportsStore),
     htmlFrom: {
       /*
         get a value that the date input will accept
@@ -162,7 +162,7 @@ export default {
       },
     },
     rotationPlays() {
-      const plays = this.albumsStore.rotationPlays;
+      const plays = this.reportsStore.rotationPlays.plays;
       const albums = [
         ...this.albumsStore.taggedAlbums("heavy_rotation"),
         ...this.albumsStore.taggedAlbums("light_rotation"),
@@ -201,7 +201,7 @@ export default {
       this.loading = true;
       await Promise.all([
         this.loadAllTaggedAlbums(),
-        this.playlistStore.getRotationPlays({
+        this.reportsStore.getRotationPlays({
           start: this.from.getTime(),
           end: this.to.getTime(),
         }),
