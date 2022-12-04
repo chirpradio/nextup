@@ -19,16 +19,16 @@ jobs:
       id-token: write
     steps:
     - id: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.inputs.branch }}
     - id: auth
-      uses: google-github-actions/auth@v0
+      uses: google-github-actions/auth@v1
       with:
         workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
         service_account: github@chirpradiodev.iam.gserviceaccount.com   
     - id: setup-env-variables
-      uses: bluwy/substitute-string-action@v1
+      uses: bluwy/substitute-string-action@v2
       with:
         _input-file: ./app/env_variables.yaml
         _output-file: ./app/env_variables.yaml
@@ -52,7 +52,7 @@ jobs:
       working-directory: ./client
       run: npm run build
     - id: deploy
-      uses: google-github-actions/deploy-appengine@main
+      uses: google-github-actions/deploy-appengine@v1
       with:
         deliverables: ./app/app.yaml
         version: ${{ github.event.inputs.version }}

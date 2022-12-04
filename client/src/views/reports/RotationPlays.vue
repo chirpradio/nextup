@@ -162,7 +162,7 @@ export default {
       },
     },
     rotationPlays() {
-      const plays = this.albumsStore.rotationPlays;
+      const plays = this.reportsStore.rotationPlays.plays;
       const albums = [
         ...this.albumsStore.taggedAlbums("heavy_rotation"),
         ...this.albumsStore.taggedAlbums("light_rotation"),

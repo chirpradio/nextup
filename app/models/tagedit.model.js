@@ -6,7 +6,7 @@ const tagEditSchema = new Schema({
   removed: { type: Array },
   author: { type: Schema.Types.Key, ref: "User" },
   subject: { type: Schema.Types.Key },
-  timestamp: { type: Date },
+  timestamp: { type: Date, default: gstore.defaultValues.NOW },
 });
 
 module.exports = gstore.model("TagEdit", tagEditSchema);

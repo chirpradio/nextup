@@ -321,6 +321,38 @@ paths:
           description: Successful response
         '404':
           description: Not found
+  /album/{album_id}/track/{track_num}:
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a track
+      description: Tag a track as explicit, recommended, or neither
+      tags:
+        - Albums
+      parameters:
+        - name: album_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: track_num
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: tags
+          in: body
+          required: true
+          schema:
+            type: array 
+            items:
+              type: string
+              enum:
+                - explicit
+                - recommended              
+      responses:
+        '200':
+          description: Updated
   /artist/{id}:
     get:
       security:

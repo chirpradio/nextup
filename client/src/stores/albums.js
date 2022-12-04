@@ -128,5 +128,14 @@ export const useAlbumsStore = defineStore("albums", {
         this.albums[album.album_id.value] = album;
       }
     },
+    async updateTrackTags({ album_id, track, tags } = {}) {
+      const oldTags = [...track.current_tags];
+      track.current_tags = tags;
+      try {
+        await api.updateTrackTags(album_id, track.track_num, tags);
+      } catch (error) {
+        track.current_tags = oldTags;
+      }
+    },
   },
 });

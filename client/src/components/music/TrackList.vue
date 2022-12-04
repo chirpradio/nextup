@@ -1,17 +1,27 @@
 <template>
-  <ol class="list-group list-group-unstyled list-group-flush">
-    <li
-      v-for="track in album.tracks"
-      :key="track.id"
-      class="list-group-item d-flex flex-column flex-md-row align-items-start px-1 bg-transparent"
-      :class="listItemClasses(track)"
-    >
-      <div class="d-flex flex-fill">
+  <div>
+    <ol class="list-group list-group-unstyled list-group-flush mb-5 mb-lg-3">
+      <li
+        v-for="track in album.tracks"
+        :key="track.id"
+        class="list-group-item d-flex flex-column fled-md-row align-items-start px-1 bg-transparent"
+        :class="listItemClasses(track)"
+      >
         <div class="d-flex flex-column flex-xl-row">
           <span class="track-number">{{ track.track_num }}.</span>
-          <TrackTag :track="track" class="mt-2 mt-xl-1 ms-lg-1" />
+          <TrackTag
+            v-if="!editing"
+            :track="track"
+            class="mt-2 mt-xl-1 ms-lg-1"
+          />
+          <TrackTagEditor
+            v-if="editing"
+            :track="track"
+            :album_id="album.album_id"
+            class="ms-lg-1"
+          />
         </div>
-        <div class="d-flex flex-column flex-lg-row flex-fill ms-2">
+        <div class="d-flex flex-fill flex-column flex-lg-row ms-2">
           <div class="me-auto mb-2 mb-lg-0">
             <div class="mb-1 me-2">
               <span>{{ track.title }}</span>
@@ -27,24 +37,35 @@
               </small>
             </div>
           </div>
+          <AddToCrate
+            :keyToAdd="track.__key"
+            :limitWidth="true"
+            class="mt-lg-0 me-2 ms-4 ms-md-0"
+          />
+          <PlayButton
+            :album="album"
+            :categories="album.current_tags"
+            :track="track"
+            class="mt-0 mb-0"
+          />
         </div>
-      </div>
-      <div class="d-flex">
-        <AddToCrate
-          :keyToAdd="track.__key"
-          :limitWidth="true"
-          class="mt-lg-0 me-2 ms-4 ms-md-0"
-        />
-        <PlayButton
-          v-if="!recentPlay"
-          :album="album"
-          :categories="album.current_tags"
-          :track="track"
-          class="mt-0 mb-0"
-        />
-      </div>
-    </li>
-  </ol>
+      </li>
+    </ol>
+    <button
+      v-if="!editing"
+      class="btn btn-sm btn-outline-chirp-red"
+      @click="startEditing"
+    >
+      edit tags
+    </button>
+    <button
+      v-if="editing"
+      class="btn btn-sm btn-outline-chirp-red"
+      @click="finishEditing"
+    >
+      done editing
+    </button>
+  </div>
 </template>
 
 <style scoped>
@@ -63,6 +84,7 @@ import ArtistLink from "./ArtistLink.vue";
 import trackMixins from "@/mixins/track";
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "@/stores/playlist";
+import TrackTagEditor from "./TrackTagEditor.vue";
 
 export default {
   components: {
@@ -71,6 +93,7 @@ export default {
     PlayButton,
     TrackDuration,
     TrackTag,
+    TrackTagEditor,
   },
   props: {
     album: Object,
@@ -80,6 +103,10 @@ export default {
     recentPlay() {
       return this.playlistStore.recentPlay(this.album);
     },
+  data() {
+    return {
+      editing: false,
+    };
   },
   mixins: [trackMixins],
   methods: {
@@ -88,6 +115,12 @@ export default {
         "fw-bold": this.isRecommended(track),
         "text-muted": this.isExplicit(track),
       };
+    },
+    startEditing() {
+      this.editing = true;
+    },
+    finishEditing() {
+      this.editing = false;
     },
   },
 };
