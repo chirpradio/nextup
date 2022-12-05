@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex flex-column">
-    <button class="btn p-0 m-0" @click="toggle('recommended')">
+  <div class="d-flex flex-row flex-md-column">
+    <button class="btn p-0 me-2 m-md-0" @click="toggle('recommended')">
       <font-awesome-icon icon="star" :class="recommendedClasses" />
     </button>
     <button class="btn p-0 m-0" @click="toggle('explicit')">

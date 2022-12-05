@@ -18,7 +18,7 @@
     </button>
     <button
       type="button"
-      class="btn btn-sm btn-outline-chirp-red dropdown-toggle dropdown-toggle-split play-button__toggle h-fit-content bg-white"
+      class="btn btn-sm btn-outline-chirp-red dropdown-toggle dropdown-toggle-split play-button__toggle fit-content bg-white"
       data-bs-toggle="dropdown"
       aria-expanded="false"
       title="play with a note"
