@@ -7,6 +7,7 @@
       <div class="d-flex flex-column flex-grow-1">
         <div>
           <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
+          <span class="fst-italic" v-if="freeform">{{ album }}</span>
           <button
             v-if="!freeform"
             class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
