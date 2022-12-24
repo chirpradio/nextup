@@ -65,19 +65,12 @@
   </div>
 </template>
 
-<style scoped>
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
-
 <script>
-import RecordSpinner from "../../components/RecordSpinner";
-import RotationPlayRow from "../../components/reports/RotationPlayRow";
+import RecordSpinner from "@/components/RecordSpinner.vue";
+import RotationPlayRow from "@/components/reports/RotationPlayRow.vue";
+import { mapStores } from "pinia";
+import { useAlbumsStore } from "@/stores/albums";
+import { useReportsStore } from "@/stores/reports";
 
 function sortByPlayCountThenLocal(a, b) {
   // sort by play count first
@@ -119,6 +112,7 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useAlbumsStore, useReportsStore),
     htmlFrom: {
       /*
         get a value that the date input will accept
@@ -168,10 +162,10 @@ export default {
       },
     },
     rotationPlays() {
-      const plays = this.$store.getters.rotationPlays;
+      const plays = this.reportsStore.rotationPlays.plays;
       const albums = [
-        ...this.$store.getters.taggedAlbums("heavy_rotation"),
-        ...this.$store.getters.taggedAlbums("light_rotation"),
+        ...this.albumsStore.taggedAlbums("heavy_rotation"),
+        ...this.albumsStore.taggedAlbums("light_rotation"),
       ];
 
       const grouped = albums.map((album) => {
@@ -207,7 +201,7 @@ export default {
       this.loading = true;
       await Promise.all([
         this.loadAllTaggedAlbums(),
-        this.$store.dispatch("getRotationPlays", {
+        this.reportsStore.getRotationPlays({
           start: this.from.getTime(),
           end: this.to.getTime(),
         }),
@@ -215,23 +209,23 @@ export default {
       this.loading = false;
     },
     async loadAllTaggedAlbums() {
-      await this.$store.dispatch("getTaggedAlbums", {
+      await this.albumsStore.getTaggedAlbums({
         tag: "heavy_rotation",
         limit: 100,
       });
-      while (this.$store.getters.moreAlbumsWithTag("heavy_rotation")) {
-        await this.$store.dispatch("getMoreTaggedAlbums", {
+      while (this.albumsStore.moreAlbumsWithTag("heavy_rotation")) {
+        await this.albumsStore.getMoreTaggedAlbums({
           tag: "heavy_rotation",
           limit: 100,
         });
       }
 
-      await this.$store.dispatch("getTaggedAlbums", {
+      await this.albumsStore.getTaggedAlbums({
         tag: "light_rotation",
         limit: 100,
       });
-      while (this.$store.getters.moreAlbumsWithTag("light_rotation")) {
-        await this.$store.dispatch("getMoreTaggedAlbums", {
+      while (this.albumsStore.moreAlbumsWithTag("light_rotation")) {
+        await this.albumsStore.getMoreTaggedAlbums({
           tag: "light_rotation",
           limit: 100,
         });

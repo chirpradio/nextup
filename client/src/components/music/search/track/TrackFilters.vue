@@ -160,6 +160,8 @@
 <script>
 import queryMethods from "../../../../mixins/queryMethods";
 import updateTitle from "../../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../../stores/search";
 
 export default {
   name: "TrackFilters",
@@ -169,6 +171,7 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useSearchStore),
     query() {
       return {
         type: "track",
@@ -216,7 +219,7 @@ export default {
       this.toggleFilters();
     },
     dispatch: async function () {
-      await this.$store.dispatch("search", this.query);
+      await this.searchStore.search(this.query);
     },
     toggleFilters: function () {
       this.filtersOpen = !this.filtersOpen;

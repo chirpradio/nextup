@@ -18,7 +18,7 @@
       @click="edit"
       aria-label="edit"
     >
-      <font-awesome-icon icon="edit" />
+      <font-awesome-icon icon="pen-to-square" />
     </button>
     <button
       class="btn btn-link-chirp-red"
@@ -26,7 +26,7 @@
       @click="save"
       aria-label="save"
     >
-      <font-awesome-icon icon="check-square" />
+      <font-awesome-icon icon="square-check" />
     </button>
   </div>
 </template>

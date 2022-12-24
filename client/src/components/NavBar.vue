@@ -55,7 +55,14 @@
             </div>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/crates">Crates</router-link>
+            <router-link class="nav-link" active-class="active" to="/crates"
+              >Crates</router-link
+            >
+          </li>
+          <li class="nav-item" v-if="isAuthorized('playlist')">
+            <router-link class="nav-link" active-class="active" to="/playlist"
+              >Playlist</router-link
+            >
           </li>
           <li class="nav-item dropdown">
             <button
@@ -79,7 +86,7 @@
         </ul>
         <form
           id="navbarSearch"
-          class="form-inline my-2 my-lg-0"
+          class="form-inline my-2 my-lg-0 me-2"
           v-on:submit.prevent="search"
         >
           <input
@@ -90,24 +97,7 @@
             aria-label="Search"
           />
         </form>
-        <div class="dropdown">
-          <button
-            class="btn btn-outline-link navbar-text dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {{ userName }}
-          </button>
-          <div
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="dropdownMenuButton"
-          >
-            <button class="dropdown-item" @click="logOut">log out</button>
-          </div>
-        </div>
+        <button class="btn btn-outline-light" @click="logOut">log out</button>
       </div>
     </div>
   </nav>
@@ -124,6 +114,9 @@
 </style>
 
 <script>
+import { mapStores } from "pinia";
+import { useAuthStore } from "../stores/auth";
+
 export default {
   name: "NavBar",
   data() {
@@ -132,17 +125,21 @@ export default {
     };
   },
   computed: {
+    ...mapStores(useAuthStore),
     isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+      return this.authStore.isAuthenticated;
     },
     userName() {
-      const user = this.$store.state.auth.user;
+      const user = this.authStore.user;
       return `${user.first_name} ${user.last_name}`;
     },
   },
   methods: {
+    isAuthorized(feature) {
+      return this.authStore.isAuthorized(feature);
+    },
     logOut() {
-      this.$store.dispatch("logOut");
+      this.authStore.logOut();
       this.$router.push("/login");
     },
     search() {

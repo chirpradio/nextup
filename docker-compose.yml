@@ -28,7 +28,9 @@ services:
       - api
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    # Our Elasticsearch provider Bonsai runs 7.2
+    # But 7.10 was the closest version we could get running on an M1 Mac
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     container_name: es
     environment:
       - bootstrap.memory_lock=true
@@ -46,7 +48,7 @@ services:
       - es
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.2.0
+    image: docker.elastic.co/kibana/kibana:7.10.2
     environment:
       ELASTICSEARCH_URL: http://es:9200
       ELASTICSEARCH_HOSTS: http://es:9200

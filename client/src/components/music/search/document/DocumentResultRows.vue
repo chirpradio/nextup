@@ -5,10 +5,10 @@
       :key="hit._id"
       class="row border-top py-2 mx-0"
     >
-      <div class="col-sm-1 search_result__col">
-        <AlbumArt :album="hit._source.subject" size="sm" />
+      <div class="col-md-1 search-result__col no-overflow">
+        <AlbumArtLink :album="hit._source.subject" srcSize="med" />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-md-3 search-result__col">
         <div
           v-if="hit._source.subject.is_compilation"
           class="badge bg-secondary"
@@ -20,16 +20,13 @@
           :artist="hit._source.subject.album_artist"
         />
       </div>
-      <div class="col-sm-3 search_result__col">
+      <div class="col-md-3 search-result__col">
         <AlbumTitleLink :album="hit._source.subject" />
       </div>
-      <div v-if="hit.highlight" class="col-sm-5 search_result__col">
-        <ul
-          v-if="hit.highlight['unsafe_text.normalized']"
-          class="list-unstyled"
-        >
+      <div v-if="hit.highlight" class="col-md-5 search-result__col">
+        <ul v-if="hit.highlight['unsafe_text']" class="list-unstyled">
           <li
-            v-for="fragment in hit.highlight['unsafe_text.normalized']"
+            v-for="fragment in hit.highlight['unsafe_text']"
             :key="fragment"
             class="mb-1 text-muted whitespace-initial"
           >
@@ -48,16 +45,16 @@
 </style>
 
 <script>
-import AlbumArt from "../../AlbumArt";
-import AlbumTitleLink from "../../AlbumTitleLink";
-import ArtistLink from "../../ArtistLink";
+import AlbumArtLink from "../../AlbumArtLink.vue";
+import AlbumTitleLink from "../../AlbumTitleLink.vue";
+import ArtistLink from "../../ArtistLink.vue";
 
 const startsWithCapital = new RegExp("^[A-Z]");
 const endsWithSentenceBoundary = new RegExp("[.!?]$");
 
 export default {
   name: "DocumentResultRows",
-  components: { AlbumArt, AlbumTitleLink, ArtistLink },
+  components: { AlbumArtLink, AlbumTitleLink, ArtistLink },
   props: {
     results: {
       type: Object,

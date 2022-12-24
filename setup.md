@@ -131,11 +131,11 @@ Note: this import process will take over an hour to complete.
 ## Set up the front end
 Open a new Terminal window. From the /nextup/client directory, run the following commands:
 `npm install`
-`npm run serve`
+`npm run dev`
 
 This runs some updates, generates some CSS warnings you can ignore, and starts serving the front end locally.
 
-Once it's done, navigate to http://localhost:8080 in your browser and log in. Changing JavaScript and Vue files in the /client directory will automatically reload the app in your browser.
+Once it's done, navigate to http://127.0.0.1:5173/ in your browser and log in. Changing JavaScript and Vue files in the /client directory will automatically reload the app in your browser.
 
 # Test your NextUp installation
 If you can log in successfully, see some albums, and successfully run a search, your installation is complete!

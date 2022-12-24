@@ -11,13 +11,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - id: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: main
+    - id: auth
+      uses: google-github-actions/auth@v1
+      with:
+        workload_identity_provider: projects/292714882487/locations/global/workloadIdentityPools/integrations/providers/github-provider
+        service_account: github@chirpradio-hrd.iam.gserviceaccount.com   
     - id: setup-env-variables
-      uses: bluwy/substitute-string-action@v1
+      uses: bluwy/substitute-string-action@v2
       with:
         _input-file: ./app/env_variables.yaml
         _output-file: ./app/env_variables.yaml
@@ -41,9 +49,8 @@ jobs:
       working-directory: ./client
       run: npm run build
     - id: deploy
-      uses: google-github-actions/deploy-appengine@main
+      uses: google-github-actions/deploy-appengine@v1
       with:
-        credentials: ${{ secrets.gcp_credentials }}
         deliverables: ./app/app.yaml
         version: ${{ github.event.inputs.version }}
         promote: true

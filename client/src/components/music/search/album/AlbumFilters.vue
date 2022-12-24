@@ -74,10 +74,13 @@
 <script>
 import queryMethods from "../../../../mixins/queryMethods";
 import updateTitle from "../../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../../stores/search";
 
 export default {
   name: "AlbumFilters",
   computed: {
+    ...mapStores(useSearchStore),
     query() {
       const base = {
         type: "album",
@@ -113,7 +116,7 @@ export default {
       });
     },
     dispatch: async function () {
-      await this.$store.dispatch("search", this.query);
+      await this.searchStore.search(this.query);
     },
   },
 };

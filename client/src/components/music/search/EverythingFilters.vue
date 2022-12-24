@@ -1,7 +1,11 @@
 <template>
-  <form id="filters" class="row row-cols-lg-auto" v-on:submit.prevent="search">
+  <form
+    id="filters"
+    class="row row-cols-lg-auto"
+    v-on:submit.prevent="updateQuery"
+  >
     <div class="flex-grow-1 mr-2 mb-3">
-      <label class="visually-hidden" for="search">Search</label>
+      <label class="d-none" for="search">Search</label>
       <input
         class="form-control"
         id="search"
@@ -54,6 +58,8 @@
 
 <script>
 import updateTitle from "../../../mixins/updateTitle";
+import { mapStores } from "pinia";
+import { useSearchStore } from "../../../stores/search";
 
 export default {
   name: "EverythingFilters",
@@ -64,22 +70,25 @@ export default {
     };
   },
   created() {
-    this.dispatch();
+    this.search();
     this.updateTitle("Search");
   },
   watch: {
-    "$route.query": "dispatch",
+    "$route.query": "search",
+  },
+  computed: {
+    ...mapStores(useSearchStore),
   },
   methods: {
-    search: function () {
+    updateQuery: function () {
       this.$gtag.event("Search", {
         event_category: "Library",
         event_label: "Search Everything",
       });
       this.$router.push({ query: { term: this.term } });
     },
-    dispatch: async function () {
-      await this.$store.dispatch("search", this.$route.query);
+    search: async function () {
+      await this.searchStore.search(this.$route.query);
     },
   },
 };

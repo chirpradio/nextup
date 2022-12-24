@@ -1,4 +1,4 @@
-const gstore = require("../db").gstore;
+const gstore = require("../db/index").gstore;
 const { Schema } = gstore;
 const crypto = require("crypto");
 
@@ -37,8 +37,16 @@ userSchema.methods.authenticate = function (plainText) {
   return hash === rehash;
 };
 
+userSchema.methods.isDJ = function () {
+  return this.roles.includes("dj");
+};
+
 userSchema.methods.isMusicDirector = function () {
   return this.roles.includes("music_director");
+};
+
+userSchema.methods.isTrafficLogAdmin = function () {
+  return this.roles.includes("traffic_log_admin");
 };
 
 module.exports = gstore.model("User", userSchema);

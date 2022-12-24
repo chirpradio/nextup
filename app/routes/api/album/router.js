@@ -3,7 +3,9 @@ const {
   validateLimit,
   validateOffset,
   validateTag,
+  validateTags,
   validateTimestamp,
+  validateTrackNum,
 } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
@@ -27,5 +29,13 @@ router.get(
 );
 
 router.get("/:album_id", controller.getAlbumById);
+
+router.patch(
+  "/:album_id/track/:track_num",
+  validateTrackNum,
+  validateTags,
+  checkErrors,
+  controller.updateTrack
+);
 
 module.exports = router;
