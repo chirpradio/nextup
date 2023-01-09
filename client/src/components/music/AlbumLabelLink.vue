@@ -5,7 +5,9 @@
       path: '/library/search/album',
       query: {
         type: 'album',
-        'album[label]': albumLabel,
+        album: {
+          label: albumLabel,
+        },
         offset: 0,
         limit: 50,
       },

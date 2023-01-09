@@ -5,7 +5,9 @@
       path: '/library/search/album',
       query: {
         type: 'album',
-        'album[year]': albumYear,
+        album: {
+          year: albumYear,
+        },
         offset: 0,
         limit: 50,
       },
