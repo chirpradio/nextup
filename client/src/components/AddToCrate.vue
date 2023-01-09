@@ -68,7 +68,7 @@ export default {
     },
   },
   async created() {
-    if (this.cratesStore.crates.length === 0) {
+    if (this.cratesStore.crates.length === 0 && !this.cratesStore.loadingCrates) {
       await this.cratesStore.getCrates();
     }
   },
