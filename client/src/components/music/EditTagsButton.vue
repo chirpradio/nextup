@@ -7,7 +7,7 @@
   </li>
   <Modal title="Edit tags" ref="modal" @confirm="setAlbumTags" confirm-label="Update Tags">
     <h3> {{ albumTitle }}</h3>
-    <h4>by {{ album.album_artist.name  }}</h4>
+    <h4 v-if="album.album_artist">by {{ album.album_artist.name  }}</h4>
     <ul>
       <li v-for="tag in allowedTags" :key="tag">
         <input

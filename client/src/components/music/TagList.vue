@@ -1,15 +1,24 @@
 <template>
   <ul class="list-inline">
-    <li v-for="tag in filteredTags" :key="tag" class="list-inline-item" :class="classes">
+    <li
+      v-for="tag in filteredTags"
+      :key="tag"
+      class="list-inline-item"
+      :class="classes"
+    >
       <Tag :tag="tag" />
     </li>
-    <EditTagsButton v-if="album" :currentTags="filteredTags" :album="album" />
+    <EditTagsButton
+      v-if="canEditTags"
+      :currentTags="filteredTags"
+      :album="album"
+    />
   </ul>
 </template>
 
 <script>
 import Tag from "./TagBadge.vue";
-import EditTagsButton from './EditTagsButton.vue'
+import EditTagsButton from "./EditTagsButton.vue";
 
 const allowedTags = [
   "local_current",
@@ -35,6 +44,9 @@ export default {
       return {
         "d-none": this.filteredTags.length === 0,
       };
+    },
+    canEditTags() {
+      return !!this.album;
     },
     filteredTags() {
       if (!this.tags) {
