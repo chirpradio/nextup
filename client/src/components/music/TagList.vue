@@ -3,13 +3,13 @@
     <li v-for="tag in filteredTags" :key="tag" class="list-inline-item" :class="classes">
       <Tag :tag="tag" />
     </li>
-    <NewTagButton v-if="album && this.filteredTags.length < 4" :currentTags="filteredTags" :album="album" />
+    <EditTagsButton v-if="album" :currentTags="filteredTags" :album="album" />
   </ul>
 </template>
 
 <script>
 import Tag from "./TagBadge.vue";
-import NewTagButton from './NewTagButton.vue'
+import EditTagsButton from './EditTagsButton.vue'
 
 const allowedTags = [
   "local_current",
@@ -20,7 +20,7 @@ const allowedTags = [
 
 export default {
   name: "TagList",
-  components: { Tag, NewTagButton },
+  components: { Tag, EditTagsButton },
   props: {
     tags: {
       type: Array,

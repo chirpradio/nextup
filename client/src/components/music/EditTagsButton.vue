@@ -1,17 +1,28 @@
 <template>
-  <li class="list-inline-item" @click="show">
+  <li class="list-inline-item edit-tags-button" @click="show">
     <div class="fw-normal text-body badge rounded-pill border">
-      <font-awesome-icon class="opacity-50 pr-1" icon="plus" size="sm" />
-      <span class="opacity-75">Add Tag</span>
+      <font-awesome-icon class="opacity-50 pr-2" icon="edit" size="sm" />
+      <span class="opacity-75">Edit Tags</span>
     </div>
   </li>
-  <Modal title="Edit tags" ref="modal" @confirm="setAlbumTags">
-    <h2>{{ albumTitle }}</h2>
-
+  <Modal title="Edit tags" ref="modal" @confirm="setAlbumTags" confirm-label="Update Tags">
+    <h3> {{ albumTitle }}</h3>
+    <h4>by {{ album.album_artist.name  }}</h4>
     <ul>
       <li v-for="tag in allowedTags" :key="tag">
-        <input type="checkbox" :name="tag" :value="tag" v-model="selectedTags[tag]" />
-        <Tag :tag="tag" @click="selectedTags[tag] = !selectedTags[tag]"/>
+        <input
+          class="mr-2"
+          type="checkbox"
+          :name="tag"
+          :value="tag"
+          v-model="selectedTags[tag]"
+        />
+        <Tag
+          class="selectable-tag"
+          :class="{ selected: selectedTags[tag] }"
+          :tag="tag"
+          @click="selectedTags[tag] = !selectedTags[tag]"
+        />
       </li>
     </ul>
   </Modal>
@@ -32,7 +43,7 @@ const allowedTags = [
 ];
 
 export default {
-  name: "NewTagButton",
+  name: "EditTagsButton",
   props: {
     currentTags: {
       type: Array,
@@ -45,7 +56,6 @@ export default {
   components: { Modal, Tag },
   data() {
     return {
-      isNewTagPopupOpen: false,
       allowedTags,
       selectedTags: allowedTags.reduce((tagsObject, tag) => {
         return {
@@ -72,12 +82,38 @@ export default {
       this.$refs.modal.show();
     },
     setAlbumTags() {
-      let tags = allowedTags.filter(tag => this.selectedTags[tag])
+      let tags = allowedTags.filter((tag) => this.selectedTags[tag]);
       this.albumsStore.updateAlbumTags({
         album: this.album,
         tags,
       });
-    }
+      this.$refs.modal.hide();
+    },
   },
 };
 </script>
+<style scoped>
+.edit-tags-button {
+  cursor: pointer;
+}
+.pr-2 {
+  padding-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.25rem;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.selectable-tag {
+  opacity: 0.6;
+}
+.selectable-tag:hover,
+.selectable-tag.selected {
+  opacity: 1;
+}
+</style>

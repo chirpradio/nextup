@@ -74,8 +74,6 @@ export default {
   },
 
   async updateAlbumTags(album_id, tags) {
-    console.log(album_id, tags)
-    debugger;
     const response = await instance.patch(
       `/album/${album_id.value}`,
       { tags }
