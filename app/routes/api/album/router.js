@@ -38,4 +38,11 @@ router.patch(
   controller.updateTrack
 );
 
+router.patch(
+  "/:album_id",
+  validateTags,
+  checkErrors,
+  controller.updateAlbumTags
+)
+
 module.exports = router;

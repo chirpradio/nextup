@@ -8,7 +8,7 @@
       />
       <CrateAlbumSpans :album="element.album" />
     </div>
-    <TagList :tags="element.album.current_tags" />
+    <TagList :tags="element.album.current_tags" :album="element.album" />
     <div class="text-muted">{{ element.notes }}</div>
   </div>
 </template>

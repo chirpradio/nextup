@@ -137,5 +137,14 @@ export const useAlbumsStore = defineStore("albums", {
         track.current_tags = oldTags;
       }
     },
+    async updateAlbumTags({ album, tags } = {}) {
+      const oldTags = album.current_tags ? [...album.current_tags] : [];
+      album.current_tags = tags;
+      try {
+        await api.updateAlbumTags(album.album_id, tags);
+      } catch (error) {
+        album.current_tags = oldTags;
+      }
+    },
   },
 });

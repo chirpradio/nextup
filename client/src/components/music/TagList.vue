@@ -1,13 +1,15 @@
 <template>
-  <ul class="list-inline" :class="classes">
-    <li v-for="tag in filteredTags" :key="tag" class="list-inline-item">
+  <ul class="list-inline">
+    <li v-for="tag in filteredTags" :key="tag" class="list-inline-item" :class="classes">
       <Tag :tag="tag" />
     </li>
+    <NewTagButton v-if="album && this.filteredTags.length < 4" :currentTags="filteredTags" :album="album" />
   </ul>
 </template>
 
 <script>
 import Tag from "./TagBadge.vue";
+import NewTagButton from './NewTagButton.vue'
 
 const allowedTags = [
   "local_current",
@@ -18,7 +20,7 @@ const allowedTags = [
 
 export default {
   name: "TagList",
-  components: { Tag },
+  components: { Tag, NewTagButton },
   props: {
     tags: {
       type: Array,
@@ -26,6 +28,7 @@ export default {
         return [];
       },
     },
+    album: Object,
   },
   computed: {
     classes() {
