@@ -12,10 +12,22 @@ export const useAlbumsStore = defineStore("albums", {
         albums: [],
         more: false,
       },
+
+      local_current: {
+        albums: [],
+        more: false,
+      },
+
+      local_classic: {
+        albums: [],
+        more: false,
+      },
     },
     loadingTagCollections: {
       heavy_rotation: false,
       light_rotation: false,
+      local_current: false,
+      local_classic: false,
       recent: false,
     },
     recent: {

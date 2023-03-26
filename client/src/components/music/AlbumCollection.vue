@@ -60,6 +60,10 @@ export default {
       default: false,
     },
   },
+  created() {
+    // when navigating between tabs, lets make sure we always start at the top of the page
+    window.scrollTo(0, 0);
+  },
   computed: {
     sortedAlbums() {
       if (!this.sortBy && !this.limit) {

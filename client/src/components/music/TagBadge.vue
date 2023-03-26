@@ -1,11 +1,19 @@
 <template>
   <div class="fw-normal text-body" :class="classes">
-    <font-awesome-icon :class="getCircleClass(tag)" icon="circle" size="sm" />
-    {{ formatTag(tag) }}
+    <router-link
+      :class="{ disabled: !canNavigate }"
+      :to="{ name: 'tag', params: { tag: tag } }"
+    >
+      <font-awesome-icon :class="getCircleClass(tag)" icon="circle" size="sm" />
+      {{ formatTag(tag) }}
+    </router-link>
   </div>
 </template>
 
 <style scoped>
+.disabled {
+  pointer-events: none;
+}
 .heavy_rotation {
   color: rgba(255, 0, 0, 0.67);
 }
@@ -30,6 +38,10 @@ import formatters from "../../mixins/formatters";
 export default {
   props: {
     badge: {
+      type: Boolean,
+      default: true,
+    },
+    canNavigate: {
       type: Boolean,
       default: true,
     },
