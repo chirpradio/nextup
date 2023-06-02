@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header bg-white">
       <button class="btn btn-link-chirp-red p-0" @click="toggleFilters">
         {{ toggleLabel }}
       </button>
