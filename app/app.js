@@ -11,6 +11,9 @@ app.use(bodyParser.json({ type: "application/json" }));
 const cors = require("cors");
 app.use(cors());
 
+const pino = require('pino-http')();
+app.use(pino);
+
 require("./config/auth")(app);
 require("./routes")(app);
 
