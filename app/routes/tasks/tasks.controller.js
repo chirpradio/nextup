@@ -82,11 +82,13 @@ function updateCurrentTags(doc, body) {
 }
 
 async function reindexAlbumHandler(req, res) {
+  const albumId = req.params.album_id
   try {
-    await reindexAlbumEverywhere(req.params.album_id);
+    await reindexAlbumEverywhere(albumId);
+    req.log.info(`Reindexed album ${albumId}`)
     res.end();
   } catch (err) {
-    console.error(err);
+    req.log.error(err, `Failed to reindex album ${albumId}`);
     res.status(500).end();
   }
 }
@@ -110,12 +112,12 @@ async function reindexTagsHandler(req, res) {
         updateCurrentTags(doc, req.body);
         await SearchService.update(index, id, doc);
       } else {
-        console.log(subject);
+        req.log.warn(subject, "No _source to reindex");
       }
     }
     res.end();
   } catch (err) {
-    console.error(err);
+    req.log.error(err);
     res.status(500).end();
   }
 }
@@ -182,7 +184,7 @@ async function updateFreeformRotationPlays(req, res) {
             album
           );
           if (track) {
-            console.log(
+            req.log.info(
               `Updating PlaylistTrack ${playlistTrack.id} with Track ${track.id}`
             );
             playlistTrack.album = track.album;
@@ -192,7 +194,7 @@ async function updateFreeformRotationPlays(req, res) {
             if (!error) {
               await playlistTrack.save();
             } else {
-              console.error(error.errors);
+              req.log.error(error.errors);
             }
             break;
           }
@@ -202,7 +204,7 @@ async function updateFreeformRotationPlays(req, res) {
 
     res.sendStatus(200);
   } catch (err) {
-    console.error(err);
+    req.log.error(err);
     res.status(500).end();
   }
 }
