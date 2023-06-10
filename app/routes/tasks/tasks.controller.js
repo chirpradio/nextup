@@ -82,10 +82,10 @@ function updateCurrentTags(doc, body) {
 }
 
 async function reindexAlbumHandler(req, res) {
-  const albumId = req.params.album_id
+  const albumId = req.params.album_id;
   try {
     await reindexAlbumEverywhere(albumId);
-    req.log.info(`Reindexed album ${albumId}`)
+    req.log.info(`Reindexed album ${albumId}`);
     res.end();
   } catch (err) {
     req.log.error(err, `Failed to reindex album ${albumId}`);
