@@ -2,7 +2,7 @@ const { Album, Document, Track } = require("../models");
 const { datastore, renameKey } = require("../db");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
-const logger = require("./logger");
+const logger = require("../logger");
 
 const options = {
   format: "ENTITY",
