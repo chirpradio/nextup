@@ -11,7 +11,10 @@ export const useReportsStore = defineStore("reports", {
   }),
   actions: {
     async getRotationPlays({ start, end } = {}) {
-      if (this.rotationPlays.start !== start || this.rotationPlays.end !== end) {
+      if (
+        this.rotationPlays.start !== start ||
+        this.rotationPlays.end !== end
+      ) {
         this.rotationPlays = await api.getRotationPlays({ start, end });
       }
     },

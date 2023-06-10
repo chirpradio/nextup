@@ -19,40 +19,6 @@
     <div class="col-auto">
       <button class="btn btn-chirp-red" type="submit">Search Everything</button>
     </div>
-    <div class="col-auto">
-      <div class="dropdown">
-        <button
-          class="btn btn-link-chirp-red dropdown-toggle"
-          type="button"
-          id="searchByTypeButton"
-          data-bs-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Search by Type
-        </button>
-        <div class="dropdown-menu" aria-labelledby="searchByType">
-          <router-link
-            class="dropdown-item"
-            :to="{
-              path: '/library/search/album',
-              query: { term: this.term, type: 'album' },
-            }"
-          >
-            Album
-          </router-link>
-          <router-link
-            class="dropdown-item"
-            :to="{
-              path: '/library/search/track',
-              query: { term: this.term, type: 'track' },
-            }"
-          >
-            Track
-          </router-link>
-        </div>
-      </div>
-    </div>
   </form>
 </template>
 
