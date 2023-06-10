@@ -16,7 +16,7 @@ function checkErrors(req, res, next) {
 }
 
 function sendErrorCode(error, req, res, next) {
-  console.error(error);
+  req.log.error(error);
   let code = 500;
 
   if (
