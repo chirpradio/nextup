@@ -5,8 +5,9 @@ const TaskController = require("./tasks.controller");
 router.use(express.json());
 
 function validateCronRequest(req, res, next) {
-  console.log("X-Appengine-Cron", req.get("X-Appengine-Cron"));
-  console.log("IP", req.ip);
+  /* log the details of a cron request so they can 
+  be confirmed and secured around */
+  req.log.info("Cron request");
   next();
 }
 
