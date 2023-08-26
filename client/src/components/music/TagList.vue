@@ -19,13 +19,10 @@
 <script>
 import Tag from "./TagBadge.vue";
 import EditTagsButton from "./EditTagsButton.vue";
+import { mapStores } from "pinia";
 
-const allowedTags = [
-  "local_current",
-  "local_classic",
-  "heavy_rotation",
-  "light_rotation",
-];
+import { useAuthStore } from "@/stores/auth";
+import { allowedTags } from "@/constants";
 
 export default {
   name: "TagList",
@@ -40,13 +37,14 @@ export default {
     album: Object,
   },
   computed: {
+    ...mapStores(useAuthStore),
     classes() {
       return {
         "d-none": this.filteredTags.length === 0,
       };
     },
     canEditTags() {
-      return !!this.album;
+      return !!this.album && this.authStore.hasRole("reviewer");
     },
     filteredTags() {
       if (!this.tags) {
