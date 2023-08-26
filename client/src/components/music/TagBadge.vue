@@ -1,15 +1,11 @@
 <template>
   <div class="fw-normal text-body" :class="classes">
-    <router-link
-      :class="{ disabled: !canNavigate }"
-      :to="{ name: 'tag', params: { tag: tag } }"
-    >
+    <router-link :class="{ disabled: !canNavigate }" :to="this.href">
       <font-awesome-icon :class="getCircleClass(tag)" icon="circle" size="sm" />
       {{ formatTag(tag) }}
     </router-link>
   </div>
 </template>
-
 <style scoped>
 .disabled {
   pointer-events: none;
@@ -49,6 +45,12 @@ export default {
   },
   mixins: [formatters],
   computed: {
+    href() {
+      const isLocalTag = this.tag.includes("local");
+      return isLocalTag
+        ? `/library/search/album?type=album&album%5Blocal%5D=${this.tag}&offset=0&limit=50`
+        : { name: "tag", params: { tag: this.tag } };
+    },
     classes() {
       const classes = {};
       if (this.badge) {
