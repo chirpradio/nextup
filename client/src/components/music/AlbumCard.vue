@@ -23,7 +23,7 @@
         {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
-      <TagList :tags="album.current_tags" :album="album"/>
+      <TagList :tags="album.current_tags" :album="album" :showEditTags="showEditTags"/>
     </div>
     <ReviewPreview v-if="showReview" class="w-100" :album="album" />
   </article>
@@ -55,6 +55,10 @@ export default {
     linkToAlbum: {
       type: Boolean,
       default: true,
+    },
+    showEditTags: {
+      type: Boolean,
+      default: false,
     },
     showReview: {
       type: Boolean,

@@ -10,6 +10,7 @@
             :linkToAlbum="false"
             :border="false"
             albumArtSrcSize="xl"
+            :showEditTags="true"
           />
         </div>
         <AddToCrate :keyToAdd="album.__key" class="col-md-4" />

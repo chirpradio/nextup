@@ -13,6 +13,7 @@
         :album="album"
         :hideArtistLink="hideArtistLinks"
         :showReview="showReview"
+        :showEditTags="true"
       />
       <button
         v-if="more && !loading"

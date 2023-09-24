@@ -9,7 +9,7 @@
       <Tag :tag="tag" />
     </li>
     <EditTagsButton
-      v-if="canEditTags"
+      v-if="showEditTags"
       :currentTags="filteredTags"
       :album="album"
     />
@@ -35,6 +35,10 @@ export default {
       },
     },
     album: Object,
+    showEditTags: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapStores(useAuthStore),
@@ -54,6 +58,9 @@ export default {
       return this.tags
         .filter((tag) => allowedTags.includes(tag))
         .sort((a, b) => (a < b ? -1 : 1));
+    },
+    showEditTagsButton() {
+      return showEditTags && canEditTags;
     },
   },
 };
