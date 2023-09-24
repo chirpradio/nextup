@@ -60,7 +60,7 @@ export default {
         .sort((a, b) => (a < b ? -1 : 1));
     },
     showEditTagsButton() {
-      return showEditTags && canEditTags;
+      return this.showEditTags && this.canEditTags;
     },
   },
 };
