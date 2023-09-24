@@ -1,5 +1,5 @@
-const { Album, Document, Track } = require("../models");
-const { datastore, renameKey } = require("../db");
+const { Album, Document, Track, TagEdit } = require("../models");
+const { datastore, gstore, renameKey } = require("../db");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
 const logger = require("../logger");
@@ -95,6 +95,25 @@ async function addImagesFromLastFm(album) {
       logger.info(err, "LastFM images not found");
     }
   }
+}
+
+async function updateCurrentTags(album, tags, user) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+
+  const oldTags = [...album.current_tags];
+  album.current_tags = tags;
+  await album.save();
+
+  const edit = new TagEdit({
+    added: tags,
+    removed: oldTags,
+    author: user.entityKey,
+    subject: album.entityKey,
+  });
+  await edit.save();
+
+  await transaction.commit();
 }
 
 async function listAlbumComments(album) {
@@ -232,6 +251,7 @@ module.exports = {
   listAlbumReviews,
   listAlbumTracks,
   options,
+  updateCurrentTags,
   getAlbumsByAlbumArtist,
   getAlbumsWithTag,
   getAlbumsImportedSince,

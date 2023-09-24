@@ -73,6 +73,14 @@ export default {
     return response.data;
   },
 
+  async updateAlbumTags(album_id, tags) {
+    const response = await instance.patch(
+      `/album/${album_id.value}`,
+      { tags }
+    )
+    return response.data
+  },
+
   async getArtist(id) {
     const getter = instance.get(`/artist/${id}`);
     return await getAndHandleError(getter);

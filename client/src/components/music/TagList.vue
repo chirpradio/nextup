@@ -1,24 +1,32 @@
 <template>
-  <ul class="list-inline" :class="classes">
-    <li v-for="tag in filteredTags" :key="tag" class="list-inline-item">
+  <ul class="list-inline">
+    <li
+      v-for="tag in filteredTags"
+      :key="tag"
+      class="list-inline-item"
+      :class="classes"
+    >
       <Tag :tag="tag" />
     </li>
+    <EditTagsButton
+      v-if="canEditTags"
+      :currentTags="filteredTags"
+      :album="album"
+    />
   </ul>
 </template>
 
 <script>
 import Tag from "./TagBadge.vue";
+import EditTagsButton from "./EditTagsButton.vue";
+import { mapStores } from "pinia";
 
-const allowedTags = [
-  "local_current",
-  "local_classic",
-  "heavy_rotation",
-  "light_rotation",
-];
+import { useAuthStore } from "@/stores/auth";
+import { allowedTags } from "@/constants";
 
 export default {
   name: "TagList",
-  components: { Tag },
+  components: { Tag, EditTagsButton },
   props: {
     tags: {
       type: Array,
@@ -26,12 +34,17 @@ export default {
         return [];
       },
     },
+    album: Object,
   },
   computed: {
+    ...mapStores(useAuthStore),
     classes() {
       return {
         "d-none": this.filteredTags.length === 0,
       };
+    },
+    canEditTags() {
+      return !!this.album && this.authStore.hasRole("reviewer");
     },
     filteredTags() {
       if (!this.tags) {

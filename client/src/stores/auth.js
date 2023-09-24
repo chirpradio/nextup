@@ -33,6 +33,9 @@ export const useAuthStore = defineStore("auth", {
         return false;
       }
     },
+    hasRole: (state) => (role) => {
+      return state.user?.roles?.includes(role);
+    },
     isAuthorized: (state) => (feature) => {
       const permitted = state.features[feature];
 
