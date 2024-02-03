@@ -35,7 +35,7 @@ You can confirm it was installed with:
 If it wasn't installed successfully, consult the [nvm troubleshooting guide](https://github.com/nvm-sh/nvm#troubleshooting-on-macos).
 
 Once installed successfully, install the latest version of Node (as of the time of writing these docs) with the following command:
-`nvm install 16.13.1`
+`nvm install 20.11.0`
 
 # Install redoc-cli
 This library is used to compile the API documentation. Install it with the following command:
