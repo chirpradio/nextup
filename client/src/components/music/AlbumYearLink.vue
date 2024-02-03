@@ -22,7 +22,7 @@
 export default {
   name: "AlbumYearLink",
   props: {
-    albumYear: String,
+    albumYear: Number,
   },
 };
 </script>
