@@ -200,12 +200,8 @@ export default {
     await instance.delete(`/spot/${spotId}`);
   },
 
-  async addCopyToSpot(spotId, body, { expire_on, start_on } = {}) {
-    return await instance.post(`/spot/${spotId}/copy`, {
-      body,
-      expire_on,
-      start_on,
-    });
+  async addCopyToSpot(spotId, data) {
+    return await instance.post(`/spot/${spotId}/copy`, data);
   },
 
   async updateCopy(copyId, data) {

@@ -47,10 +47,10 @@ export const useSpotsStore = defineStore("spots", {
       const index = this.spots.indexOf((element) => element.id === spotId);
       this.spots.splice(index, 1);
     },
-    async addCopyToSpot({ spotId, body, dates }) {
-      const response = await api.addCopyToSpot(spotId, body, dates);
+    async addCopyToSpot({ spotId, data }) {
+      const response = await api.addCopyToSpot(spotId, data);
       const spot = this.spot(spotId);
-      spot.copy.push(response);
+      spot.copy.push(response.data);
     },
     async updateCopy({ copy, data }) {
       await api.updateCopy(copy.id, data);

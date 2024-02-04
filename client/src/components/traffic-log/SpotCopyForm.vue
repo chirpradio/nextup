@@ -26,6 +26,7 @@
           id="start"
           class="form-control"
           v-model="start_on"
+          required
         />
       </div>
     </div>
@@ -56,20 +57,23 @@
         </select>
       </div>
     </div>
-  </form>
-  <div class="row mt-3">
-    <div class="offset-6">
-      <router-link :to="{ name: 'spots' }" class="btn btn-link-chirp-red me-2">
-        Cancel
-      </router-link>
-      <LoadingButton
-        label="Save"
-        :loading="saving"
-        :small="false"
-        @click="onSave"
-      />
+    <div class="row mt-3">
+      <div class="offset-6">
+        <router-link
+          :to="{ name: 'spots' }"
+          class="btn btn-link-chirp-red me-2"
+        >
+          Cancel
+        </router-link>
+        <LoadingButton
+          label="Save"
+          :loading="saving"
+          :small="false"
+          @click="onSave"
+        />
+      </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <style scoped>

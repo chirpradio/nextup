@@ -1,12 +1,7 @@
 <template>
   <button class="btn" :class="classes" :disabled="loading">
     <font-awesome-icon v-if="icon && !loading" :icon="icon" />
-    <RecordSpinner
-      v-if="loading"
-      size="xs"
-      :reverse="!outline"
-      class="nudge-up"
-    />
+    <RecordSpinner v-if="loading" size="xs" class="nudge-up" />
     {{ label }}
   </button>
 </template>

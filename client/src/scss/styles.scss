@@ -91,12 +91,14 @@ a:hover {
   text-decoration: underline;
 }
 
+a.btn-chirp-red,
 button.btn-chirp-red {
   background-color: var(--dark-red);
   border-color: var(--dark-red);
   color: #fff;
 }
 
+a.btn-chirp-red:hover,
 button.btn-chirp-red:hover {
   background-color: var(--bright-red);
   color: #fff;
