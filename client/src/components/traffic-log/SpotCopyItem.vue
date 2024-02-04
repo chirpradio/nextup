@@ -1,22 +1,29 @@
 <template>
   <li class="spot-copy-item d-inline-flex">
-    <input type="checkbox" disabled class="form-check-input me-2" />
+    <!-- <input type="checkbox" class="form-check-input me-2" /> -->
     <span class="flex-grow-1 h-100 overflow-hidden me-2">
       {{ title }}
-    </span>      
-    <font-awesome-icon icon="fa-regular fa-pen-to-square" class="mt-1" />
+    </span>
+    <router-link
+      :to="{
+        name: 'editSpotCopy',
+        params: { spotId: copy.spot.id, copyId: copy.id },
+      }"
+    >
+      <font-awesome-icon icon="fa-regular fa-pen-to-square" class="mt-1" />
+    </router-link>
   </li>
 </template>
 
 <style scoped>
-  .spot-copy-item {
-    height: 2.5rem;
-  }
+.spot-copy-item {
+  height: 2.5rem;
+}
 </style>
 
 <script>
 export default {
-  name: "SpotCopyItem",  
+  name: "SpotCopyItem",
   data() {
     return {
       checked: false,
@@ -33,8 +40,6 @@ export default {
       return this.copy.name || this.copy.body;
     },
   },
-  methods: {
-  },
+  methods: {},
 };
-
 </script>

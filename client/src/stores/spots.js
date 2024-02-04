@@ -5,12 +5,17 @@ export const useSpotsStore = defineStore("spots", {
   state: () => ({
     spots: [],
     loadingSpots: false,
+    loadedSpots: false,
     trafficLog: [],
     loadingTrafficLog: false,
   }),
   getters: {
     spot: (state) => (id) => {
       return state.spots.find((element) => element.id === id);
+    },
+    copy: (state) => (spotId, copyId) => {
+      const spot = state.spots.find((element) => element.id === spotId);
+      return spot.copy.find((element) => element.id === copyId);
     },
   },
   actions: {
@@ -19,6 +24,7 @@ export const useSpotsStore = defineStore("spots", {
       const response = await api.getSpots();
       this.spots = response;
       this.loadingSpots = false;
+      this.loadedSpots = true;
     },
     async getSpot({ spotId }) {
       this.loadingSpots = true;
@@ -49,6 +55,9 @@ export const useSpotsStore = defineStore("spots", {
     async updateCopy({ copy, data }) {
       await api.updateCopy(copy.id, data);
       Object.assign(copy, data);
+      copy.spot = {
+        id: data.spot,
+      };
     },
     async deleteCopy({ copy }) {
       await api.deleteCopy(copy.id);

@@ -12,9 +12,9 @@ export const useAuthStore = defineStore("auth", {
        * template: {
        *   users: [],
        *   roles: [],
-      **/
+       **/
       "traffic-log": {
-        roles: ["traffic_log_admin"]
+        roles: ["traffic_log_admin"],
       },
     },
   }),

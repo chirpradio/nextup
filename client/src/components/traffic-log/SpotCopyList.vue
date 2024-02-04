@@ -8,12 +8,10 @@
 import SpotCopyItem from "./SpotCopyItem.vue";
 
 export default {
-  name: "SpotCopyList",  
+  name: "SpotCopyList",
   components: { SpotCopyItem },
   data() {
-    return {    
-
-    };
+    return {};
   },
   props: {
     spot: {
@@ -21,10 +19,7 @@ export default {
       required: true,
     },
   },
-  computed: {
-  },
-  methods: {
-  },
+  computed: {},
+  methods: {},
 };
-
 </script>

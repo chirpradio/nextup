@@ -30,8 +30,8 @@ module.exports = {
   },
   async updateSpot(req, res, next) {
     try {
-      await SpotService.updateSpot(req.params.id, req.body);
-      res.sendStatus(204);
+      const spot = await SpotService.updateSpot(req.params.id, req.body);
+      res.sendStatus(204).json(spot);
     } catch (error) {
       next(error);
     }

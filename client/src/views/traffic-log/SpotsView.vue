@@ -5,23 +5,21 @@
     <div v-if="!loading" class="px-2 py-2">
       <div class="col-8 pe-3 border-end">
         <div class="row mt-3 font-sans fw-bold border-bottom">
-          <div class="col-2">
-            Title
-          </div>
-          <div class="col-2">
-            Type
-          </div>
+          <div class="col-2">Title</div>
+          <div class="col-2">Type</div>
+          <div class="col-8">Copy</div>
+        </div>
+        <div
+          v-for="spot in spots"
+          :key="spot.id"
+          class="row border-bottom py-3"
+        >
+          <div class="col-2">{{ spot.title }}</div>
+          <div class="col-2">{{ spot.type }}</div>
           <div class="col-8">
-            Copy
+            <SpotCopyList :spot="spot" />
           </div>
-        </div>      
-        <div v-for="spot in spots" :key="spot.id" class="row border-bottom py-3">
-            <div class="col-2">{{ spot.title }}</div>
-            <div class="col-2">{{ spot.type }}</div>
-            <div class="col-8">
-              <SpotCopyList :spot="spot" />
-            </div>     
-        </div> 
+        </div>
       </div>
       <div class="col-4">
         <!-- Bulk actions -->
@@ -48,7 +46,9 @@ export default {
     },
   },
   mounted() {
-    this.spotsStore.getSpots();
+    if (!this.spotsStore.loadedSpots) {
+      this.spotsStore.getSpots();
+    }
   },
 };
 </script>

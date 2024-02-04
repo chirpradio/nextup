@@ -196,7 +196,14 @@ const routes = [
   },
   {
     path: "/traffic-log/spots",
+    name: "spots",
     component: () => import("../views/traffic-log/SpotsView.vue"),
+  },
+  {
+    path: "/traffic-log/spots/:spotId/copy/:copyId/edit",
+    name: "editSpotCopy",
+    component: () => import("../views/traffic-log/EditSpotCopy.vue"),
+    props: true,
   },
 ];
 
