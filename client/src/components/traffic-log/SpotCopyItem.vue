@@ -1,9 +1,10 @@
 <template>
   <li class="spot-copy-item d-inline-flex">
     <!-- <input type="checkbox" class="form-check-input me-2" /> -->
-    <span class="flex-grow-1 h-100 overflow-hidden me-2">
-      {{ title }}
-    </span>
+    <div class="flex-grow-1 h-100 overflow-hidden me-2">
+      <span>{{ title }}</span>
+      <span v-if="!started"> (not started)</span>
+    </div>
     <router-link
       :to="{
         name: 'editSpotCopy',
@@ -39,7 +40,14 @@ export default {
     title() {
       return this.copy.name || this.copy.body;
     },
+    started() {
+      if(this.copy.start_on) {
+        const start = new Date(this.copy.start_on.slice(0, 19));
+        return start < Date.now();
+      }
+
+      return false;      
+    },
   },
-  methods: {},
 };
 </script>
