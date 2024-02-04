@@ -19,14 +19,13 @@
       </div>
     </div>
     <div class="row mt-3">
-      <label for="start" class="col-2 col-form-label">Start *</label>
+      <label for="start" class="col-2 col-form-label">Start</label>
       <div class="col-3">
         <input
           type="datetime-local"
           id="start"
           class="form-control"
-          v-model="start_on"
-          required
+          v-model="start_on"          
         />
       </div>
     </div>
@@ -122,6 +121,7 @@ export default {
   mounted() {
     this.name = this.copy.name;
     this.body = this.copy.body;
+    // trim dates to a form the HTML input will accept
     this.start_on = this.copy.start_on?.slice(0, 19);
     this.expire_on = this.copy.expire_on?.slice(0, 19);
     this.underwriter = this.copy.underwriter;
@@ -140,6 +140,7 @@ export default {
           body: this.body,
           underwriter: this.underwriter,
           spot: parseInt(this.spot_id, 10),
+          // return dates to a form the server will accept
           start_on: getFullDateTimeString(this.start_on),
           expire_on: getFullDateTimeString(this.expire_on),
         });
