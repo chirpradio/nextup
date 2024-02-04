@@ -25,7 +25,7 @@
           type="datetime-local"
           id="start"
           class="form-control"
-          v-model="start_on"          
+          v-model="start_on"
         />
       </div>
     </div>

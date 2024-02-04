@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import api from "../services/api.service";
 
+function sortSpotsByTitle(a, b) {
+  if (a.title === b.title || !a.title || !b.title) {
+    return 0;
+  }
+  return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
+}
+
 export const useSpotsStore = defineStore("spots", {
   state: () => ({
     spots: [],
@@ -22,7 +29,7 @@ export const useSpotsStore = defineStore("spots", {
     async getSpots() {
       this.loadingSpots = true;
       const response = await api.getSpots();
-      this.spots = response;
+      this.spots = response.sort(sortSpotsByTitle);
       this.loadingSpots = false;
       this.loadedSpots = true;
     },

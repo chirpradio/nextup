@@ -41,12 +41,12 @@ export default {
       return this.copy.name || this.copy.body;
     },
     started() {
-      if(this.copy.start_on) {
+      if (this.copy.start_on) {
         const start = new Date(this.copy.start_on.slice(0, 19));
         return start < Date.now();
       }
 
-      return false;      
+      return false;
     },
   },
 };

@@ -34,13 +34,6 @@ import SpotCopyList from "../../components/traffic-log/SpotCopyList.vue";
 import { mapStores } from "pinia";
 import { useSpotsStore } from "@/stores/spots";
 
-function sortSpotsByTitle(a, b) {
-  if (a.title === b.title || !a.title || !b.title) {
-    return 0;
-  }
-  return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
-}
-
 export default {
   components: { RecordSpinner, SpotCopyList },
   computed: {
@@ -49,7 +42,7 @@ export default {
       return this.spotsStore.loadingSpots;
     },
     spots() {
-      return this.spotsStore.spots.sort(sortSpotsByTitle);
+      return this.spotsStore.spots;
     },
   },
   mounted() {
