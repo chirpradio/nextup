@@ -32,7 +32,7 @@ export default {
     async onSave(event) {
       try {
         await this.spotsStore.addCopyToSpot({
-          spotId: this.spotId,
+          spotId: event.spot,
           data: event,
         });
         this.$router.back();

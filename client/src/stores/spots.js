@@ -11,7 +11,7 @@ export const useSpotsStore = defineStore("spots", {
   }),
   getters: {
     spot: (state) => (id) => {
-      return state.spots.find((element) => element.id === id);
+      return state.spots.find((element) => element.id == id);
     },
     copy: (state) => (spotId, copyId) => {
       const spot = state.spots.find((element) => element.id === spotId);
