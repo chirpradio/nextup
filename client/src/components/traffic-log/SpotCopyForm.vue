@@ -2,7 +2,7 @@
   <form ref="form" novalidate>
     <div class="row mt-3">
       <label for="name" class="col-2 col-form-label">Name *</label>
-      <div class="col-3">
+      <div class="col-2">
         <input
           id="name"
           class="form-control"
@@ -20,7 +20,7 @@
     </div>
     <div class="row mt-3">
       <label for="start" class="col-2 col-form-label">Start</label>
-      <div class="col-3">
+      <div class="col-2">
         <input
           type="datetime-local"
           id="start"
@@ -31,7 +31,7 @@
     </div>
     <div class="row mt-3">
       <label for="expire" class="col-2 col-form-label">Expire</label>
-      <div class="col-3">
+      <div class="col-2">
         <input
           type="datetime-local"
           id="expire"
@@ -42,13 +42,13 @@
     </div>
     <div class="row mt-3">
       <label for="underwriter" class="col-2 col-form-label">Underwriter</label>
-      <div class="col-3">
+      <div class="col-2">
         <input id="underwriter" class="form-control" v-model="underwriter" />
       </div>
     </div>
     <div class="row mt-3">
       <label for="spot" class="col-2 col-form-label">Spot *</label>
-      <div class="col-3">
+      <div class="col-2">
         <select id="spot" class="form-select" v-model="spot_id" required>
           <option v-for="spot in spots" :key="spot.id" :value="spot.id">
             {{ spot.title }}
@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="row mt-3">
-      <div class="offset-6">
+      <div class="offset-7">
         <router-link
           :to="{ name: 'spots' }"
           class="btn btn-link-chirp-red me-2"

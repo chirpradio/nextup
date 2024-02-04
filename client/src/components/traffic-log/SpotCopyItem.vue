@@ -1,5 +1,5 @@
 <template>
-  <li class="spot-copy-item d-inline-flex">
+  <li class="spot-copy-item d-inline-flex" :class="classes">
     <!-- <input type="checkbox" class="form-check-input me-2" /> -->
     <div class="flex-grow-1 h-100 overflow-hidden me-2">
       <span>{{ title }}</span>
@@ -47,6 +47,12 @@ export default {
       }
 
       return false;
+    },
+    classes() {
+      return {
+        "bg-warning-subtle": !this.started,
+        "bg-light": this.started,
+      };
     },
   },
 };
