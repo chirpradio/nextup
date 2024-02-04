@@ -15,6 +15,9 @@ import {
   faPen,
   faRightToBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare as farFaPenToSquare
+} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faGripLines,
@@ -30,5 +33,6 @@ library.add(
   faRotateRight,
   faPlus,
   faPen,
-  faRightToBracket
+  faRightToBracket,
+  farFaPenToSquare,
 );
