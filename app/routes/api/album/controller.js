@@ -65,13 +65,11 @@ module.exports = {
   },
   async updateAlbumTags(req, res, next) {
     try {
-      const album = await AlbumService.getAlbumById(
-        req.params.album_id
-      )
-      await AlbumService.updateCurrentTags(album, req.body.tags, req.user)
-      res.json(album.plain({showKey: true}))
+      const album = await AlbumService.getAlbumById(req.params.album_id);
+      await AlbumService.updateCurrentTags(album, req.body.tags, req.user);
+      res.json(album.plain({ showKey: true }));
     } catch (error) {
       next(error);
     }
-  }
+  },
 };
