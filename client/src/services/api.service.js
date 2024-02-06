@@ -185,11 +185,8 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async addSpot(title, type) {
-    return await instance.post(`/spot/`, {
-      title,
-      type,
-    });
+  async addSpot(data) {
+    return await instance.post(`/spot/`, data);
   },
 
   async updateSpot(spotId, data) {

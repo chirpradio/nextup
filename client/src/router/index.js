@@ -211,6 +211,11 @@ const routes = [
     component: () => import("../views/traffic-log/EditSpotCopy.vue"),
     props: true,
   },
+  {
+    path: "/traffic-log/spots/add",
+    name: "addSpot",
+    component: () => import("../views/traffic-log/AddSpot.vue"),
+  },
 ];
 
 const router = createRouter({

@@ -104,8 +104,23 @@ async function deleteSpot(id) {
 }
 
 async function addSpot(data) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+
   const spot = new Spot(data);
   await spot.save();
+
+  const promises = data.constraints.map(async function (constraint) {
+    return addSpotToConstraint(spot.entityKey, constraint, transaction);
+  });
+  await Promise.all(promises);
+
+  const { err } = await transaction.commit();
+  if (err) {
+    await transaction.rollback();
+    await spot.delete(spot.entityKey);
+    throw err;
+  }
   return spot.plain({ showKey: true });
 }
 

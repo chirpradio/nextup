@@ -1,10 +1,15 @@
 <template>
-  <div>
-    <h1>Spots</h1>
+  <div class="px-3">
+    <div class="d-inline-flex">
+      <h1>Spots</h1>
+    </div>
     <RecordSpinner v-if="loading" />
-    <div v-if="!loading" class="px-2 py-2">
+    <div v-if="!loading" class="py-2">
       <div class="col-8 pe-3 border-end">
-        <div class="row mt-3 font-sans fw-bold border-bottom">
+        <router-link :to="{ name: 'addSpot' }" class="btn btn-chirp-red mt-3"
+          >Add a new spot</router-link
+        >
+        <div class="row mt-4 font-sans fw-bold border-bottom">
           <div class="col-2">Title</div>
           <div class="col-2">Type</div>
           <div class="col-8">Copy</div>

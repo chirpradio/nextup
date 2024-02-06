@@ -40,9 +40,15 @@ export const useSpotsStore = defineStore("spots", {
       this.spots.splice(index, 0, response);
       this.loadingSpots = false;
     },
-    async addSpot({ title, type }) {
-      const response = await api.addSpot(title, type);
-      this.spots.push(response);
+    async addSpot({ title, type, slot, selected }) {
+      const constraints = selected.map((c) => `${c.weekday}:${c.hour}:${slot}`);
+      const response = await api.addSpot({
+        title,
+        type,
+        constraints,
+      });
+      this.spots.push(response.data);
+      this.spots.sort(sortSpotsByTitle);
     },
     async updateSpot({ spotId, data }) {
       const response = await api.updateSpot(spotId, data);

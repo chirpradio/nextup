@@ -8,6 +8,7 @@ const VALID_TYPES = [
   "Underwriting Spot",
   "Pledge Liner",
   "Station ID",
+  "Other",
 ];
 
 const spotSchema = new Schema({
