@@ -82,12 +82,9 @@ export const useSpotsStore = defineStore("spots", {
       const spot = this.spot(spotId);
       spot.copy.push(data);
     },
-    async updateCopy({ copy, data }) {
-      await api.patch(`/spot/copy/${copy.id}`, data);
+    async updateCopy({ copy, body }) {
+      const { data } = await api.patch(`/spot/copy/${copy.id}`, body);
       Object.assign(copy, data);
-      copy.spot = {
-        id: data.spot,
-      };
     },
     async deleteCopy({ copy }) {
       await api.deleteCopy(copy.id);

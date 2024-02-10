@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" :class="classes" :disabled="loading">
+  <button class="btn" :class="classes" :disabled="disabled">
     <font-awesome-icon v-if="icon && !loading" :icon="icon" />
     <RecordSpinner v-if="loading" size="xs" class="nudge-up" />
     {{ label }}
@@ -33,6 +33,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    disable: {
+      type: Boolean,
+      default: false,
+    }
   },
   computed: {
     classes() {
@@ -44,6 +48,9 @@ export default {
       obj["btn-sm"] = this.small;
       return obj;
     },
+    disabled() {
+      return this.disable || this.loading;
+    }
   },
 };
 </script>

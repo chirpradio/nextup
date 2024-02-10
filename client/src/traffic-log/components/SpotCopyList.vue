@@ -1,6 +1,17 @@
 <template>
+  <button
+    class="btn btn-link-chirp-red check-all p-0"
+    v-if="showCheckAll"
+    @click="checkAll"
+  >
+    check all
+  </button>
   <ul v-for="copy in spot.copy" :key="copy.id" class="list-group">
-    <SpotCopyItem :copy="copy" class="list-group-item mb-2" />
+    <SpotCopyItem
+      :copy="copy"
+      class="list-group-item mb-2"
+      v-model="selected[copy.id]"
+    />
   </ul>
   <router-link
     :to="{ name: 'addSpotCopy', params: { spotId: spot.id } }"
@@ -10,14 +21,25 @@
   </router-link>
 </template>
 
+<style scoped>
+.check-all {
+  font-size: 0.75rem;
+}
+</style>
+
 <script>
 import SpotCopyItem from "./SpotCopyItem.vue";
+
+const SELECT = "select";
 
 export default {
   name: "SpotCopyList",
   components: { SpotCopyItem },
+  emits: [SELECT],
   data() {
-    return {};
+    return {
+      selected: {},
+    };
   },
   props: {
     spot: {
@@ -25,7 +47,46 @@ export default {
       required: true,
     },
   },
-  computed: {},
-  methods: {},
+  watch: {
+    spot: {
+      handler() {
+        this.spot.copy.forEach((copy) => {
+          this.selected[copy.id] = false;
+        });
+      },
+      immediate: true,
+    },
+    selected: {
+      handler(newSelected) {
+        const selectedIds = [];
+        for (const [key, value] of Object.entries(newSelected)) {
+          if (value) selectedIds.push(key);
+        }
+        this.$emit(SELECT, {
+          [this.spot.id]: this.spot.copy.filter((copy) =>
+            selectedIds.includes(copy.id)
+          ),
+        });
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    showCheckAll() {
+      return this.spot?.copy?.length > 1;
+    },
+  },
+  methods: {
+    checkAll() {
+      for (const id in this.selected) {
+        this.selected[id] = true;
+      }
+    },
+    clearAll() {
+      for (const id in this.selected) {
+        this.selected[id] = false;
+      }
+    }
+  },
 };
 </script>

@@ -35,7 +35,7 @@ export default {
       try {
         await this.spotsStore.updateCopy({
           copy: this.copy,
-          data: event,
+          body: event,
         });
         this.$router.back();
       } catch (error) {

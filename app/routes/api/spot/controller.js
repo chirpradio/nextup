@@ -55,8 +55,8 @@ module.exports = {
   },
   async updateCopy(req, res, next) {
     try {
-      await SpotService.updateCopy(req.params.id, req.body);
-      res.sendStatus(204);
+      const copy = await SpotService.updateCopy(req.params.id, req.body);
+      res.status(200).json(copy);
     } catch (error) {
       next(error);
     }

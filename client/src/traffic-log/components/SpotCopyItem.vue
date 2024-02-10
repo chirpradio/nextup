@@ -1,10 +1,20 @@
 <template>
   <li class="spot-copy-item d-inline-flex" :class="classes">
-    <!-- <input type="checkbox" class="form-check-input me-2" /> -->
-    <div class="flex-grow-1 h-100 overflow-hidden me-2">
+    <input
+      :id="id"
+      type="checkbox"
+      class="form-check-input me-2"
+      :checked="modelValue"
+      @click="$emit('update:modelValue', $event.target.checked)"
+      :value="copy.id"
+    />
+    <label
+      class="flex-grow-1 h-100 overflow-hidden fw-normal font-serif me-2"
+      :for="id"
+    >
       <span>{{ title }}</span>
       <span v-if="!started"> (not started)</span>
-    </div>
+    </label>
     <router-link
       :to="{
         name: 'editSpotCopy',
@@ -26,17 +36,22 @@
 export default {
   name: "SpotCopyItem",
   data() {
-    return {
-      checked: false,
-    };
+    return {};
   },
   props: {
     copy: {
       type: Object,
       required: true,
     },
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
+    id() {
+      return `${this.copy.id}Check`;
+    },
     title() {
       return this.copy.name || this.copy.body;
     },

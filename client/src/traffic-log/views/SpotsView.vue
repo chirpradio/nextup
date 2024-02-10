@@ -3,15 +3,8 @@
     <RecordSpinner v-if="loading" />
     <div v-if="!loading" class="py-2">
       <div class="row">
-        <div class="col-8 d-inline-flex align-items-center">
-          <h1 class="flex-grow-1">Spots</h1>
-          <router-link :to="{ name: 'addSpot' }" class="btn btn-chirp-red"
-            >Add a new spot</router-link
-          >
-        </div>
-      </div>
-      <div class="row">
         <div class="col-8 pe-3 border-end">
+          <h1>Spots</h1>
           <div class="row mt-4 font-sans fw-bold border-bottom">
             <div class="col-2">Title</div>
             <div class="col-2">Type</div>
@@ -31,12 +24,23 @@
             </div>
             <div class="col-2">{{ spot.type }}</div>
             <div class="col-8">
-              <SpotCopyList :spot="spot" />
+              <SpotCopyList :spot="spot" ref="lists" @select="onSelect" />
             </div>
           </div>
         </div>
-        <div class="col-4">
-          <!-- Bulk actions -->
+        <div class="col-4 p-3">
+          <router-link
+            :to="{ name: 'addSpot' }"
+            class="btn btn-chirp-red w-100 mb-5"
+            >Add a new spot</router-link
+          >
+          <h3>Bulk Actions</h3>
+          <SpotCopyBulkActions
+            class="px-3"
+            @bulk-update="onBulkUpdate"
+            :count="selectedCopy.length"
+            :updating-copy="updatingCopy"
+          />
         </div>
       </div>
     </div>
@@ -48,9 +52,16 @@ import RecordSpinner from "../../components/RecordSpinner.vue";
 import SpotCopyList from "../components/SpotCopyList.vue";
 import { mapStores } from "pinia";
 import { useSpotsStore } from "../store";
+import SpotCopyBulkActions from "../components/SpotCopyBulkActions.vue";
 
 export default {
-  components: { RecordSpinner, SpotCopyList },
+  components: { RecordSpinner, SpotCopyList, SpotCopyBulkActions },
+  data() {
+    return {
+      selections: {},
+      updatingCopy: false,
+    };
+  },
   computed: {
     ...mapStores(useSpotsStore),
     loading() {
@@ -59,11 +70,37 @@ export default {
     spots() {
       return this.spotsStore.spots;
     },
+    selectedCopy() {
+      return Object.values(this.selections).flat();
+    },
   },
   created() {
     if (!this.spotsStore.loadedSpots) {
       this.spotsStore.getSpots();
     }
+  },
+  methods: {
+    onSelect(event) {
+      Object.assign(this.selections, event);
+    },
+    async onBulkUpdate(event) {
+      if (!event.delete) {
+        this.updatingCopy = true;
+        delete event.delete;
+        const store = this.spotsStore;
+        const promises = this.selectedCopy.map(async function (copy) {
+          return await store.updateCopy({
+            copy,
+            body: event,
+          });
+        });
+        await Promise.all(promises);
+        this.updatingCopy = false;
+        this.$refs.lists.forEach(list => list.clearAll());
+      } else {
+        // delete copy
+      }
+    },
   },
 };
 </script>
