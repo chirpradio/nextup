@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
+import trafficLogRoutes from "../traffic-log/routes";
 
 const routes = [
   {
@@ -190,32 +191,7 @@ const routes = [
     name: "playlist",
     component: () => import("../views/playlist/PlaylistView.vue"),
   },
-  {
-    path: "/traffic-log",
-    component: () => import("../views/traffic-log/TrafficLog.vue"),
-  },
-  {
-    path: "/traffic-log/spots",
-    name: "spots",
-    component: () => import("../views/traffic-log/SpotsView.vue"),
-  },
-  {
-    path: "/traffic-log/spots/:spotId/copy/add",
-    name: "addSpotCopy",
-    component: () => import("../views/traffic-log/AddSpotCopy.vue"),
-    props: true,
-  },
-  {
-    path: "/traffic-log/spots/:spotId/copy/:copyId/edit",
-    name: "editSpotCopy",
-    component: () => import("../views/traffic-log/EditSpotCopy.vue"),
-    props: true,
-  },
-  {
-    path: "/traffic-log/spots/add",
-    name: "addSpot",
-    component: () => import("../views/traffic-log/AddSpot.vue"),
-  },
+  ...trafficLogRoutes,
 ];
 
 const router = createRouter({
@@ -236,6 +212,12 @@ router.beforeEach((to, from, next) => {
     next({ name: "Log In", query: { redirect: to.fullPath } });
   } else {
     next();
+  }
+});
+
+router.afterEach((to) => {
+  if (to.meta.title) {
+    document.title = `${to.meta.title} – NextUp`;
   }
 });
 

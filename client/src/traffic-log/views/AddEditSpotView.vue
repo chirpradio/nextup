@@ -1,7 +1,8 @@
 <template>
-  <div class="px-3">
-    <h1>Add a new spot</h1>
-    <div class="row">
+  <div class="px-3 pb-5">
+    <h1>{{ heading }}</h1>
+    <RecordSpinner v-if="loading" />
+    <div class="row" v-if="!loading">
       <div class="col-8 pe-5">
         <form ref="form" novalidate>
           <div class="row mt-3">
@@ -19,7 +20,7 @@
           </div>
           <div class="row mt-3">
             <label for="spot" class="col-2 col-form-label">Type</label>
-            <div class="col-4">
+            <div class="col-3">
               <select id="spot" class="form-select" v-model="type" required>
                 <option value="Live Read Promo">Live Read Promo</option>
                 <option value="Recorded Promo">Recorded Promo</option>
@@ -51,12 +52,23 @@
             </div>
           </div>
           <div class="row mt-3">
-            <SpotConstraintTable ref="table" />
+            <SpotConstraintTable ref="table" :constraints="spot.constraints" />
           </div>
-          <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-lg btn-chirp-red" @click.prevent="onSave">
-              Save
+          <div class="d-flex justify-content-end mt-5">
+            <button
+              class="btn btn-lg btn-outline-chirp-red"
+              @click.prevent="onCancel"
+              :disabled="saving"
+            >
+              Cancel
             </button>
+            <LoadingButton
+              label="Save"
+              class="ms-3 btn-lg"
+              :loading="saving"
+              :small="false"
+              @click.prevent="onSave"
+            />
           </div>
         </form>
       </div>
@@ -69,40 +81,96 @@
 </template>
 
 <script>
-import SpotConstraintBulkActions from "../../components/traffic-log/SpotConstraintBulkActions.vue";
-import SpotConstraintTable from "../../components/traffic-log/SpotConstraintTable.vue";
+import RecordSpinner from "../../components/RecordSpinner.vue";
+import SpotConstraintTable from "../components/SpotConstraintTable.vue";
+import SpotConstraintBulkActions from "../components/SpotConstraintBulkActions.vue";
 import { mapStores } from "pinia";
-import { useSpotsStore } from "@/stores/spots";
+import { useSpotsStore } from "../store";
+import LoadingButton from "../../components/LoadingButton.vue";
 
 export default {
   data() {
     return {
       title: "",
       type: "",
-      slot: 0,
+      slot: null,
+      editing: false,
     };
+  },
+  props: {
+    spotId: {
+      type: String,
+      required: false,
+    },
+  },
+  components: {
+    SpotConstraintBulkActions,
+    SpotConstraintTable,
+    RecordSpinner,
+    LoadingButton,
   },
   computed: {
     ...mapStores(useSpotsStore),
+    loading() {
+      return this.spotsStore.loadingSpots;
+    },
+    heading() {
+      return this.editing ? "Edit spot" : "Add spot";
+    },
+    spot() {
+      if (this.spotId) {
+        return this.spotsStore.spot(this.spotId);
+      }
+
+      return {
+        constraints: [],
+      };
+    },
+    saving() {
+      return this.spotsStore.savingSpot;
+    },
   },
   methods: {
-    onBulkAdd(event) {
-      this.$refs.table.selectHours(event.weekdays, event.hours);
+    onBulkAdd({ weekdays, hours }) {
+      this.$refs.table.selectCells(weekdays, hours);
+    },
+    onCancel() {
+      this.$router.push({ name: "spots" });
     },
     async onSave() {
       if (this.$refs.form.checkValidity()) {
-        await this.spotsStore.addSpot({
-          title: this.title,
-          type: this.type,
-          slot: this.slot,
-          selected: this.$refs.table.selected,
-        });
+        if (this.editing) {
+          await this.spotsStore.updateSpot(this.spotId, {
+            title: this.title,
+            type: this.type,
+            slot: this.slot,
+            selected: this.$refs.table.selected,
+          });
+        } else {
+          await this.spotsStore.addSpot({
+            title: this.title,
+            type: this.type,
+            slot: this.slot,
+            selected: this.$refs.table.selected,
+          });
+        }
         this.$router.push({ name: "spots" });
       } else {
         this.$refs.form.classList.add("was-validated");
+        window.scrollTo(0, 0);
       }
     },
   },
-  components: { SpotConstraintTable, SpotConstraintBulkActions },
+  async created() {
+    if (this.spotId) {
+      this.editing = true;
+      await this.spotsStore.getSpot(this.spotId);
+      this.title = this.spot.title;
+      this.type = this.spot.type;
+      if (this.spot.constraints.length) {
+        this.slot = this.spot.constraints[0].slot;
+      }
+    }
+  },
 };
 </script>

@@ -35,6 +35,8 @@ async function getAndHandleError(getter) {
   return response.data;
 }
 
+export { instance as api };
+
 export default {
   async login(email, password) {
     const response = await instance.post("/token", {
@@ -175,34 +177,8 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async getSpots() {
-    const getter = instance.get("/spot");
-    return await getAndHandleError(getter);
-  },
-
-  async getSpot(spotId) {
-    const getter = instance.get(`/spot/${spotId}`);
-    return await getAndHandleError(getter);
-  },
-
-  async addSpot(data) {
-    return await instance.post(`/spot/`, data);
-  },
-
-  async updateSpot(spotId, data) {
-    await instance.patch(`/spot/${spotId}`, data);
-  },
-
   async deleteSpot(spotId) {
     await instance.delete(`/spot/${spotId}`);
-  },
-
-  async addCopyToSpot(spotId, data) {
-    return await instance.post(`/spot/${spotId}/copy`, data);
-  },
-
-  async updateCopy(copyId, data) {
-    await instance.patch(`/spot/copy/${copyId}`, data);
   },
 
   async deleteCopy(copyId) {

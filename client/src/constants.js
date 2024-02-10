@@ -4,13 +4,3 @@ export const allowedTags = [
   "heavy_rotation",
   "light_rotation",
 ];
-
-export const days = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];

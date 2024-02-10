@@ -1,15 +1,15 @@
 <template>
   <form ref="form" novalidate>
     <fieldset class="mt-3">
-      <div v-for="weekday in weekdays" :key="weekday.day" class="form-check">
+      <div v-for="option in dayOptions" :key="option.day" class="form-check">
         <input
           class="form-check-input"
           type="checkbox"
-          v-model="weekday.selected"
-          :id="weekday.id"
+          v-model="option.selected"
+          :id="option.id"
         />
-        <label class="form-check-label" :for="weekday.id">
-          {{ weekday.day }}
+        <label class="form-check-label" :for="option.id">
+          {{ option.day }}
         </label>
       </div>
     </fieldset>
@@ -29,68 +29,74 @@
       </div>
     </fieldset>
     <button
-      class="btn btn-primary mt-5"
+      class="btn btn-outline-chirp-red mt-5"
       :disabled="disableAddButton"
       @click.prevent="onAdd"
     >
-      Add
+      Add to schedule
     </button>
   </form>
 </template>
 
 <script>
-import _ from "lodash";
-import { days } from "../../constants";
+import { days, hours } from "../constants";
 
 const BULK_ADD = "bulkAdd";
 const hourOptions = {
   everyHour: {
     label: "Every hour",
-    values: _.range(0, 24),
+    values: hours,
   },
   evenHours: {
     label: "Even hours",
-    values: _.range(0, 24).filter((h) => h % 2 === 0),
+    values: hours.filter((h) => h % 2 === 0),
   },
   oddHours: {
     label: "Odd hours",
-    values: _.range(0, 24).filter((h) => h % 2 === 1),
+    values: hours.filter((h) => h % 2 === 1),
   },
   everyThreeHours: {
     label: "Every three hours",
-    values: _.range(0, 24).filter((h) => h % 3 === 0),
+    values: hours.filter((h) => h % 3 === 0),
   },
   everySixHours: {
     label: "Every six hours",
-    values: _.range(0, 24).filter((h) => h % 6 === 0),
+    values: hours.filter((h) => h % 6 === 0),
   },
 };
 
 export default {
   data() {
-    const weekdays = days.map((day) => {
-      return { day, id: `${day}Check`, selected: false };
-    });
+    const dayOptions = [];
+    for (const [key, value] of Object.entries(days)) {
+      dayOptions.push({
+        day: key,
+        id: `${key}Check`,
+        dow: value,
+        selected: false,
+      });
+    }
+
     return {
-      weekdays,
+      dayOptions,
       hourOptions,
       bulkHours: "",
     };
   },
   computed: {
     disableAddButton() {
-      return !this.bulkHours || !this.weekdays.some((d) => d.selected);
+      return !this.bulkHours || !this.dayOptions.some((d) => d.selected);
     },
   },
   emits: [BULK_ADD],
   methods: {
     onAdd() {
       this.$emit(BULK_ADD, {
-        weekdays: this.weekdays.filter((d) => d.selected).map((d) => d.day),
+        weekdays: this.dayOptions.filter((d) => d.selected).map((d) => d.dow),
         hours: hourOptions[this.bulkHours].values,
       });
       // reset data & form
-      this.weekdays.forEach((d) => (d.selected = false));
+      this.dayOptions.forEach((d) => (d.selected = false));
       this.bulkHours = "";
     },
   },

@@ -51,17 +51,17 @@ async function listSpots(active = true, includeCopy = true) {
   return response;
 }
 
-async function addSpotToConstraint(spot, id, transaction) {
+async function addSpotToConstraint(spotKey, id, transaction) {
   const constraint = await SpotConstraint.get(id);
   if (constraint) {
-    constraint.spots.push(spot);
+    constraint.spots.push(spotKey);
     return await constraint.save(transaction);
   }
 }
 
-async function removeSpotFromConstraint(spot, id, transaction) {
+async function removeSpotFromConstraint(spotKey, id, transaction) {
   const constraint = await SpotConstraint.get(id);
-  const index = constraint.spots.findIndex((key) => key.id == spot.id);
+  const index = constraint.spots.findIndex((key) => key.id == spotKey.id);
   if (index !== -1) {
     constraint.spots.splice(index, 1);
     return await constraint.save(transaction);
@@ -75,14 +75,14 @@ async function updateSpot(id, data) {
     const spotKey = Spot.key(id);
     const current = await getConstraintsForSpot(spotKey);
     const currentIds = current.map((constraint) => constraint.id);
-    const providedIds = data.constraints.map((constraint) => constraint.id);
-    const removed = currentIds.filter((id) => !providedIds.includes(id));
-    const added = providedIds.filter((id) => !currentIds.includes(id));
+    const removed = currentIds.filter((id) => !data.constraints.includes(id));
+    const added = data.constraints.filter((id) => !currentIds.includes(id));
+    console.log(added, removed);
 
-    const addPromises = added.map((id) => {
+    const addPromises = added.map(async function (id) {
       return addSpotToConstraint(spotKey, id, transaction);
     });
-    const removePromises = removed.map((id) => {
+    const removePromises = removed.map(async function (id) {
       return removeSpotFromConstraint(spotKey, id, transaction);
     });
     await Promise.all([...addPromises, ...removePromises]);
@@ -130,7 +130,9 @@ async function addCopy(id, data, user) {
   data.author = user.entityKey;
   const copy = new SpotCopy(data);
   await copy.save();
-  return copy.plain({ showKey: true });
+  const plain = copy.plain({ showKey: true });
+  plain.spot = key;
+  return plain;
 }
 
 async function updateCopy(id, data) {

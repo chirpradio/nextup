@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api } from "../services/api.service";
 
 function sortSpotsByTitle(a, b) {
   if (a.title === b.title || !a.title || !b.title) {
@@ -13,6 +13,7 @@ export const useSpotsStore = defineStore("spots", {
     spots: [],
     loadingSpots: false,
     loadedSpots: false,
+    savingSpot: false,
     trafficLog: [],
     loadingTrafficLog: false,
   }),
@@ -22,51 +23,67 @@ export const useSpotsStore = defineStore("spots", {
     },
     copy: (state) => (spotId, copyId) => {
       const spot = state.spots.find((element) => element.id === spotId);
-      return spot.copy.find((element) => element.id === copyId);
+      if (spot) {
+        return spot.copy.find((element) => element.id === copyId);
+      }
     },
   },
   actions: {
     async getSpots() {
       this.loadingSpots = true;
-      const response = await api.getSpots();
-      this.spots = response.sort(sortSpotsByTitle);
+      const { data } = await api.get("/spot");
+      this.spots = data.sort(sortSpotsByTitle);
       this.loadingSpots = false;
       this.loadedSpots = true;
     },
-    async getSpot({ spotId }) {
+    async getSpot(spotId) {
       this.loadingSpots = true;
-      const response = await api.getSpot(spotId);
-      const index = this.spots.indexOf((element) => element.id === spotId);
-      this.spots.splice(index, 0, response);
+      const { data } = await api.get(`/spot/${spotId}`);
+      const index = this.spots.findIndex((spot) => spot.id === spotId);
+      if (index === -1) {
+        this.spots.push(data);
+      } else {
+        this.spots.splice(index, 1, data);
+      }
       this.loadingSpots = false;
     },
     async addSpot({ title, type, slot, selected }) {
-      const constraints = selected.map((c) => `${c.weekday}:${c.hour}:${slot}`);
-      const response = await api.addSpot({
+      this.savingSpot = true;
+      const constraints = selected.map((c) => `${c.day}:${c.hour}:${slot}`);
+      const { data } = await api.post("/spot", {
         title,
         type,
         constraints,
       });
-      this.spots.push(response.data);
+      this.spots.push(data);
       this.spots.sort(sortSpotsByTitle);
+      this.savingSpot = false;
     },
-    async updateSpot({ spotId, data }) {
-      const response = await api.updateSpot(spotId, data);
-      const index = this.spots.indexOf((element) => element.id === spotId);
-      this.spots.splice(index, 0, response);
+    async updateSpot(spotId, { title, type, slot, selected }) {
+      this.savingSpot = true;
+      const constraints = selected.map((c) => `${c.day}:${c.hour}:${slot}`);
+      const { data } = await api.patch(`/spot/${spotId}`, {
+        title,
+        type,
+        constraints,
+      });
+      const index = this.spots.findIndex((spot) => spot.id === spotId);
+      this.spots.splice(index, 1, data);
+      this.spots.sort(sortSpotsByTitle);
+      this.savingSpot = false;
     },
     async deleteSpot({ spotId }) {
       await api.deleteSpot(spotId);
       const index = this.spots.indexOf((element) => element.id === spotId);
       this.spots.splice(index, 1);
     },
-    async addCopyToSpot({ spotId, data }) {
-      const response = await api.addCopyToSpot(spotId, data);
+    async addCopyToSpot({ spotId, copy }) {
+      const { data } = await api.post(`/spot/${spotId}/copy`, copy);
       const spot = this.spot(spotId);
-      spot.copy.push(response.data);
+      spot.copy.push(data);
     },
     async updateCopy({ copy, data }) {
-      await api.updateCopy(copy.id, data);
+      await api.patch(`/spot/copy/${copy.id}`, data);
       Object.assign(copy, data);
       copy.spot = {
         id: data.spot,

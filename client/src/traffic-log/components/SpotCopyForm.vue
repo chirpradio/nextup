@@ -82,9 +82,7 @@
 </style>
 
 <script>
-import { mapStores } from "pinia";
-import { useSpotsStore } from "@/stores/spots";
-import LoadingButton from "../LoadingButton.vue";
+import LoadingButton from "../../components/LoadingButton.vue";
 
 const SAVE = "save";
 
@@ -111,21 +109,21 @@ export default {
   },
   props: {
     copy: Object,
+    spots: Array,
   },
-  computed: {
-    ...mapStores(useSpotsStore),
-    spots() {
-      return this.spotsStore.spots;
+  watch: {
+    copy: {
+      handler(newCopy) {
+        this.name = newCopy.name;
+        this.body = newCopy.body;
+        // trim dates to a form the HTML input will accept
+        this.start_on = newCopy.start_on?.slice(0, 19);
+        this.expire_on = newCopy.expire_on?.slice(0, 19);
+        this.underwriter = newCopy.underwriter;
+        this.spot_id = newCopy.spot.id;
+      },
+      immediate: true,
     },
-  },
-  mounted() {
-    this.name = this.copy.name;
-    this.body = this.copy.body;
-    // trim dates to a form the HTML input will accept
-    this.start_on = this.copy.start_on?.slice(0, 19);
-    this.expire_on = this.copy.expire_on?.slice(0, 19);
-    this.underwriter = this.copy.underwriter;
-    this.spot_id = this.copy.spot.id;
   },
   emits: [SAVE],
   methods: {
