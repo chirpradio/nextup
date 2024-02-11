@@ -10,6 +10,10 @@ on:
         description: Version name or number
         required: false
         default: live
+      promote:
+        description: Route traffic to this version
+        type: boolean
+        default: true
 
 jobs:
   deploy:
@@ -52,4 +56,4 @@ jobs:
           DATASTORE_PROJECT_ID=${{ steps.auth.outputs.project_id }}
           LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
         version: ${{ github.event.inputs.version }}
-        promote: true
+        promote: ${{ github.event.inputs.promote }}
