@@ -5,7 +5,9 @@
       <div class="row">
         <div class="col-8 pe-3 border-end">
           <h1>Spots</h1>
-          <div class="row mt-4 font-sans fw-bold border-bottom">
+          <div
+            class="row d-none d-lg-flex mt-4 font-sans fw-bold border-bottom"
+          >
             <div class="col-2">Title</div>
             <div class="col-2">Type</div>
             <div class="col-8">Copy</div>
@@ -15,15 +17,15 @@
             :key="spot.id"
             class="row border-bottom py-3"
           >
-            <div class="col-2">
+            <div class="col-12 col-lg-2">
               <router-link
                 :to="{ name: 'editSpot', params: { spotId: spot.id } }"
               >
                 {{ spot.title }}
               </router-link>
             </div>
-            <div class="col-2">{{ spot.type }}</div>
-            <div class="col-8">
+            <div class="col-12 col-lg-2">{{ spot.type }}</div>
+            <div class="col-12 col-lg-8 mt-3 mt-lg-0">
               <SpotCopyList :spot="spot" ref="lists" @select="onSelect" />
             </div>
           </div>
@@ -84,28 +86,28 @@ export default {
     onSelect(event) {
       Object.assign(this.selections, event);
     },
-    async onBulkUpdate(event) {      
+    async onBulkUpdate(event) {
       const store = this.spotsStore;
       let promises;
 
       this.updatingCopy = true;
-      if (!event.deleteCopy) {        
-        delete event.deleteCopy;        
+      if (!event.deleteCopy) {
+        delete event.deleteCopy;
         promises = this.selectedCopy.map(async function (copy) {
           return await store.updateCopy({
             copy,
             body: event,
           });
-        });        
-      } else {        
+        });
+      } else {
         promises = this.selectedCopy.map(async function (copy) {
           return await store.deleteCopy(copy);
-        });        
+        });
       }
 
-      await Promise.all(promises);        
+      await Promise.all(promises);
       this.updatingCopy = false;
-      this.$refs.lists.forEach(list => list.clearAll());
+      this.$refs.lists.forEach((list) => list.clearAll());
       this.$refs.bulkActions.reset();
     },
   },

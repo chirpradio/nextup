@@ -1,13 +1,13 @@
 <template>
   <div class="px-3 pb-5">
-    <h1>{{ heading }}</h1>
     <RecordSpinner v-if="loading" />
     <div class="row" v-if="!loading">
       <div class="col-8 pe-5">
+        <h1>{{ heading }}</h1>
         <form ref="form" novalidate>
           <div class="row mt-3">
             <label for="name" class="col-2 col-form-label">Title</label>
-            <div class="col-4">
+            <div class="col-6 col-lg-4">
               <input
                 id="name"
                 class="form-control"
@@ -20,7 +20,7 @@
           </div>
           <div class="row mt-3">
             <label for="spot" class="col-2 col-form-label">Type</label>
-            <div class="col-3">
+            <div class="col-6 col-lg-4">
               <select id="spot" class="form-select" v-model="type" required>
                 <option value="Live Read Promo">Live Read Promo</option>
                 <option value="Recorded Promo">Recorded Promo</option>
@@ -36,7 +36,7 @@
           </div>
           <div class="row mt-3">
             <label for="spot" class="col-2 col-form-label">Break (slot)</label>
-            <div class="col-2">
+            <div class="col-4 col-lg-2">
               <select id="spot" class="form-select" v-model="slot" required>
                 <option value="0">00</option>
                 <option value="12">12</option>
@@ -72,7 +72,7 @@
           </div>
         </form>
       </div>
-      <div class="col-4 border-start ps-4">
+      <div class="col-4 border-start ps-3 pt-3">
         <h3>Bulk actions</h3>
         <SpotConstraintBulkActions @bulk-add="onBulkAdd" />
       </div>
