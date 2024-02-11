@@ -5,9 +5,7 @@
       <div class="row">
         <div class="col-8 pe-3 border-end">
           <h1>Spots</h1>
-          <div
-            class="row mt-4 mx-1 px-0 py-2 border-top border-bottom"
-          >
+          <div class="row mt-4 mx-1 px-0 py-2 border-top border-bottom">
             <div class="col-12 col-lg-2 ps-0 font-sans fs-5">Filters</div>
             <div class="col-12 col-lg-2 ps-0 mt-3 mt-lg-0">
               <label class="form-label">Type</label>

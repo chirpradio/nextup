@@ -1,12 +1,5 @@
 const routes = [
   {
-    path: "/traffic-log",
-    component: () => import("./views/TrafficLogView.vue"),
-    meta: {
-      title: "Traffic Log",
-    },
-  },
-  {
     path: "/traffic-log/spots",
     name: "spots",
     component: () => import("./views/SpotsView.vue"),
