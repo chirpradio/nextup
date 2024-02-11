@@ -36,6 +36,7 @@
           >
           <h3>Bulk Actions</h3>
           <SpotCopyBulkActions
+            ref="bulkActions"
             class="px-3"
             @bulk-update="onBulkUpdate"
             :count="selectedCopy.length"
@@ -83,23 +84,29 @@ export default {
     onSelect(event) {
       Object.assign(this.selections, event);
     },
-    async onBulkUpdate(event) {
-      if (!event.delete) {
-        this.updatingCopy = true;
-        delete event.delete;
-        const store = this.spotsStore;
-        const promises = this.selectedCopy.map(async function (copy) {
+    async onBulkUpdate(event) {      
+      const store = this.spotsStore;
+      let promises;
+
+      this.updatingCopy = true;
+      if (!event.deleteCopy) {        
+        delete event.deleteCopy;        
+        promises = this.selectedCopy.map(async function (copy) {
           return await store.updateCopy({
             copy,
             body: event,
           });
-        });
-        await Promise.all(promises);
-        this.updatingCopy = false;
-        this.$refs.lists.forEach(list => list.clearAll());
-      } else {
-        // delete copy
+        });        
+      } else {        
+        promises = this.selectedCopy.map(async function (copy) {
+          return await store.deleteCopy(copy);
+        });        
       }
+
+      await Promise.all(promises);        
+      this.updatingCopy = false;
+      this.$refs.lists.forEach(list => list.clearAll());
+      this.$refs.bulkActions.reset();
     },
   },
 };
