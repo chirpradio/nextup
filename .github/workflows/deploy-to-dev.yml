@@ -41,16 +41,15 @@ jobs:
       uses: google-github-actions/deploy-appengine@v2
       with:
         deliverables: ./app/app.yaml
-        with:
-          env_vars: |
-            NODE_ENV=production
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            SESSION_SECRET=${{ secrets.SESSION_SECRET }}
-            SESSION_LENGTH=${{ secrets.SESSION_LENGTH }}
-            ELASTICSEARCH_DOMAIN=${{ secrets.ELASTICSEARCH_DOMAIN }}
-            ELASTICSEARCH_USERNAME=${{ secrets.ELASTICSEARCH_USERNAME }}
-            ELASTICSEARCH_PASSWORD=${{ secrets.ELASTICSEARCH_PASSWORD }}
-            DATASTORE_PROJECT_ID=${{ steps.auth.outputs.project_id }}
-            LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
+        env_vars: |-
+          NODE_ENV=production
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          SESSION_SECRET=${{ secrets.SESSION_SECRET }}
+          SESSION_LENGTH=${{ secrets.SESSION_LENGTH }}
+          ELASTICSEARCH_DOMAIN=${{ secrets.ELASTICSEARCH_DOMAIN }}
+          ELASTICSEARCH_USERNAME=${{ secrets.ELASTICSEARCH_USERNAME }}
+          ELASTICSEARCH_PASSWORD=${{ secrets.ELASTICSEARCH_PASSWORD }}
+          DATASTORE_PROJECT_ID=${{ steps.auth.outputs.project_id }}
+          LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
         version: ${{ github.event.inputs.version }}
         promote: true
