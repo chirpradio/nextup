@@ -36,7 +36,7 @@ export default {
     disable: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     classes() {
@@ -50,7 +50,7 @@ export default {
     },
     disabled() {
       return this.disable || this.loading;
-    }
+    },
   },
 };
 </script>

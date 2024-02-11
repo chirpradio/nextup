@@ -86,7 +86,7 @@ export default {
       for (const id in this.selected) {
         this.selected[id] = false;
       }
-    }
+    },
   },
 };
 </script>
