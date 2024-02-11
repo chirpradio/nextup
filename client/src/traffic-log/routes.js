@@ -1,7 +1,7 @@
 const routes = [
   {
     path: "/traffic-log",
-    component: () => import("./views/TrafficLog.vue"),
+    component: () => import("./views/TrafficLogView.vue"),
     meta: {
       title: "Traffic Log",
     },
