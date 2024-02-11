@@ -121,7 +121,10 @@ async function addSpot(data) {
     await spot.delete(spot.entityKey);
     throw err;
   }
-  return spot.plain({ showKey: true });
+
+  const plain = spot.plain({ showKey: true });
+  plain.copy = [];
+  return plain;
 }
 
 async function addCopy(id, data, user) {

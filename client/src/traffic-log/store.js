@@ -84,9 +84,11 @@ export const useSpotsStore = defineStore("spots", {
     },
     async updateCopy({ copy, body }) {
       const { data } = await api.patch(`/spot/copy/${copy.id}`, body);
-      if(copy.spot.id !== data.spot.id) {
+      if (copy.spot.id !== data.spot.id) {
         const oldSpot = this.spot(copy.spot.id);
-        const index = oldSpot.copy.findIndex((element) => element.id === copy.id);
+        const index = oldSpot.copy.findIndex(
+          (element) => element.id === copy.id
+        );
         oldSpot.copy.splice(index, 1);
 
         const newSpot = this.spot(data.spot.id);

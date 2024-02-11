@@ -52,9 +52,11 @@ export default {
   watch: {
     spot: {
       handler() {
-        this.spot.copy.forEach((copy) => {
-          this.selected[copy.id] = false;
-        });
+        if (Array.isArray(this.spot.copy)) {
+          this.spot.copy.forEach((copy) => {
+            this.selected[copy.id] = false;
+          });
+        }
       },
       immediate: true,
     },
@@ -81,7 +83,7 @@ export default {
         );
       }
 
-      return this.spot.copy;
+      return this.spot.copy || [];
     },
     showCheckAll() {
       return this.filteredCopy.length > 1;

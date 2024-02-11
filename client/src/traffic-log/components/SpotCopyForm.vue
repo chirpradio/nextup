@@ -106,7 +106,7 @@ export default {
   watch: {
     copy: {
       handler(newCopy) {
-        if(newCopy) {
+        if (newCopy) {
           this.name = newCopy.name;
           this.body = newCopy.body;
           // trim dates to a form the HTML input will accept
@@ -114,7 +114,7 @@ export default {
           this.expire_on = newCopy.expire_on?.slice(0, 19);
           this.underwriter = newCopy.underwriter;
           this.spot_id = newCopy.spot.id;
-        }        
+        }
       },
       immediate: true,
     },
