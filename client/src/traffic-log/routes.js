@@ -5,6 +5,7 @@ const routes = [
     component: () => import("./views/SpotsView.vue"),
     meta: {
       title: "Spots",
+      requiresAuth: "traffic-log",
     },
   },
   {
@@ -14,6 +15,7 @@ const routes = [
     props: true,
     meta: {
       title: "Add Spot Copy",
+      requiresAuth: "traffic-log",
     },
   },
   {
@@ -23,6 +25,7 @@ const routes = [
     props: true,
     meta: {
       title: "Edit Spot Copy",
+      requiresAuth: "traffic-log",
     },
   },
   {
@@ -31,6 +34,7 @@ const routes = [
     component: () => import("./views/AddEditSpotView.vue"),
     meta: {
       title: "Add Spot",
+      requiresAuth: "traffic-log",
     },
   },
   {
@@ -40,6 +44,7 @@ const routes = [
     props: true,
     meta: {
       title: "Edit Spot",
+      requiresAuth: "traffic-log",
     },
   },
 ];

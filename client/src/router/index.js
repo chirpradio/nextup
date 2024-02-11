@@ -206,12 +206,14 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore();
   if (to.name !== "Log In" && !authStore.isAuthenticated) {
-    next({ name: "Log In", query: { redirect: to.fullPath } });
-  } else {
-    next();
+    return { name: "Log In", query: { redirect: to.fullPath } };
+  }
+
+  if (to.meta.requiresAuth && !authStore.isAuthorized(to.meta.requiresAuth)) {
+    return false;
   }
 });
 
