@@ -15,17 +15,17 @@
 
 <script>
 import { mapStores } from "pinia";
-import { useSpotsStore } from "@/stores/spots";
+import { useSpotsStore } from "../store";
 
 export default {
   computed: {
     ...mapStores(useSpotsStore),
     trafficLog() {
-      const log = this.spotsStore.trafficLog;
+      const log = this.spotsStore.trafficLog;      
       return log ? log.filter((entry) => entry.spot) : [];
     },
   },
-  mounted() {
+  created() {
     this.spotsStore.getTrafficLog();
   },
 };

@@ -73,7 +73,7 @@ export const useSpotsStore = defineStore("spots", {
       this.savingSpot = false;
     },
     async deleteSpot({ spotId }) {
-      await api.deleteSpot(spotId);
+      await api.delete(`/spot/${spotId}`);
       const index = this.spots.indexOf((element) => element.id === spotId);
       this.spots.splice(index, 1);
     },
@@ -94,20 +94,20 @@ export const useSpotsStore = defineStore("spots", {
     },
     async getTrafficLog() {
       this.loadingTrafficLog = true;
-      const response = await api.getTrafficLog();
-      this.trafficLog = response;
+      const { data } = await api.get("/traffic-log");
+      this.trafficLog = data;
       this.loadingTrafficLog = false;
     },
-    async addTrafficLogEntry(data) {
-      const response = await api.addTrafficLogEntry(data);
+    async addTrafficLogEntry(body) {
+      const { data } = await api.post("/traffic-log", body);
       const entry = this.trafficLog.find((element) => {
         return (
-          element.dow === response.dow &&
-          element.hour === response.hour &&
-          element.slot === response.slot
+          element.dow === data.dow &&
+          element.hour === data.hour &&
+          element.slot === data.slot
         );
       });
-      Object.assign(entry, response);
+      Object.assign(entry, data);
     },
   },
 });

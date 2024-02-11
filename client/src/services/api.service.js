@@ -176,21 +176,4 @@ export default {
     });
     return await getAndHandleError(getter);
   },
-
-  async deleteSpot(spotId) {
-    await instance.delete(`/spot/${spotId}`);
-  },
-
-  async deleteCopy(copyId) {
-    await instance.delete(`/spot/copy/${copyId}`);
-  },
-
-  async getTrafficLog() {
-    const getter = instance.get("/traffic-log");
-    return await getAndHandleError(getter);
-  },
-
-  async addTrafficLogEntry(data) {
-    await instance.post("/traffic-log", data);
-  },
 };
