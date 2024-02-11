@@ -11,3 +11,14 @@ export const days = {
 };
 
 export const hours = _.range(0, 24);
+
+export const types = [
+  "Live Read Promo",
+  "Recorded Promo",
+  "Live Read PSA",
+  "Recorded PSA",
+  "Underwriting Spot",
+  "Pledge Liner",
+  "Station ID",
+  "Other",
+];

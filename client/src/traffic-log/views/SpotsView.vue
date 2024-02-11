@@ -6,6 +6,34 @@
         <div class="col-8 pe-3 border-end">
           <h1>Spots</h1>
           <div
+            class="row mt-4 mx-1 px-0 py-2 border-top border-bottom"
+          >
+            <div class="col-12 col-lg-2 ps-0 font-sans fs-5">Filters</div>
+            <div class="col-12 col-lg-2 ps-0 mt-3 mt-lg-0">
+              <label class="form-label">Type</label>
+              <select class="form-select form-select-sm" v-model="typeFilter">
+                <option value="">All</option>
+                <option v-for="opt in types" :key="opt" :value="opt">
+                  {{ opt }}
+                </option>
+              </select>
+            </div>
+            <div class="col-12 col-lg-2 ps-0 ps-lg-3 mt-3 mt-lg-0">
+              <label class="form-label">Copy</label>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="futureCopy"
+                  v-model="futureCopy"
+                />
+                <label class="form-check-label" for="futureCopy">
+                  Future
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
             class="row d-none d-lg-flex mt-4 font-sans fw-bold border-bottom"
           >
             <div class="col-2">Title</div>
@@ -26,7 +54,12 @@
             </div>
             <div class="col-12 col-lg-2">{{ spot.type }}</div>
             <div class="col-12 col-lg-8 mt-3 mt-lg-0">
-              <SpotCopyList :spot="spot" ref="lists" @select="onSelect" />
+              <SpotCopyList
+                :spot="spot"
+                ref="lists"
+                @select="onSelect"
+                :future="futureCopy"
+              />
             </div>
           </div>
         </div>
@@ -56,13 +89,17 @@ import SpotCopyList from "../components/SpotCopyList.vue";
 import { mapStores } from "pinia";
 import { useSpotsStore } from "../store";
 import SpotCopyBulkActions from "../components/SpotCopyBulkActions.vue";
+import { types } from "../constants";
 
 export default {
   components: { RecordSpinner, SpotCopyList, SpotCopyBulkActions },
   data() {
     return {
       selections: {},
+      typeFilter: "",
       updatingCopy: false,
+      types,
+      futureCopy: false,
     };
   },
   computed: {
@@ -71,6 +108,11 @@ export default {
       return this.spotsStore.loadingSpots;
     },
     spots() {
+      if (this.typeFilter) {
+        return this.spotsStore.spots.filter(
+          (spot) => spot.type === this.typeFilter
+        );
+      }
       return this.spotsStore.spots;
     },
     selectedCopy() {

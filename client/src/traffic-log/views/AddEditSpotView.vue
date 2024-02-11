@@ -22,14 +22,7 @@
             <label for="spot" class="col-2 col-form-label">Type</label>
             <div class="col-6 col-lg-4">
               <select id="spot" class="form-select" v-model="type" required>
-                <option value="Live Read Promo">Live Read Promo</option>
-                <option value="Recorded Promo">Recorded Promo</option>
-                <option value="Live Read PSA">Live Read PSA</option>
-                <option value="Recorded PSA">Recorded PSA</option>
-                <option value="Underwriting Spot">Underwriting Spot</option>
-                <option value="Pledge Liner">Pledge Liner</option>
-                <option value="Station ID">Station ID</option>
-                <option value="Other">Other</option>
+                <option v-for="opt in types" :key="opt">{{ opt }}</option>
               </select>
               <div class="invalid-feedback">Please select a type</div>
             </div>
@@ -87,6 +80,7 @@ import SpotConstraintBulkActions from "../components/SpotConstraintBulkActions.v
 import { mapStores } from "pinia";
 import { useSpotsStore } from "../store";
 import LoadingButton from "../../components/LoadingButton.vue";
+import { types } from "../constants";
 
 export default {
   data() {
@@ -95,6 +89,7 @@ export default {
       type: "",
       slot: null,
       editing: false,
+      types,
     };
   },
   props: {

@@ -6,3 +6,12 @@ export const getFullDateTimeString = function (str) {
 
   return null;
 };
+
+export const copyStarted = function (start_on) {
+  if (start_on) {
+    const start = new Date(start_on.slice(0, 19));
+    return start < Date.now();
+  }
+
+  return false;
+};

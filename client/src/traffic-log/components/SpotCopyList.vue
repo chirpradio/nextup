@@ -6,7 +6,7 @@
   >
     check all
   </button>
-  <ul v-for="copy in spot.copy" :key="copy.id" class="list-group">
+  <ul v-for="copy in filteredCopy" :key="copy.id" class="list-group">
     <SpotCopyItem
       :copy="copy"
       class="list-group-item mb-2"
@@ -29,6 +29,7 @@
 
 <script>
 import SpotCopyItem from "./SpotCopyItem.vue";
+import { copyStarted } from "../functions";
 
 const SELECT = "select";
 
@@ -46,6 +47,7 @@ export default {
       type: Object,
       required: true,
     },
+    future: Boolean,
   },
   watch: {
     spot: {
@@ -72,8 +74,17 @@ export default {
     },
   },
   computed: {
+    filteredCopy() {
+      if (this.future) {
+        return this.spot.copy.filter(
+          (copy) => copy.start_on && !copyStarted(copy.start_on)
+        );
+      }
+
+      return this.spot.copy;
+    },
     showCheckAll() {
-      return this.spot?.copy?.length > 1;
+      return this.filteredCopy.length > 1;
     },
   },
   methods: {

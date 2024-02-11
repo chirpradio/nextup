@@ -33,6 +33,8 @@
 </style>
 
 <script>
+import { copyStarted } from "../functions";
+
 export default {
   name: "SpotCopyItem",
   data() {
@@ -56,12 +58,7 @@ export default {
       return this.copy.name || this.copy.body;
     },
     started() {
-      if (this.copy.start_on) {
-        const start = new Date(this.copy.start_on.slice(0, 19));
-        return start < Date.now();
-      }
-
-      return false;
+      return copyStarted(this.copy.start_on);
     },
     classes() {
       return {

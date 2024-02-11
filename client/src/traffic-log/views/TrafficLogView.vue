@@ -21,7 +21,7 @@ export default {
   computed: {
     ...mapStores(useSpotsStore),
     trafficLog() {
-      const log = this.spotsStore.trafficLog;      
+      const log = this.spotsStore.trafficLog;
       return log ? log.filter((entry) => entry.spot) : [];
     },
   },
