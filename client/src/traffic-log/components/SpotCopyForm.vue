@@ -106,13 +106,15 @@ export default {
   watch: {
     copy: {
       handler(newCopy) {
-        this.name = newCopy.name;
-        this.body = newCopy.body;
-        // trim dates to a form the HTML input will accept
-        this.start_on = newCopy.start_on?.slice(0, 19);
-        this.expire_on = newCopy.expire_on?.slice(0, 19);
-        this.underwriter = newCopy.underwriter;
-        this.spot_id = newCopy.spot.id;
+        if(newCopy) {
+          this.name = newCopy.name;
+          this.body = newCopy.body;
+          // trim dates to a form the HTML input will accept
+          this.start_on = newCopy.start_on?.slice(0, 19);
+          this.expire_on = newCopy.expire_on?.slice(0, 19);
+          this.underwriter = newCopy.underwriter;
+          this.spot_id = newCopy.spot.id;
+        }        
       },
       immediate: true,
     },
