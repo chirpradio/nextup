@@ -99,6 +99,7 @@ async function updateSpot(id, data) {
 async function deleteSpot(id) {
   await updateSpot(id, {
     active: false,
+    deleted: true,
     constraints: [],
   });
 }

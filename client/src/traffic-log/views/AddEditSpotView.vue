@@ -66,10 +66,15 @@
         </form>
       </div>
       <div class="col-4 border-start ps-3 pt-3">
+        <button class="btn btn-outline-chirp-red w-100 mb-5" v-if="editing" @click="confirmDelete">Delete spot</button>
         <h3>Bulk actions</h3>
         <SpotConstraintBulkActions @bulk-add="onBulkAdd" />
       </div>
     </div>
+
+    <ModalDialog ref="deleteModal" title="Delete spot" @confirm="deleteSpot">
+      <span>Are you sure you want to delete this spot?</span>
+    </ModalDialog>
   </div>
 </template>
 
@@ -81,6 +86,7 @@ import { mapStores } from "pinia";
 import { useSpotsStore } from "../store";
 import LoadingButton from "../../components/LoadingButton.vue";
 import { types } from "../constants";
+import ModalDialog from "../../components/ModalDialog.vue";
 
 export default {
   data() {
@@ -103,7 +109,8 @@ export default {
     SpotConstraintTable,
     RecordSpinner,
     LoadingButton,
-  },
+    ModalDialog
+},
   computed: {
     ...mapStores(useSpotsStore),
     loading() {
@@ -154,6 +161,14 @@ export default {
         this.$refs.form.classList.add("was-validated");
         window.scrollTo(0, 0);
       }
+    },
+    confirmDelete() {
+      this.$refs.deleteModal.show();
+    },
+    deleteSpot() {
+      this.spotsStore.deleteSpot(this.spotId);
+      this.$refs.deleteModal.hide();
+      this.$router.push({ name: "spots" });
     },
   },
   async created() {

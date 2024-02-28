@@ -72,9 +72,9 @@ export const useSpotsStore = defineStore("spots", {
       this.spots.sort(sortSpotsByTitle);
       this.savingSpot = false;
     },
-    async deleteSpot({ spotId }) {
+    async deleteSpot(spotId) {
       await api.delete(`/spot/${spotId}`);
-      const index = this.spots.indexOf((element) => element.id === spotId);
+      const index = this.spots.findIndex((element) => element.id === spotId);
       this.spots.splice(index, 1);
     },
     async addCopyToSpot({ spotId, copy }) {
