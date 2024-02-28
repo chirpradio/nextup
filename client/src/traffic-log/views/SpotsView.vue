@@ -5,10 +5,17 @@
       <div class="row">
         <div class="col-8 pe-3 border-end">
           <h1>Spots</h1>
-          <div class="row mt-4 mx-1 px-0 py-2 border-top border-bottom">
-            <div class="col-12 col-lg-2 ps-0 font-sans fs-5">Filters</div>
-            <div class="col-12 col-lg-2 ps-0 mt-3 mt-lg-0">
-              <label class="form-label">Type</label>
+          <div
+            class="row d-none d-lg-flex mt-4 mx-1 font-sans fw-bold"
+          >
+            <div class="col-2 ps-0">Title</div>
+            <div class="col-2 ps-0">Type</div>
+            <div class="col-8 ps-0">Copy</div>
+          </div>
+          <div class="row d-none d-lg-flex gx-5 mx-1 mt-2 pb-2 border-bottom">
+            <div class="col-2 ps-0"></div>
+            <div class="col-2 ps-0">
+              <label class="d-none form-label">Type</label>
               <select class="form-select form-select-sm" v-model="typeFilter">
                 <option value="">All</option>
                 <option v-for="opt in types" :key="opt" :value="opt">
@@ -16,8 +23,7 @@
                 </option>
               </select>
             </div>
-            <div class="col-12 col-lg-2 ps-0 ps-lg-3 mt-3 mt-lg-0">
-              <label class="form-label">Copy</label>
+            <div class="col-2 ps-0">
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -32,26 +38,19 @@
             </div>
           </div>
           <div
-            class="row d-none d-lg-flex mt-4 font-sans fw-bold border-bottom"
-          >
-            <div class="col-2">Title</div>
-            <div class="col-2">Type</div>
-            <div class="col-8">Copy</div>
-          </div>
-          <div
             v-for="spot in spots"
             :key="spot.id"
-            class="row border-bottom py-3"
+            class="row gx-5 mx-1 border-bottom py-3"
           >
-            <div class="col-12 col-lg-2">
+            <div class="col-12 col-lg-2 ps-0">
               <router-link
                 :to="{ name: 'editSpot', params: { spotId: spot.id } }"
               >
                 {{ spot.title }}
               </router-link>
             </div>
-            <div class="col-12 col-lg-2">{{ spot.type }}</div>
-            <div class="col-12 col-lg-8 mt-3 mt-lg-0">
+            <div class="col-12 col-lg-2 ps-0">{{ spot.type }}</div>
+            <div class="col-12 col-lg-8 px-0 mt-3 mt-lg-0">
               <SpotCopyList
                 :spot="spot"
                 ref="lists"
