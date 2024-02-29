@@ -25,7 +25,7 @@ const spotSchema = new Schema({
   created: { type: Date, default: gstore.defaultValues.NOW },
   updated: { type: Date },
   random_spot_copies: { type: Array, default: [], read: false },
-  deleted: { type: Boolean, default: false }
+  deleted: { type: Boolean, default: false },
 });
 
 function setUpdated() {
