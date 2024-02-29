@@ -77,7 +77,6 @@ export default {
   },
   computed: {
     filteredCopy() {
-      this.spot.copy.sort((a, b) => a.updated < b.updated ? 1 : -1);
       if (this.future) {
         return this.spot.copy.filter(
           (copy) => copy.start_on && !copyStarted(copy.start_on)

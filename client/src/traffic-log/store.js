@@ -8,6 +8,10 @@ function sortSpotsByTitle(a, b) {
   return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
 }
 
+function sortCopyByLastUpdated(a, b) {
+  return a.updated < b.updated ? 1 : -1;
+}
+
 export const useSpotsStore = defineStore("spots", {
   state: () => ({
     spots: [],
@@ -33,6 +37,7 @@ export const useSpotsStore = defineStore("spots", {
       this.loadingSpots = true;
       const { data } = await api.get("/spot");
       this.spots = data.sort(sortSpotsByTitle);
+      this.spots.forEach((spot) => spot.copy.sort(sortCopyByLastUpdated));
       this.loadingSpots = false;
       this.loadedSpots = true;
     },
@@ -80,22 +85,27 @@ export const useSpotsStore = defineStore("spots", {
     async addCopyToSpot({ spotId, copy }) {
       const { data } = await api.post(`/spot/${spotId}/copy`, copy);
       const spot = this.spot(spotId);
-      spot.copy.push(data);
+      spot.copy.unshift(data);
     },
     async updateCopy({ copy, body }) {
       const { data } = await api.patch(`/spot/copy/${copy.id}`, body);
+      const spot = this.spot(data.spot.id);
+
+      // if they changed the spot
       if (copy.spot.id !== data.spot.id) {
+        // remove from old spot
         const oldSpot = this.spot(copy.spot.id);
         const index = oldSpot.copy.findIndex(
           (element) => element.id === copy.id
         );
         oldSpot.copy.splice(index, 1);
 
-        const newSpot = this.spot(data.spot.id);
-        newSpot.copy.push(copy);
+        // add to the new one
+        spot.copy.push(copy);
       }
 
       Object.assign(copy, data);
+      spot.copy.sort(sortCopyByLastUpdated);
     },
     async deleteCopy(copy) {
       await api.delete(`/spot/copy/${copy.id}`);
