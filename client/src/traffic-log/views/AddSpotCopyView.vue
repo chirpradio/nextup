@@ -1,7 +1,12 @@
 <template>
   <div class="p-3">
     <h1>Add Spot Copy</h1>
-    <SpotCopyForm :copy="copy" :spots="spots" @save="onSave" />
+    <SpotCopyForm
+      :copy="copy"
+      :spots="spots"
+      @save="onSave"
+      class="col-8 border-end"
+    />
   </div>
 </template>
 

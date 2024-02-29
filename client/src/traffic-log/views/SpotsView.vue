@@ -5,9 +5,7 @@
       <div class="row">
         <div class="col-8 pe-3 border-end">
           <h1>Spots</h1>
-          <div
-            class="row d-none d-lg-flex mt-4 mx-1 font-sans fw-bold"
-          >
+          <div class="row d-none d-lg-flex mt-4 mx-1 font-sans fw-bold">
             <div class="col-2 ps-0">Title</div>
             <div class="col-2 ps-0">Type</div>
             <div class="col-8 ps-0">Copy</div>

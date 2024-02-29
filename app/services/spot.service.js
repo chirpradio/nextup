@@ -150,6 +150,7 @@ async function updateCopy(id, data) {
 async function deleteCopy(id) {
   return await updateCopy(id, {
     expire_on: new Date(),
+    deleted: true,
   });
 }
 

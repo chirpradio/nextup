@@ -1,8 +1,8 @@
 <template>
   <form ref="form" novalidate>
     <div class="row mt-3">
-      <label for="name" class="col-2 col-form-label">Name *</label>
-      <div class="col-6 col-lg-3">
+      <label for="name" class="col-3 col-lg-2 col-form-label">Name *</label>
+      <div class="col-9 col-lg-4">
         <input
           id="name"
           class="form-control"
@@ -13,14 +13,14 @@
       </div>
     </div>
     <div class="row mt-3">
-      <label for="body" class="col-2 col-form-label">Body *</label>
-      <div class="col-6">
+      <label for="body" class="col-3 col-lg-2 col-form-label">Body *</label>
+      <div class="col-9">
         <textarea id="body" class="form-control" v-model="body" required />
       </div>
     </div>
     <div class="row mt-3">
-      <label for="start" class="col-2 col-form-label">Start</label>
-      <div class="col-6 col-lg-3">
+      <label for="start" class="col-3 col-lg-2 col-form-label">Start</label>
+      <div class="col-9 col-lg-4">
         <input
           type="datetime-local"
           id="start"
@@ -30,8 +30,8 @@
       </div>
     </div>
     <div class="row mt-3">
-      <label for="expire" class="col-2 col-form-label">Expire</label>
-      <div class="col-6 col-lg-3">
+      <label for="expire" class="col-3 col-lg-2 col-form-label">Expire</label>
+      <div class="col-9 col-lg-4">
         <input
           type="datetime-local"
           id="expire"
@@ -41,14 +41,16 @@
       </div>
     </div>
     <div class="row mt-3">
-      <label for="underwriter" class="col-2 col-form-label">Underwriter</label>
-      <div class="col-6 col-lg-3">
+      <label for="underwriter" class="col-3 col-lg-2 col-form-label"
+        >Underwriter</label
+      >
+      <div class="col-9 col-lg-4">
         <input id="underwriter" class="form-control" v-model="underwriter" />
       </div>
     </div>
     <div class="row mt-3">
-      <label for="spot" class="col-2 col-form-label">Spot *</label>
-      <div class="col-6 col-lg-3">
+      <label for="spot" class="col-3 col-lg-2 col-form-label">Spot *</label>
+      <div class="col-9 col-lg-4">
         <select id="spot" class="form-select" v-model="spot_id" required>
           <option v-for="spot in spots" :key="spot.id" :value="spot.id">
             {{ spot.title }}
@@ -57,7 +59,7 @@
       </div>
     </div>
     <div class="row mt-3">
-      <div class="offset-7">
+      <div class="offset-6 offset-md-8 offset-lg-9 align-items-right">
         <router-link
           :to="{ name: 'spots' }"
           class="btn btn-link-chirp-red me-2"

@@ -66,7 +66,13 @@
         </form>
       </div>
       <div class="col-4 border-start ps-3 pt-3">
-        <button class="btn btn-outline-chirp-red w-100 mb-5" v-if="editing" @click="confirmDelete">Delete spot</button>
+        <button
+          class="btn btn-outline-chirp-red w-100 mb-5"
+          v-if="editing"
+          @click="confirmDelete"
+        >
+          Delete spot
+        </button>
         <h3>Bulk actions</h3>
         <SpotConstraintBulkActions @bulk-add="onBulkAdd" />
       </div>
@@ -109,8 +115,8 @@ export default {
     SpotConstraintTable,
     RecordSpinner,
     LoadingButton,
-    ModalDialog
-},
+    ModalDialog,
+  },
   computed: {
     ...mapStores(useSpotsStore),
     loading() {

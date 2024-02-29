@@ -10,6 +10,7 @@ const spotCopySchema = new Schema({
   expire_on: { type: Date },
   created: { type: Date, default: gstore.defaultValues.NOW },
   updated: { type: Date },
+  deleted: { type: Boolean, default: false },
   underwriter: { type: String },
 });
 

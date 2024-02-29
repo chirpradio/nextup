@@ -21,7 +21,11 @@
         params: { spotId: copy.spot.id, copyId: copy.id },
       }"
     >
-      <font-awesome-icon icon="fa-regular fa-pen-to-square" class="mt-1" />
+      <font-awesome-icon
+        icon="fa-regular fa-pen-to-square"
+        class="mt-1"
+        title="edit copy"
+      />
     </router-link>
   </li>
 </template>
