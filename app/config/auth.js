@@ -22,7 +22,7 @@ module.exports = function configureAuth(app) {
             return done(null, false);
           }
 
-          if (user.authenticate(password)) {
+          if (user.is_active && user.authenticate(password)) {
             return done(null, user);
           } else {
             return done(null, false);
