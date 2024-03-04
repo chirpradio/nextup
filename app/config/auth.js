@@ -65,7 +65,7 @@ module.exports = function configureAuth(app) {
       async function (jwtPayload, done) {
         try {
           const user = await User.findOne({ email: jwtPayload.user.email });
-          if (user) {
+          if (user && user.is_active) {
             return done(null, user);
           } else {
             return done(null, false);
