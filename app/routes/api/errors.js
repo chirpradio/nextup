@@ -19,7 +19,6 @@ function checkErrors(req, res, next) {
 function sendErrorCode(error, req, res, next) {
   if (!res.headersSent) {
     let code = 500;
-    console.log("send", error);
 
     if (
       error.message === errorMessages.BAD_REQUEST ||

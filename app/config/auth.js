@@ -14,22 +14,19 @@ module.exports = function configureAuth(app) {
     new LocalStrategy(
       {
         usernameField: "email",
+        passReqToCallback: true,
       },
-      async function (email, password, done) {
-        let user;
+      async function (req, email, password, done) {        
         try {
-          user = await User.findOne({ email: email });
-          if (!user) {
-            return done(null, false);
+          const user = await User.findOne({ email: email });
+          if (user && user.is_active && user.authenticate(password)) {
+            return done(null, user);
           }
 
-          if (user.is_active && user.authenticate(password)) {
-            return done(null, user);
-          } else {
-            return done(null, false);
-          }
-        } catch (err) {
           return done(null, false);
+        } catch (err) {
+          req.log.error(err);
+          return done(new Error("Unauthorized"), false);
         }
       }
     )
