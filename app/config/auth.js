@@ -16,7 +16,7 @@ module.exports = function configureAuth(app) {
         usernameField: "email",
         passReqToCallback: true,
       },
-      async function (req, email, password, done) {        
+      async function (req, email, password, done) {
         try {
           const user = await User.findOne({ email: email });
           if (user && user.is_active && user.authenticate(password)) {
