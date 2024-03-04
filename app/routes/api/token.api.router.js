@@ -15,7 +15,7 @@ router.post(
   body("password").isString(),
   checkErrors,
   function (req, res, next) {
-    passport.authenticate("local", { session: false }, (err, user) => {
+    passport.authenticate("email-password", { session: false }, (err, user) => {
       if (err || !user) {
         return res.status(400).json({
           message: "Invalid username or password",
