@@ -43,6 +43,6 @@ router.patch(
   validateTags,
   checkErrors,
   controller.updateAlbumTags
-)
+);
 
 module.exports = router;
