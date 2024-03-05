@@ -230,6 +230,8 @@ paths:
                 properties:   
                   token:
                     type: string
+        '401':
+          description: Unauthorized
   /album/tag:
     get:
       security:
