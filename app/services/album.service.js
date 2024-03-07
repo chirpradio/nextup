@@ -2,7 +2,6 @@ const { Album, Document, Track, TagEdit } = require("../models");
 const { datastore, gstore, renameKey } = require("../db");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
-const logger = require("../logger");
 
 const options = {
   format: "ENTITY",
@@ -92,7 +91,10 @@ async function addImagesFromLastFm(album) {
         await album.populate("album_artist");
       }
     } catch (err) {
-      logger.info(err, "LastFM images not found");
+      /*   
+        LastFM API throws an error 
+        when images are not found
+      */ 
     }
   }
 }
