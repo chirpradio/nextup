@@ -11,6 +11,9 @@ app.use(bodyParser.json({ type: "application/json" }));
 const cors = require("cors");
 app.use(cors());
 
+const logger = require("./logger");
+app.use(logger);
+
 require("./config/auth")(app);
 require("./routes")(app);
 

@@ -19,7 +19,7 @@
       </div>
       <div class="col-md-3 search-result__col">
         <AlbumTitleLink :album="hit._source" />
-        <TagList :tags="hit._source.current_tags" />
+        <TagList :tags="hit._source.current_tags" :album="hit._source" />
       </div>
       <AlbumLabelLink
         class="col-md-2 search-result__col"

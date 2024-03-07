@@ -12,10 +12,22 @@ export const useAlbumsStore = defineStore("albums", {
         albums: [],
         more: false,
       },
+
+      local_current: {
+        albums: [],
+        more: false,
+      },
+
+      local_classic: {
+        albums: [],
+        more: false,
+      },
     },
     loadingTagCollections: {
       heavy_rotation: false,
       light_rotation: false,
+      local_current: false,
+      local_classic: false,
       recent: false,
     },
     recent: {
@@ -135,6 +147,15 @@ export const useAlbumsStore = defineStore("albums", {
         await api.updateTrackTags(album_id, track.track_num, tags);
       } catch (error) {
         track.current_tags = oldTags;
+      }
+    },
+    async updateAlbumTags({ album, tags } = {}) {
+      const oldTags = album.current_tags ? [...album.current_tags] : [];
+      album.current_tags = tags;
+      try {
+        await api.updateAlbumTags(album.album_id, tags);
+      } catch (error) {
+        album.current_tags = oldTags;
       }
     },
   },

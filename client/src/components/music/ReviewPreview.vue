@@ -36,6 +36,10 @@ export default {
         return this.review.author_name;
       }
 
+      if (!this.review.author) {
+        return "";
+      }
+
       return `${this.review.author.first_name} ${this.review.author.last_name}`;
     },
   },
