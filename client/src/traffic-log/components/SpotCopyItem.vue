@@ -12,9 +12,11 @@
       class="flex-grow-1 h-100 overflow-hidden fw-normal font-serif me-2"
       :for="id"
     >
-      <span>{{ title }}</span>     
+      <span>{{ title }}</span>
     </label>
-    <span class="badge me-2 fw-normal" :class="badgeClasses" >{{badgeLabel}}</span>
+    <span class="badge me-2 fw-normal" :class="badgeClasses">{{
+      badgeLabel
+    }}</span>
     <router-link
       :to="{
         name: 'editSpotCopy',
@@ -67,7 +69,7 @@ export default {
     expired() {
       return copyExpired(this.copy.expire_on);
     },
-    badgeLabel() {      
+    badgeLabel() {
       if (this.expired) {
         return "expired";
       } else if (this.started) {
@@ -84,8 +86,8 @@ export default {
     },
     classes() {
       return {
-        "bg-warning-subtle": this.started,
-        "bg-light": !this.started,
+        "bg-light": this.expired || !this.started,
+        "bg-warning-subtle": this.started && !this.expired,
       };
     },
   },

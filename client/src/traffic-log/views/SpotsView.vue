@@ -21,16 +21,58 @@
                 </option>
               </select>
             </div>
-            <div class="col-2 ps-0">
+            <div class="col-2 ps-0 d-inline-flex">
+              <div class="form-check me-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="copyFilter"
+                  id="allCopyRadio"
+                  v-model="copyFilter"
+                  value="all"
+                />
+                <label class="form-check-label" for="allCopyRadio"> All </label>
+              </div>
+              <div class="form-check me-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="copyFilter"
+                  id="startedCopyRadio"
+                  v-model="copyFilter"
+                  value="started"
+                />
+                <label class="form-check-label" for="startedCopyRadio">
+                  Started
+                </label>
+              </div>
+              <div class="form-check me-4">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="copyFilter"
+                  id="notStartedCopyRadio"
+                  v-model="copyFilter"
+                  value="notStarted"
+                />
+                <label
+                  class="form-check-label text-nowrap"
+                  for="notStartedCopyRadio"
+                >
+                  Not Started
+                </label>
+              </div>
               <div class="form-check">
                 <input
                   class="form-check-input"
-                  type="checkbox"
-                  id="notStartedCopy"
-                  v-model="notStarted"
+                  type="radio"
+                  name="copyFilter"
+                  id="expiredCopyRadio"
+                  v-model="copyFilter"
+                  value="expired"
                 />
-                <label class="form-check-label" for="notStarted">
-                  Not Started
+                <label class="form-check-label" for="expiredCopyRadio">
+                  Expired
                 </label>
               </div>
             </div>
@@ -53,7 +95,7 @@
                 :spot="spot"
                 ref="lists"
                 @select="onSelect"
-                :not-started="notStarted"
+                :filter="copyFilter"
               />
             </div>
           </div>
@@ -94,7 +136,7 @@ export default {
       typeFilter: "",
       updatingCopy: false,
       types,
-      notStarted: false,
+      copyFilter: "all",
     };
   },
   computed: {
