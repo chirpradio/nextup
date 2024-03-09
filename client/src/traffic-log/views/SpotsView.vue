@@ -26,11 +26,11 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  id="futureCopy"
-                  v-model="futureCopy"
+                  id="notStartedCopy"
+                  v-model="notStarted"
                 />
-                <label class="form-check-label" for="futureCopy">
-                  Future
+                <label class="form-check-label" for="notStarted">
+                  Not Started
                 </label>
               </div>
             </div>
@@ -53,7 +53,7 @@
                 :spot="spot"
                 ref="lists"
                 @select="onSelect"
-                :future="futureCopy"
+                :not-started="notStarted"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ export default {
       typeFilter: "",
       updatingCopy: false,
       types,
-      futureCopy: false,
+      notStarted: false,
     };
   },
   computed: {

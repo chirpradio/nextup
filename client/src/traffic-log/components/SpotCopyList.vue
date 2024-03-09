@@ -47,7 +47,7 @@ export default {
       type: Object,
       required: true,
     },
-    future: Boolean,
+    notStarted: Boolean,
   },
   watch: {
     spot: {
@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     filteredCopy() {
-      if (this.future) {
+      if (this.notStarted) {
         return this.spot.copy.filter(
           (copy) => copy.start_on && !copyStarted(copy.start_on)
         );

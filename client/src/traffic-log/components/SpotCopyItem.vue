@@ -66,8 +66,8 @@ export default {
     },
     classes() {
       return {
-        "bg-warning-subtle": !this.started,
-        "bg-light": this.started,
+        "bg-warning-subtle": this.started,
+        "bg-light": !this.started,
       };
     },
   },
