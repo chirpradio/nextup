@@ -1,4 +1,3 @@
-require("@google-cloud/debug-agent").start();
 require("./db");
 
 const express = require("express");

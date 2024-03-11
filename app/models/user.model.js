@@ -13,6 +13,7 @@ const userSchema = new Schema({
   last_login: { type: Date },
   last_name: { type: String, required: true },
   password: { type: String, required: true },
+  api_key: { type: String },
   roles: { type: Array },
 });
 

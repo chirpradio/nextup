@@ -11,7 +11,9 @@ const spotRouter = require("./spot/router");
 const trafficLogRouter = require("./traffic-log/router");
 const tokenRouter = require("./token.api.router");
 const { sendErrorCode } = require("./errors");
-const authorizeWithToken = passport.authenticate("jwt", { session: false });
+const authenticate = passport.authenticate(["api_key", "jwt"], {
+  session: false,
+});
 
 // documentation at the index
 router.get(
@@ -30,13 +32,13 @@ router.get(
 );
 
 // routes
-router.use("/album", authorizeWithToken, albumRouter);
-router.use("/artist", authorizeWithToken, artistRouter);
-router.use("/crate", authorizeWithToken, crateRouter);
-router.use("/playlist", authorizeWithToken, playlistRouter);
-router.use("/search", authorizeWithToken, searchRouter);
-router.use("/spot", authorizeWithToken, spotRouter);
-router.use("/traffic-log", authorizeWithToken, trafficLogRouter);
+router.use("/album", authenticate, albumRouter);
+router.use("/artist", authenticate, artistRouter);
+router.use("/crate", authenticate, crateRouter);
+router.use("/playlist", authenticate, playlistRouter);
+router.use("/search", authenticate, searchRouter);
+router.use("/spot", authenticate, spotRouter);
+router.use("/traffic-log", authenticate, trafficLogRouter);
 router.use("/token", tokenRouter);
 
 // error handling

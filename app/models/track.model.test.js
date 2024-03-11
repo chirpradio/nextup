@@ -146,7 +146,7 @@ describe("Track model", () => {
     const badValue = "explosive";
     const error = {
       code: "ERR_PROP_VALUE",
-      message: `"${badValue}" is not a valid value for property "current_tags"`,
+      message: `"[ '${badValue}' ]" is not a valid value for property "current_tags"`,
       ref: undefined,
     };
 
