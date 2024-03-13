@@ -4,9 +4,7 @@ const { errorMessages } = require("../errors");
 module.exports = {
   async getSpots(req, res, next) {
     try {
-      const active =
-        typeof req.query.active === "boolean" ? req.query.active : true;
-      const spots = await SpotService.listSpots(active);
+      const spots = await SpotService.listSpots();     
       res.json(spots);
     } catch (error) {
       next(error);

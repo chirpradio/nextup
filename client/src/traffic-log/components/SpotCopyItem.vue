@@ -13,8 +13,10 @@
       :for="id"
     >
       <span>{{ title }}</span>
-      <span v-if="!started"> (not started)</span>
     </label>
+    <span class="badge me-2 fw-normal" :class="badgeClasses">{{
+      badgeLabel
+    }}</span>
     <router-link
       :to="{
         name: 'editSpotCopy',
@@ -37,7 +39,7 @@
 </style>
 
 <script>
-import { copyStarted } from "../functions";
+import { copyStarted, copyExpired } from "../functions";
 
 export default {
   name: "SpotCopyItem",
@@ -64,10 +66,28 @@ export default {
     started() {
       return copyStarted(this.copy.start_on);
     },
+    expired() {
+      return copyExpired(this.copy.expire_on);
+    },
+    badgeLabel() {
+      if (this.expired) {
+        return "expired";
+      } else if (this.started) {
+        return "started";
+      }
+
+      return "not started";
+    },
+    badgeClasses() {
+      return {
+        "text-bg-secondary": this.expired || !this.started,
+        "text-bg-warning": this.started && !this.expired,
+      };
+    },
     classes() {
       return {
-        "bg-warning-subtle": !this.started,
-        "bg-light": this.started,
+        "bg-light": this.expired || !this.started,
+        "bg-warning-subtle": this.started && !this.expired,
       };
     },
   },

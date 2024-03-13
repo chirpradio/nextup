@@ -29,7 +29,7 @@
 
 <script>
 import SpotCopyItem from "./SpotCopyItem.vue";
-import { copyStarted } from "../functions";
+import { copyStarted, copyExpired } from "../functions";
 
 const SELECT = "select";
 
@@ -47,7 +47,7 @@ export default {
       type: Object,
       required: true,
     },
-    future: Boolean,
+    filter: String,
   },
   watch: {
     spot: {
@@ -77,13 +77,22 @@ export default {
   },
   computed: {
     filteredCopy() {
-      if (this.future) {
-        return this.spot.copy.filter(
-          (copy) => copy.start_on && !copyStarted(copy.start_on)
-        );
+      switch (this.filter) {
+        case "expired":
+          return this.spot.copy.filter((copy) => copyExpired(copy.expire_on));
+        case "started":
+          return this.spot.copy.filter(
+            (copy) => copyStarted(copy.start_on) && !copyExpired(copy.expire_on)
+          );
+        case "notStarted":
+          return this.spot.copy.filter(
+            (copy) =>
+              !copyStarted(copy.start_on) && !copyExpired(copy.expire_on)
+          );
+        case "all":
+        default:
+          return this.spot.copy || [];
       }
-
-      return this.spot.copy || [];
     },
     showCheckAll() {
       return this.filteredCopy.length > 1;

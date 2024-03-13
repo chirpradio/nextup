@@ -35,8 +35,8 @@ export const useSpotsStore = defineStore("spots", {
   actions: {
     async getSpots() {
       this.loadingSpots = true;
-      const { data } = await api.get("/spot");
-      this.spots = data.sort(sortSpotsByTitle);
+      const { data: spots } = await api.get("/spot");
+      this.spots = spots.sort(sortSpotsByTitle);
       this.spots.forEach((spot) => spot.copy.sort(sortCopyByLastUpdated));
       this.loadingSpots = false;
       this.loadedSpots = true;

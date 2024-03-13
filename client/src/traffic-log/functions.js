@@ -15,3 +15,10 @@ export const copyStarted = function (start_on) {
 
   return false;
 };
+
+export const copyExpired = function (expire_on) {
+  if (expire_on) {
+    const expire = new Date(expire_on.slice(0, 19));
+    return expire < Date.now();
+  }
+};
