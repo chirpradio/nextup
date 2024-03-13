@@ -1,3 +1,7 @@
+/* 
+  Used to keep actual passwords out of the dev database
+  as part of the initial setup.
+*/
 if (process.env.DATASTORE_PROJECT_ID === "chirpradio-hrd") {
   console.error("This should never be run on the production datastore");
   process.exit(1);

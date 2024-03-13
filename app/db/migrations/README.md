@@ -1,0 +1,1 @@
+As a NoSQL database, the Google Cloud Datastore doesn't give us the ability to run schema and data migrations as readily as a relational database. You can only load the entities and save them again with property or value changes. These scripts are intended to be run manually as part of major updates.

@@ -8,6 +8,7 @@ const VALID_TYPES = [
   "Underwriting Spot",
   "Pledge Liner",
   "Station ID",
+  "Other",
 ];
 
 const spotSchema = new Schema({
@@ -24,6 +25,7 @@ const spotSchema = new Schema({
   created: { type: Date, default: gstore.defaultValues.NOW },
   updated: { type: Date },
   random_spot_copies: { type: Array, default: [], read: false },
+  deleted: { type: Boolean, default: false },
 });
 
 function setUpdated() {

@@ -65,3 +65,8 @@ indexes:
   - name: dow
   - name: hour
   - name: created
+
+- kind: Spot
+  properties:
+  - name: active
+  - name: deleted

@@ -9,14 +9,10 @@ async function getConstraintsForSpot(key) {
   return result.entities;
 }
 
-async function getAllCopyForSpot(key, includeExpired = false) {
+async function getAllCopyForSpot(key) {
   const options = {
-    filters: [["spot", key]],
+    filters: [["spot", key], ["deleted", false]],
   };
-  if (includeExpired === false) {
-    options.filters.push(["expire_on", null]);
-  }
-
   const { entities: copy } = await SpotCopy.list(options);
   return copy;
 }
@@ -33,35 +29,33 @@ async function getSpot(id) {
   return plain;
 }
 
-async function listSpots(active = true, includeCopy = true) {
+async function listSpots() {
   const options = {
     format: "ENTITY",
-    filters: ["active", active],
+    filters: ["active", true],
   };
   const { entities: spots } = await Spot.list(options);
   const response = await Promise.all(
     spots.map(async function (spot) {
       const plain = spot.plain({ showKey: true });
-      if (includeCopy) {
-        plain.copy = await getAllCopyForSpot(plain.__key);
-      }
+      plain.copy = await getAllCopyForSpot(plain.__key);
       return plain;
     })
   );
   return response;
 }
 
-async function addSpotToConstraint(spot, id, transaction) {
+async function addSpotToConstraint(spotKey, id, transaction) {
   const constraint = await SpotConstraint.get(id);
   if (constraint) {
-    constraint.spots.push(spot);
+    constraint.spots.push(spotKey);
     return await constraint.save(transaction);
   }
 }
 
-async function removeSpotFromConstraint(spot, id, transaction) {
+async function removeSpotFromConstraint(spotKey, id, transaction) {
   const constraint = await SpotConstraint.get(id);
-  const index = constraint.spots.findIndex((key) => key.id == spot.id);
+  const index = constraint.spots.findIndex((key) => key.id == spotKey.id);
   if (index !== -1) {
     constraint.spots.splice(index, 1);
     return await constraint.save(transaction);
@@ -75,14 +69,14 @@ async function updateSpot(id, data) {
     const spotKey = Spot.key(id);
     const current = await getConstraintsForSpot(spotKey);
     const currentIds = current.map((constraint) => constraint.id);
-    const providedIds = data.constraints.map((constraint) => constraint.id);
-    const removed = currentIds.filter((id) => !providedIds.includes(id));
-    const added = providedIds.filter((id) => !currentIds.includes(id));
+    const removed = currentIds.filter((id) => !data.constraints.includes(id));
+    const added = data.constraints.filter((id) => !currentIds.includes(id));
+    console.log(added, removed);
 
-    const addPromises = added.map((id) => {
+    const addPromises = added.map(async function (id) {
       return addSpotToConstraint(spotKey, id, transaction);
     });
-    const removePromises = removed.map((id) => {
+    const removePromises = removed.map(async function (id) {
       return removeSpotFromConstraint(spotKey, id, transaction);
     });
     await Promise.all([...addPromises, ...removePromises]);
@@ -99,14 +93,33 @@ async function updateSpot(id, data) {
 async function deleteSpot(id) {
   await updateSpot(id, {
     active: false,
+    deleted: true,
     constraints: [],
   });
 }
 
 async function addSpot(data) {
+  const transaction = gstore.transaction();
+  await transaction.run();
+
   const spot = new Spot(data);
   await spot.save();
-  return spot.plain({ showKey: true });
+
+  const promises = data.constraints.map(async function (constraint) {
+    return addSpotToConstraint(spot.entityKey, constraint, transaction);
+  });
+  await Promise.all(promises);
+
+  const { err } = await transaction.commit();
+  if (err) {
+    await transaction.rollback();
+    await spot.delete(spot.entityKey);
+    throw err;
+  }
+
+  const plain = spot.plain({ showKey: true });
+  plain.copy = [];
+  return plain;
 }
 
 async function addCopy(id, data, user) {
@@ -115,7 +128,9 @@ async function addCopy(id, data, user) {
   data.author = user.entityKey;
   const copy = new SpotCopy(data);
   await copy.save();
-  return copy.plain({ showKey: true });
+  const plain = copy.plain({ showKey: true });
+  plain.spot = key;
+  return plain;
 }
 
 async function updateCopy(id, data) {
@@ -129,6 +144,7 @@ async function updateCopy(id, data) {
 async function deleteCopy(id) {
   return await updateCopy(id, {
     expire_on: new Date(),
+    deleted: true,
   });
 }
 
