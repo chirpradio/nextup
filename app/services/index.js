@@ -10,6 +10,7 @@ const SpotService = require("./spot.service");
 const TagEditService = require("./tagedit.service");
 const TrackService = require("./track.service");
 const TrafficLogService = require("./trafficLog.service");
+const PlaylistService = require("./playlist.service");
 
 module.exports = {
   AlbumService,
@@ -24,4 +25,5 @@ module.exports = {
   TagEditService,
   TrackService,
   TrafficLogService,
+  PlaylistService,
 };

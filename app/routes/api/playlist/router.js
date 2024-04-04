@@ -56,4 +56,6 @@ router.get(
   controller.getRotationPlays
 );
 
+router.get("/automation", controller.isAutomationCaptured);
+
 module.exports = router;

@@ -2,6 +2,7 @@ const {
   AlbumService,
   DateService,
   PlaylistEventService,
+  PlaylistService,
 } = require("../../../services");
 
 async function getAlbums(events) {
@@ -131,6 +132,15 @@ async function updateTrack(req, res, next) {
   }
 }
 
+async function isAutomationCaptured(req, res, next) {
+  try {
+    const isCaptured = await PlaylistService.isAutomationCaptured();
+    res.json({ isCaptured });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   deleteTrack,
   getPlaylistEvents,
@@ -139,4 +149,5 @@ module.exports = {
   postPlaylistBreak,
   postPlaylistTrack,
   updateTrack,
+  isAutomationCaptured,
 };

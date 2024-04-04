@@ -20,6 +20,7 @@ const playlistSchema = new Schema({
   },
   established: { type: Date },
   modified: { type: Date },
+  is_automation_captured: { type: Boolean },
 });
 
 module.exports = gstore.model("Playlist", playlistSchema);
