@@ -1,9 +1,18 @@
-const { gstore } = require("../db");
+const { gstore, getPlaylistKey } = require("../db");
 const { Playlist } = require("../models");
+
+async function getPlaylist() {
+  const playlistId = parseInt((await getPlaylistKey()).id);
+  result = await Playlist.get(playlistId);
+  return result;
+}
 
 module.exports = {
   async isAutomationCaptured() {
-    const playlist = await Playlist.list();
-    return playlist.entities[0].is_automation_captured;
+    const result = await getPlaylist();
+    return result.entityData.is_automation_captured;
+  },
+  async setAutomationCaptured(isCapture) {
+    const playlist = await getPlaylist();
   },
 };
