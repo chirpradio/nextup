@@ -8,10 +8,14 @@ export const useAuthStore = defineStore("auth", {
     token: "",
     user: {},
     features: {
-      // template: {
-      //   users: [],
-      //   roles: [],
-      // },
+      /**
+       * template: {
+       *   users: [],
+       *   roles: [],
+       **/
+      "traffic-log": {
+        roles: ["traffic_log_admin"],
+      },
     },
   }),
   getters: {
