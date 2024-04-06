@@ -80,11 +80,11 @@ describe("CrateService", () => {
       }
     });
 
-    afterAll(async () => {
-      await owner.delete();
-      await pretender.delete();
-      await superUser.delete();
-      await crate.delete();
+    afterAll(async () => {  
+      await User.delete(owner.entityKey.id)
+      await User.delete(pretender.entityKey.id);
+      await User.delete(superUser.entityKey.id);      
+      await Crate.delete(crate.entityKey.id);
     });
 
     test("The owner is  authorized to view", () => {

@@ -4,9 +4,7 @@ const { authorizeTrafficLogAdmins, validateId } = require("../validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 
-const validateActive = query("active").optional().toBoolean();
-
-router.get("/", validateActive, checkErrors, controller.getSpots);
+router.get("/", checkErrors, controller.getSpots);
 
 router.post("/", authorizeTrafficLogAdmins, checkErrors, controller.addSpot);
 

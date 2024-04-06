@@ -4,6 +4,7 @@ const errorMessages = {
   BAD_REQUEST: "Bad request",
   FORBIDDEN: "Forbidden",
   NOT_FOUND: "Not found",
+  UNAUTHORIZED: "Unauthorized",
 };
 
 function checkErrors(req, res, next) {
@@ -16,29 +17,33 @@ function checkErrors(req, res, next) {
 }
 
 function sendErrorCode(error, req, res, next) {
-  req.log.error(error);
-  let code = 500;
+  if (!res.headersSent) {
+    let code = 500;
 
-  if (
-    error.message === errorMessages.BAD_REQUEST ||
-    error.code === "ERR_VALIDATION"
-  ) {
-    code = 400;
-  }
-  if (error.message === errorMessages.FORBIDDEN) {
-    code = 403;
-  }
-  if (
-    error.code === "ERR_ENTITY_NOT_FOUND" ||
-    error.message === errorMessages.NOT_FOUND
-  ) {
-    code = 404;
-  }
+    if (
+      error.message === errorMessages.BAD_REQUEST ||
+      error.code === "ERR_VALIDATION"
+    ) {
+      code = 400;
+    }
+    if (error.message === errorMessages.UNAUTHORIZED) {
+      code = 401;
+    }
+    if (error.message === errorMessages.FORBIDDEN) {
+      code = 403;
+    }
+    if (
+      error.code === "ERR_ENTITY_NOT_FOUND" ||
+      error.message === errorMessages.NOT_FOUND
+    ) {
+      code = 404;
+    }
 
-  if (error.errors) {
-    res.status(code).json(error.errors);
-  } else {
-    res.sendStatus(code);
+    if (error.errors) {
+      res.status(code).json(error.errors);
+    } else {
+      res.sendStatus(code);
+    }
   }
 }
 

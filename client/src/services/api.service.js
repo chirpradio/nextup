@@ -35,6 +35,8 @@ async function getAndHandleError(getter) {
   return response.data;
 }
 
+export { instance as api };
+
 export default {
   async login(email, password) {
     const response = await instance.post("/token", {
@@ -74,11 +76,8 @@ export default {
   },
 
   async updateAlbumTags(album_id, tags) {
-    const response = await instance.patch(
-      `/album/${album_id.value}`,
-      { tags }
-    )
-    return response.data
+    const response = await instance.patch(`/album/${album_id.value}`, { tags });
+    return response.data;
   },
 
   async getArtist(id) {
@@ -176,55 +175,5 @@ export default {
       params,
     });
     return await getAndHandleError(getter);
-  },
-
-  async getSpots() {
-    const getter = instance.get("/spot");
-    return await getAndHandleError(getter);
-  },
-
-  async getSpot(spotId) {
-    const getter = instance.get(`/spot/${spotId}`);
-    return await getAndHandleError(getter);
-  },
-
-  async addSpot(title, type) {
-    return await instance.post(`/spot/`, {
-      title,
-      type,
-    });
-  },
-
-  async updateSpot(spotId, data) {
-    await instance.patch(`/spot/${spotId}`, data);
-  },
-
-  async deleteSpot(spotId) {
-    await instance.delete(`/spot/${spotId}`);
-  },
-
-  async addCopyToSpot(spotId, body, { expire_on, start_on } = {}) {
-    return await instance.post(`/spot/${spotId}/copy`, {
-      body,
-      expire_on,
-      start_on,
-    });
-  },
-
-  async updateCopy(copyId, data) {
-    await instance.patch(`/spot/copy/${copyId}`, data);
-  },
-
-  async deleteCopy(copyId) {
-    await instance.delete(`/spot/copy/${copyId}`);
-  },
-
-  async getTrafficLog() {
-    const getter = instance.get("/traffic-log");
-    return await getAndHandleError(getter);
-  },
-
-  async addTrafficLogEntry(data) {
-    await instance.post("/traffic-log", data);
   },
 };

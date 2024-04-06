@@ -64,7 +64,7 @@ export default {
         this.authenticating = false;
         this.error = true;
         this.errorMessage =
-          error.response.status === 400
+          error.response.status === 401
             ? "Invalid username or password"
             : "Could not log in";
       }
