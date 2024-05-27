@@ -1,5 +1,5 @@
 <template>
-  <div class="offcanvas offcanvas-end">
+  <aside class="offcanvas offcanvas-end">
     <div class="offcanvas-header">
       <button
         type="button"
@@ -40,7 +40,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script>
