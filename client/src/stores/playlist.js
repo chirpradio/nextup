@@ -49,7 +49,7 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     async getRecentRotationPlays() {
       const start = new Date();
-      start.setHours(start.getHours() - 6);
+      start.setHours(start.getHours() - 4);
       this.rotationPlays = await api.getRotationPlays({
         start: start.getTime(),
       });
