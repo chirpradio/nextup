@@ -35,7 +35,7 @@ You can confirm it was installed with:
 If it wasn't installed successfully, consult the [nvm troubleshooting guide](https://github.com/nvm-sh/nvm#troubleshooting-on-macos).
 
 Once installed successfully, install the latest version of Node (as of the time of writing these docs) with the following command:
-`nvm install 16.13.1`
+`nvm install 20.11.0`
 
 # Install redoc-cli
 This library is used to compile the API documentation. Install it with the following command:
@@ -70,20 +70,25 @@ Clone the NextUp repository in whatever folder you wish:
 `git clone https://github.com/chirpradio/nextup.git`
 
 Then create a copy of the environment variables file:
-`cd nextup`
-`cp .env.example .env`
+```
+cd nextup
+cp .env.example .env
+```
 
 ## Set up the API
 
 ### Install the npm packages
-`cd app`
-`npm install`
+```
+cd app
+npm install
+```
 
 ### Build the API documentation
 This generates a static HTML version of the API documentation from the YAML specification.
-
-`cd routes/api`
-`redoc-cli bundle specification.yaml`
+```
+cd routes/api
+redoc-cli bundle specification.yaml
+```
 
 
 ### Start the API 
@@ -113,11 +118,12 @@ Once you see those and the messages stop you're ready to continue. Keep this Ter
 
 ### Create the indexes
 Open a new Terminal window and from the /nextup/elasticsearch/indexes directory, run the following four commands:
-
-- `curl -X PUT "localhost:9200/album?pretty" -H "Content-Type: application/json" -d @album.index.json`
-- `curl -X PUT "localhost:9200/artist?pretty" -H "Content-Type: application/json" -d @artist.index.json`
-- `curl -X PUT "localhost:9200/document?pretty" -H "Content-Type: application/json" -d @document.index.json`
-- `curl -X PUT "localhost:9200/track?pretty" -H "Content-Type: application/json" -d @track.index.json`
+```
+curl -X PUT "localhost:9200/album?pretty" -H "Content-Type: application/json" -d @album.index.json
+curl -X PUT "localhost:9200/artist?pretty" -H "Content-Type: application/json" -d @artist.index.json
+curl -X PUT "localhost:9200/document?pretty" -H "Content-Type: application/json" -d @document.index.json
+curl -X PUT "localhost:9200/track?pretty" -H "Content-Type: application/json" -d @track.index.json
+```
 
 ### Import the data
 The [Elasticdump](https://github.com/elasticsearch-dump/elasticsearch-dump) library makes importing the data a little easier. Install it with the following command:
@@ -130,12 +136,14 @@ Note: this import process will take over an hour to complete.
 
 ## Set up the front end
 Open a new Terminal window. From the /nextup/client directory, run the following commands:
-`npm install`
-`npm run dev`
+```
+npm install
+npm run dev
+```
 
 This runs some updates, generates some CSS warnings you can ignore, and starts serving the front end locally.
 
-Once it's done, navigate to http://127.0.0.1:5173/ in your browser and log in. Changing JavaScript and Vue files in the /client directory will automatically reload the app in your browser.
+Once it's done, navigate to http://localhost:5173/ in your browser and log in. Changing JavaScript and Vue files in the /client directory will automatically reload the app in your browser.
 
 # Test your NextUp installation
 If you can log in successfully, see some albums, and successfully run a search, your installation is complete!

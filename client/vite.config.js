@@ -5,6 +5,9 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],  
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false',
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -44,8 +47,11 @@ export default defineConfig({
             "./src/views/crates/CratesView.vue",
             "./src/views/crates/CrateView.vue",            
           ], 
-          "traffic-log": [
-            "./src/views/traffic-log/SpotsView.vue",            
+          "traffic-log": [            
+            "./src/traffic-log/views/AddEditSpotView.vue",
+            "./src/traffic-log/views/AddSpotCopyView.vue",
+            "./src/traffic-log/views/EditSpotCopyView.vue",
+            "./src/traffic-log/views/SpotsView.vue",
           ],       
           "reports": [
             "./src/views/reports/RotationAlbums.vue",

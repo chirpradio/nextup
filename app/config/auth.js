@@ -1,5 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const CustomStrategy = require("passport-custom").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const session = require("express-session");
@@ -9,29 +10,47 @@ const { User } = require("../models");
 
 module.exports = function configureAuth(app) {
   passport.use(
+    "email-password",
     new LocalStrategy(
       {
         usernameField: "email",
         passReqToCallback: true,
       },
       async function (req, email, password, done) {
-        let user;
         try {
-          user = await User.findOne({ email: email });
-          if (!user) {
-            return done(null, false);
+          const user = await User.findOne({ email: email });
+          if (user && user.is_active && user.authenticate(password)) {
+            return done(null, user);
           }
 
-          if (user.authenticate(password)) {
-            return done(null, user);
-          } else {
-            return done(null, false);
-          }
-        } catch (err) {
           return done(null, false);
+        } catch (err) {
+          req.log.error(err);
+          return done(new Error("Unauthorized"), false);
         }
       }
     )
+  );
+
+  passport.use(
+    "api_key",
+    new CustomStrategy(async function (req, done) {
+      try {
+        if (!req.query.api_key) {
+          return done(null, false);
+        }
+
+        const user = await User.findOne({ api_key: req.query.api_key });
+        if (user && user.is_active) {
+          return done(null, user);
+        }
+
+        return done(null, false);
+      } catch (err) {
+        req.log.error(err);
+        return done(new Error("Unauthorized"), false);
+      }
+    })
   );
 
   passport.use(
@@ -43,7 +62,7 @@ module.exports = function configureAuth(app) {
       async function (jwtPayload, done) {
         try {
           const user = await User.findOne({ email: jwtPayload.user.email });
-          if (user) {
+          if (user && user.is_active) {
             return done(null, user);
           } else {
             return done(null, false);

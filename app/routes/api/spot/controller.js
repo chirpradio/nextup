@@ -4,9 +4,7 @@ const { errorMessages } = require("../errors");
 module.exports = {
   async getSpots(req, res, next) {
     try {
-      const active =
-        typeof req.query.active === "boolean" ? req.query.active : true;
-      const spots = await SpotService.listSpots(active);
+      const spots = await SpotService.listSpots();     
       res.json(spots);
     } catch (error) {
       next(error);
@@ -31,7 +29,8 @@ module.exports = {
   async updateSpot(req, res, next) {
     try {
       await SpotService.updateSpot(req.params.id, req.body);
-      res.sendStatus(204);
+      const spot = await SpotService.getSpot(req.params.id);
+      res.status(200).json(spot);
     } catch (error) {
       next(error);
     }
@@ -54,8 +53,8 @@ module.exports = {
   },
   async updateCopy(req, res, next) {
     try {
-      await SpotService.updateCopy(req.params.id, req.body);
-      res.sendStatus(204);
+      const copy = await SpotService.updateCopy(req.params.id, req.body);
+      res.status(200).json(copy);
     } catch (error) {
       next(error);
     }

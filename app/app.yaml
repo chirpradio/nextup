@@ -1,8 +1,6 @@
 service: nextup
-runtime: nodejs16
+runtime: nodejs20
 env: standard
-includes:
-  - env_variables.yaml
 handlers:
   - url: /api.*
     secure: always

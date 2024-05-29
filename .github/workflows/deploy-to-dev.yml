@@ -10,6 +10,10 @@ on:
         description: Version name or number
         required: false
         default: live
+      promote:
+        description: Route traffic to this version
+        type: boolean
+        default: true
 
 jobs:
   deploy:
@@ -19,28 +23,14 @@ jobs:
       id-token: write
     steps:
     - id: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.event.inputs.branch }}
     - id: auth
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: projects/425991501736/locations/global/workloadIdentityPools/development/providers/github
         service_account: github@chirpradiodev.iam.gserviceaccount.com   
-    - id: setup-env-variables
-      uses: bluwy/substitute-string-action@v2
-      with:
-        _input-file: ./app/env_variables.yaml
-        _output-file: ./app/env_variables.yaml
-        _format-key: '%%key%%'
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        SESSION_LENGTH: ${{ secrets.SESSION_LENGTH }}
-        ELASTICSEARCH_DOMAIN: ${{ secrets.ELASTICSEARCH_DOMAIN }}
-        ELASTICSEARCH_USERNAME: ${{ secrets.ELASTICSEARCH_USERNAME }}
-        ELASTICSEARCH_PASSWORD: ${{ secrets.ELASTICSEARCH_PASSWORD }}
-        DATASTORE_PROJECT_ID: ${{ steps.auth.outputs.project_id }}
-        LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
     - id: api-docs
       uses: seeebiii/redoc-cli-github-action@v10
       with:
@@ -52,8 +42,18 @@ jobs:
       working-directory: ./client
       run: npm run build
     - id: deploy
-      uses: google-github-actions/deploy-appengine@v1
+      uses: google-github-actions/deploy-appengine@v2
       with:
         deliverables: ./app/app.yaml
+        env_vars: |-
+          NODE_ENV=production
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          SESSION_SECRET=${{ secrets.SESSION_SECRET }}
+          SESSION_LENGTH=${{ secrets.SESSION_LENGTH }}
+          ELASTICSEARCH_DOMAIN=${{ secrets.ELASTICSEARCH_DOMAIN }}
+          ELASTICSEARCH_USERNAME=${{ secrets.ELASTICSEARCH_USERNAME }}
+          ELASTICSEARCH_PASSWORD=${{ secrets.ELASTICSEARCH_PASSWORD }}
+          DATASTORE_PROJECT_ID=${{ steps.auth.outputs.project_id }}
+          LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
         version: ${{ github.event.inputs.version }}
-        promote: true
+        promote: ${{ github.event.inputs.promote }}

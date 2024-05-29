@@ -59,7 +59,6 @@ async function addBreak() {
 }
 
 async function publish(message) {
-  console.log(message);
   await PubSubService.publish(TOPIC, message);
 }
 

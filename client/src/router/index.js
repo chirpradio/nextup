@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
+import trafficLogRoutes from "../traffic-log/routes";
 
 const routes = [
   {
@@ -190,10 +191,7 @@ const routes = [
     name: "playlist",
     component: () => import("../views/playlist/PlaylistView.vue"),
   },
-  {
-    path: "/traffic-log/spots",
-    component: () => import("../views/traffic-log/SpotsView.vue"),
-  },
+  ...trafficLogRoutes,
 ];
 
 const router = createRouter({
@@ -208,12 +206,20 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore();
   if (to.name !== "Log In" && !authStore.isAuthenticated) {
-    next({ name: "Log In", query: { redirect: to.fullPath } });
-  } else {
-    next();
+    return { name: "Log In", query: { redirect: to.fullPath } };
+  }
+
+  if (to.meta.requiresAuth && !authStore.isAuthorized(to.meta.requiresAuth)) {
+    return false;
+  }
+});
+
+router.afterEach((to) => {
+  if (to.meta.title) {
+    document.title = `${to.meta.title} – NextUp`;
   }
 });
 

@@ -64,6 +64,22 @@
               >Playlist</router-link
             >
           </li>
+          <li class="nav-item dropdown" v-if="isAuthorized('traffic-log')">
+            <button
+              class="btn btn-link nav-link dropdown-toggle"
+              id="traffic-log-menu-link"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Traffic Log
+            </button>
+            <div class="dropdown-menu" aria-labelledby="traffic-log-menu-link">
+              <router-link class="dropdown-item" to="/traffic-log/spots">
+                Spots
+              </router-link>
+            </div>
+          </li>
           <li class="nav-item dropdown">
             <button
               class="btn btn-link nav-link dropdown-toggle"

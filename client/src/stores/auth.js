@@ -8,12 +8,16 @@ export const useAuthStore = defineStore("auth", {
     token: "",
     user: {},
     features: {
-      // template: {
-      //   users: [],
-      //   roles: [],
-      // },
+      /**
+       * template: {
+       *   users: [],
+       *   roles: [],
+       **/
       playlist: {
-        roles: ["dj"],
+        roles: ["dj"],  
+      },    
+      "traffic-log": {
+        roles: ["traffic_log_admin"],
       },
     },
   }),
@@ -35,6 +39,9 @@ export const useAuthStore = defineStore("auth", {
         console.error(error);
         return false;
       }
+    },
+    hasRole: (state) => (role) => {
+      return state.user?.roles?.includes(role);
     },
     isAuthorized: (state) => (feature) => {
       const permitted = state.features[feature];

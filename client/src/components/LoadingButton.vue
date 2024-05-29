@@ -1,6 +1,6 @@
 <template>
-  <button class="btn" :class="classes" :disabled="loading">
-    <font-awesome-icon v-if="!loading" :icon="icon" />
+  <button class="btn" :class="classes" :disabled="disabled">
+    <font-awesome-icon v-if="icon && !loading" :icon="icon" />
     <RecordSpinner v-if="loading" size="xs" class="nudge-up" />
     {{ label }}
   </button>
@@ -33,14 +33,27 @@ export default {
       type: Boolean,
       default: false,
     },
+    small: {
+      type: Boolean,
+      default: true,
+    },
+    disable: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     classes() {
-      return {
-        "btn-outline-chirp-red": this.outline,
-        "btn-chirp-red": !this.outline,
-        "btn-sm": this.small,
-      };
+      const obj = {};
+      const colorClass = this.outline
+        ? "btn-outline-chirp-red"
+        : "btn-chirp-red";
+      obj[colorClass] = true;
+      obj["btn-sm"] = this.small;
+      return obj;
+    },
+    disabled() {
+      return this.disable || this.loading;
     },
   },
 };

@@ -1,5 +1,6 @@
 <template>
   <AlbumCollection
+    :key="this.tag"
     :albums="albums"
     :loading="loading"
     :more="more"

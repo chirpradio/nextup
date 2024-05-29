@@ -21,6 +21,7 @@ import {
   faCirclePlus,
   faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare as farFaPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 library.add(
   faGripLines,
@@ -42,5 +43,6 @@ library.add(
   faCheck,
   faSquareCaretLeft,
   faCirclePlus,
-  faCompactDisc
+  faCompactDisc,
+  farFaPenToSquare
 );

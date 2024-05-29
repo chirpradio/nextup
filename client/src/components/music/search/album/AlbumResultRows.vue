@@ -19,11 +19,17 @@
       </div>
       <div class="col-md-2 search-result__col">
         <AlbumTitleLink :album="hit._source" />
-        <TagList :tags="hit._source.current_tags" class="mt-1" />
+        <TagList :tags="hit._source.current_tags" :album="hit._source" />
       </div>
-      <div class="col search-result__col">{{ hit._source.label }}</div>
-      <div class="col-md-1 search-result__col">{{ hit._source.year }}</div>
-      <div class="col-md-2 search-result__col mt-2 mt-md-0">
+      <AlbumLabelLink
+        class="col-md-2 search-result__col"
+        :albumLabel="hit._source.label"
+      />
+      <AlbumYearLink
+        class="col-md-1 search-result__col"
+        :albumYear="hit._source.year"
+      />
+      <div class="col-md-3 search-result__col mt-2 mt-2-sm">
         <AddToCrate :keyToAdd="hit._source.__key" />
       </div>
       <div class="col-md-1"></div>
@@ -35,12 +41,22 @@
 import AddToCrate from "../../../AddToCrate.vue";
 import AlbumArtLink from "../../AlbumArtLink.vue";
 import AlbumTitleLink from "../../AlbumTitleLink.vue";
+import AlbumLabelLink from "../../AlbumLabelLink.vue";
+import AlbumYearLink from "../../AlbumYearLink.vue";
 import ArtistLink from "../../ArtistLink.vue";
 import TagList from "../../TagList.vue";
 
 export default {
   name: "AlbumResultRows",
-  components: { AddToCrate, AlbumArtLink, AlbumTitleLink, ArtistLink, TagList },
+  components: {
+    AddToCrate,
+    AlbumArtLink,
+    AlbumTitleLink,
+    ArtistLink,
+    TagList,
+    AlbumLabelLink,
+    AlbumYearLink,
+  },
   props: {
     results: {
       type: Object,

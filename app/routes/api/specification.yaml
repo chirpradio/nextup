@@ -230,6 +230,8 @@ paths:
                 properties:   
                   token:
                     type: string
+        '401':
+          description: Unauthorized
   /album/tag:
     get:
       security:
@@ -859,13 +861,6 @@ paths:
       tags:
         - Spots
       description: List all spots
-      parameters:
-        - name: active
-          in: query
-          required: false
-          default: true
-          schema:
-            type: boolean
       responses:
         '200':
           description: Success
