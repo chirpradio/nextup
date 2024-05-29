@@ -134,42 +134,6 @@ export default {
     await instance.delete(`/crate/${crateId}`);
   },
 
-  async getPlaylistEvents({ start, end } = {}) {
-    const options = {};
-    if (start || end) {
-      const params = {};
-      if (start) {
-        params.start = start;
-      }
-      if (end) {
-        params.end = end;
-      }
-      options.params = params;
-    }
-
-    return await instance.get("/playlist", options);
-  },
-
-  async addPlaylistTrack(data) {
-    const response = await instance.post("/playlist/track", data);
-    return response.data;
-  },
-
-  async addFreeformPlaylistTrack(data) {
-    const response = await instance.post("/playlist/freeform", data);
-    return response.data;
-  },
-
-  async addBreak() {
-    const response = await instance.post("/playlist/break");
-    return response.data;
-  },
-
-  async getRotationPlays(params) {
-    const getter = instance.get("/playlist/rotation", { params });
-    return await getAndHandleError(getter);
-  },
-
   async search(params) {
     const getter = instance.get("/search", {
       params,

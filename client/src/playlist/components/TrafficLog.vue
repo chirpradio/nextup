@@ -68,8 +68,8 @@
 <script>
 import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
-import { useSpotsStore } from "@/stores/spots";
-import LoadingButton from "../LoadingButton.vue";
+import { useSpotsStore } from "@/traffic-log/store";
+import LoadingButton from "@/components/LoadingButton.vue";
 
 export default {
   components: { LoadingButton },

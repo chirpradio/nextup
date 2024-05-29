@@ -40,9 +40,9 @@
 </style>
 
 <script>
-import TagTotal from "../playlist/TagTotal.vue";
+import TagTotal from "./TagTotal.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../../stores/playlist";
+import { usePlaylistStore } from "../store";
 
 function topOfHourIso() {
   const date = new Date();

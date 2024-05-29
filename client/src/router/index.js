@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
+import playlistRoutes from "../playlist/routes";
 import trafficLogRoutes from "../traffic-log/routes";
 
 const routes = [
@@ -186,11 +187,7 @@ const routes = [
     component: () => import("../views/crates/CrateView.vue"),
     props: true,
   },
-  {
-    path: "/playlist",
-    name: "playlist",
-    component: () => import("../views/playlist/PlaylistView.vue"),
-  },
+  ...playlistRoutes,
   ...trafficLogRoutes,
 ];
 

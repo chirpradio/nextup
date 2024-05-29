@@ -31,7 +31,7 @@
 
 <script>
 import PlayedTime from "./PlayedTime.vue";
-import TagList from "../music/TagList.vue";
+import TagList from "@/components/music/TagList.vue";
 
 const SELECTED = "selected";
 

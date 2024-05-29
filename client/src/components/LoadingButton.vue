@@ -33,10 +33,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    small: {
-      type: Boolean,
-      default: true,
-    },
     disable: {
       type: Boolean,
       default: false,

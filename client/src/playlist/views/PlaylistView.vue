@@ -83,16 +83,16 @@
 </style>
 
 <script>
-import AddTrackModal from "../../components/playlist/AddTrackModal.vue";
-import LoadingButton from "../../components/LoadingButton.vue";
-import PlaylistBreak from "../../components/playlist/PlaylistBreak.vue";
-import PlaylistTrack from "../../components/playlist/PlaylistTrack.vue";
-import TagTotals from "../../components/playlist/TagTotals.vue";
-import updateTitle from "../../mixins/updateTitle";
+import AddTrackModal from "../components/AddTrackModal.vue";
+import LoadingButton from "@/components/LoadingButton.vue";
+import PlaylistBreak from "../components/PlaylistBreak.vue";
+import PlaylistTrack from "../components/PlaylistTrack.vue";
+import TagTotals from "../components/TagTotals.vue";
+import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../../stores/playlist";
-import TrafficLog from "../../components/playlist/TrafficLog.vue";
-import AlbumPreview from "../../components/playlist/AlbumPreview.vue";
+import { usePlaylistStore } from "../store";
+import TrafficLog from "../components/TrafficLog.vue";
+import AlbumPreview from "../components/AlbumPreview.vue";
 
 export default {
   components: {

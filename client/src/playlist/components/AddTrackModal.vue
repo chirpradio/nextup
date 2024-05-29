@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import Modal from "../ModalDialog.vue";
-import CustomTrackForm from "../CustomTrackForm.vue";
+import Modal from "@/components/ModalDialog.vue";
+import CustomTrackForm from "@/components/CustomTrackForm.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../../stores/playlist";
+import { usePlaylistStore } from "../store";
 
 export default {
   components: { Modal, CustomTrackForm },

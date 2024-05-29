@@ -14,8 +14,8 @@ export const useAuthStore = defineStore("auth", {
        *   roles: [],
        **/
       playlist: {
-        roles: ["dj"],  
-      },    
+        roles: ["dj"],
+      },
       "traffic-log": {
         roles: ["traffic_log_admin"],
       },
