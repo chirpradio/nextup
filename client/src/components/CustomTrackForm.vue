@@ -3,13 +3,7 @@
     <div class="row mb-3">
       <label for="artist" class="col-2 col-form-label">Artist</label>
       <div class="col-10">
-        <input
-          id="artist"
-          class="form-control"
-          v-model="item.artist"
-          :required="required"
-          @change="onChange"
-        />
+        <ArtistTypeahead v-model="item.artist" :required="required" />
         <div v-if="required" class="form-text">required</div>
       </div>
     </div>
@@ -115,6 +109,8 @@
 </template>
 
 <script>
+import ArtistTypeahead from "./music/search/artist/ArtistTypeahead.vue";
+
 const CHANGE = "change";
 const EMPTY_ITEM = {
   track: "",
@@ -130,6 +126,7 @@ function resetItem() {
 }
 
 export default {
+  components: { ArtistTypeahead },
   props: {
     required: {
       type: Boolean,
