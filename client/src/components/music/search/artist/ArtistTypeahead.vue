@@ -32,7 +32,6 @@ import { mapStores } from "pinia";
 import { useSearchStore } from "@/stores/search";
 
 const UPDATE = "update:modelValue";
-const LIMIT = 5;
 
 export default {
   props: {
@@ -71,20 +70,21 @@ export default {
       await this.searchStore.search({
         term: event.target.value,
         index: "artist",
-        limit: LIMIT,
+        limit: 5,
         as_you_type: true
       });
     },
     incrementIndex() {
       this.activeIndex++;
-      if (this.activeIndex === LIMIT) {
+      if (this.activeIndex === this.artists.length) {
         this.activeIndex = 0;
       }
     },
-    decrementIndex() {
+    decrementIndex(event) {
+      event.preventDefault();
       this.activeIndex--;
       if (this.activeIndex < 0) {
-        this.activeIndex = LIMIT - 1;
+        this.activeIndex = this.artists.length - 1;
       }
     },
     select() {
