@@ -23,13 +23,6 @@
           "preserve_original": true
         }
       },
-      "tokenizer": {
-        "tengram": {
-          "type": "edge_ngram",
-          "min_gram": 1,
-          "max_gram": 10
-        }
-      },
       "analyzer": {
         "default": {
           "type": "custom",
@@ -47,11 +40,6 @@
           "char_filter": ["normalize_characters"],
           "tokenizer": "whitespace",
           "filter": ["lowercase", "asciifolding", "classic", "catenate"]
-        },
-        "autocomplete": {
-          "type": "custom",
-          "tokenizer": "tengram",
-          "filter": ["lowercase", "asciifolding_original"]
         }
       }
     }
@@ -69,9 +57,8 @@
             "type": "text",
             "analyzer": "normalizer_whitespace"
           },
-          "autocomplete": {
-            "type": "text",
-            "analyzer": "autocomplete"
+          "search_as_you_type": {
+            "type": "search_as_you_type"
           }
         }
       }      
