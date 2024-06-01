@@ -786,23 +786,24 @@ paths:
             minimum: 1
             maximum: 100
             default: 50
-          description: The number of albums to return. 
+          description: The number of results to return. 
         - name: offset
           in: query
           required: false
           schema:
             type: integer
             default: 0
-          description: The index of the first album to return. Use with limit to get the next set of albums.
-        - name: type
+          description: The offset of the first album to return. Use with limit to get the next page of results.
+        - name: index
           in: query
           required: false
           schema:
             type: string
             enum: 
               - album
+              - artist
               - track              
-          description: Limit the search and results to albums or tracks
+          description: Limit the search and results to albums, artists, or tracks
         - name: album[is_compilation]
           in: query
           required: false

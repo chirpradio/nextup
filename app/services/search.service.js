@@ -12,12 +12,12 @@ const client = new elasticsearch.Client({
   ssl: { rejectUnauthorized: false, pfx: [] },
 });
 
-async function search(params, type = "all", options) {
+async function search(params, index = "all", options) {
   const trimmedParams = removeEmptyStrings(params);
   const searchFn =
-    type === "all"
-      ? doMSearch(trimmedParams)
-      : doTypedSearch(trimmedParams, type, options);
+    index === "all"
+      ? doMSearch(trimmedParams, options)
+      : doSearchByIndex(trimmedParams, index, options);
   return await searchFn;
 }
 
@@ -33,7 +33,7 @@ function removeEmptyStrings(obj) {
     );
 }
 
-async function doMSearch(params) {
+async function doMSearch(params, options) {
   const keys = Object.keys(params);
   const emptyParams =
     keys.length === 0 ||
@@ -52,8 +52,10 @@ async function doMSearch(params) {
   };
 }
 
-function getRandomQuery() {
+function getRandomQuery({ from = 0, size = 10 } = options) {
   return {
+    from,
+    size,
     query: {
       bool: {
         must: {
@@ -72,7 +74,7 @@ function getRandomQuery() {
 }
 
 function getRandomQueries() {
-  const queryString = JSON.stringify(getRandomQuery());
+  const queryString = JSON.stringify(getRandomQuery({ size: 10 }));
 
   return [
     '{ "index": "artist" }',
@@ -113,6 +115,12 @@ function buildArtistSearch(params, options) {
       size: 5,
     };
   }
+
+  const queryObj = options.as_you_type === true ? buildArtistSearchAsYouType(params, options) : buildFuzzyArtistSearch(params, options);
+  return queryObj;
+}
+
+function buildFuzzyArtistSearch(params, options) {
   const queryObj = buildQueryObj(options);
 
   if (params.term) {
@@ -127,6 +135,17 @@ function buildArtistSearch(params, options) {
   }
 
   return queryObj;
+}
+
+function buildArtistSearchAsYouType(params, options) {
+  return {
+    "query": {
+      "match_phrase_prefix": {
+        "name.search_as_you_type": params.term
+      }
+    },
+    "size": options.size
+  }
 }
 
 function buildAlbumSearch(params, options) {
@@ -326,11 +345,11 @@ function noSearchTermsInParams(params) {
   return noTerm && noAlbum && noTrack;
 }
 
-async function doTypedSearch(params, index, options) {
-  const mainBody = noSearchTermsInParams(params)
-    ? getRandomQuery()
+async function doSearchByIndex(params, index, options) {
+  const body = noSearchTermsInParams(params)
+    ? getRandomQuery(options)
     : getSearchBody(params, index, options);
-  const body = Object.assign(mainBody, options);
+  // const body = Object.assign(mainBody, options);
 
   const results = await client.search({
     index,

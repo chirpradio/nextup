@@ -1,10 +1,11 @@
 const router = require("express").Router();
-const { validateLimit, validateOffset } = require("./validators");
+const { validateAsYouType, validateLimit, validateOffset } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 
 router.get(
   "/",
+  validateAsYouType,
   validateLimit,
   validateOffset,
   checkErrors,

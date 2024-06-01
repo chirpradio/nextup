@@ -70,8 +70,9 @@ export default {
       this.activeIndex = -1;
       await this.searchStore.search({
         term: event.target.value,
-        type: "artist",
+        index: "artist",
         limit: LIMIT,
+        as_you_type: true
       });
     },
     incrementIndex() {

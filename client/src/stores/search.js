@@ -16,8 +16,8 @@ export const useSearchStore = defineStore("search", {
         const { data: results } = await api.get("/search", {
           params: query,
         });
-        if (query.type) {
-          this.results[query.type] = results;
+        if (query.index) {
+          this.results[query.index] = results;
         } else {
           this.results = results;
         }
