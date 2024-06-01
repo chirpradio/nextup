@@ -11,7 +11,10 @@ async function getConstraintsForSpot(key) {
 
 async function getAllCopyForSpot(key) {
   const options = {
-    filters: [["spot", key], ["deleted", false]],
+    filters: [
+      ["spot", key],
+      ["deleted", false],
+    ],
   };
   const { entities: copy } = await SpotCopy.list(options);
   return copy;

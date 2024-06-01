@@ -1,5 +1,9 @@
 const router = require("express").Router();
-const { validateAsYouType, validateLimit, validateOffset } = require("./validators");
+const {
+  validateAsYouType,
+  validateLimit,
+  validateOffset,
+} = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 

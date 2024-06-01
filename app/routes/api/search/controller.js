@@ -8,7 +8,7 @@ module.exports = {
       const results = await SearchService.search(req.query, req.query.index, {
         from,
         size,
-        as_you_type: req.query.as_you_type
+        as_you_type: req.query.as_you_type,
       });
       res.json(results);
     } catch (error) {

@@ -80,10 +80,10 @@ describe("CrateService", () => {
       }
     });
 
-    afterAll(async () => {  
-      await User.delete(owner.entityKey.id)
+    afterAll(async () => {
+      await User.delete(owner.entityKey.id);
       await User.delete(pretender.entityKey.id);
-      await User.delete(superUser.entityKey.id);      
+      await User.delete(superUser.entityKey.id);
       await Crate.delete(crate.entityKey.id);
     });
 

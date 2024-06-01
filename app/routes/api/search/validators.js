@@ -1,6 +1,9 @@
 const { query } = require("express-validator");
 
-const validateAsYouType = query("as_you_type").optional().isBoolean().toBoolean();
+const validateAsYouType = query("as_you_type")
+  .optional()
+  .isBoolean()
+  .toBoolean();
 const validateLimit = query("limit")
   .optional()
   .isInt({ min: 1, max: 100 })
