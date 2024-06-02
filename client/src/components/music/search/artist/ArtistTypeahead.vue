@@ -68,7 +68,7 @@ export default {
       this.enableResults();
       this.activeIndex = -1;
       await this.searchStore.search({
-        term: event.target.value,
+        term: event.target.value.trimEnd(),
         index: "artist",
         limit: 5,
         as_you_type: true

@@ -116,7 +116,10 @@ function buildArtistSearch(params, options) {
     };
   }
 
-  const queryObj = options.as_you_type === true ? buildArtistSearchAsYouType(params, options) : buildFuzzyArtistSearch(params, options);
+  const queryObj =
+    options.as_you_type === true
+      ? buildArtistSearchAsYouType(params, options)
+      : buildFuzzyArtistSearch(params, options);
   return queryObj;
 }
 
@@ -139,13 +142,56 @@ function buildFuzzyArtistSearch(params, options) {
 
 function buildArtistSearchAsYouType(params, options) {
   return {
-    "query": {
-      "match_phrase_prefix": {
-        "name.search_as_you_type": params.term
-      }
+    query: {
+      bool: {
+        must: {
+          match_phrase_prefix: {
+            "name.search_as_you_type": params.term,
+          },
+        },
+        // prefer matches near the beginning
+        should: [
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 1,
+            },
+          },
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 2,
+            },
+          },
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 3,
+            },
+          },
+        ],
+      },
     },
-    "size": options.size
-  }
+    size: options.size,
+  };
 }
 
 function buildAlbumSearch(params, options) {
