@@ -67,12 +67,15 @@ export default {
       this.$emit(UPDATE, event.target.value);
       this.enableResults();
       this.activeIndex = -1;
-      await this.searchStore.search({
-        term: event.target.value.trimEnd(),
-        index: "artist",
-        limit: 5,
-        as_you_type: true
-      });
+      const term = event.target.value.trimEnd();
+      if (term.length > 1) {
+        await this.searchStore.search({
+          term,
+          index: "artist",
+          limit: 5,
+          as_you_type: true,
+        });
+      }
     },
     incrementIndex() {
       this.activeIndex++;
