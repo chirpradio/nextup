@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column align-items-end">
-    <Tag :tag="tag" :badge="false" class="mb-1" />
+    <Tag :tag="tag" :badge="false" class="mb-1 text-end" />
     <span class="font-sans">{{ total }} / {{ expected }}</span>
   </div>
 </template>

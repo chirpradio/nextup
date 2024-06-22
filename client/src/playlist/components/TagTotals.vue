@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-totals d-flex justify-content-between justify-content-lg-end">
+  <div class="tag-totals d-flex justify-content-between justify-content-xl-end">
     <TagTotal
       class="me-3"
       tag="heavy_rotation"

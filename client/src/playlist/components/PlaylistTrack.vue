@@ -1,9 +1,9 @@
 <template>
-  <div class="row g-2 border-bottom">
+  <div class="row gx-2 border-bottom">
     <div class="col-2">
       <PlayedTime :date="track.established" />
     </div>
-    <div class="col-10">
+    <div class="col-10 ps-3 ps-md-0">
       <div class="d-flex flex-column flex-grow-1">
         <div>
           <span class="fw-bold">{{ artist }}</span> “{{ title }}” from

@@ -47,6 +47,30 @@ $primary: #822036;
 @import "~bootstrap/scss/helpers";
 
 // Utilities
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (15: 15%),
+        ),
+      ),
+    ),
+  )
+);
+
+$utilities: map-merge(
+  $utilities, (
+    "font-size": map-merge(
+      map-get($utilities, "font-size"),
+      ( responsive: true ),
+    ),
+  )
+);
+
 @import "~bootstrap/scss/utilities/api";
 
 
@@ -127,6 +151,14 @@ button.btn-outline-chirp-red:hover {
   border-color: var(--bright-red);
 }
 
+.text-chirp-red {
+  color: var(--dark-red);
+}
+
+.text-chirp-red-hover:hover {
+  color: var(--bright-red);
+}
+
 .form-check-input:checked {
   background-color: var(--bright-red);
   border-color: var(--bright-red);
@@ -143,4 +175,14 @@ button.btn-outline-chirp-red:hover {
 
 .numeral {
   font-family: "Times New Roman", Times, serif;
+}
+
+.drawer {
+  width: 90% !important;
+}
+
+@media (min-width: 768px) {
+  .drawer {
+    width: 750px !important;
+  }
 }

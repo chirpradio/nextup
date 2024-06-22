@@ -1,67 +1,66 @@
 <template>
   <div>
-    <div class="d-flex mb-2">
-      <div class="d-flex flex-fill text-end">
-        <span class="font-sans me-2">ON AIR</span>
-        <div class="form-check form-switch">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            v-model="onAir"
+    <div class="row pe-3">
+      <div class="col-8">
+        <!-- on air switch -->
+        <div class="d-flex flex-fill text-end mb-2">
+          <span class="font-sans me-2">ON AIR</span>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              v-model="onAir"
+            />
+          </div>
+        </div>
+        <!-- buttons and tag totals -->
+        <div class="row g-2 mb-2">
+          <LoadingButton
+            class="col h-md-50 me-1"
+            icon="rotate-right"
+            label="update"
+            :outline="true"
+            :loading="loading"
+            @click="update"
+          />
+          <LoadingButton
+            class="col h-md-50 me-1"
+            :class="addButtonClasses"
+            icon="play"
+            label="add track"
+            @click="addTrack"
+          />
+          <LoadingButton
+            class="col h-md-50"
+            :class="addButtonClasses"
+            icon="plus"
+            label="add break"
+            :loading="adding"
+            @click="addBreak"
+          />
+          <TagTotals
+            class="col-12 col-xl-6 ms-0 ms-md-2 mt-3 mb-2 text-lg-end"
           />
         </div>
+        <!-- playlist events -->
+        <ol class="list-group list-group-flush list-unstyled border-top">
+          <li v-for="event in sorted" :key="event.id">
+            <component
+              :is="getComponent(event)"
+              :track="event"
+              class="py-2"
+              @selected="updateSelected"
+            />
+          </li>
+        </ol>
       </div>
-      <button
-        class="btn btn-link-chirp-red"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#trafficLog"
-        role="button"
-        aria-controls="trafficLog"
-      >
-        <font-awesome-icon icon="square-caret-left" />
-        open traffic log
-      </button>
+      <div class="col-4 py-3 pe-3 text-bg-light">
+        <TrafficLog id="trafficLog" v-if="onAir" />
+      </div>
     </div>
-    <div class="row g-2 mb-2">
-      <LoadingButton
-        class="col h-50 me-1"
-        icon="rotate-right"
-        label="update"
-        :outline="true"
-        :loading="loading"
-        @click="update"
-      />
-      <LoadingButton
-        class="col h-50 me-1"
-        :class="addButtonClasses"
-        icon="play"
-        label="add track"
-        @click="addTrack"
-      />
-      <LoadingButton
-        class="col h-50"
-        :class="addButtonClasses"
-        icon="plus"
-        label="add break"
-        :loading="adding"
-        @click="addBreak"
-      />
-      <TagTotals class="col-12 col-lg-6 text-lg-end" />
-    </div>
-    <ol class="list-group list-group-flush list-unstyled border-top">
-      <li v-for="event in sorted" :key="event.id">
-        <component
-          :is="getComponent(event)"
-          :track="event"
-          class="py-2"
-          @selected="updateSelected"
-        />
-      </li>
-    </ol>
 
     <AddTrackModal ref="addTrackModal" />
-    <TrafficLog id="trafficLog" class="drawer" />
     <AlbumPreview
       id="albumPreview"
       class="drawer"
@@ -69,18 +68,6 @@
     />
   </div>
 </template>
-
-<style>
-.drawer {
-  width: 90% !important;
-}
-
-@media (min-width: 768px) {
-  .drawer {
-    width: 750px !important;
-  }
-}
-</style>
 
 <script>
 import AddTrackModal from "../components/AddTrackModal.vue";
