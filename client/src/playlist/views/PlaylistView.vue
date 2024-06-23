@@ -59,10 +59,11 @@
       </div>
       <div
         :id="TRAFFIC_LOG"
-        ref="trafficLog"
+        ref="trafficLog" 
+        v-if="onAir"
         class="col-12 col-md-4 py-3 pe-3 text-bg-light"
       >
-        <TrafficLog v-if="onAir" />
+        <TrafficLog />
       </div>
     </div>
 
