@@ -29,7 +29,7 @@ import CrateAlbumSpans from "./CrateAlbumSpans.vue";
 import TagList from "../music/TagList.vue";
 import PlayButton from "../music/PlayButton.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/stores/playlist";
+import { usePlaylistStore } from "@/playlist/store";
 import RecentlyPlayedAlert from "../music/RecentlyPlayedAlert.vue";
 
 export default {
