@@ -1,6 +1,6 @@
 <template>
   <div class="text-bg-light">
-    <div class="d-flex flex-column flex-md-row">
+    <div class="d-flex">
       <h2 class="h4 flex-fill">Traffic Log</h2>
       <LoadingButton
         icon="rotate-right"
@@ -22,7 +22,7 @@
         aria-controls="spot"
         @click="select(entry)"
       >
-        <span class="w-15">{{ time(entry) }}</span>
+        <span class="w-20">{{ time(entry) }}</span>
         <div class="col" :class="titleClass(entry)">
           <font-awesome-icon icon="square-caret-left" />
           {{ entry.spot.title }}
@@ -34,7 +34,7 @@
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasLabel">{{ spotHeading }}</h5>
       </div>
-      <div class="offcanvas-body fs-2 fs-md-1">
+      <div class="offcanvas-body fs-3 fs-md-1">
         <div class="d-flex justify-content-end">
           <button
             class="btn btn-light"
@@ -43,7 +43,7 @@
           >
             close script
           </button>
-          <button            
+          <button
             class="btn btn-chirp-red ms-2"
             data-bs-dismiss="offcanvas"
             aria-label="mark as read"
