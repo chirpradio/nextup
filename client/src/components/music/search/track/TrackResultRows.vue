@@ -35,7 +35,7 @@
       <div class="col-md-1 search-result__col text-md-end numeral">
         <TrackDuration :track="hit._source" />
       </div>
-      <div class="col-auto search-result__col actions d-flex mt-2 mt-md-0">
+      <div class="col-auto actions d-flex mt-2 mt-md-0">
         <TrackResultActions :track="hit._source" :album="hit._source.album" />
       </div>
       <div class="col-md-1"></div>

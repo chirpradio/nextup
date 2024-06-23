@@ -29,7 +29,7 @@
         class="col-md-1 search-result__col"
         :albumYear="hit._source.year"
       />
-      <div class="col-md-3 search-result__col mt-2 mt-2-sm">
+      <div class="col-md-3 mt-2 mt-2-sm">
         <AddToCrate :keyToAdd="hit._source.__key" />
       </div>
       <div class="col-md-1"></div>
