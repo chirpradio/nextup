@@ -65,7 +65,9 @@ export const usePlaylistStore = defineStore("playlist", {
       const start = new Date();
       start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
       const { data: rotationPlays } = await api.get("/playlist/rotation", {
-        start: start.getTime(),
+        params: {
+          start: start.getTime(),
+        },
       });
       this.rotationPlays = rotationPlays;
     },
