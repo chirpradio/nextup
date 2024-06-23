@@ -16,7 +16,7 @@
       <button
         v-for="entry in trafficLog"
         :key="entry.scheduled.name"
-        class="list-group-item list-group-item-action list-group-item-light d-flex flex-column flex-lg-row"
+        class="list-group-item list-group-item-action list-group-item-light d-flex flex-row flex-md-column flex-lg-row"
         data-bs-toggle="offcanvas"
         data-bs-target="#spot"
         aria-controls="spot"
