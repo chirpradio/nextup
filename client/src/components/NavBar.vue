@@ -64,38 +64,38 @@
               >Playlist</router-link
             >
           </li>
-          <li class="nav-item dropdown" v-if="isAuthorized('traffic-log')">
-            <button
-              class="btn btn-link nav-link dropdown-toggle"
-              id="traffic-log-menu-link"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Traffic Log
-            </button>
-            <div class="dropdown-menu" aria-labelledby="traffic-log-menu-link">
-              <router-link class="dropdown-item" to="/traffic-log/spots">
-                Spots
-              </router-link>
-            </div>
-          </li>
           <li class="nav-item dropdown">
             <button
               class="btn btn-link nav-link dropdown-toggle"
-              id="report-menu-link"
+              id="admin-menu-link"
               data-bs-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Reports
+              Admin
             </button>
-            <div class="dropdown-menu" aria-labelledby="report-menu-link">
+            <div class="dropdown-menu" aria-labelledby="admin-menu-link">
+              <li>
+                <h6 class="dropdown-header">Reports</h6>
+              </li>
               <router-link class="dropdown-item" to="/reports/rotation/albums">
                 Rotation Albums
               </router-link>
               <router-link class="dropdown-item" to="/reports/rotation/plays">
                 Rotation Plays
+              </router-link>
+              <li v-if="isAuthorized('traffic-log')">
+                <hr class="dropdown-divider" />
+              </li>
+              <li v-if="isAuthorized('traffic-log')">
+                <h6 class="dropdown-header">Traffic Log</h6>
+              </li>
+              <router-link
+                v-if="isAuthorized('traffic-log')"
+                class="dropdown-item"
+                to="/traffic-log/spots"
+              >
+                Spots
               </router-link>
             </div>
           </li>
