@@ -1,34 +1,22 @@
 <template>
   <div v-if="onAir" class="btn-group">
-    <button
-      class="btn btn-sm btn-outline-chirp-red play-button fit-content"
-      data-reference="parent"
-      :class="buttonClasses"
-      :disabled="disabled"
-      @mousedown="startConfirmation"
-      @touchstart="startConfirmation"
-      @mouseup="endConfirmation"
-      @mouseout="endConfirmation"
-      @touchend="endConfirmation"
-      @keypress="keyStartConfirmation"
-      @keyup="keyEndConfirmation"
-    >
-      <font-awesome-icon :icon="icon" :class="iconClasses" size="sm" />
-      {{ label }}
+    <button class="btn btn-sm btn-outline-chirp-red d-flex d-flex-row align-items-center">
+      <font-awesome-icon icon="clock" size="sm" class="me-1" />
+      cue
     </button>
     <button
       type="button"
-      class="btn btn-sm btn-outline-chirp-red dropdown-toggle dropdown-toggle-split play-button__toggle fit-content bg-white"
+      class="btn btn-sm btn-outline-chirp-red dropdown-toggle dropdown-toggle-split play-button__toggle fit-content bg-white d-flex d-flex-row align-items-center"
       data-bs-toggle="dropdown"
       aria-expanded="false"
       title="play with a note"
       :disabled="disabled"
     >
-      <font-awesome-icon icon="pen" class="me-1" size="sm" />
-      <span class="d-none">toggle dropdown</span>
+      <font-awesome-icon icon="play" class="me-1" size="sm" />
+      <span class="me-1">play</span>
     </button>
     <div class="dropdown-menu play-button__menu p-2">
-      <label class="form-label" for="notes">Note</label>
+      <label class="form-label" for="notes">Note (optional)</label>
       <textarea
         class="form-control form-control-sm mb-2"
         id="notes"
@@ -39,7 +27,7 @@
         :disabled="disabled"
         @click="playWithNote"
       >
-        Play with a note
+        play
       </button>
     </div>
   </div>
