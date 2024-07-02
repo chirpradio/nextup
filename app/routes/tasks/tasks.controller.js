@@ -7,6 +7,12 @@ const {
   SearchService,
 } = require("../../services");
 const levenshtein = require("js-levenshtein");
+const validTags = [
+  "local_current",
+  "local_classic",
+  "heavy_rotation",
+  "light_rotation",
+];
 
 async function updateIndexWithAlbumArtist(artist) {
   await SearchService.update(
@@ -190,6 +196,9 @@ async function updateFreeformRotationPlays(req, res) {
             playlistTrack.album = track.album;
             playlistTrack.artist = album.album_artist.__key;
             playlistTrack.track = track.__key;
+            playlistTrack.categories = album.current_tags.filter((tag) =>
+              validTags.includes(tag)
+            );
             const { error } = playlistTrack.validate();
             if (!error) {
               await playlistTrack.save();
