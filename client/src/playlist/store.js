@@ -8,6 +8,7 @@ const ROTATION_PLAY_POLLING_INTERVAL = 5 * 60 * 1000; // every five minutes
 export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
     adding: false,
+    cuedTrack: undefined,
     events: [],
     lastUpdated: undefined,
     onAir: false,
@@ -43,6 +44,9 @@ export const usePlaylistStore = defineStore("playlist", {
       await api.post("/playlist/track", data);
       this.adding = false;
       this.getPlaylistEvents({ start: this.lastUpdated });
+    },
+    cue(track) {
+      this.cuedTrack = track;
     },
     async getPlaylistEvents({ start, end } = {}) {
       const options = {};
