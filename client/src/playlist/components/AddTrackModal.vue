@@ -2,7 +2,7 @@
   <Modal
     ref="modal"
     title="Add track to playlist"
-    confirmLabel="Add track"
+    confirmLabel="add to playlist"
     @confirm="onConfirm"
     :loading="adding"
     :error="error"
