@@ -17,7 +17,7 @@
           </div>
         </div>
         <!-- buttons and tag totals -->
-        <div :id="PLAYLIST" class="row g-2 mb-2">
+        <div :id="PLAYLIST" class="row g-2 mb-4">
           <LoadingButton
             class="col h-md-50 me-1"
             icon="rotate-right"
@@ -46,16 +46,19 @@
           />
         </div>
         <!-- playlist events -->
-        <ol class="list-group list-group-flush list-unstyled border-top">
-          <li v-for="event in sorted" :key="event.id">
-            <component
-              :is="getComponent(event)"
-              :track="event"
-              class="py-2"
-              @selected="updateSelected"
-            />
-          </li>
-        </ol>
+        <CuedTrack class="mb-4 p-2 border" />
+        <div class="p-2">
+          <h4>Now playing</h4>
+          <ol class="list-group list-group-flush list-unstyled border-top">
+            <li v-for="event in sorted" :key="event.id">
+              <component
+                :is="getComponent(event)"
+                :track="event"
+                class="py-2"
+              />
+            </li>
+          </ol>
+        </div>
       </div>
       <div
         :id="TRAFFIC_LOG"
@@ -100,6 +103,7 @@ import AddTrackModal from "../components/AddTrackModal.vue";
 import LoadingButton from "@/components/LoadingButton.vue";
 import PlaylistBreak from "../components/PlaylistBreak.vue";
 import PlaylistTrack from "../components/PlaylistTrack.vue";
+import CuedTrack from "../components/CuedTrack.vue";
 import TagTotals from "../components/TagTotals.vue";
 import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
@@ -120,6 +124,7 @@ export default {
     TagTotals,
     TrafficLog,
     AlbumPreview,
+    CuedTrack,
   },
   data() {
     return {
@@ -127,7 +132,6 @@ export default {
       loading: false,
       PLAYLIST,
       sectionInView: PLAYLIST,
-      selectedAlbumId: null,
       TRAFFIC_LOG,
     };
   },
@@ -149,6 +153,9 @@ export default {
       set(value) {
         this.playlistStore.onAir = value;
       },
+    },
+    selectedAlbumId() {
+      return this.playlistStore.selectedAlbumId;
     },
     sorted() {
       const copy = [...this.events];
@@ -192,9 +199,6 @@ export default {
     },
     addTrack() {
       this.$refs.addTrackModal.show();
-    },
-    updateSelected(evt) {
-      this.selectedAlbumId = evt.album_id.value;
     },
     updateSectionInView() {
       const rect = this.$refs.trafficLog.getBoundingClientRect();

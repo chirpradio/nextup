@@ -15,32 +15,49 @@
             data-bs-target="#albumPreview"
             role="button"
             aria-controls="albumPreview"
-            @click="emitSelected"
+            @click="selectAlbum"
           >
             <font-awesome-icon icon="square-caret-left" />
             {{ album }}
           </button>
           <span class="text-muted"> ({{ label }})</span>
         </div>
-        <TagList :tags="track.categories" class="mb-1" />
-        <div class="text-muted">{{ track.notes }}</div>
+        <TagList :tags="track.categories" class="mb-2" />
+        <div v-if="editable" class="form-floating mb-2">
+          <input
+            class="form-control"
+            id="notes"
+            :value="notes"
+            @input="$emit('update:notes', $event.target.value)"
+          />
+          <label class="form-label" for="notes">Notes</label>
+        </div>
+        <div v-if="!editable && track.notes" class="text-muted">
+          {{ track.notes }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "../store";
 import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
-
-const SELECTED = "selected";
 
 export default {
   components: { PlayedTime, TagList },
   props: {
+    editable: {
+      type: Boolean,
+      default: false,
+    },
+    notes: String,
     track: Object,
   },
   computed: {
+    ...mapStores(usePlaylistStore),
     artist() {
       return this.track.freeform_artist_name || this.track.artist.name;
     },
@@ -54,13 +71,12 @@ export default {
       return this.track.freeform_label || this.track.album.label;
     },
     freeform() {
-      return this.track.freeform_track_title;
+      return !this.track.album?.album_id;
     },
   },
-  emits: [SELECTED],
   methods: {
-    emitSelected() {
-      this.$emit(SELECTED, { album_id: this.track.album.album_id });
+    selectAlbum() {
+      this.playlistStore.selectAlbum(this.track.album.album_id.value);
     },
   },
 };

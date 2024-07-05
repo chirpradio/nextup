@@ -17,6 +17,7 @@ export const usePlaylistStore = defineStore("playlist", {
       start: undefined,
       end: undefined,
     },
+    selectedAlbumId: undefined,
   }),
   getters: {
     recentPlay: (state) => (album) => {
@@ -45,6 +46,9 @@ export const usePlaylistStore = defineStore("playlist", {
       this.adding = false;
       this.getPlaylistEvents({ start: this.lastUpdated });
     },
+    clearCuedTrack() {
+      this.cuedTrack = undefined;
+    },
     cue(track) {
       this.cuedTrack = track;
     },
@@ -66,14 +70,18 @@ export const usePlaylistStore = defineStore("playlist", {
       this.lastUpdated = Date.now();
     },
     async getRecentRotationPlays() {
-      const start = new Date();
-      start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
-      const { data: rotationPlays } = await api.get("/playlist/rotation", {
-        params: {
-          start: start.getTime(),
-        },
-      });
-      this.rotationPlays = rotationPlays;
+      try {
+        const start = new Date();
+        start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
+        const { data: rotationPlays } = await api.get("/playlist/rotation", {
+          params: {
+            start: start.getTime(),
+          },
+        });
+        this.rotationPlays = rotationPlays;
+      } catch (error) {
+        intervalID = undefined;
+      }
     },
     async pollRotationPlays() {
       this.getRecentRotationPlays();
@@ -83,6 +91,9 @@ export const usePlaylistStore = defineStore("playlist", {
           ROTATION_PLAY_POLLING_INTERVAL
         );
       }
+    },
+    selectAlbum(id) {
+      this.selectedAlbumId = id;
     },
   },
 });

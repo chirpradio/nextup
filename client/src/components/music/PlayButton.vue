@@ -42,6 +42,11 @@
 </template>
 
 <style>
+.cue-button,
+.play-button {
+  height: fit-content;
+}
+
 .cue-button {
   min-width: 4.25rem;
 }
@@ -73,6 +78,9 @@ export default {
     type: {
       type: String,
       default: "track",
+      validator(value) {
+        return ["freeform", "track"].includes(value);
+      },
     },
   },
   data() {
@@ -91,7 +99,11 @@ export default {
         : this.album.album_artist;
     },
     cued() {
-      return this.playlistStore.cuedTrack === this.track;
+      const cuedTrack = this.playlistStore.cuedTrack;
+      return (
+        cuedTrack?.track.title === this.track.title &&
+        cuedTrack?.album.title === this.album.title
+      );
     },
     cuedLabel() {
       return this.cued ? "cued" : "cue";
@@ -122,6 +134,15 @@ export default {
     onAir() {
       return this.playlistStore.onAir;
     },
+    freeformPlaylistTrack() {
+      return {
+        album: this.album,
+        artist: this.artist,
+        categories: this.categories || [],
+        notes: this.playNotes,
+        track: this.track,
+      };
+    },
   },
   created() {
     /* 
@@ -144,15 +165,9 @@ export default {
             notes: this.playNotes,
           });
         } else if (this.type === "freeform") {
-          await this.playlistStore.addFreeformPlaylistTrack({
-            album: this.album,
-            artist: this.artist,
-            categories: this.categories || [],
-            notes: this.playNotes,
-            track: this.track,
-          });
-        } else {
-          throw new Error(`Invalid type "${this.type}"`);
+          await this.playlistStore.addFreeformPlaylistTrack(
+            this.freeformPlaylistTrack
+          );
         }
         this.adding = false;
         this.added = true;
@@ -163,7 +178,20 @@ export default {
       }
     },
     cue() {
-      this.playlistStore.cue(this.track);
+      let playlistTrack;
+      if (this.type === "freeform") {
+        playlistTrack = this.freeformPlaylistTrack;
+      } else {
+        playlistTrack = {
+          album: this.album,
+          artist: this.trackOrAlbumArtist,
+          categories: this.categories || [],
+          label: this.album.label || null,
+          track: this.track,
+          notes: this.playNotes,
+        };
+      }
+      this.playlistStore.cue(playlistTrack);
     },
   },
 };
