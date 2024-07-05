@@ -5,7 +5,7 @@
     </div>
     <div class="col-10 ps-3 ps-md-0">
       <div class="d-flex flex-column flex-grow-1">
-        <div>
+        <div class="mb-1">
           <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
           <span class="fst-italic" v-if="freeform">{{ album }}</span>
           <button
@@ -21,8 +21,8 @@
             {{ album }}
           </button>
           <span class="text-muted"> ({{ label }})</span>
+          <TagList :tags="track.categories" class="d-inline ms-2" />
         </div>
-        <TagList :tags="track.categories" class="mb-2" />
         <div v-if="editable" class="form-floating mb-2">
           <input
             class="form-control"
