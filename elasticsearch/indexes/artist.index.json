@@ -27,19 +27,19 @@
         "default": {
           "type": "custom",
           "tokenizer": "standard",
-          "filter": ["lowercase", "asciifolding", "classic"]
+          "filter": ["lowercase", "asciifolding", "catenate"]
         },
         "normalizer_standard": {
           "type": "custom",
           "char_filter": ["normalize_characters"],
           "tokenizer": "standard",
-          "filter": ["lowercase", "asciifolding", "classic", "catenate"]
+          "filter": ["lowercase", "asciifolding", "catenate"]
         },
         "normalizer_whitespace": {
           "type": "custom",
           "char_filter": ["normalize_characters"],
           "tokenizer": "whitespace",
-          "filter": ["lowercase", "asciifolding", "classic", "catenate"]
+          "filter": ["lowercase", "asciifolding", "catenate"]
         }
       }
     }
