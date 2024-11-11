@@ -40,6 +40,11 @@
           "char_filter": ["normalize_characters"],
           "tokenizer": "whitespace",
           "filter": ["lowercase", "asciifolding", "catenate"]
+        },
+        "typeahead": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
         }
       }
     }
@@ -58,7 +63,8 @@
             "analyzer": "normalizer_whitespace"
           },
           "search_as_you_type": {
-            "type": "search_as_you_type"
+            "type": "search_as_you_type",
+            "analyzer": "typeahead"
           }
         }
       }      
