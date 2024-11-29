@@ -201,11 +201,13 @@ export default {
       this.$refs.addTrackModal.show();
     },
     updateSectionInView() {
-      const rect = this.$refs.trafficLog.getBoundingClientRect();
-      if (window.scrollY > rect.top + 2) {
-        this.sectionInView = TRAFFIC_LOG;
-      } else {
-        this.sectionInView = PLAYLIST;
+      if (this.$refs.trafficLog) {
+        const rect = this.$refs.trafficLog.getBoundingClientRect();
+        if (window.scrollY > rect.top + 2) {
+          this.sectionInView = TRAFFIC_LOG;
+        } else {
+          this.sectionInView = PLAYLIST;
+        }
       }
     },
   },
