@@ -105,7 +105,6 @@ import PlaylistBreak from "../components/PlaylistBreak.vue";
 import PlaylistTrack from "../components/PlaylistTrack.vue";
 import CuedTrack from "../components/CuedTrack.vue";
 import TagTotals from "../components/TagTotals.vue";
-import updateTitle from "@/mixins/updateTitle";
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "../store";
 import TrafficLog from "../components/TrafficLog.vue";
@@ -162,9 +161,7 @@ export default {
       return copy.sort((a, b) => (a.established < b.established ? 1 : -1));
     },
   },
-  mixins: [updateTitle],
-  created: async function () {
-    this.updateTitle("Playlist");
+  created: async function () {    
     if (this.events.length === 0) {
       this.update();
     }
