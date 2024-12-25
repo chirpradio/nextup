@@ -161,7 +161,7 @@ export default {
       return copy.sort((a, b) => (a.established < b.established ? 1 : -1));
     },
   },
-  created: async function () {    
+  created: async function () {
     if (this.events.length === 0) {
       this.update();
     }

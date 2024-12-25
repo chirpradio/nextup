@@ -6,7 +6,11 @@
         <span v-if="required" class="form-text">required</span>
       </div>
       <div class="col-10">
-        <ArtistTypeahead v-model="item.artist" :required="required" />
+        <ArtistTypeahead
+          v-model="item.artist"
+          :required="required"
+          @update:model-value="onChange"
+        />
       </div>
     </div>
     <div class="row mb-3">
@@ -118,7 +122,12 @@
     <div class="row mb-3">
       <label for="notes" class="col-2 col-form-label">Notes</label>
       <div class="col-10">
-        <input id="notes" class="form-control" v-model="item.notes" />
+        <input
+          id="notes"
+          class="form-control"
+          v-model="item.notes"
+          @change="onChange"
+        />
       </div>
     </div>
   </form>
@@ -153,15 +162,33 @@ export default {
       type: Boolean,
       default: false,
     },
+    track: {
+      type: Object,
+      required: false,
+    },
   },
   data() {
     return {
-      item: resetItem(),
+      item: {},
       HEAVY_ROTATION,
       LIGHT_ROTATION,
       LOCAL_CLASSIC,
       LOCAL_CURRENT,
     };
+  },
+  beforeMount() {
+    if (this.track) {
+      this.item = {
+        track: this.track.track.title,
+        artist: this.track.artist?.name || this.track.track_artist?.name,
+        album: this.track.album.title,
+        label: this.track.album.label,
+        notes: this.track.notes,
+        categories: this.track.categories,
+      };
+    } else {
+      this.item = resetItem();
+    }
   },
   emits: [CHANGE],
   methods: {
@@ -169,7 +196,7 @@ export default {
       this.item = resetItem();
     },
     onChange() {
-      this.$emit(CHANGE);
+      this.$emit(CHANGE, this.item);
     },
     checkValidity() {
       return this.$refs.form.checkValidity();
@@ -193,6 +220,7 @@ export default {
       if (index > -1) {
         this.item.categories.splice(index, 1);
       }
+      this.$emit(CHANGE, this.item);
     },
   },
 };

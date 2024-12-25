@@ -2,14 +2,20 @@
   <div v-if="cuedTrack">
     <h4>Cued</h4>
     <PlaylistTrack
+      v-if="!editing"
       :track="cuedTrack"
       v-model:notes="cuedTrack.notes"
       :editable="true"
     />
+    <CustomTrackForm v-if="editing" :track="cuedTrack" @change="onChange" />
     <div class="d-flex d-flex-row justify-content-end g-2 mt-2">
-      <button class="btn btn-light" @click="clear">
+      <button class="btn btn-light" v-if="!editing" @click="clear">
         <font-awesome-icon icon="xmark" />
         clear cued track
+      </button>
+      <button class="btn btn-light" @click="edit">
+        <font-awesome-icon :icon="editIcon" />
+        {{ editLabel }}
       </button>
       <LoadingButton
         class="ms-2"
@@ -27,12 +33,15 @@ import PlaylistTrack from "./PlaylistTrack.vue";
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "../store";
 import LoadingButton from "@/components/LoadingButton.vue";
+import CustomTrackForm from "../../components/CustomTrackForm.vue";
+import playlistMixins from "../mixins";
 
 export default {
-  components: { PlaylistTrack, LoadingButton },
+  components: { PlaylistTrack, LoadingButton, CustomTrackForm },
   data() {
     return {
       adding: false,
+      editing: false,
     };
   },
   computed: {
@@ -40,7 +49,14 @@ export default {
     cuedTrack() {
       return this.playlistStore.cuedTrack;
     },
+    editLabel() {
+      return this.editing ? "finish editing" : "edit cued track";
+    },
+    editIcon() {
+      return this.editing ? "check" : "edit";
+    },
   },
+  mixins: [playlistMixins],
   methods: {
     async addToPlaylist() {
       this.adding = true;
@@ -66,6 +82,13 @@ export default {
       }
       this.adding = false;
       this.clear();
+    },
+    edit() {
+      this.editing = !this.editing;
+    },
+    onChange(item) {      
+      const track = this.convertCrateItemToFreeformTrack(item);
+      this.playlistStore.cue(track);
     },
     clear() {
       this.playlistStore.clearCuedTrack();
