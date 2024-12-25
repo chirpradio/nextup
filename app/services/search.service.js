@@ -143,14 +143,50 @@ function buildFuzzyArtistSearch(params, options) {
 function buildArtistSearchAsYouType(params, options) {
   return {
     query: {
-      multi_match: {
-        query: params.term,
-        type: "bool_prefix",
-        fields: [
-          "name.search_as_you_type",
-          "name.search_as_you_type._2gram",
-          "name.search_as_you_type._3gram",
-          "name.normalized_standard",
+      bool: {
+        must: {
+          match_phrase_prefix: {
+            "name.search_as_you_type": params.term,
+          },
+        },
+        // prefer matches near the beginning
+        should: [
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 1,
+            },
+          },
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 2,
+            },
+          },
+          {
+            span_first: {
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: { name: params.term },
+                  },
+                },
+              },
+              end: 3,
+            },
+          },
         ],
       },
     },
