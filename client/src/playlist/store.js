@@ -52,6 +52,11 @@ export const usePlaylistStore = defineStore("playlist", {
     cue(track) {
       this.cuedTrack = track;
     },
+    async deletePlaylistEvent(event) {
+      const index = this.events.findIndex((element) => element.id === event.id);
+      this.events.splice(index, 1);
+      await api.delete(`/playlist/${event.id}`);
+    },
     async getPlaylistEvents({ start, end } = {}) {
       const options = {};
       if (start || end) {

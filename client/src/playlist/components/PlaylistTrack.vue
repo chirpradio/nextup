@@ -5,23 +5,35 @@
     </div>
     <div class="col-10 ps-3 ps-md-0">
       <div class="d-flex flex-column flex-grow-1">
-        <div class="mb-1">
-          <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
-          <span class="fst-italic" v-if="freeform">{{ album }}</span>
-          <button
-            v-if="!freeform"
-            class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#albumPreview"
-            role="button"
-            aria-controls="albumPreview"
-            @click="selectAlbum"
-          >
-            <font-awesome-icon icon="square-caret-left" />
-            {{ album }}
-          </button>
-          <span class="text-muted"> ({{ label }})</span>
-          <TagList :tags="track.categories" class="d-inline ms-2" />
+        <div class="mb-1 d-flex flex-row">
+          <div class="flex-grow-1">
+            <span class="fw-bold">{{ artist }}</span> “{{ title }}” from
+            <span class="fst-italic" v-if="freeform">{{ album }}</span>
+            <button
+              v-if="!freeform"
+              class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#albumPreview"
+              role="button"
+              aria-controls="albumPreview"
+              @click="selectAlbum"
+            >
+              <font-awesome-icon icon="square-caret-left" />
+              {{ album }}
+            </button>
+            <span class="text-muted"> ({{ label }})</span>
+            <TagList :tags="track.categories" class="d-inline ms-2" />
+          </div>
+          <div v-if="!editable" class="col-1">
+            <button
+              class="btn btn-link-chirp-red btn-sm"
+              aria-label="delete from playlist"
+              title="delete from playlist"
+              @click="showConfirmationModal"
+            >
+              <font-awesome-icon icon="xmark" />
+            </button>
+          </div>
         </div>
         <div v-if="editable" class="form-floating mb-2">
           <input
@@ -37,6 +49,17 @@
         </div>
       </div>
     </div>
+
+    <Modal
+      ref="deleteModal"
+      title="Delete track"
+      @confirm="deleteTrack"
+      confirmLabel="delete from playlist"
+    >
+      <span
+        >Are you sure you want to delete “{{ title }}” from the playlist?</span
+      >
+    </Modal>
   </div>
 </template>
 
@@ -45,9 +68,10 @@ import { mapStores } from "pinia";
 import { usePlaylistStore } from "../store";
 import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
+import Modal from "@/components/ModalDialog.vue";
 
 export default {
-  components: { PlayedTime, TagList },
+  components: { PlayedTime, TagList, Modal },
   props: {
     editable: {
       type: Boolean,
@@ -77,6 +101,13 @@ export default {
   methods: {
     selectAlbum() {
       this.playlistStore.selectAlbum(this.track.album.album_id.value);
+    },
+    showConfirmationModal() {
+      this.$refs.deleteModal.show();
+    },
+    async deleteTrack() {
+      this.$refs.deleteModal.hide();
+      await this.playlistStore.deletePlaylistEvent(this.track);
     },
   },
 };

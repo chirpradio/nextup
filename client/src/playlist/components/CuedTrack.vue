@@ -86,7 +86,7 @@ export default {
     edit() {
       this.editing = !this.editing;
     },
-    onChange(item) {      
+    onChange(item) {
       const track = this.convertCrateItemToFreeformTrack(item);
       this.playlistStore.cue(track);
     },
