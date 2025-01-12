@@ -181,6 +181,10 @@ button.btn-outline-chirp-red:hover {
   width: 90% !important;
 }
 
+.offcanvas-backdrop.show {
+  opacity: 0.25;
+}
+
 @media (min-width: 768px) {
   .drawer {
     width: 750px !important;
