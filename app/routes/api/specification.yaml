@@ -804,6 +804,17 @@ paths:
               - artist
               - track              
           description: Limit the search and results to albums, artists, or tracks
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: 
+              - album
+              - artist
+              - track              
+          deprecated: true
+          description: Use `index` instead
         - name: album[is_compilation]
           in: query
           required: false
