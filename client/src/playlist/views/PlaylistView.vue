@@ -1,7 +1,7 @@
 <template>
   <div class="pb-5">
     <div class="row pe-3">
-      <div class="col-12 col-md-8">
+      <div class="col-12 col-xxl-7 col-md-8">
         <!-- on air switch -->
         <div class="d-flex mb-2">
           <div class="flex-fill d-inline-flex">
@@ -64,7 +64,7 @@
         :id="TRAFFIC_LOG"
         ref="trafficLog"
         v-if="onAir"
-        class="col-12 col-md-4 py-3 pe-3 text-bg-light"
+        class="col-12 col-xxl-3 col-md-4 py-3 pe-3 text-bg-light"
       >
         <TrafficLog />
       </div>
