@@ -41,8 +41,6 @@
                 <option value="37">37</option>
                 <option value="48">48</option>
                 <option value="49">49</option>
-                <option value="54">54</option>
-                <option value="55">55</option>
               </select>
             </div>
           </div>
