@@ -6,11 +6,11 @@ async function up() {
   });
 
   const now = Date.now();
-  for (const copy of spotCopy) {    
-    if(copy.expire_on && copy.expire_on < now) {      
+  for (const copy of spotCopy) {
+    if (copy.expire_on && copy.expire_on < now) {
       copy.deleted = true;
     }
-    
+
     try {
       await copy.save();
     } catch (err) {

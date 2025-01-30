@@ -53,11 +53,11 @@ export default {
     title: String,
     cancelLabel: {
       type: String,
-      default: "Cancel",
+      default: "cancel",
     },
     confirmLabel: {
       type: String,
-      default: "Confirm",
+      default: "confirm",
     },
     loading: {
       type: Boolean,

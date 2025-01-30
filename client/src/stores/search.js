@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api } from "../services/api.service";
 
 export const useSearchStore = defineStore("search", {
   state: () => ({
@@ -13,9 +13,11 @@ export const useSearchStore = defineStore("search", {
         this.loading = true;
         this.query = query;
 
-        const results = await api.search(query);
-        if (query.type) {
-          this.results[query.type] = results;
+        const { data: results } = await api.get("/search", {
+          params: query,
+        });
+        if (query.index) {
+          this.results[query.index] = results;
         } else {
           this.results = results;
         }

@@ -19,7 +19,7 @@
             active-class="active bg-light "
             :to="{
               path: '/library/search/album',
-              query: { term: this.term, type: 'album' },
+              query: { term: this.term, index: 'album' },
             }"
           >
             Albums
@@ -29,7 +29,7 @@
             active-class="active bg-light "
             :to="{
               path: '/library/search/track',
-              query: { term: this.term, type: 'track' },
+              query: { term: this.term, index: 'track' },
             }"
           >
             Tracks

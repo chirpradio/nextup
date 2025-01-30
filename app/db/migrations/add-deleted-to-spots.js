@@ -5,9 +5,9 @@ async function up() {
     format: "ENTITY",
   });
 
-  for (const spot of spots) {    
-    if(spot.active === false) {      
-      spot.deleted = true;      
+  for (const spot of spots) {
+    if (spot.active === false) {
+      spot.deleted = true;
     }
 
     try {

@@ -48,7 +48,7 @@ export default {
     href() {
       const isLocalTag = this.tag.includes("local");
       return isLocalTag
-        ? `/library/search/album?type=album&album%5Blocal%5D=${this.tag}&offset=0&limit=50`
+        ? `/library/search/album?index=album&album%5Blocal%5D=${this.tag}&offset=0&limit=50`
         : { name: "tag", params: { tag: this.tag } };
     },
     classes() {

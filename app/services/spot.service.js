@@ -11,7 +11,10 @@ async function getConstraintsForSpot(key) {
 
 async function getAllCopyForSpot(key) {
   const options = {
-    filters: [["spot", key], ["deleted", false]],
+    filters: [
+      ["spot", key],
+      ["deleted", false],
+    ],
   };
   const { entities: copy } = await SpotCopy.list(options);
   return copy;
@@ -70,8 +73,7 @@ async function updateSpot(id, data) {
     const current = await getConstraintsForSpot(spotKey);
     const currentIds = current.map((constraint) => constraint.id);
     const removed = currentIds.filter((id) => !data.constraints.includes(id));
-    const added = data.constraints.filter((id) => !currentIds.includes(id));
-    console.log(added, removed);
+    const added = data.constraints.filter((id) => !currentIds.includes(id));    
 
     const addPromises = added.map(async function (id) {
       return addSpotToConstraint(spotKey, id, transaction);

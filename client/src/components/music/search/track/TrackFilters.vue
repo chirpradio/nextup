@@ -147,7 +147,7 @@
           <button class="col-4 btn btn-chirp-red" type="submit">Search</button>
           <router-link
             class="btn btn-link btn-link-chirp-red"
-            :to="{ path: '/library/search/track', query: { type: 'track' } }"
+            :to="{ path: '/library/search/track', query: { index: 'track' } }"
           >
             clear filters
           </router-link>
@@ -174,7 +174,7 @@ export default {
     ...mapStores(useSearchStore),
     query() {
       return {
-        type: "track",
+        index: "track",
         offset: 0,
         limit: 50,
         ...this.$route.query,

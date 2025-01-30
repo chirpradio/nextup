@@ -15,7 +15,7 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error.response.data);
+    console.dir(error.response);
     if (error.response.status === 401) {
       const authStore = useAuthStore();
       authStore.logOut();
@@ -132,42 +132,6 @@ export default {
 
   async deleteCrate(crateId) {
     await instance.delete(`/crate/${crateId}`);
-  },
-
-  async getPlaylistEvents({ start, end } = {}) {
-    const options = {};
-    if (start || end) {
-      const params = {};
-      if (start) {
-        params.start = start;
-      }
-      if (end) {
-        params.end = end;
-      }
-      options.params = params;
-    }
-
-    return await instance.get("/playlist", options);
-  },
-
-  async addPlaylistTrack(data) {
-    const response = await instance.post("/playlist/track", data);
-    return response.data;
-  },
-
-  async addFreeformPlaylistTrack(data) {
-    const response = await instance.post("/playlist/freeform", data);
-    return response.data;
-  },
-
-  async addBreak() {
-    const response = await instance.post("/playlist/break");
-    return response.data;
-  },
-
-  async getRotationPlays(params) {
-    const getter = instance.get("/playlist/rotation", { params });
-    return await getAndHandleError(getter);
   },
 
   async search(params) {

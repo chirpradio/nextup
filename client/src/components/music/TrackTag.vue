@@ -4,6 +4,7 @@
     :icon="icon"
     :title="text"
     :aria-label="text"
+    fixed-width
   />
 </template>
 

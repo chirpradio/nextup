@@ -24,6 +24,7 @@
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
       <TagList :tags="album.current_tags" :album="album" />
+      <RecentlyPlayedAlert :album="album" />
     </div>
     <ReviewPreview v-if="showReview" class="w-100" :album="album" />
   </article>
@@ -34,9 +35,16 @@ import AlbumArtLink from "./AlbumArtLink.vue";
 import ArtistName from "./ArtistName.vue";
 import ReviewPreview from "./ReviewPreview.vue";
 import TagList from "./TagList.vue";
+import RecentlyPlayedAlert from "./RecentlyPlayedAlert.vue";
 
 export default {
-  components: { ArtistName, TagList, AlbumArtLink, ReviewPreview },
+  components: {
+    ArtistName,
+    TagList,
+    AlbumArtLink,
+    ReviewPreview,
+    RecentlyPlayedAlert,
+  },
   props: {
     album: Object,
     albumArtSrcSize: {

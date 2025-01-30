@@ -24,7 +24,8 @@ function replaceAlbumKeysWithAlbums(events, albums) {
 
 async function deleteTrack(req, res, next) {
   try {
-    await PlaylistEventService.deleteTrack(req.params.id);
+    const id = Number.parseInt(req.params.id, 10);
+    await PlaylistEventService.deleteTrack(id);
     res.sendStatus(200);
   } catch (error) {
     next(error);

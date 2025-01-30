@@ -2,7 +2,7 @@
   <Modal
     ref="modal"
     title="Add track to playlist"
-    confirmLabel="Add track"
+    confirmLabel="add to playlist"
     @confirm="onConfirm"
     :loading="adding"
     :error="error"
@@ -13,10 +13,11 @@
 </template>
 
 <script>
-import Modal from "../ModalDialog.vue";
-import CustomTrackForm from "../CustomTrackForm.vue";
+import Modal from "@/components/ModalDialog.vue";
+import CustomTrackForm from "@/components/CustomTrackForm.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../../stores/playlist";
+import { usePlaylistStore } from "../store";
+import playlistMixins from "../mixins";
 
 export default {
   components: { Modal, CustomTrackForm },
@@ -30,6 +31,7 @@ export default {
   computed: {
     ...mapStores(usePlaylistStore),
   },
+  mixins: [playlistMixins],
   methods: {
     show() {
       this.$refs.modal.show();
@@ -43,16 +45,8 @@ export default {
           this.error = false;
           this.adding = true;
           const item = this.$refs.form.item;
-          await this.playlistStore.addFreeformPlaylistTrack({
-            album: {
-              title: item.album,
-              label: item.label,
-            },
-            artist: { name: item.artist },
-            categories: item.categories || [],
-            notes: item.notes,
-            track: { title: item.track },
-          });
+          const track = this.convertCrateItemToFreeformTrack(item);
+          await this.playlistStore.addFreeformPlaylistTrack(track);
           this.$refs.form.reset();
           this.$refs.modal.hide();
         } catch (error) {

@@ -8,7 +8,7 @@
       <div class="col-md-1 search-result__col no-overflow">
         <AlbumArtLink :album="hit._source.subject" srcSize="med" />
       </div>
-      <div class="col-md-3 search-result__col">
+      <div class="col-md-2 search-result__col">
         <div
           v-if="hit._source.subject.is_compilation"
           class="badge bg-secondary"
@@ -23,7 +23,7 @@
       <div class="col-md-3 search-result__col">
         <AlbumTitleLink :album="hit._source.subject" />
       </div>
-      <div v-if="hit.highlight" class="col-md-5 search-result__col">
+      <div v-if="hit.highlight" class="col-md-6 search-result__col">
         <ul v-if="hit.highlight['unsafe_text']" class="list-unstyled">
           <li
             v-for="fragment in hit.highlight['unsafe_text']"
