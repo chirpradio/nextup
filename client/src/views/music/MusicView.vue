@@ -7,8 +7,16 @@
 
 <script>
 import BreadCrumbs from "@/components/music/BreadCrumbs.vue";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "@/playlist/store";
 
 export default {
   components: { BreadCrumbs },
+  computed: {
+    ...mapStores(usePlaylistStore),
+  },
+  created() {
+    this.playlistStore.pollRotationPlays();
+  },
 };
 </script>

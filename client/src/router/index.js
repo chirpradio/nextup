@@ -2,12 +2,15 @@ import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
+import playlistRoutes from "../playlist/routes";
 import trafficLogRoutes from "../traffic-log/routes";
+
+const LOG_IN = "Log In";
 
 const routes = [
   {
     path: "/login",
-    name: "Log In",
+    name: LOG_IN,
     component: () => import("../views/LoginView.vue"),
   },
   {
@@ -186,11 +189,7 @@ const routes = [
     component: () => import("../views/crates/CrateView.vue"),
     props: true,
   },
-  {
-    path: "/playlist",
-    name: "playlist",
-    component: () => import("../views/playlist/PlaylistView.vue"),
-  },
+  ...playlistRoutes,
   ...trafficLogRoutes,
 ];
 
@@ -206,10 +205,14 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to) => {
+router.beforeEach((to, from) => {
   const authStore = useAuthStore();
-  if (to.name !== "Log In" && !authStore.isAuthenticated) {
-    return { name: "Log In", query: { redirect: to.fullPath } };
+  if (to.name !== LOG_IN && !authStore.isAuthenticated) {
+    return { name: LOG_IN, query: { redirect: to.fullPath } };
+  }
+
+  if (to.name === LOG_IN && from.name === LOG_IN) {
+    return false;
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthorized(to.meta.requiresAuth)) {

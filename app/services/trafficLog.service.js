@@ -40,7 +40,7 @@ async function getTrafficLogEntries(dow, hour, since) {
       ["hour", hour],
     ],
     showKey: true,
-  }).populate("spot");
+  }).populate(["spot", "spot_copy"]);
   return entries;
 }
 
@@ -239,8 +239,10 @@ async function addEntry(data, user) {
     .setZone("America/Chicago")
     .set({ hour: 18, minute: 0, second: 0, millisecond: 0 })
     .toJSDate();
+
   const entry = new TrafficLogEntry(data);
   await entry.save();
+  await entry.populate(["spot", "spot_copy"]);
   return entry.plain({ showKey: true });
 }
 

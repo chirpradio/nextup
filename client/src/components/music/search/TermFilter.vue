@@ -28,14 +28,14 @@ export default {
   name: "TermFilter",
   mixins: [formatters, updateTitle],
   props: {
-    type: String,
+    index: String,
   },
   computed: {
     ...mapStores(useSearchStore),
     query() {
       const base = {
         term: "",
-        type: this.type,
+        index: this.index,
         offset: 0,
         limit: 50,
       };
@@ -44,7 +44,7 @@ export default {
   },
   created() {
     this.dispatch();
-    this.updateTitle(`${this.capitalizeFirstLetter(this.type)} Search`);
+    this.updateTitle(`${this.capitalizeFirstLetter(this.index)} Search`);
   },
   watch: {
     "$route.query": "dispatch",

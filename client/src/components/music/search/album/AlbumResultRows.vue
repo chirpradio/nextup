@@ -17,7 +17,7 @@
           :artist="hit._source.album_artist"
         />
       </div>
-      <div class="col-md-3 search-result__col">
+      <div class="col-md-2 search-result__col">
         <AlbumTitleLink :album="hit._source" />
         <TagList :tags="hit._source.current_tags" :album="hit._source" />
       </div>
@@ -29,9 +29,10 @@
         class="col-md-1 search-result__col"
         :albumYear="hit._source.year"
       />
-      <div class="col-md-3 search-result__col mt-2 mt-2-sm">
+      <div class="col-md-3 mt-2 mt-2-sm">
         <AddToCrate :keyToAdd="hit._source.__key" />
       </div>
+      <div class="col-md-1"></div>
     </div>
   </div>
 </template>

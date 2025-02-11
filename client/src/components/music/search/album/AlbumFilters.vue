@@ -62,7 +62,7 @@
         <button class="btn btn-chirp-red" type="submit">Search</button>
         <router-link
           class="btn btn-link btn-link-chirp-red"
-          :to="{ path: '/library/search/album', query: { type: 'album' } }"
+          :to="{ path: '/library/search/album', query: { index: 'album' } }"
         >
           clear filters
         </router-link>
@@ -83,7 +83,7 @@ export default {
     ...mapStores(useSearchStore),
     query() {
       const base = {
-        type: "album",
+        index: "album",
         album: {},
         offset: 0,
         limit: 50,

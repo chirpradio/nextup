@@ -94,7 +94,7 @@ async function addImagesFromLastFm(album) {
       /*   
         LastFM API throws an error 
         when images are not found
-      */ 
+      */
     }
   }
 }

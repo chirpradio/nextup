@@ -13,6 +13,9 @@ export const useAuthStore = defineStore("auth", {
        *   users: [],
        *   roles: [],
        **/
+      playlist: {
+        users: ["tony@chirpradio.org", "jennamlchapman@gmail.com"],      
+      },
       "traffic-log": {
         roles: ["traffic_log_admin"],
       },

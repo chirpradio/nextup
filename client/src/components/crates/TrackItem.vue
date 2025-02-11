@@ -9,10 +9,16 @@
       <TagList :tags="element.album.current_tags" />
     </div>
     <PlayButton
+      v-if="!recentPlay"
       :album="element.album"
       :categories="element.album.current_tags"
       :track="element.track"
       class="mt-2 mt-md-0"
+    />
+    <RecentlyPlayedAlert
+      v-if="recentPlay"
+      :album="element.album"
+      :shrink="true"
     />
   </div>
 </template>
@@ -22,12 +28,27 @@ import ArtistLink from "../music/ArtistLink.vue";
 import CrateAlbumSpans from "./CrateAlbumSpans.vue";
 import TagList from "../music/TagList.vue";
 import PlayButton from "../music/PlayButton.vue";
+import { mapStores } from "pinia";
+import { usePlaylistStore } from "@/playlist/store";
+import RecentlyPlayedAlert from "../music/RecentlyPlayedAlert.vue";
 
 export default {
   name: "TrackItem",
-  components: { ArtistLink, CrateAlbumSpans, TagList, PlayButton },
+  components: {
+    ArtistLink,
+    CrateAlbumSpans,
+    TagList,
+    PlayButton,
+    RecentlyPlayedAlert,
+  },
   props: {
     element: Object,
+  },
+  computed: {
+    ...mapStores(usePlaylistStore),
+    recentPlay() {
+      return this.playlistStore.recentPlay(this.element.album);
+    },
   },
 };
 </script>

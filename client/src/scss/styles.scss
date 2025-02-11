@@ -5,7 +5,6 @@ $primary: #822036;
 // Required
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/_variables-dark.scss";
 @import "~bootstrap/scss/maps";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/utilities";
@@ -30,8 +29,9 @@ $primary: #822036;
 @import "~bootstrap/scss/list-group";
 @import "~bootstrap/scss/close";
 @import "~bootstrap/scss/modal"; // Requires transitions
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/offcanvas"; // Requires transitions
 
-// @import "~bootstrap/scss/alert";
 // @import "~bootstrap/scss/progress";
 // @import "~bootstrap/scss/toasts";
 // @import "~bootstrap/scss/accordion";
@@ -40,12 +40,37 @@ $primary: #822036;
 // @import "~bootstrap/scss/popover";
 // @import "~bootstrap/scss/carousel";
 // @import "~bootstrap/scss/spinners";
-// @import "~bootstrap/scss/offcanvas"; // Requires transitions
 // @import "~bootstrap/scss/placeholders";
 
+@import "~bootstrap/scss/helpers/ratio";
+@import "~bootstrap/scss/helpers/visually-hidden";
 @import "~bootstrap/scss/helpers";
 
 // Utilities
+$utilities: map-merge(
+  $utilities,
+  (
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+          (20: 20%),
+        ),
+      ),
+    ),
+  )
+);
+
+$utilities: map-merge(
+  $utilities, (
+    "font-size": map-merge(
+      map-get($utilities, "font-size"),
+      ( responsive: true ),
+    ),
+  )
+);
+
 @import "~bootstrap/scss/utilities/api";
 
 
@@ -68,6 +93,7 @@ h4,
 h5,
 h6,
 button,
+select,
 label,
 legend,
 th,
@@ -125,6 +151,14 @@ button.btn-outline-chirp-red:hover {
   border-color: var(--bright-red);
 }
 
+.text-chirp-red {
+  color: var(--dark-red);
+}
+
+.text-chirp-red-hover:hover {
+  color: var(--bright-red);
+}
+
 .form-check-input:checked {
   background-color: var(--bright-red);
   border-color: var(--bright-red);
@@ -141,4 +175,18 @@ button.btn-outline-chirp-red:hover {
 
 .numeral {
   font-family: "Times New Roman", Times, serif;
+}
+
+.drawer {
+  width: 90% !important;
+}
+
+.offcanvas-backdrop.show {
+  opacity: 0.1;
+}
+
+@media (min-width: 768px) {
+  .drawer {
+    width: 750px !important;
+  }
 }

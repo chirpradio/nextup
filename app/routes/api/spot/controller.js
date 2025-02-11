@@ -4,7 +4,7 @@ const { errorMessages } = require("../errors");
 module.exports = {
   async getSpots(req, res, next) {
     try {
-      const spots = await SpotService.listSpots();     
+      const spots = await SpotService.listSpots();
       res.json(spots);
     } catch (error) {
       next(error);

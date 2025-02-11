@@ -40,7 +40,7 @@ describe("Authenticate with API key", () => {
 
   test("Cannot authenticate with API key as inactive user", async () => {
     User.findOne.mockReturnValue({
-      is_active: false
+      is_active: false,
     });
     const response = await request(app).get("/api/crate?api_key=abc123");
     expect(response.statusCode).toBe(401);
@@ -49,7 +49,7 @@ describe("Authenticate with API key", () => {
   test("Authenticates with valid API key and active user", async () => {
     User.findOne.mockReturnValue({
       is_active: true,
-    });    
+    });
     const response = await request(app).get("/api/crate?api_key=abc123");
     expect(response.statusCode).toBe(200);
   });

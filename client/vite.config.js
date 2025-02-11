@@ -29,7 +29,7 @@ export default defineConfig({
             "./src/views/music/ArtistView.vue",
           ],
           "playlist": [
-            "./src/views/playlist/PlaylistView.vue",
+            "./src/playlist/views/PlaylistView.vue",
           ],
           "search": [
             "./src/components/music/search/EverythingFilters.vue",

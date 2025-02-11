@@ -1,5 +1,5 @@
 <template>
-  <div class="tag-totals d-flex justify-content-between justify-content-lg-end">
+  <div class="tag-totals d-flex justify-content-between justify-content-xl-end">
     <TagTotal
       class="me-3"
       tag="heavy_rotation"
@@ -40,9 +40,9 @@
 </style>
 
 <script>
-import TagTotal from "../playlist/TagTotal.vue";
+import TagTotal from "./TagTotal.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../../stores/playlist";
+import { usePlaylistStore } from "../store";
 
 function topOfHourIso() {
   const date = new Date();

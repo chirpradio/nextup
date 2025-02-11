@@ -21,6 +21,10 @@ export default {
   props: {
     icon: String,
     label: String,
+    small: {
+      type: Boolean,
+      default: false,
+    },
     outline: {
       type: Boolean,
       default: false,
@@ -28,10 +32,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-    small: {
-      type: Boolean,
-      default: true,
     },
     disable: {
       type: Boolean,

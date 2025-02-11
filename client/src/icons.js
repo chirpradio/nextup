@@ -14,6 +14,15 @@ import {
   faPlus,
   faPen,
   faRightToBracket,
+  faCirclePause,
+  faArrowLeft,
+  faArrowRight,
+  faCheck,
+  faSquareCaretLeft,
+  faCirclePlus,
+  faCompactDisc,
+  faClock,
+  faExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare as farFaPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
@@ -32,5 +41,14 @@ library.add(
   faPlus,
   faPen,
   faRightToBracket,
-  farFaPenToSquare
+  faCirclePause,
+  faArrowLeft,
+  faArrowRight,
+  faCheck,
+  faSquareCaretLeft,
+  faCirclePlus,
+  faCompactDisc,
+  farFaPenToSquare,
+  faClock,
+  faExclamation
 );

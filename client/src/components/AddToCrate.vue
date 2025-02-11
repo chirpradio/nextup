@@ -1,43 +1,27 @@
 <template>
-  <form class="add-to-crate row">
-    <div class="col-11 mt-0">
-      <select
-        class="form-select form-select-sm"
-        v-model="selected"
-        @change="add"
-      >
-        <option disabled value="">+ add to crate</option>
-        <optgroup v-if="lastAddedTo" label="Last added to">
-          <option :value="lastAddedTo.id">{{ lastAddedTo.name }}</option>
-        </optgroup>
-        <optgroup label="A-Z">
-          <option v-for="crate in crates" :key="crate.id" :value="crate.id">
-            {{ crate.name }}
-          </option>
-        </optgroup>
-      </select>
-    </div>
-    <div class="col-1">
-      <font-awesome-icon
-        v-if="added"
-        icon="circle-check"
-        class="text-success"
-      />
-      <font-awesome-icon
-        v-if="error"
-        icon="circle-exclamation"
-        class="text-danger"
-      />
-    </div>
-  </form>
+  <div class="dropdown">
+    <button
+      class="btn btn-sm btn-outline-chirp-red dropdown-toggle w-100"
+      role="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <font-awesome-icon :icon="icon" :class="iconClass" :spin="adding" />
+      <span class="ms-1 me-1">add to crate</span>
+    </button>
+    <ul class="dropdown-menu">
+      <li v-if="lastAddedTo">
+        <button class="dropdown-item">{{ lastAddedTo.name }}</button>
+      </li>
+      <li v-if="lastAddedTo"><hr class="dropdown-divider" /></li>
+      <li v-for="crate in crates" :key="crate.id">
+        <button class="dropdown-item" @click="addTo(crate)">
+          {{ crate.name }}
+        </button>
+      </li>
+    </ul>
+  </div>
 </template>
-
-<style>
-.add-to-crate select {
-  color: var(--dark-red);
-  border-color: var(--dark-red);
-}
-</style>
 
 <script>
 import { mapStores } from "pinia";
@@ -46,7 +30,7 @@ import { useCratesStore } from "../stores/crates";
 export default {
   data() {
     return {
-      selected: "",
+      adding: false,
       added: false,
       error: false,
     };
@@ -66,6 +50,18 @@ export default {
     lastAddedTo() {
       return this.cratesStore.lastAddedTo;
     },
+    icon() {
+      if (this.adding) return "compact-disc";
+      if (this.added) return "circle-check";
+      if (this.error) return "circle-exclamation";
+      return "circle-plus";
+    },
+    iconClass() {
+      return {
+        "text-success": this.added,
+        "text-danger": this.error,
+      };
+    },
   },
   async created() {
     if (
@@ -76,12 +72,13 @@ export default {
     }
   },
   methods: {
-    async add() {
+    async addTo(crate) {
       this.added = false;
       this.error = false;
+      this.adding = true;
       try {
         await this.cratesStore.addToCrate({
-          crateId: this.selected,
+          crateId: crate.id,
           params: {
             path: this.keyToAdd.path,
           },
@@ -91,7 +88,7 @@ export default {
         this.error = true;
         setTimeout(() => (this.error = false), 2000);
       }
-      this.selected = "";
+      this.adding = false;
       setTimeout(() => (this.added = false), 2000);
     },
   },

@@ -9,7 +9,11 @@ export default {
   },
   computed: {
     dateObj() {
-      return new Date(this.date);
+      if (this.date) {
+        return new Date(this.date);
+      } else {
+        return new Date();
+      }
     },
     timeLabel() {
       return this.dateObj.toLocaleTimeString("en-US", {
