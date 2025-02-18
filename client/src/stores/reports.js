@@ -15,10 +15,11 @@ export const useReportsStore = defineStore("reports", {
         this.rotationPlays.start !== start ||
         this.rotationPlays.end !== end
       ) {
-        this.rotationPlays = await api.get("/playlist/rotation", {
+        const { data: rotationPlays } = await api.get("/playlist/rotation", {
           start,
           end,
         });
+        this.rotationPlays = rotationPlays;
       }
     },
   },
