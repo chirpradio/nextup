@@ -110,6 +110,7 @@ export const useCratesStore = defineStore("crates", () => {
     }
   });
 
+
   return { 
     // state
     crates, 
@@ -130,7 +131,8 @@ export const useCratesStore = defineStore("crates", () => {
     removeItem, 
     reorderItem 
   }; 
-  // persist: {
-  //   paths: ["lastAddedTo"],
-  // },
-});
+}, {
+  persist: {
+    paths: ["lastAddedTo"],
+  },
+} );
