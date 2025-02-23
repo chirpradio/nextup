@@ -63,14 +63,6 @@ export default {
       };
     },
   },
-  async created() {
-    if (
-      this.cratesStore.crates.length === 0 &&
-      !this.cratesStore.loadingCrates
-    ) {
-      await this.cratesStore.getCrates();
-    }
-  },
   methods: {
     async addTo(crate) {
       this.added = false;

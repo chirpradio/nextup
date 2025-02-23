@@ -98,6 +98,15 @@ export const useCratesStore = defineStore("crates", () => {
     await api.patch(`/crate/${crateId}/item/${index}/reorder/${newIndex}`);
   }
 
+  // load crates for user
+  const auth = useAuthStore();
+  const { isAuthenticated } = storeToRefs(auth);
+  if(isAuthenticated.value === true) {
+    getCrates();
+  };
+  watch(isAuthenticated, (value) => {
+    if(value === true) {
+      getCrates();
     }
   });
 
