@@ -250,7 +250,7 @@ export default {
     async deleteCrate() {
       this.hideDeleteModal();
       this.loading = true;
-      await this.cratesStore.deleteCrate({ crateId: this.id });      
+      await this.cratesStore.deleteCrate({ crateId: this.id });
       this.$router.push({ path: "/crates" });
     },
     scrollToBottom() {
