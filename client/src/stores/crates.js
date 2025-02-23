@@ -1,89 +1,127 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api } from "../services/api.service";
+import { useAuthStore } from "./auth";
+import { watch, ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
-function findCrate(crates, crateId) {
-  return crates.find((crate) => crate.id === crateId);
-}
 
-function sortCrates(crates) {
-  crates.sort((a, b) => {
-    if (a.name === b.name || !a.name || !b.name) {
-      return 0;
-    }
-    return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+export const useCratesStore = defineStore("crates", () => {
+  // state
+  const crates = ref([]);
+  const items = ref({});
+  const loadingCrates = ref(false);
+  const lastAddedTo = ref();
+  
+  function findCrate(crateId) {    
+    return crates.value.find((crate) => crate.id === crateId);
+  }
+  
+  function sortCrates(crates) {
+    crates.value.sort((a, b) => {
+      if (a.name === b.name || !a.name || !b.name) {
+        return 0;
+      }
+      return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+    });
+  }
+
+  // getters
+  const crate = computed(() => (id) => {
+    return findCrate(id);
   });
-}
 
-export const useCratesStore = defineStore("crates", {
-  state: () => ({
-    crates: [],
-    items: {},
-    loadingCrates: false,
-    lastAddedTo: null,
-  }),
-  getters: {
-    crate: (state) => (id) => {
-      return findCrate(state.crates, id);
-    },
-    crateItems: (state) => (id) => {
-      return state.items[id];
-    },
-  },
-  actions: {
-    async getCrates() {
-      this.loadingCrates = true;
-      const response = await api.getCrates();
-      this.crates = response;
-      sortCrates(this.crates);
-      this.loadingCrates = false;
-    },
-    async getCrate({ crateId }) {
-      this.loadingCrates = true;
-      const crate = await api.getCrate(crateId);
-      this.items[crateId] = [];
-      crate.order = crate.order || [];
-      this.crates.push(crate);
-      this.loadingCrates = false;
-    },
-    async addCrate({ name }) {
-      const response = await api.addCrate(name);
-      this.crates.push(response.data);
-      sortCrates(this.crates);
-      return response.data;
-    },
-    async renameCrate({ crateId, name }) {
-      await api.renameCrate(crateId, name);
-      const crate = findCrate(this.crates, crateId);
-      crate.name = name;
-    },
-    async deleteCrate({ crateId }) {
-      const index = this.crates.findIndex((element) => element.id === crateId);
-      this.crates.splice(index, 1);
-      await api.deleteCrate(crateId);
-    },
-    async getCrateItems({ crateId }) {
-      const items = await api.getCrateItems(crateId);
-      this.items[crateId] = items;
-    },
-    async addToCrate({ crateId, params }) {
-      const items = await api.addToCrate(crateId, params);
-      this.items[crateId] = items;
+  const crateItems = computed(() => (id) => {
+    return items.value[id];
+  });
 
-      const crate = findCrate(this.crates, crateId);
-      crate.totalItems++;
-      this.lastAddedTo = crate;
-    },
-    async removeItem({ crateId, index }) {
-      const crate = findCrate(this.crates, crateId);
-      this.items[crateId].splice(index, 1);
-      crate.totalItems--;
-      await api.removeFromCrate(crateId, index);
-    },
-    async reorderItem({ crateId, index, newIndex }) {
-      await api.reorderItemInCrate(crateId, index, newIndex);
-    },
-  },
-  persist: {
-    paths: ["lastAddedTo"],
-  },
+  // actions
+  async function getCrates() {
+    loadingCrates.value = true;
+    const response = await api.get("/crate");
+    crates.value = response.data;
+    sortCrates(crates);
+    loadingCrates.value = false;
+  }
+
+  async function getCrate({ crateId }) {
+    loadingCrates.value = true;
+    const { data: crate } = await api.get(`/crate/${crateId}`);
+    items.value[crateId] = [];
+    crate.order = crate.order || [];
+    crates.value.push(crate);
+    loadingCrates.value = false;
+  }
+
+  async function addCrate({ name }) {
+    const { data: crate } = await api.post(`/crate/`, { name });
+    crates.value.push(crate);
+    sortCrates(crates);
+    return crate;
+  }
+
+  async function renameCrate({ crateId, name }) {
+    await api.patch(`/crate/${crateId}`, {
+      name,
+    });
+    const crate = findCrate(crateId);
+    crate.name = name;
+  }
+
+  async function deleteCrate({ crateId }) {
+    const index = crates.value.findIndex((element) => element.id === crateId);
+    crates.value.splice(index, 1);
+    await api.delete(`/crate/${crateId}`);
+  }
+
+  async function getCrateItems({ crateId }) {
+    const { data: loadedItems } = await api.get(`/crate/${crateId}/items`);
+    items.value[crateId] = loadedItems;
+  }
+
+  async function addToCrate({ crateId, params }) {
+    const { data: loadedItems } = await api.post(`/crate/${crateId}/item`, params);
+    items.value[crateId] = loadedItems;
+
+    const crate = findCrate(crateId);
+    crate.totalItems++;
+    lastAddedTo.value = crate;
+  }
+
+  async function removeItem({ crateId, index }) {
+    const crate = findCrate(crateId);
+    items.value[crateId].splice(index, 1);
+    crate.totalItems--;
+    await api.delete(`crate/${crateId}/item/${index}`);
+  }
+
+  async function reorderItem({ crateId, index, newIndex }) {
+    await api.patch(`/crate/${crateId}/item/${index}/reorder/${newIndex}`);
+  }
+
+    }
+  });
+
+  return { 
+    // state
+    crates, 
+    items, 
+    loadingCrates, 
+    lastAddedTo, 
+    // getters
+    crate, 
+    crateItems, 
+    // actions
+    getCrates, 
+    getCrate, 
+    addCrate, 
+    renameCrate, 
+    deleteCrate, 
+    getCrateItems, 
+    addToCrate, 
+    removeItem, 
+    reorderItem 
+  }; 
+  // persist: {
+  //   paths: ["lastAddedTo"],
+  // },
 });
