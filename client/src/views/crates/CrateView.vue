@@ -197,7 +197,7 @@ export default {
       return name;
     },
     showList() {
-      return this.crate && this.items && this.items.length;
+      return this.crate && this.items && this.items.length && !this.loading;
     },
   },
   created: async function () {
@@ -247,9 +247,10 @@ export default {
     showAddModal() {
       this.$refs.addModal.show();
     },
-    deleteCrate() {
+    async deleteCrate() {
       this.hideDeleteModal();
-      this.cratesStore.deleteCrate({ crateId: this.id });
+      this.loading = true;
+      await this.cratesStore.deleteCrate({ crateId: this.id });      
       this.$router.push({ path: "/crates" });
     },
     scrollToBottom() {
