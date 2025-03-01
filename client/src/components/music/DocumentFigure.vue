@@ -12,6 +12,13 @@
         formatDate(document.created)
       }})
     </figcaption>
+    <figcaption
+      v-else-if="document.author_name"
+      class="blockquote-footer"
+      :class="footerClass"
+    >
+      {{ document.author_name }} ({{ formatDate(document.created) }})
+    </figcaption>
   </figure>
 </template>
 
