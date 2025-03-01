@@ -12,7 +12,7 @@
     </td>
     <td><AlbumTitleLink class="col" :album="play.album" /></td>
     <td>{{ play.album.label }}</td>
-    <td>{{ play.plays.length }}</td>
+    <td>{{ play.plays?.length }}</td>
     <td><TagList :tags="play.album.current_tags" /></td>
   </tr>
   <tr v-if="open">

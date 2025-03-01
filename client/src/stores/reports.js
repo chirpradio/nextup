@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api } from "../services/api.service";
 
 export const useReportsStore = defineStore("reports", {
   state: () => ({
@@ -15,7 +15,11 @@ export const useReportsStore = defineStore("reports", {
         this.rotationPlays.start !== start ||
         this.rotationPlays.end !== end
       ) {
-        this.rotationPlays = await api.getRotationPlays({ start, end });
+        const { data: rotationPlays } = await api.get("/playlist/rotation", {
+          start,
+          end,
+        });
+        this.rotationPlays = rotationPlays;
       }
     },
   },

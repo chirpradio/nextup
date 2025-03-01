@@ -74,7 +74,7 @@ import { useReportsStore } from "@/stores/reports";
 
 function sortByPlayCountThenLocal(a, b) {
   // sort by play count first
-  if (a.plays.length !== b.plays.length) {
+  if (a.plays?.length !== b.plays?.length) {
     return b.plays.length - a.plays.length;
   }
 
@@ -169,7 +169,7 @@ export default {
       ];
 
       const grouped = albums.map((album) => {
-        const albumPlays = plays.filter(
+        const albumPlays = plays?.filter(
           (play) => play.album.name === album.__key.name
         );
         return {
