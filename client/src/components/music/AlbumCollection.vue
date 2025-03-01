@@ -30,15 +30,14 @@
 <script>
 import AlbumCard from "./AlbumCard.vue";
 import RecordSpinner from "../RecordSpinner.vue";
-import { get, shuffle, sortBy } from "lodash";
+import { shuffle, orderBy } from "lodash";
 
 function compareByProperty(array, prop) {
-  return sortBy(array, [
-    function (album) {
-      const value = get(album, prop);
-      return typeof value === "string" ? value.toLowerCase() : null;
-    },
-  ]);
+  if ( prop === "year") {
+    return orderBy(array, [prop], ["desc"]);
+  } else {
+    return orderBy(array, [prop], ["asc"]);
+  }
 }
 
 export default {
