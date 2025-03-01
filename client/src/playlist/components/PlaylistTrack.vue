@@ -57,15 +57,15 @@
       confirmLabel="delete from playlist"
     >
       <p>
-        Deleting the track will not update chirpradio.org or the mobile apps, but it will be removed from Music Department reporting.
+        Deleting the track will not update chirpradio.org or the mobile apps,
+        but it will be removed from Music Department reporting.
       </p>
       <p class="text-danger">
-        <span class="fw-bold">{{ artist }}</span> 
+        <span class="fw-bold">{{ artist }}</span>
         <span> “{{ title }}” from</span>
         <span class="fst-italic">&nbsp;{{ album }}</span>
         <span> ({{ label }})</span>
       </p>
-      
     </Modal>
   </div>
 </template>

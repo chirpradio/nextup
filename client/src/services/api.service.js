@@ -90,50 +90,6 @@ export default {
     return await getAndHandleError(getter);
   },
 
-  async getCrates() {
-    const getter = instance.get("/crate");
-    return await getAndHandleError(getter);
-  },
-
-  async getCrate(crateId) {
-    const getter = instance.get(`/crate/${crateId}`);
-    return await getAndHandleError(getter);
-  },
-
-  async getCrateItems(crateId) {
-    const getter = instance.get(`/crate/${crateId}/items`);
-    return await getAndHandleError(getter);
-  },
-
-  async addToCrate(crateId, params) {
-    const response = await instance.post(`/crate/${crateId}/item`, params);
-    return response.data;
-  },
-
-  async removeFromCrate(crateId, index) {
-    await instance.delete(`crate/${crateId}/item/${index}`);
-  },
-
-  async reorderItemInCrate(crateId, index, newIndex) {
-    await instance.patch(`/crate/${crateId}/item/${index}/reorder/${newIndex}`);
-  },
-
-  async addCrate(name) {
-    return await instance.post(`/crate/`, {
-      name,
-    });
-  },
-
-  async renameCrate(crateId, name) {
-    await instance.patch(`/crate/${crateId}`, {
-      name,
-    });
-  },
-
-  async deleteCrate(crateId) {
-    await instance.delete(`/crate/${crateId}`);
-  },
-
   async search(params) {
     const getter = instance.get("/search", {
       params,

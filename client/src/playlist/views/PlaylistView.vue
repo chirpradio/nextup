@@ -162,9 +162,7 @@ export default {
     },
   },
   created: async function () {
-    if (this.events.length === 0) {
-      this.update();
-    }
+    this.update();
     this.playlistStore.pollRotationPlays();
   },
   mounted() {
