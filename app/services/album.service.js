@@ -1,5 +1,6 @@
 const { Album, Document, Track, TagEdit } = require("../models");
 const { datastore, gstore, renameKey } = require("../db");
+const { JSDOM } = require('jsdom');
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
 
@@ -21,6 +22,43 @@ const jsonOptions = {
   },
 };
 
+async function cleanReviewText(reviewTextHTML) {
+  // rewrite album links to new site and delete other links from old djdb site 
+  // scottj 2025-02-28 - code thanks to deepseek
+  // Create a DOM using jsdom
+  const dom = new JSDOM(reviewTextHTML);
+  const document = dom.window.document;
+
+  // Regex to match the specific URL format
+  const regex = /^\/djdb\/album\/(\d+)\/info$/;
+
+  // Select all anchor tags
+  const links = document.querySelectorAll('a');
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+
+    // Check if the link is from chirpradio.appspot.com
+    if (href && (href.includes('chirpradio.appspot.com') || href.startsWith('/djdb/'))) {
+      // Parse the URL to extract the pathname
+      const url = new URL(href, 'https://chirpradio.appspot.com');
+      const path = url.pathname;
+
+      // Check if the path matches the regex
+      const match = path.match(regex);
+      if (match) {
+        // Rewrite the link
+        const albumId = match[1];
+        link.setAttribute('href', `/library/album/${albumId}`);
+      } else {
+        // Remove the link if it doesn't match
+        link.replaceWith(...link.childNodes);
+      }
+    }
+  });
+
+  // Return the modified HTML
+  return document.body.innerHTML;
+}
 async function getPopulatedAlbum(albumId) {
   const options = {
     wrapNumbers: {
@@ -143,6 +181,9 @@ async function listAlbumReviews(album) {
     ],
   };
   const { entities: reviews } = await Document.list(options).populate("author");
+  reviews.forEach(async (review) => {
+    review.unsafe_text = await cleanReviewText(review.unsafe_text);
+  });
   return reviews;
 }
 
