@@ -205,7 +205,7 @@ async function listAlbumTracks(album) {
   return tracks;
 }
 
-function getBaseQuery({ limit = 25, offset = 0 } = {}) {
+function getBaseQuery({ limit = 50, offset = 0 } = {}) {
   return Album.query().filter("revoked", false).offset(offset).limit(limit);
 }
 
