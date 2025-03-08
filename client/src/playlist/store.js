@@ -150,14 +150,14 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     async addTrafficLogEntry(body) {
       const { data } = await api.post("/traffic-log", body);
-      const entry = this.trafficLog.find((element) => {
+      const slot = this.trafficLog.find((element) => {
         return (
-          element.dow === data.dow &&
-          element.hour === data.hour &&
-          element.slot === data.slot
+          element.entry.dow === data.dow &&
+          element.entry.hour === data.hour &&
+          element.entry.slot === data.slot
         );
       });
-      Object.assign(entry, data);
+      Object.assign(slot.entry, data);
     },
   },
 });

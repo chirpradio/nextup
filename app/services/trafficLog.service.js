@@ -216,12 +216,15 @@ function checkForKey(prop, value) {
 }
 
 async function addEntry(data, user) {
-  data.spot = checkForKey("spot", data.spot);
+  // turn the populated spot back into its reference
+  data.spot = datastore.key(["Spot", parseInt(data.spot.id, 10)]);
+
   data.scheduled = checkForKey("scheduled", data.scheduled);
   data.spot_copy = checkForKey("spot_copy", data.spot_copy);
   data.reader = user;
   const now = new Date();
   data.readtime = now;
+  
   // matches DJDB
   data.log_date = DateTime.now()
     .minus({ days: 1 })
