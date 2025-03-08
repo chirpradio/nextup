@@ -205,7 +205,7 @@ async function listAlbumTracks(album) {
   return tracks;
 }
 
-function getBaseQuery({ limit = 50, offset = 0 } = {}) {
+function getBaseQuery({ limit = 25, offset = 0 } = {}) {
   return Album.query().filter("revoked", false).offset(offset).limit(limit);
 }
 
@@ -226,7 +226,7 @@ async function runAndRenameKeys(query) {
   return { albums, nextPageCursor };
 }
 
-async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
+async function getAlbumsByAlbumArtist({ key, limit = 50, offset } = {}) {
   const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
   return await runAndRenameKeys(query);
 }
