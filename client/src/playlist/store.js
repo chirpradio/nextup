@@ -121,14 +121,17 @@ export const usePlaylistStore = defineStore("playlist", {
 
       let grouping = false;
       let groups = [];
-      for (let i = 0; i < slots.length - 1; i++) {
-        const entry = slots[i].entry;
-        const nextEntry = slots[i + 1].entry;
-
+      slots.forEach((slot, i) => {
+        const entry = slot.entry;
+        
         if (grouping) {
           groups.at(-1).push(entry);
         }
+        if (i === slots.length - 1) {
+          return;
+        }
 
+        const nextEntry = slots[i + 1].entry;
         if (entry.spot && nextEntry?.spot) {
           const slotTime = entry.hour * 60 + entry.slot;
           const nextSlotTime = nextEntry.hour * 60 + nextEntry.slot;
@@ -142,7 +145,7 @@ export const usePlaylistStore = defineStore("playlist", {
             grouping = false;
           }
         }
-      }
+      });
 
       this.trafficLog = slots;
       this.trafficLogGroups = groups;
