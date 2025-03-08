@@ -152,7 +152,7 @@ function buildEntryStub(constraint) {
 }
 
 function buildEntries(existingEntries, constraints, copy) {
-  return constraints.map((constraint) => {
+  return constraints.reduce((result, constraint) => {
     let entry,
       runningCopy = [];
     const existingEntryForConstraint = findExistingEntryForConstraint(
@@ -163,19 +163,20 @@ function buildEntries(existingEntries, constraints, copy) {
     if (existingEntryForConstraint) {
       entry = existingEntryForConstraint;
     } else {
-      runningCopy = runningCopyForConstraint(copy, constraint);
-      if (runningCopy.length === 0) {
-        return;
+      runningCopy = runningCopyForConstraint(copy, constraint);  
+      if(runningCopy.length === 0) {
+        return result;
       }
 
-      entry = buildEntryStub(constraint);
+      entry = buildEntryStub(constraint);    
     }
 
-    return {
+    result.push({
       entry,
       copy: runningCopy,
-    };
-  });
+    });
+    return result;
+  }, []);
 }
 
 async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
