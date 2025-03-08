@@ -4,6 +4,7 @@ import { api } from "../services/api.service";
 let intervalID;
 const ROTATION_PLAY_WINDOW = 4; // hours
 const ROTATION_PLAY_POLLING_INTERVAL = 5 * 60 * 1000; // every five minutes
+const GROUP_SLOTS_WITHIN = 3; // minutes
 
 export const usePlaylistStore = defineStore("playlist", {
   state: () => ({
@@ -18,6 +19,9 @@ export const usePlaylistStore = defineStore("playlist", {
       end: undefined,
     },
     selectedAlbumId: undefined,
+    trafficLog: [],
+    trafficLogGroups: [],
+    loadingTrafficLog: false,
   }),
   getters: {
     recentPlay: (state) => (album) => {
@@ -25,6 +29,9 @@ export const usePlaylistStore = defineStore("playlist", {
       return state.rotationPlays.plays.find(
         (play) => play.album?.name === idToFind
       );
+    },
+    group: (state) => (entry) => {
+      return state.trafficLogGroups.find((group) => group.includes(entry));
     },
   },
   actions: {
@@ -100,6 +107,57 @@ export const usePlaylistStore = defineStore("playlist", {
     },
     selectAlbum(id) {
       this.selectedAlbumId = id;
+    },
+    async getTrafficLog() {
+      this.loadingTrafficLog = true;
+      const { data: slots } = await api.get("/traffic-log"); 
+      
+      slots.forEach((slot) => {
+        if(!slot.entry.spot_copy) {          
+          slot.entry.spot_copy = slot.copy[Math.floor(Math.random() * slot.copy.length)];
+          slot.entry.spot = slot.entry.spot_copy.spot;
+        }
+      });
+
+      let grouping = false;
+      let groups = [];
+      for (let i = 0; i < slots.length - 1; i++) {
+        const entry = slots[i].entry;
+        const nextEntry = slots[i + 1].entry;
+
+        if (grouping) {
+          groups.at(-1).push(entry);
+        }
+
+        if (entry.spot && nextEntry?.spot) {
+          const slotTime = entry.hour * 60 + entry.slot;
+          const nextSlotTime = nextEntry.hour * 60 + nextEntry.slot;
+
+          if (nextSlotTime - slotTime <= GROUP_SLOTS_WITHIN) {
+            if (!grouping) {
+              groups.push([entry]);
+              grouping = true;
+            }
+          } else {
+            grouping = false;
+          }
+        }
+      }
+
+      this.trafficLog = slots;
+      this.trafficLogGroups = groups;
+      this.loadingTrafficLog = false;
+    },
+    async addTrafficLogEntry(body) {
+      const { data } = await api.post("/traffic-log", body);
+      const entry = this.trafficLog.find((element) => {
+        return (
+          element.dow === data.dow &&
+          element.hour === data.hour &&
+          element.slot === data.slot
+        );
+      });
+      Object.assign(entry, data);
     },
   },
 });

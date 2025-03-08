@@ -14,18 +14,18 @@
 
     <ul class="list-group">
       <button
-        v-for="entry in trafficLog"
-        :key="entry.scheduled.name"
+        v-for="slot in trafficLog"
+        :key="slot.entry.scheduled.name"
         class="list-group-item list-group-item-action list-group-item-light d-flex flex-row flex-md-column flex-lg-row"
         data-bs-toggle="offcanvas"
         data-bs-target="#spot"
         aria-controls="spot"
-        @click="select(entry)"
+        @click="select(slot.entry)"
       >
-        <span class="w-20">{{ time(entry) }}</span>
-        <div class="col" :class="titleClass(entry)">
+        <span class="w-20">{{ time(slot.entry) }}</span>
+        <div class="col" :class="titleClass(slot.entry)">
           <font-awesome-icon icon="square-caret-left" />
-          {{ entry.spot.title }}
+          {{ slot.entry.spot.title }}
         </div>
       </button>
     </ul>
@@ -79,7 +79,7 @@
 <script>
 import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
-import { useSpotsStore } from "@/traffic-log/store";
+import { usePlaylistStore } from "../store";
 import LoadingButton from "@/components/LoadingButton.vue";
 import TrafficLogActions from "./TrafficLogActions.vue";
 
@@ -92,15 +92,15 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useSpotsStore),
+    ...mapStores(usePlaylistStore),
     loading() {
-      return this.spotsStore.loadingTrafficLog;
+      return this.playlistStore.loadingTrafficLog;
     },
     trafficLog() {
-      return this.spotsStore.trafficLog;
+      return this.playlistStore.trafficLog;
     },
     selectedGroup() {
-      return this.spotsStore.group(this.selected);
+      return this.playlistStore.group(this.selected);
     },
     selectedIndexInGroup() {
       return this.selectedGroup?.indexOf(this.selected);
@@ -129,7 +129,7 @@ export default {
     },
   },
   mounted() {
-    this.spotsStore.getTrafficLog();
+    this.playlistStore.getTrafficLog();
     this.drawer = new Offcanvas(this.$refs.spot);
   },
   methods: {
@@ -146,7 +146,7 @@ export default {
       return `${this.time(entry)} ${entry.spot.title}`;
     },
     refresh() {
-      this.spotsStore.getTrafficLog();
+      this.playlistStore.getTrafficLog();
     },
     select(entry) {
       this.selected = entry;
@@ -161,7 +161,7 @@ export default {
       this.selected = this.nextInGroup;
     },
     async markAsRead() {
-      await this.spotsStore.addTrafficLogEntry(this.selected);
+      await this.playlistStore.addTrafficLogEntry(this.selected);
       if (this.nextInGroup) {
         this.next();
       } else {

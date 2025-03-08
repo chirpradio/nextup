@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../services/api.service";
 
-const GROUP_SLOTS_WITHIN = 3; // minutes
 
 function sortSpotsByTitle(a, b) {
   if (a.title === b.title || !a.title || !b.title) {
@@ -20,9 +19,6 @@ export const useSpotsStore = defineStore("spots", {
     loadingSpots: false,
     loadedSpots: false,
     savingSpot: false,
-    trafficLog: [],
-    trafficLogGroups: [],
-    loadingTrafficLog: false,
   }),
   getters: {
     spot: (state) => (id) => {
@@ -118,51 +114,6 @@ export const useSpotsStore = defineStore("spots", {
       const spot = this.spot(copy.spot.id);
       const index = spot.copy.findIndex((element) => element.id === copy.id);
       spot.copy.splice(index, 1);
-    },
-    async getTrafficLog() {
-      this.loadingTrafficLog = true;
-      const { data } = await api.get("/traffic-log");
-      const withSpots = data.filter((entry) => entry.spot);
-
-      let grouping = false;
-      let groups = [];
-      for (let i = 0; i < withSpots.length; i++) {
-        const copy = withSpots[i];
-        const nextCopy = withSpots[i + 1];
-
-        if (grouping) {
-          groups.at(-1).push(copy);
-        }
-
-        if (copy.spot && nextCopy?.spot) {
-          const copyTime = copy.hour * 60 + copy.slot;
-          const nextCopyTime = nextCopy.hour * 60 + nextCopy.slot;
-
-          if (nextCopyTime - copyTime <= GROUP_SLOTS_WITHIN) {
-            if (!grouping) {
-              groups.push([copy]);
-              grouping = true;
-            }
-          } else {
-            grouping = false;
-          }
-        }
-      }
-
-      this.trafficLog = withSpots;
-      this.trafficLogGroups = groups;
-      this.loadingTrafficLog = false;
-    },
-    async addTrafficLogEntry(body) {
-      const { data } = await api.post("/traffic-log", body);
-      const entry = this.trafficLog.find((element) => {
-        return (
-          element.dow === data.dow &&
-          element.hour === data.hour &&
-          element.slot === data.slot
-        );
-      });
-      Object.assign(entry, data);
     },
   },
 });
