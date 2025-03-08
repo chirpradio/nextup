@@ -1,9 +1,4 @@
-const {
-  Spot,
-  SpotConstraint,
-  SpotCopy,
-  TrafficLogEntry,
-} = require("../models");
+const { SpotConstraint, SpotCopy, TrafficLogEntry } = require("../models");
 const { datastore } = require("../db");
 const { DateTime } = require("luxon");
 const stringify = require("csv-stringify/lib/sync");
@@ -73,13 +68,14 @@ async function getMultipleConstraints(pairs) {
   });
 }
 
-function combineSpotKeysAtConstraints(constraints) {
-  return constraints.reduce((previous, current) => {
-    if (Array.isArray(current.spots)) {
-      return previous.concat(current.spots);
-    }
-    return previous;
-  }, []);
+function uniqueSpotKeysAtConstraints(constraints) {
+  const keyMap = new Map();
+  constraints.forEach((constraint) => {
+    constraint.spots.forEach((spot) => {
+      keyMap.set(spot.id, spot);
+    });
+  });
+  return Array.from(keyMap.values());
 }
 
 async function getActiveCopyForSpot(key) {
@@ -90,14 +86,14 @@ async function getActiveCopyForSpot(key) {
         ["expire_on", null],
       ],
       showKey: true,
-    }),
+    }).populate("spot"),
     await SpotCopy.list({
       filters: [
         ["spot", key],
         ["expire_on", ">", new Date()],
       ],
       showKey: true,
-    }),
+    }).populate("spot"),
   ];
   const results = await Promise.all(promises);
   return results.reduce(
@@ -138,56 +134,48 @@ function findExistingEntryForConstraint(entries, constraint) {
   });
 }
 
-async function getRandomCopyForConstraint(copy, constraint) {
+function runningCopyForConstraint(copy, constraint) {
   const spotIds = constraint.spots.map((spot) => spot.id);
   const copyForConstraint = copy.filter((item) =>
     spotIds.includes(item.spot.id)
   );
-  const runningCopy = copyForConstraint.filter(copyIsRunning);
-  let randomCopy;
-  let spot;
-  if (runningCopy.length) {
-    const randomIndex = Math.floor(Math.random() * runningCopy.length);
-    randomCopy = runningCopy[randomIndex];
-    spot = await Spot.get(parseInt(randomCopy.spot.id, 10));
-    randomCopy.spot = spot.plain({ showKey: true });
-  }
-  return randomCopy;
+  return copyForConstraint.filter(copyIsRunning);
 }
 
-async function buildEntry(constraint, copy) {
-  let spot;
-  if (copy) {
-    spot = copy.spot;
-  }
-
-  const entry = new TrafficLogEntry({
+function buildEntryStub(constraint) {
+  return new TrafficLogEntry({
     dow: constraint.dow,
     hour: constraint.hour,
     slot: constraint.slot,
-    spot: spot,
     scheduled: constraint[datastore.KEY],
-    spot_copy: copy,
-  });
-  return entry.plain();
+  }).plain();
 }
 
-async function buildEntries(existingEntries, constraints, copy) {
-  return Promise.all(
-    constraints.map(async (constraint) => {
-      const existingEntryForConstraint = findExistingEntryForConstraint(
-        existingEntries,
-        constraint
-      );
+function buildEntries(existingEntries, constraints, copy) {
+  return constraints.map((constraint) => {
+    let entry,
+      runningCopy = [];
+    const existingEntryForConstraint = findExistingEntryForConstraint(
+      existingEntries,
+      constraint
+    );
 
-      if (existingEntryForConstraint) {
-        return existingEntryForConstraint;
-      } else {
-        const randomCopy = await getRandomCopyForConstraint(copy, constraint);
-        return await buildEntry(constraint, randomCopy);
+    if (existingEntryForConstraint) {
+      entry = existingEntryForConstraint;
+    } else {
+      runningCopy = runningCopyForConstraint(copy, constraint);
+      if (runningCopy.length === 0) {
+        return;
       }
-    })
-  );
+
+      entry = buildEntryStub(constraint);
+    }
+
+    return {
+      entry,
+      copy: runningCopy,
+    };
+  });
 }
 
 async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
@@ -197,9 +185,9 @@ async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
     length
   );
   const constraints = await getMultipleConstraints(pairs);
-  const spotKeys = combineSpotKeysAtConstraints(constraints);
+  const spotKeys = uniqueSpotKeysAtConstraints(constraints);
   const copy = await getActiveCopy(spotKeys);
-  const entries = await buildEntries(existingEntries, constraints, copy);
+  const entries = buildEntries(existingEntries, constraints, copy);
   return entries;
 }
 
@@ -285,8 +273,6 @@ async function getReport(start, end) {
 
 module.exports = {
   addEntry,
-  copyIsRunning,
-  createDayAndHourPairs,
   getLog,
   getReport,
 };
