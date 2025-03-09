@@ -1,9 +1,22 @@
 const router = require("express").Router();
-const { validateEnd, validateStart } = require("./validators");
+const {
+  validateEnd,
+  validateStart,
+  validateDow,
+  validateHour,
+  validateLength,
+} = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 
-router.get("/", controller.getLog);
+router.get(
+  "/",
+  validateDow,
+  validateHour,
+  validateLength,
+  checkErrors,
+  controller.getLog
+);
 
 router.post("/", controller.addEntry);
 

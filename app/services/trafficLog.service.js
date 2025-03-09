@@ -163,12 +163,12 @@ function buildEntries(existingEntries, constraints, copy) {
     if (existingEntryForConstraint) {
       entry = existingEntryForConstraint;
     } else {
-      runningCopy = runningCopyForConstraint(copy, constraint);  
-      if(runningCopy.length === 0) {
+      runningCopy = runningCopyForConstraint(copy, constraint);
+      if (runningCopy.length === 0) {
         return result;
       }
 
-      entry = buildEntryStub(constraint);    
+      entry = buildEntryStub(constraint);
     }
 
     result.push({
@@ -224,7 +224,7 @@ async function addEntry(data, user) {
   data.reader = user;
   const now = new Date();
   data.readtime = now;
-  
+
   // matches DJDB
   data.log_date = DateTime.now()
     .minus({ days: 1 })
