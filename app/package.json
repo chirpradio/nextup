@@ -22,6 +22,7 @@
     "express-validator": "^6.10.0",
     "gstore-node": "^7.2.8",
     "js-levenshtein": "^1.1.6",
+    "jsdom": "^26.0.0",
     "jsonwebtoken": "^9.0.0",
     "lastfm-node-client": "^2.2.0",
     "luxon": "^3.2.1",
