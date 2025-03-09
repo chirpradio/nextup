@@ -1,5 +1,6 @@
 const { Album, Document, Track, TagEdit } = require("../models");
 const { datastore, gstore, renameKey } = require("../db");
+const { JSDOM } = require("jsdom");
 const LastFm = require("lastfm-node-client");
 const lastFm = new LastFm(process.env.LASTFM_API_KEY);
 
@@ -20,6 +21,41 @@ const jsonOptions = {
     properties: ["album_id"],
   },
 };
+
+async function rewriteOldLinks(reviewTextHTML) {
+  // Create a DOM using jsdom
+  const dom = new JSDOM(reviewTextHTML);
+  const document = dom.window.document;
+
+  // Regex to match the specific URL format
+  const regex = /^\/djdb\/album\/(\d+)\/info$/;
+
+  // Select all anchor tags
+  const links = document.querySelectorAll("a");
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+
+    if (
+      href &&
+      (href.includes("chirpradio.appspot.com") || href.startsWith("/djdb/"))
+    ) {
+      const url = new URL(href, "https://chirpradio.appspot.com");
+      const path = url.pathname;
+
+      const match = path.match(regex);
+      if (match) {
+        // Rewrite the link
+        const albumId = match[1];
+        link.setAttribute("href", `/library/album/${albumId}`);
+      } else {
+        // Remove the link if it doesn't match
+        link.replaceWith(...link.childNodes);
+      }
+    }
+  });
+
+  return document.body.innerHTML;
+}
 
 async function getPopulatedAlbum(albumId) {
   const options = {
@@ -143,6 +179,9 @@ async function listAlbumReviews(album) {
     ],
   };
   const { entities: reviews } = await Document.list(options).populate("author");
+  reviews.forEach(async (review) => {
+    review.unsafe_text = await rewriteOldLinks(review.unsafe_text);
+  });
   return reviews;
 }
 

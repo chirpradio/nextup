@@ -78,7 +78,14 @@ export const usePlaylistStore = defineStore("playlist", {
       }
 
       const { data: events } = await api.get("/playlist", options);
-      this.events = [...this.events, ...events];
+      for (const event of events) {
+        const index = this.events.findIndex((item) => item.id === event.id);
+        if (index > -1) {
+          this.events.splice(index, 1, event);
+        } else {
+          this.events.push(event);
+        }
+      }
       this.lastUpdated = Date.now();
     },
     async getRecentRotationPlays() {
