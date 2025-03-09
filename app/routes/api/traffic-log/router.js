@@ -1,10 +1,7 @@
 const router = require("express").Router();
-const { query } = require("express-validator");
+const { validateEnd, validateStart } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
-
-const validateStart = query("start").isISO8601();
-const validateEnd = query("end").isISO8601();
 
 router.get("/", controller.getLog);
 
