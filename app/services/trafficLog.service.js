@@ -1,4 +1,9 @@
-const { SpotConstraint, SpotCopy, TrafficLogEntry } = require("../models");
+const {
+  Spot,
+  SpotConstraint,
+  SpotCopy,
+  TrafficLogEntry,
+} = require("../models");
 const { datastore } = require("../db");
 const { DateTime } = require("luxon");
 const stringify = require("csv-stringify/lib/sync");
@@ -86,14 +91,14 @@ async function getActiveCopyForSpot(key) {
         ["expire_on", null],
       ],
       showKey: true,
-    }).populate("spot"),
+    }),
     await SpotCopy.list({
       filters: [
         ["spot", key],
         ["expire_on", ">", new Date()],
       ],
       showKey: true,
-    }).populate("spot"),
+    }),
   ];
   const results = await Promise.all(promises);
   return results.reduce(
@@ -134,49 +139,56 @@ function findExistingEntryForConstraint(entries, constraint) {
   });
 }
 
-function runningCopyForConstraint(copy, constraint) {
+async function getRandomCopyForConstraint(copy, constraint) {
   const spotIds = constraint.spots.map((spot) => spot.id);
   const copyForConstraint = copy.filter((item) =>
     spotIds.includes(item.spot.id)
   );
-  return copyForConstraint.filter(copyIsRunning);
+  const runningCopy = copyForConstraint.filter(copyIsRunning);
+  let randomCopy;
+  let spot;
+  if (runningCopy.length) {
+    const randomIndex = Math.floor(Math.random() * runningCopy.length);
+    randomCopy = runningCopy[randomIndex];
+    spot = await Spot.get(parseInt(randomCopy.spot.id, 10));
+    randomCopy.spot = spot.plain({ showKey: true });
+  }
+  return randomCopy;
 }
 
-function buildEntryStub(constraint) {
-  return new TrafficLogEntry({
+function buildEntry(constraint, copy) {
+  let spot;
+  if (copy) {
+    spot = copy.spot;
+  }
+
+  const entry = new TrafficLogEntry({
     dow: constraint.dow,
     hour: constraint.hour,
     slot: constraint.slot,
+    spot: spot,
     scheduled: constraint[datastore.KEY],
-  }).plain();
+    spot_copy: copy,
+  });
+  return entry.plain();
 }
 
-function buildEntries(existingEntries, constraints, copy) {
-  return constraints.reduce((result, constraint) => {
-    let entry,
-      runningCopy = [];
-    const existingEntryForConstraint = findExistingEntryForConstraint(
-      existingEntries,
-      constraint
-    );
+async function buildEntries(existingEntries, constraints, copy) {
+  return Promise.all(
+    constraints.map(async (constraint) => {
+      const existingEntryForConstraint = findExistingEntryForConstraint(
+        existingEntries,
+        constraint
+      );
 
-    if (existingEntryForConstraint) {
-      entry = existingEntryForConstraint;
-    } else {
-      runningCopy = runningCopyForConstraint(copy, constraint);
-      if (runningCopy.length === 0) {
-        return result;
+      if (existingEntryForConstraint) {
+        return existingEntryForConstraint;
+      } else {
+        const randomCopy = await getRandomCopyForConstraint(copy, constraint);
+        return buildEntry(constraint, randomCopy);
       }
-
-      entry = buildEntryStub(constraint);
-    }
-
-    result.push({
-      entry,
-      copy: runningCopy,
-    });
-    return result;
-  }, []);
+    })
+  );
 }
 
 async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
@@ -188,8 +200,9 @@ async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
   const constraints = await getMultipleConstraints(pairs);
   const spotKeys = uniqueSpotKeysAtConstraints(constraints);
   const copy = await getActiveCopy(spotKeys);
-  const entries = buildEntries(existingEntries, constraints, copy);
-  return entries;
+  const entries = await buildEntries(existingEntries, constraints, copy);
+  const entriesWithASpot = entries.filter((entry) => entry.spot);
+  return entriesWithASpot;
 }
 
 function checkForKey(prop, value) {
@@ -216,9 +229,7 @@ function checkForKey(prop, value) {
 }
 
 async function addEntry(data, user) {
-  // turn the populated spot back into its reference
-  data.spot = datastore.key(["Spot", parseInt(data.spot.id, 10)]);
-
+  data.spot = checkForKey("spot", data.spot);
   data.scheduled = checkForKey("scheduled", data.scheduled);
   data.spot_copy = checkForKey("spot_copy", data.spot_copy);
   data.reader = user;
