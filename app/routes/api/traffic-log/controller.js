@@ -4,7 +4,7 @@ module.exports = {
   async getLog(req, res, next) {
     try {
       const dow = req.query.dow || DateService.currentChicagoWeekday();
-      const hour = req.query.hour || DateService.currentChicagoHour();
+      const hour = Number.isInteger(req.query.hour) ? req.query.hour : DateService.currentChicagoHour();
       const length = req.query.length || 1;
       const log = await TrafficLogService.getLog(dow, hour, length);
       res.json(log);
