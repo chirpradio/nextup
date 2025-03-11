@@ -4,9 +4,10 @@ module.exports = {
   async getLog(req, res, next) {
     try {
       const dow = req.query.dow || DateService.currentChicagoWeekday();
-      const hour = Number.isInteger(req.query.hour) ? req.query.hour : DateService.currentChicagoHour();
-      const length = req.query.length || 1;
-      const log = await TrafficLogService.getLog(dow, hour, length);
+      const hour = Number.isInteger(req.query.hour)
+        ? req.query.hour
+        : DateService.currentChicagoHour();
+      const log = await TrafficLogService.getLog(dow, hour);
       res.json(log);
     } catch (error) {
       next(error);
