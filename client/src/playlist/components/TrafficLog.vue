@@ -2,30 +2,22 @@
   <div class="text-bg-light">
     <div class="d-flex">
       <h2 class="h4 flex-fill">Traffic Log</h2>
-      <LoadingButton
-        icon="rotate-right"
-        label="refresh"
-        :loading="loading"
-        class="ms-2 mb-2"
-        :small="true"
-        @click="refresh"
-      />
     </div>
 
     <ul class="list-group">
       <button
-        v-for="slot in trafficLog"
-        :key="slot.entry.scheduled.name"
+        v-for="entry in trafficLog"
+        :key="entry.scheduled.name"
         class="list-group-item list-group-item-action list-group-item-light d-flex flex-row flex-md-column flex-lg-row"
         data-bs-toggle="offcanvas"
         data-bs-target="#spot"
         aria-controls="spot"
-        @click="select(slot.entry)"
+        @click="select(entry)"
       >
-        <span class="w-20">{{ time(slot.entry) }}</span>
-        <div class="col" :class="titleClass(slot.entry)">
+        <span class="w-20">{{ time(entry) }}</span>
+        <div class="col" :class="titleClass(entry)">
           <font-awesome-icon icon="square-caret-left" />
-          {{ slot.entry.spot.title }}
+          {{ entry.spot.title }}
         </div>
       </button>
     </ul>
@@ -80,11 +72,10 @@
 import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "../store";
-import LoadingButton from "@/components/LoadingButton.vue";
 import TrafficLogActions from "./TrafficLogActions.vue";
 
 export default {
-  components: { LoadingButton, TrafficLogActions },
+  components: { TrafficLogActions },
   data() {
     return {
       drawer: undefined,
@@ -103,7 +94,9 @@ export default {
       return this.playlistStore.group(this.selected);
     },
     selectedIndexInGroup() {
-      return this.selectedGroup?.indexOf(this.selected);
+      return this.selectedGroup?.findIndex(
+        (entry) => this.selected.scheduled.name === entry.scheduled.name
+      );
     },
     previousInGroup() {
       return this.selectedGroup
@@ -124,17 +117,23 @@ export default {
         case 2:
           return "3rd";
         default:
-          return `${this.selectedIndexInGroup}th`;
+          return `${this.selectedIndexInGroup + 1}th`;
       }
     },
   },
   mounted() {
-    this.playlistStore.getTrafficLog();
     this.drawer = new Offcanvas(this.$refs.spot);
   },
   methods: {
     time(entry) {
-      const hour = entry.hour > 12 ? entry.hour - 12 : entry.hour;
+      let hour;
+      if (entry.hour > 12) {
+        hour = entry.hour - 12;
+      } else if (entry.hour === 0) {
+        hour = 12;
+      } else {
+        hour = entry.hour;
+      }
       const minute = entry.slot.toString().padStart(2, "0");
       return `${hour}:${minute}`;
     },
@@ -144,9 +143,6 @@ export default {
       }
 
       return `${this.time(entry)} ${entry.spot.title}`;
-    },
-    refresh() {
-      this.playlistStore.getTrafficLog();
     },
     select(entry) {
       this.selected = entry;

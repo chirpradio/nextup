@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../services/api.service";
 
-
 function sortSpotsByTitle(a, b) {
   if (a.title === b.title || !a.title || !b.title) {
     return 0;
