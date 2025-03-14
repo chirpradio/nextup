@@ -96,25 +96,28 @@ function findExistingEntryForConstraint(entries, constraint) {
   });
 }
 
-async function getRandomCopyForConstraint(copy, constraint) {
+async function getRandomCopyForConstraint(copy, constraint, greylist) {
   if (!constraint.spots) {
     return;
   }
 
   const spotIds = constraint.spots.map((spot) => spot.id);
-  const copyForConstraint = copy.filter((item) =>
-    spotIds.includes(item.spot.id)
-  );
-  const runningCopy = copyForConstraint.filter(copyIsRunning);
-  let randomCopy;
-  let spot;
-  if (runningCopy.length) {
-    const randomIndex = Math.floor(Math.random() * runningCopy.length);
-    randomCopy = runningCopy[randomIndex];
-    spot = await Spot.get(parseInt(randomCopy.spot.id, 10));
-    randomCopy.spot = spot.plain({ showKey: true });
+  const runningCopy = copy
+    .filter((item) => spotIds.includes(item.spot.id))
+    .filter(copyIsRunning);
+
+  let validCopy = runningCopy;
+  if (runningCopy.length > 1) {
+    validCopy = runningCopy.filter((copy) => !greylist.includes(copy.id));
   }
-  return randomCopy;
+
+  if (validCopy.length) {
+    const randomIndex = Math.floor(Math.random() * validCopy.length);
+    const randomCopy = validCopy[randomIndex];
+    const spot = await Spot.get(parseInt(randomCopy.spot.id, 10));
+    randomCopy.spot = spot.plain({ showKey: true });
+    return randomCopy;
+  }
 }
 
 function buildEntry(constraint, copy) {
@@ -134,7 +137,7 @@ function buildEntry(constraint, copy) {
   return entry.plain();
 }
 
-async function buildEntries(existingEntries, constraints, copy) {
+async function buildEntries(existingEntries, constraints, copy, greylist) {
   return Promise.all(
     constraints.map(async (constraint) => {
       const existingEntryForConstraint = findExistingEntryForConstraint(
@@ -145,19 +148,28 @@ async function buildEntries(existingEntries, constraints, copy) {
       if (existingEntryForConstraint) {
         return existingEntryForConstraint;
       } else {
-        const randomCopy = await getRandomCopyForConstraint(copy, constraint);
+        const randomCopy = await getRandomCopyForConstraint(
+          copy,
+          constraint,
+          greylist
+        );
         return buildEntry(constraint, randomCopy);
       }
     })
   );
 }
 
-async function getLog(dow, hour) {
+async function getLog(dow, hour, greylist) {
   const existingEntries = await getTrafficLogEntries(dow, hour);
   const constraints = await getConstraints(dow, hour);
   const spotKeys = uniqueSpotKeysAtConstraints(constraints);
   const copy = await getActiveCopy(spotKeys);
-  const entries = await buildEntries(existingEntries, constraints, copy);
+  const entries = await buildEntries(
+    existingEntries,
+    constraints,
+    copy,
+    greylist
+  );
   const entriesWithASpot = entries.filter((entry) => entry.spot);
   return entriesWithASpot;
 }

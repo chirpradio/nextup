@@ -4,11 +4,19 @@ const {
   validateStart,
   validateDow,
   validateHour,
+  validateGreylist,
 } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 
-router.get("/", validateDow, validateHour, checkErrors, controller.getLog);
+router.get(
+  "/",
+  validateDow,
+  validateHour,
+  validateGreylist,
+  checkErrors,
+  controller.getLog
+);
 
 router.post("/", controller.addEntry);
 
