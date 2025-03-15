@@ -2,7 +2,6 @@ const { Album } = require("../../models");
 const { datastore } = require("../../db");
 
 const oldTags = [
-  "clean",
   "EP",
   "Disc 1",
   "Disc 2",
