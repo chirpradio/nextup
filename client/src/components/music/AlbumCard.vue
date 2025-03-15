@@ -23,6 +23,12 @@
         {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
+      <div v-if="album.pronunciation" class="text-muted">
+        <i
+          >Pronunciation: <br />
+          {{ album.pronunciation }}</i
+        >
+      </div>
       <TagList :tags="album.current_tags" :album="album" />
       <RecentlyPlayedAlert :album="album" />
     </div>
