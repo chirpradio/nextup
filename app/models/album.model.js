@@ -1,5 +1,6 @@
 const gstore = require("../db").gstore;
 const { Schema } = gstore;
+const { CURRENT_TAGS } = require("../config/constants");
 
 function validateCurrentTags(obj, validator, validTags) {
   if (Array.isArray(obj)) {
@@ -28,20 +29,7 @@ const albumSchema = new Schema({
     type: Array,
     validate: {
       rule: validateCurrentTags,
-      args: [
-        [
-          "local_current",
-          "local_classic",
-          "heavy_rotation",
-          "light_rotation",
-          "clean",
-          "ep",
-          "Disc 1",
-          "Disc 2",
-          "Disc 3",
-          "Disc 4",
-        ],
-      ],
+      args: [CURRENT_TAGS],
     },
     default: [],
   },

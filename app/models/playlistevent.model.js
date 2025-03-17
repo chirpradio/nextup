@@ -1,5 +1,6 @@
 const { datastore, gstore, getPlaylistKey } = require("../db");
 const { Schema } = gstore;
+const { CURRENT_TAGS } = require("../config/constants");
 
 let PLAYLIST_KEY;
 
@@ -18,9 +19,7 @@ const playlistEventSchema = new Schema({
     type: Array,
     validate: {
       rule: validateArray,
-      args: [
-        ["local_current", "local_classic", "heavy_rotation", "light_rotation"],
-      ],
+      args: [CURRENT_TAGS],
     },
   },
   class: {
