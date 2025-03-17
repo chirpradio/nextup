@@ -95,7 +95,7 @@ export default {
     },
     selectedIndexInGroup() {
       return this.selectedGroup?.findIndex(
-        (entry) => this.selected.scheduled.name === entry.scheduled.name
+        (entry) => this.selected.spot_copy.id === entry.spot_copy.id
       );
     },
     previousInGroup() {
