@@ -58,16 +58,31 @@ async function getActiveCopyForSpot(key) {
     }),
   ];
   const results = await Promise.all(promises);
-  return results.reduce(
+  const copy = results.reduce(
     (previous, current) => previous.concat(current.entities),
     []
   );
+  const spotId = parseInt(key.id, 10);
+  return { spotId, copy };
 }
 
-async function getActiveCopy(spotKeys) {
-  const promises = spotKeys.map(async (key) => await getActiveCopyForSpot(key));
-  const copy = await Promise.all(promises);
-  return copy.flat();
+async function getActiveSpotsAndCopy(spotKeys) {
+  const spotIds = spotKeys.map((key) => parseInt(key.id, 10));
+  const spots = await Spot.get(spotIds);
+  const activeSpots = spots.filter((spot) => spot.active && !spot.deleted);
+  const activeSpotKeys = activeSpots.map((spot) => spot.entityKey);
+  const promises = activeSpotKeys.map(
+    async (key) => await getActiveCopyForSpot(key)
+  );
+  const allCopy = await Promise.all(promises);
+  const spotsAndCopy = allCopy.reduce((acc, { spotId, copy }) => {
+    acc[spotId] = {
+      copy,
+      spot: spots.find((spot) => spot.id == spotId),
+    };
+    return acc;
+  }, {});
+  return spotsAndCopy;
 }
 
 function copyIsRunning(copy) {
@@ -90,33 +105,6 @@ function copyIsRunning(copy) {
   return started && !expired;
 }
 
-function findExistingEntryForConstraint(entries, constraint) {
-  return entries.find((entry) => {
-    return entry.scheduled.name == constraint.id;
-  });
-}
-
-async function getRandomCopyForConstraint(copy, constraint) {
-  if (!constraint.spots) {
-    return;
-  }
-
-  const spotIds = constraint.spots.map((spot) => spot.id);
-  const copyForConstraint = copy.filter((item) =>
-    spotIds.includes(item.spot.id)
-  );
-  const runningCopy = copyForConstraint.filter(copyIsRunning);
-  let randomCopy;
-  let spot;
-  if (runningCopy.length) {
-    const randomIndex = Math.floor(Math.random() * runningCopy.length);
-    randomCopy = runningCopy[randomIndex];
-    spot = await Spot.get(parseInt(randomCopy.spot.id, 10));
-    randomCopy.spot = spot.plain({ showKey: true });
-  }
-  return randomCopy;
-}
-
 function buildEntry(constraint, copy) {
   let spot;
   if (copy) {
@@ -134,32 +122,43 @@ function buildEntry(constraint, copy) {
   return entry.plain();
 }
 
-async function buildEntries(existingEntries, constraints, copy) {
-  return Promise.all(
-    constraints.map(async (constraint) => {
-      const existingEntryForConstraint = findExistingEntryForConstraint(
-        existingEntries,
-        constraint
+function buildEntries(existingEntries, constraints, spots) {
+  const entries = [];
+  for (const constraint of constraints) {
+    if (!constraint.spots?.length) {
+      continue;
+    }
+    
+    for (const spot of constraint.spots) {
+      const entry = existingEntries.find(
+        (entry) =>
+          entry.scheduled.name == constraint.id && entry.spot.id == spot.id
       );
 
-      if (existingEntryForConstraint) {
-        return existingEntryForConstraint;
+      if (entry) {
+        entries.push(entry);
       } else {
-        const randomCopy = await getRandomCopyForConstraint(copy, constraint);
-        return buildEntry(constraint, randomCopy);
+        const copyForSpot = spots[spot.id].copy.filter(copyIsRunning);
+        if (copyForSpot.length) {
+          const randomIndex = Math.floor(Math.random() * copyForSpot.length);
+          const randomCopy = copyForSpot[randomIndex];
+          randomCopy.spot = spots[spot.id].spot.plain({ showKey: true });
+          entries.push(buildEntry(constraint, randomCopy));
+        }
       }
-    })
-  );
+    }
+  }
+
+  return entries;
 }
 
 async function getLog(dow, hour) {
   const existingEntries = await getTrafficLogEntries(dow, hour);
   const constraints = await getConstraints(dow, hour);
   const spotKeys = uniqueSpotKeysAtConstraints(constraints);
-  const copy = await getActiveCopy(spotKeys);
-  const entries = await buildEntries(existingEntries, constraints, copy);
-  const entriesWithASpot = entries.filter((entry) => entry.spot);
-  return entriesWithASpot;
+  const spots = await getActiveSpotsAndCopy(spotKeys);
+  const entries = buildEntries(existingEntries, constraints, spots);
+  return entries;
 }
 
 function checkForKey(prop, value) {
