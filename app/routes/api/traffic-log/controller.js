@@ -3,11 +3,12 @@ const { DateService, TrafficLogService } = require("../../../services");
 module.exports = {
   async getLog(req, res, next) {
     try {
-      const entries = await TrafficLogService.getLog(
-        DateService.currentChicagoWeekday(),
-        DateService.currentChicagoHour()
-      );
-      res.json(entries);
+      const dow = req.query.dow || DateService.currentChicagoWeekday();
+      const hour = Number.isInteger(req.query.hour)
+        ? req.query.hour
+        : DateService.currentChicagoHour();
+      const log = await TrafficLogService.getLog(dow, hour);
+      res.json(log);
     } catch (error) {
       next(error);
     }

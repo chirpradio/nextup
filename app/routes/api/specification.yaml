@@ -1049,9 +1049,27 @@ paths:
       tags:
         - Traffic Log
       description: 
-        Returns a list of traffic log entries for the next three hours, starting at the top of the current hour.
+        Returns a list of traffic log entries for the given weekday and hour.
         Entries that have already been read have values for "logtime", "readtime", "reader", or "__key".
         Entries still to be read have a random copy but no values for those properties. They can be posted to the API to be saved to the database.       
+      parameters:
+        - name: dow          
+          in: query
+          required: false          
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 7
+            default: current weekday in Chicago
+          description: Weekday (1 = Monday, 7 = Sunday)
+        - name: hour          
+          in: query
+          required: false          
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 23
+            default: current hour in Chicago
       responses:
         '200':
           description: Success

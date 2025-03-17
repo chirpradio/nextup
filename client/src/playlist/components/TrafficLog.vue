@@ -2,14 +2,6 @@
   <div class="text-bg-light">
     <div class="d-flex">
       <h2 class="h4 flex-fill">Traffic Log</h2>
-      <LoadingButton
-        icon="rotate-right"
-        label="refresh"
-        :loading="loading"
-        class="ms-2 mb-2"
-        :small="true"
-        @click="refresh"
-      />
     </div>
 
     <ul class="list-group">
@@ -79,12 +71,11 @@
 <script>
 import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
-import { useSpotsStore } from "@/traffic-log/store";
-import LoadingButton from "@/components/LoadingButton.vue";
+import { usePlaylistStore } from "../store";
 import TrafficLogActions from "./TrafficLogActions.vue";
 
 export default {
-  components: { LoadingButton, TrafficLogActions },
+  components: { TrafficLogActions },
   data() {
     return {
       drawer: undefined,
@@ -92,18 +83,20 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useSpotsStore),
+    ...mapStores(usePlaylistStore),
     loading() {
-      return this.spotsStore.loadingTrafficLog;
+      return this.playlistStore.loadingTrafficLog;
     },
     trafficLog() {
-      return this.spotsStore.trafficLog;
+      return this.playlistStore.trafficLog;
     },
     selectedGroup() {
-      return this.spotsStore.group(this.selected);
+      return this.playlistStore.group(this.selected);
     },
     selectedIndexInGroup() {
-      return this.selectedGroup?.indexOf(this.selected);
+      return this.selectedGroup?.findIndex(
+        (entry) => this.selected.scheduled.name === entry.scheduled.name
+      );
     },
     previousInGroup() {
       return this.selectedGroup
@@ -124,17 +117,23 @@ export default {
         case 2:
           return "3rd";
         default:
-          return `${this.selectedIndexInGroup}th`;
+          return `${this.selectedIndexInGroup + 1}th`;
       }
     },
   },
   mounted() {
-    this.spotsStore.getTrafficLog();
     this.drawer = new Offcanvas(this.$refs.spot);
   },
   methods: {
     time(entry) {
-      const hour = entry.hour > 12 ? entry.hour - 12 : entry.hour;
+      let hour;
+      if (entry.hour > 12) {
+        hour = entry.hour - 12;
+      } else if (entry.hour === 0) {
+        hour = 12;
+      } else {
+        hour = entry.hour;
+      }
       const minute = entry.slot.toString().padStart(2, "0");
       return `${hour}:${minute}`;
     },
@@ -144,9 +143,6 @@ export default {
       }
 
       return `${this.time(entry)} ${entry.spot.title}`;
-    },
-    refresh() {
-      this.spotsStore.getTrafficLog();
     },
     select(entry) {
       this.selected = entry;
@@ -161,7 +157,7 @@ export default {
       this.selected = this.nextInGroup;
     },
     async markAsRead() {
-      await this.spotsStore.addTrafficLogEntry(this.selected);
+      await this.playlistStore.addTrafficLogEntry(this.selected);
       if (this.nextInGroup) {
         this.next();
       } else {

@@ -7,32 +7,10 @@ const {
 const { datastore } = require("../db");
 const { DateTime } = require("luxon");
 const stringify = require("csv-stringify/lib/sync");
-const DEFAULT_LOG_LENGTH = 3; // hours
 
-function getNextDayAndHourPair(pair) {
-  const [dow, hour] = [...pair];
-  let newDow = dow;
-  let newHour = hour + 1;
-  if (newHour === 24) {
-    newDow = dow + 1;
-    newHour = 0;
-  }
-  if (newDow === 8) {
-    newDow = 1;
-  }
-
-  return [newDow, newHour];
-}
-
-function createDayAndHourPairs(dow, hour, length) {
-  const pairs = [[dow, hour]];
-  for (let i = 1; i < length; i++) {
-    pairs.push(getNextDayAndHourPair(pairs[i - 1]));
-  }
-  return pairs;
-}
-
-async function getTrafficLogEntries(dow, hour, since) {
+async function getTrafficLogEntries(dow, hour) {
+  const since = new Date();
+  since.setDate(since.getDate() - 1);
   const { entities: entries } = await TrafficLogEntry.list({
     filters: [
       ["created", ">", since],
@@ -41,18 +19,7 @@ async function getTrafficLogEntries(dow, hour, since) {
     ],
     showKey: true,
   }).populate(["spot", "spot_copy"]);
-  return entries;
-}
-
-async function getTrafficLogEntriesForMultipleHours(pairs) {
-  const since = new Date();
-  since.setDate(since.getDate() - 1);
-  const entryPromises = pairs.map(async (pair) => {
-    return await getTrafficLogEntries(pair[0], pair[1], since);
-  });
-  const entries = await Promise.all(entryPromises);
-  const flatEntries = entries.flat();
-  return flatEntries;
+  return entries.flat();
 }
 
 async function getConstraints(dow, hour) {
@@ -63,23 +30,14 @@ async function getConstraints(dow, hour) {
   return constraints;
 }
 
-async function getMultipleConstraints(pairs) {
-  const promises = pairs.map(async (pair) => {
-    return await getConstraints(pair[0], pair[1]);
+function uniqueSpotKeysAtConstraints(constraints) {
+  const keyMap = new Map();
+  constraints.forEach((constraint) => {
+    constraint.spots?.forEach((spot) => {
+      keyMap.set(spot.id, spot);
+    });
   });
-  const constraints = await Promise.all(promises);
-  return constraints.flat().filter((constraint) => {
-    return Array.isArray(constraint.spots);
-  });
-}
-
-function combineSpotKeysAtConstraints(constraints) {
-  return constraints.reduce((previous, current) => {
-    if (Array.isArray(current.spots)) {
-      return previous.concat(current.spots);
-    }
-    return previous;
-  }, []);
+  return Array.from(keyMap.values());
 }
 
 async function getActiveCopyForSpot(key) {
@@ -139,6 +97,10 @@ function findExistingEntryForConstraint(entries, constraint) {
 }
 
 async function getRandomCopyForConstraint(copy, constraint) {
+  if (!constraint.spots) {
+    return;
+  }
+
   const spotIds = constraint.spots.map((spot) => spot.id);
   const copyForConstraint = copy.filter((item) =>
     spotIds.includes(item.spot.id)
@@ -155,7 +117,7 @@ async function getRandomCopyForConstraint(copy, constraint) {
   return randomCopy;
 }
 
-async function buildEntry(constraint, copy) {
+function buildEntry(constraint, copy) {
   let spot;
   if (copy) {
     spot = copy.spot;
@@ -184,23 +146,20 @@ async function buildEntries(existingEntries, constraints, copy) {
         return existingEntryForConstraint;
       } else {
         const randomCopy = await getRandomCopyForConstraint(copy, constraint);
-        return await buildEntry(constraint, randomCopy);
+        return buildEntry(constraint, randomCopy);
       }
     })
   );
 }
 
-async function getLog(dow, hour, length = DEFAULT_LOG_LENGTH) {
-  const pairs = createDayAndHourPairs(dow, hour, length);
-  const existingEntries = await getTrafficLogEntriesForMultipleHours(
-    pairs,
-    length
-  );
-  const constraints = await getMultipleConstraints(pairs);
-  const spotKeys = combineSpotKeysAtConstraints(constraints);
+async function getLog(dow, hour) {
+  const existingEntries = await getTrafficLogEntries(dow, hour);
+  const constraints = await getConstraints(dow, hour);
+  const spotKeys = uniqueSpotKeysAtConstraints(constraints);
   const copy = await getActiveCopy(spotKeys);
   const entries = await buildEntries(existingEntries, constraints, copy);
-  return entries;
+  const entriesWithASpot = entries.filter((entry) => entry.spot);
+  return entriesWithASpot;
 }
 
 function checkForKey(prop, value) {
@@ -233,6 +192,7 @@ async function addEntry(data, user) {
   data.reader = user;
   const now = new Date();
   data.readtime = now;
+
   // matches DJDB
   data.log_date = DateTime.now()
     .minus({ days: 1 })
@@ -285,8 +245,6 @@ async function getReport(start, end) {
 
 module.exports = {
   addEntry,
-  copyIsRunning,
-  createDayAndHourPairs,
   getLog,
   getReport,
 };
