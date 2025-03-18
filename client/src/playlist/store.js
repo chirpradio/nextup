@@ -54,13 +54,17 @@ async function updateTrafficLog(store) {
   const updates = checkSlotsForUpdates(store.trafficLog);
 
   if (updates.outdated.length > 0) {
-    updates.outdated.forEach(({ weekday, hour }) => {
-      store.removeEntries(weekday, hour);
-    });
+    await Promise.all(updates.outdated.map(store.removeEntries));
   }
-  
+
   if (updates.missing.length > 0) {
-    await Promise.all(updates.missing.map(store.getEntries));
+    /* 
+      Get the multiple missing hours sequentially so each subsequent hour 
+      can greylist the copy from the previous hour after it returns.
+    */
+    updates.missing.reduce((lastPromise, pair) => {
+      return lastPromise.then(() => store.getEntries(pair));
+    }, Promise.resolve());
   }
 }
 
@@ -133,6 +137,12 @@ export const usePlaylistStore = defineStore("playlist", {
           (groupedEntry) => entry.scheduled.name === groupedEntry.scheduled.name
         )
       );
+    },
+    spotCopyIdsInLastHour: (state) => {
+      const lastEntry = state.trafficLog.at(-1);
+      return state.trafficLog
+        .filter((entry) => entry.hour === lastEntry.hour)
+        .map((entry) => entry.spot_copy.id);
     },
   },
   actions: {
@@ -222,6 +232,7 @@ export const usePlaylistStore = defineStore("playlist", {
         params: {
           dow: weekday,
           hour,
+          greylist: this.spotCopyIdsInLastHour,
         },
       });
       this.trafficLog = [...this.trafficLog, ...entries];
@@ -232,7 +243,7 @@ export const usePlaylistStore = defineStore("playlist", {
       ];
       this.loadingTrafficLog = false;
     },
-    removeEntries(weekday, hour) {
+    removeEntries({ hour } = {}) {
       this.trafficLog = this.trafficLog.filter((entry) => entry.hour !== hour);
 
       this.trafficLogGroups = this.trafficLogGroups.filter(
