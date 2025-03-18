@@ -35,6 +35,9 @@
                   <ArtistLink :artist="track.track_artist" />
                 </span>
               </div>
+              <div v-if="track.pronunciation" class="text-muted fw-light fst-italic">
+                {{ track.pronunciation }}
+              </div>
               <div class="mb-1">
                 <TrackDuration :track="track" />
                 <small class="text-muted fw-light">

@@ -19,6 +19,9 @@
       <component :is="secondHeading" v-if="!hideArtistLink">
         <ArtistName :album="album" :includeBy="true" />
       </component>
+      <div v-if="album.pronunciation" class="text-muted fst-italic my-2">
+        {{ album.pronunciation }}
+      </div>
       <p class="my-2">
         {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
