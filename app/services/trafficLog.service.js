@@ -122,27 +122,38 @@ function buildEntry(constraint, copy) {
   return entry.plain();
 }
 
-function buildEntries(existingEntries, constraints, spots) {
+function buildEntries(existingEntries, constraints, spots, greylist) {
   const entries = [];
   for (const constraint of constraints) {
     if (!constraint.spots?.length) {
       continue;
     }
-    
-    for (const spot of constraint.spots) {
+
+    for (const spotKey of constraint.spots) {
       const entry = existingEntries.find(
         (entry) =>
-          entry.scheduled.name == constraint.id && entry.spot.id == spot.id
+          entry.scheduled.name == constraint.id && entry.spot.id == spotKey.id
       );
 
       if (entry) {
         entries.push(entry);
       } else {
-        const copyForSpot = spots[spot.id].copy.filter(copyIsRunning);
-        if (copyForSpot.length) {
-          const randomIndex = Math.floor(Math.random() * copyForSpot.length);
-          const randomCopy = copyForSpot[randomIndex];
-          randomCopy.spot = spots[spot.id].spot.plain({ showKey: true });
+        const spotAndCopy = spots[spotKey.id];
+        if (!spotAndCopy) {
+          continue;
+        }
+
+        const runningCopy = spotAndCopy.copy.filter(copyIsRunning);
+
+        let validCopy = runningCopy;
+        if (runningCopy.length > 1) {
+          validCopy = runningCopy.filter((copy) => !greylist.includes(copy.id));
+        }
+
+        if (validCopy.length) {
+          const randomIndex = Math.floor(Math.random() * validCopy.length);
+          const randomCopy = validCopy[randomIndex];
+          randomCopy.spot = spotAndCopy.spot.plain({ showKey: true });
           entries.push(buildEntry(constraint, randomCopy));
         }
       }
@@ -152,12 +163,12 @@ function buildEntries(existingEntries, constraints, spots) {
   return entries;
 }
 
-async function getLog(dow, hour) {
+async function getLog(dow, hour, greylist) {
   const existingEntries = await getTrafficLogEntries(dow, hour);
   const constraints = await getConstraints(dow, hour);
   const spotKeys = uniqueSpotKeysAtConstraints(constraints);
   const spots = await getActiveSpotsAndCopy(spotKeys);
-  const entries = buildEntries(existingEntries, constraints, spots);
+  const entries = buildEntries(existingEntries, constraints, spots, greylist);
   return entries;
 }
 
