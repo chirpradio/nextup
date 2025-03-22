@@ -58,7 +58,7 @@ async function updateTrafficLog(store) {
       store.removeEntries(weekday, hour);
     });
   }
-  
+
   if (updates.missing.length > 0) {
     await Promise.all(updates.missing.map(store.getEntries));
   }

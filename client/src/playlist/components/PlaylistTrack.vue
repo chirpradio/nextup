@@ -96,7 +96,7 @@ export default {
       return this.track.freeform_track_title || this.track.track?.title || "?";
     },
     album() {
-      return this.track.freeform_album_title || this.track.album?.title  || "?";
+      return this.track.freeform_album_title || this.track.album?.title || "?";
     },
     label() {
       return this.track.freeform_label || this.track.album?.label || "?";

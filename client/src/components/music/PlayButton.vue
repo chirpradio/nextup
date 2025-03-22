@@ -105,7 +105,7 @@ export default {
       if (cuedTrack.track?.__key) {
         return cuedTrack.track.__key.name === this.track?.__key?.name;
       }
-      
+
       const props = ["artist.name", "album.title", "track.title"];
       const cuedProps = _.pick(cuedTrack, props);
       const thisProps = _.pick(this, props);

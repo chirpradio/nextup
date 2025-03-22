@@ -13,7 +13,7 @@
     </div>
     <PlayButton
       :album="element.album"
-      :categories="element.album.current_tags"      
+      :categories="element.album.current_tags"
       type="freeform"
       class="mt-2 mt-md-0"
     />
@@ -28,7 +28,7 @@ import PlayButton from "../music/PlayButton.vue";
 
 export default {
   name: "AlbumItem",
-  components: { ArtistLink, CrateAlbumSpans, TagList, PlayButton, },
+  components: { ArtistLink, CrateAlbumSpans, TagList, PlayButton },
   props: {
     element: Object,
   },
