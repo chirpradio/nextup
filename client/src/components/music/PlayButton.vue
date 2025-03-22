@@ -101,8 +101,8 @@ export default {
     cued() {
       const cuedTrack = this.playlistStore.cuedTrack;
       return (
-        cuedTrack?.track.title === this.track.title &&
-        cuedTrack?.album.title === this.album.title
+        cuedTrack?.track?.title === this.track?.title &&
+        cuedTrack?.album?.title === this.album?.title
       );
     },
     cuedLabel() {
