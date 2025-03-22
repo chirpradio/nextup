@@ -109,7 +109,7 @@ export default {
       return this.cued ? "cued" : "cue";
     },
     disabled() {
-      return this.added || this.error;
+      return this.added || this.error || !this.validForPlaylist;
     },
     playIcon() {
       if (this.added) {
@@ -142,6 +142,18 @@ export default {
         notes: this.playNotes,
         track: this.track,
       };
+    },
+    validForPlaylist() {
+      if (this.type === "track") {
+        return true;
+      }
+
+      return (
+        this.album?.title &&
+        this.artist?.name &&
+        this.track?.title &&
+        this.album?.label
+      );
     },
   },
   created() {
