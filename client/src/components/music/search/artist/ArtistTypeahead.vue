@@ -20,8 +20,8 @@
         :key="artist._id"
         class="list-group-item"
         :class="{ active: activeIndex === index }"
-        @mouseover="setIndex(index)" 
-        @mousedown="select" 
+        @mouseover="setIndex(index)"
+        @mousedown="select"
         role="button"
       >
         {{ artist._source.name }}
@@ -95,8 +95,8 @@ export default {
     },
     setIndex(index) {
       this.activeIndex = index;
-    },  
-    select() {            
+    },
+    select() {
       this.disableResults();
       const artist = this.artists[this.activeIndex];
       this.$emit(UPDATE, artist._source.name);
