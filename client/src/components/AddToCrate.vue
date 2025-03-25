@@ -11,7 +11,9 @@
     </button>
     <ul class="dropdown-menu">
       <li v-if="lastAddedTo">
-        <button class="dropdown-item">{{ lastAddedTo.name }}</button>
+        <button class="dropdown-item" @click="addTo(lastAddedTo)">
+          {{ lastAddedTo.name }}
+        </button>
       </li>
       <li v-if="lastAddedTo"><hr class="dropdown-divider" /></li>
       <li v-for="crate in crates" :key="crate.id">
