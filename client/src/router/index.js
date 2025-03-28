@@ -134,7 +134,7 @@ const routes = [
             },
             props: {
               filters: {
-                type: "artist",
+                index: "artist",
               },
               results: {
                 showAllLink: false,
@@ -158,7 +158,7 @@ const routes = [
             },
             props: {
               filters: {
-                type: "document",
+                index: "document",
               },
               results: {
                 showAllLink: false,
