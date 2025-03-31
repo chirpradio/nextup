@@ -1,5 +1,6 @@
 const gstore = require("../db").gstore;
 const { Schema } = gstore;
+const { CURRENT_TAGS } = require("../config/constants");
 
 function validateCategories(obj, validator, validTags) {
   if (Array.isArray(obj)) {
@@ -21,9 +22,7 @@ const crateItemSchema = new Schema({
     default: [],
     validate: {
       rule: validateCategories,
-      args: [
-        ["local_current", "local_classic", "heavy_rotation", "light_rotation"],
-      ],
+      args: [CURRENT_TAGS],
     },
   },
 });

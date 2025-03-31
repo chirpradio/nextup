@@ -226,7 +226,7 @@ async function runAndRenameKeys(query) {
   return { albums, nextPageCursor };
 }
 
-async function getAlbumsByAlbumArtist({ key, limit, offset } = {}) {
+async function getAlbumsByAlbumArtist({ key, limit = 50, offset } = {}) {
   const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
   return await runAndRenameKeys(query);
 }
