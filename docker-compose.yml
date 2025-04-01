@@ -21,7 +21,7 @@ services:
       - 9229:9229
     volumes: 
       - ./app:/usr/src/app
-      - ${CONFIG_LOCATION:-${HOME}/.config}:/root/.config
+      - ${CONFIG_LOCATION}:/root/.config
     working_dir: /usr/src/app
     profiles:
       - api
