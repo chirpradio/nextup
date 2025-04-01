@@ -8,6 +8,8 @@ const oldTags = [
   "Disc 3",
   "Disc 4",
   "Disc 5",
+  "Light Rotation",
+  "-",
 ];
 
 async function up() {

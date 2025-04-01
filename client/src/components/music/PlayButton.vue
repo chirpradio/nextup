@@ -91,6 +91,21 @@ export default {
       playNotes: "",
     };
   },
+  created() {
+    /* 
+      use value passed in from props
+      if a DJ already added notes in their crate
+    */
+    this.playNotes = this.notes;
+  },
+  watch: {    
+    track() {
+      this.added = false;
+      this.adding = false;  
+      this.error = false;
+      this.playNotes = this.notes;
+    },
+  },
   computed: {
     ...mapStores(usePlaylistStore),
     trackOrAlbumArtist() {
@@ -143,13 +158,6 @@ export default {
         track: this.track,
       };
     },
-  },
-  created() {
-    /* 
-      use value passed in from props
-      if a DJ already added notes in their crate
-    */
-    this.playNotes = this.notes;
   },
   methods: {
     async addToPlaylist() {

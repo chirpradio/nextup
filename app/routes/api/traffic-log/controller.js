@@ -7,7 +7,8 @@ module.exports = {
       const hour = Number.isInteger(req.query.hour)
         ? req.query.hour
         : DateService.currentChicagoHour();
-      const log = await TrafficLogService.getLog(dow, hour);
+      const greylist = req.query.greylist || [];
+      const log = await TrafficLogService.getLog(dow, hour, greylist);
       res.json(log);
     } catch (error) {
       next(error);
