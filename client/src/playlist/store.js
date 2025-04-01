@@ -263,7 +263,7 @@ export const usePlaylistStore = defineStore("playlist", {
     },
   },
   persist: {
-    paths: ["trafficLog", "trafficLogGroups"],
+    paths: ["trafficLog", "trafficLogGroups", "onAir"],
     afterRestore: ({ store }) => {
       updateTrafficLog(store);
       setInterval(updateTrafficLog, TRAFFIC_LOG_POLLING_INTERVAL, store);
