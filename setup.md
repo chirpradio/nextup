@@ -75,6 +75,8 @@ cd nextup
 cp .env.example .env
 ```
 
+If you need to set the location of the Google config files, you can update the CONFIG_LOCATION variable in the .env file.
+
 ## Set up the API
 
 ### Install the npm packages

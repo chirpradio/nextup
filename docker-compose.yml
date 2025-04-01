@@ -1,7 +1,6 @@
 ---
 version: '3'
 services:
-
   app:
     image: node:20.11.0
     command: [ "npx", "nodemon", "server.js" ]
@@ -22,7 +21,7 @@ services:
       - 9229:9229
     volumes: 
       - ./app:/usr/src/app
-      - ~/.config:/root/.config
+      - ${CONFIG_LOCATION}:/root/.config
     working_dir: /usr/src/app
     profiles:
       - api
