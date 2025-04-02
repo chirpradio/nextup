@@ -4,23 +4,23 @@
       <div class="mb-1">
         <ArtistLink :artist="element.artist" class="fw-bold me-2" />
         <span class="me-1">“{{ element.track.title }}” from</span>
-        <CrateAlbumSpans :album="element.album" />
+        <CrateAlbumSpans :album="element.album" />i1
       </div>
-      <TagList :tags="element.album.current_tags" />
-    </div>
+     <TagList :tags="element.album.current_tags" />
+     <RecentlyPlayedAlert
+        v-if="recentPlay"
+        :album="element.album"
+        :shrink="true"
+        class="me-2"
+     />
+      </div>
     <PlayButton
-      v-if="!recentPlay"
       :album="element.album"
       :categories="element.album.current_tags"
       :track="element.track"
       class="mt-2 mt-md-0"
     />
-    <RecentlyPlayedAlert
-      v-if="recentPlay"
-      :album="element.album"
-      :shrink="true"
-    />
-  </div>
+ </div>
 </template>
 
 <script>
