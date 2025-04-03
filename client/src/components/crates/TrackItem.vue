@@ -4,14 +4,14 @@
       <div class="mb-1">
         <ArtistLink :artist="element.artist" class="fw-bold me-2" />
         <span class="me-1">“{{ element.track.title }}” from</span>
-        <CrateAlbumSpans :album="element.album" />i1
+        <CrateAlbumSpans :album="element.album" />
       </div>
      <TagList :tags="element.album.current_tags" />
      <RecentlyPlayedAlert
         v-if="recentPlay"
         :album="element.album"
         :shrink="true"
-        class="me-2"
+        class="mt-2"
      />
       </div>
     <PlayButton
