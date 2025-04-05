@@ -90,16 +90,16 @@ export default {
   computed: {
     ...mapStores(usePlaylistStore),
     artist() {
-      return this.track.freeform_artist_name || this.track.artist.name;
+      return this.track.freeform_artist_name || this.track.artist?.name || "?";
     },
     title() {
-      return this.track.freeform_track_title || this.track.track.title;
+      return this.track.freeform_track_title || this.track.track?.title || "?";
     },
     album() {
-      return this.track.freeform_album_title || this.track.album.title;
+      return this.track.freeform_album_title || this.track.album?.title || "?";
     },
     label() {
-      return this.track.freeform_label || this.track.album.label;
+      return this.track.freeform_label || this.track.album?.label || "?";
     },
     freeform() {
       return !this.track.album?.album_id;

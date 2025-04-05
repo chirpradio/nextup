@@ -179,10 +179,10 @@ export default {
   beforeMount() {
     if (this.track) {
       this.item = {
-        track: this.track.track.title,
+        track: this.track.track?.title,
         artist: this.track.artist?.name || this.track.track_artist?.name,
-        album: this.track.album.title,
-        label: this.track.album.label,
+        album: this.track.album?.title,
+        label: this.track.album?.label,
         notes: this.track.notes,
         categories: this.track.categories,
       };

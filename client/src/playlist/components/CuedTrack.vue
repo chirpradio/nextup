@@ -22,6 +22,7 @@
         icon="play"
         label="add to playlist"
         :loading="adding"
+        :disabled="!valid"
         @click="addToPlaylist"
       />
     </div>
@@ -54,6 +55,10 @@ export default {
     },
     editIcon() {
       return this.editing ? "check" : "edit";
+    },
+    valid() {
+      const cued = this.cuedTrack;
+      return cued.album && cued.album.label && cued.artist && cued.track;
     },
   },
   mixins: [playlistMixins],
