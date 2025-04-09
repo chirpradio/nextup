@@ -64,6 +64,7 @@
 <script>
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "@/playlist/store";
+import { useAuthStore } from "@/stores/auth";
 
 export default {
   props: {
@@ -107,7 +108,7 @@ export default {
     },
   },
   computed: {
-    ...mapStores(usePlaylistStore),
+    ...mapStores(usePlaylistStore, useAuthStore),
     trackOrAlbumArtist() {
       return this.album.is_compilation
         ? this.track.track_artist
@@ -147,7 +148,7 @@ export default {
       }
     },
     onAir() {
-      return this.playlistStore.onAir;
+      return this.authStore.isAuthorized("playlist") && this.playlistStore.onAir;
     },
     freeformPlaylistTrack() {
       return {
