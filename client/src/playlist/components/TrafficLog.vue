@@ -1,7 +1,8 @@
 <template>
   <div class="text-bg-light">
-    <div class="d-flex">
+    <div class="d-flex align-items-center">
       <h2 class="h4 flex-fill">Traffic Log</h2>
+      <RecordSpinner size="sm" v-if="loading" />
     </div>
 
     <ul class="list-group">
@@ -73,9 +74,10 @@ import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
 import { useTrafficLogStore } from "../trafficLogStore";
 import TrafficLogActions from "./TrafficLogActions.vue";
+import RecordSpinner from "@/components/RecordSpinner.vue";
 
 export default {
-  components: { TrafficLogActions },
+  components: { TrafficLogActions, RecordSpinner },
   data() {
     return {
       drawer: undefined,
