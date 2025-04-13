@@ -113,9 +113,9 @@
             aria-label="Search"
           />
         </form>
-        <div class="d-flex flex-column align-items-end">
+        <div class="d-flex flex-column align-items-start align-items-md-end">
           <div class="username text-white me-1">{{ userName }}</div>
-          <button class="btn btn-sm btn-link btn-link-light" @click="logOut">
+          <button class="btn btn-sm btn-link btn-link-light ps-0 ps-md-2" @click="logOut">
             log out
           </button>
         </div>
