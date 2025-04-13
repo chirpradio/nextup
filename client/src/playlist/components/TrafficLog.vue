@@ -71,7 +71,7 @@
 <script>
 import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { useTrafficLogStore } from "../trafficLogStore";
 import TrafficLogActions from "./TrafficLogActions.vue";
 
 export default {
@@ -83,15 +83,15 @@ export default {
     };
   },
   computed: {
-    ...mapStores(usePlaylistStore),
+    ...mapStores(useTrafficLogStore),
     loading() {
-      return this.playlistStore.loadingTrafficLog;
+      return this.trafficLogStore.loading;
     },
     trafficLog() {
-      return this.playlistStore.trafficLog;
+      return this.trafficLogStore.entries;
     },
     selectedGroup() {
-      return this.playlistStore.group(this.selected);
+      return this.trafficLogStore.group(this.selected);
     },
     selectedIndexInGroup() {
       return this.selectedGroup?.findIndex(
@@ -157,7 +157,7 @@ export default {
       this.selected = this.nextInGroup;
     },
     async markAsRead() {
-      await this.playlistStore.addTrafficLogEntry(this.selected);
+      await this.trafficLogStore.addEntry(this.selected);
       if (this.nextInGroup) {
         this.next();
       } else {

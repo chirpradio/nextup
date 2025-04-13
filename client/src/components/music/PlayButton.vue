@@ -63,7 +63,7 @@
 
 <script>
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
 
 export default {
   props: {
@@ -98,10 +98,10 @@ export default {
     */
     this.playNotes = this.notes;
   },
-  watch: {    
+  watch: {
     track() {
       this.added = false;
-      this.adding = false;  
+      this.adding = false;
       this.error = false;
       this.playNotes = this.notes;
     },

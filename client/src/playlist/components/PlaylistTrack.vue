@@ -72,7 +72,7 @@
 
 <script>
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
 import Modal from "@/components/ModalDialog.vue";
