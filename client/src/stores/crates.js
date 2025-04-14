@@ -111,6 +111,8 @@ export const useCratesStore = defineStore(
     watch(isAuthenticated, (value) => {
       if (value === true) {
         getCrates();
+      } else {
+        lastAddedTo.value = null;
       }
     });
 
