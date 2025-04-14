@@ -65,6 +65,7 @@
 import { mapStores } from "pinia";
 import { usePlaylistStore } from "@/playlist/store";
 import { useAuthStore } from "@/stores/auth";
+import { _ } from "lodash";
 
 export default {
   props: {
@@ -116,16 +117,21 @@ export default {
     },
     cued() {
       const cuedTrack = this.playlistStore.cuedTrack;
-      return (
-        cuedTrack?.track.title === this.track.title &&
-        cuedTrack?.album.title === this.album.title
-      );
+      if (!cuedTrack) return false;
+      if (cuedTrack.track?.__key) {
+        return cuedTrack.track.__key.name === this.track?.__key?.name;
+      }
+
+      const props = ["artist.name", "album.title", "track.title"];
+      const cuedProps = _.pick(cuedTrack, props);
+      const thisProps = _.pick(this, props);
+      return _.isEqual(cuedProps, thisProps);
     },
     cuedLabel() {
       return this.cued ? "cued" : "cue";
     },
     disabled() {
-      return this.added || this.error;
+      return this.added || this.error || !this.validForPlaylist;
     },
     playIcon() {
       if (this.added) {
@@ -158,6 +164,18 @@ export default {
         notes: this.playNotes,
         track: this.track,
       };
+    },
+    validForPlaylist() {
+      if (this.type === "track") {
+        return true;
+      }
+
+      return (
+        this.album?.title &&
+        this.artist?.name &&
+        this.track?.title &&
+        this.album?.label
+      );
     },
   },
   methods: {
