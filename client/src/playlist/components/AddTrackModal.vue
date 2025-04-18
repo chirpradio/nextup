@@ -16,7 +16,7 @@
 import Modal from "@/components/ModalDialog.vue";
 import CustomTrackForm from "@/components/CustomTrackForm.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 import playlistMixins from "../mixins";
 
 export default {

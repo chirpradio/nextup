@@ -32,7 +32,7 @@
 <script>
 import PlaylistTrack from "./PlaylistTrack.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CustomTrackForm from "../../components/CustomTrackForm.vue";
 import playlistMixins from "../mixins";

@@ -8,7 +8,7 @@
 <script>
 import BreadCrumbs from "@/components/music/BreadCrumbs.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
 
 export default {
   components: { BreadCrumbs },

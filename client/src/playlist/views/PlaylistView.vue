@@ -106,7 +106,7 @@ import PlaylistTrack from "../components/PlaylistTrack.vue";
 import CuedTrack from "../components/CuedTrack.vue";
 import TagTotals from "../components/TagTotals.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 import TrafficLog from "../components/TrafficLog.vue";
 import AlbumPreview from "../components/AlbumPreview.vue";
 import { debounce } from "lodash";
