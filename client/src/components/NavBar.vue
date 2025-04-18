@@ -102,7 +102,7 @@
         </ul>
         <form
           id="navbarSearch"
-          class="form-inline my-2 my-lg-0 me-2"
+          class="form-inline my-2 my-lg-0 me-4"
           v-on:submit.prevent="search"
         >
           <input
@@ -113,7 +113,12 @@
             aria-label="Search"
           />
         </form>
-        <button class="btn btn-outline-light" @click="logOut">log out</button>
+        <div class="d-flex flex-column align-items-start align-items-md-end">
+          <div class="username text-white me-1">{{ userName }}</div>
+          <button class="btn btn-sm btn-link btn-link-light ps-0 ps-md-2" @click="logOut">
+            log out
+          </button>
+        </div>
       </div>
     </div>
   </nav>
@@ -126,6 +131,10 @@
 */
 .dropdown-menu {
   z-index: 1035;
+}
+
+.username {
+  font-size: 0.875rem;
 }
 </style>
 
@@ -147,7 +156,8 @@ export default {
     },
     userName() {
       const user = this.authStore.user;
-      return `${user.first_name} ${user.last_name}`;
+      const lastInitial = user.last_name?.length ? `${user.last_name[0]}.` : "";
+      return `${user.first_name} ${lastInitial}`;
     },
   },
   methods: {

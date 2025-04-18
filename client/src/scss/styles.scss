@@ -159,6 +159,18 @@ button.btn-outline-chirp-red:hover {
   color: var(--bright-red);
 }
 
+button.btn-link-light,
+button.btn-outline-light,
+a.btn-link-light {
+  color: #fff;
+}
+
+button.btn-link-light:hover,
+button.btn-outline-light:hover,
+a.btn-link-light:hover {
+  color: #fff;
+}
+
 .form-check-input:checked {
   background-color: var(--bright-red);
   border-color: var(--bright-red);
