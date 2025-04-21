@@ -26,7 +26,7 @@
 
 <script>
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
 
 export default {
   props: {
