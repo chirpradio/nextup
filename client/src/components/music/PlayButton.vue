@@ -154,7 +154,9 @@ export default {
       }
     },
     onAir() {
-      return this.authStore.isAuthorized("playlist") && this.playlistStore.onAir;
+      return (
+        this.authStore.isAuthorized("playlist") && this.playlistStore.onAir
+      );
     },
     freeformPlaylistTrack() {
       return {
