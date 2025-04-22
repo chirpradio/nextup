@@ -42,7 +42,7 @@
 <script>
 import TagTotal from "./TagTotal.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 
 function topOfHourIso() {
   const date = new Date();

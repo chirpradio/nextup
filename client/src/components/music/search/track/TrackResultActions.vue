@@ -25,7 +25,7 @@
 import AddToCrate from "../../../AddToCrate.vue";
 import PlayButton from "../../PlayButton.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
 import RecentlyPlayedAlert from "../../RecentlyPlayedAlert.vue";
 
 export default {

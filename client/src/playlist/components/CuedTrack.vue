@@ -22,6 +22,7 @@
         icon="play"
         label="add to playlist"
         :loading="adding"
+        :disabled="!valid"
         @click="addToPlaylist"
       />
     </div>
@@ -31,7 +32,7 @@
 <script>
 import PlaylistTrack from "./PlaylistTrack.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "../store";
+import { usePlaylistStore } from "../playlistStore";
 import LoadingButton from "@/components/LoadingButton.vue";
 import CustomTrackForm from "../../components/CustomTrackForm.vue";
 import playlistMixins from "../mixins";
@@ -54,6 +55,10 @@ export default {
     },
     editIcon() {
       return this.editing ? "check" : "edit";
+    },
+    valid() {
+      const cued = this.cuedTrack;
+      return cued.album && cued.album.label && cued.artist && cued.track;
     },
   },
   mixins: [playlistMixins],

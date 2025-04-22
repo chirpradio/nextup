@@ -29,9 +29,6 @@ export const useSpotsStore = defineStore("spots", {
         return spot.copy.find((element) => element.id === copyId);
       }
     },
-    group: (state) => (entry) => {
-      return state.trafficLogGroups.find((group) => group.includes(entry));
-    },
   },
   actions: {
     async getSpots() {
