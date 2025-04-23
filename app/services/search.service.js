@@ -353,6 +353,7 @@ function buildFuzzyMultiMatch(term, fields) {
           query: term,
           operator: "AND",
           fields: fields,
+          type: "cross_fields",
           boost: 2,
         },
       },
