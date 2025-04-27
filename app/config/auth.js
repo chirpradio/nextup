@@ -19,17 +19,38 @@ module.exports = function configureAuth(app) {
       async function (req, email, password, done) {
         try {
           const user = await User.findOne({ email: email });
-          if (user && user.is_active && user.authenticate(password)) {
-            req.log.info({
-              email: user.email,
-              ip: req.ip,              
-            }, "authenticated");
-            return done(null, user);
+          if (user) {
+            const passwordMatch = user.authenticate(password);
+            if (user.is_active && passwordMatch) {
+              req.log.info(
+                {
+                  email: user.email,
+                },
+                "authenticated"
+              );
+              return done(null, user);
+            } else {
+              req.log.info(
+                {
+                  email: user.email,
+                  is_active: user.is_active,
+                  passwordMatch,
+                },
+                "not authenticated"
+              );
+              return done(null, false);
+            }
           }
 
+          req.log.error(
+            {
+              email,
+            },
+            "not authenticated"
+          );
           return done(null, false);
         } catch (err) {
-          req.log.error(err);
+          req.log.error(err, email);
           return done(new Error("Unauthorized"), false);
         }
       }
