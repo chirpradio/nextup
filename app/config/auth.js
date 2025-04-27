@@ -20,6 +20,10 @@ module.exports = function configureAuth(app) {
         try {
           const user = await User.findOne({ email: email });
           if (user && user.is_active && user.authenticate(password)) {
+            req.log.info({
+              email: user.email,
+              ip: req.ip,              
+            }, "authenticated");
             return done(null, user);
           }
 
