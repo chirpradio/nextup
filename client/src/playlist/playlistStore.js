@@ -91,7 +91,7 @@ export const usePlaylistStore = defineStore("playlist", {
           },
         });
         this.rotationPlays = rotationPlays;
-      } catch (error) {        
+      } catch (error) {
         clearInterval(intervalID);
         intervalID = undefined;
       }
