@@ -63,7 +63,8 @@
 
 <script>
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
+import { useAuthStore } from "@/stores/auth";
 import { _ } from "lodash";
 
 export default {
@@ -99,16 +100,16 @@ export default {
     */
     this.playNotes = this.notes;
   },
-  watch: {    
+  watch: {
     track() {
       this.added = false;
-      this.adding = false;  
+      this.adding = false;
       this.error = false;
       this.playNotes = this.notes;
     },
   },
   computed: {
-    ...mapStores(usePlaylistStore),
+    ...mapStores(usePlaylistStore, useAuthStore),
     trackOrAlbumArtist() {
       return this.album.is_compilation
         ? this.track.track_artist
@@ -153,7 +154,9 @@ export default {
       }
     },
     onAir() {
-      return this.playlistStore.onAir;
+      return (
+        this.authStore.isAuthorized("playlist") && this.playlistStore.onAir
+      );
     },
     freeformPlaylistTrack() {
       return {

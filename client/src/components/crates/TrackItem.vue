@@ -6,21 +6,21 @@
         <span class="me-1">“{{ element.track.title }}” from</span>
         <CrateAlbumSpans :album="element.album" />
       </div>
-     <TagList :tags="element.album.current_tags" />
-     <RecentlyPlayedAlert
+      <TagList :tags="element.album.current_tags" />
+      <RecentlyPlayedAlert
         v-if="recentPlay"
         :album="element.album"
         :shrink="true"
         class="mt-2"
-     />
-      </div>
+      />
+    </div>
     <PlayButton
       :album="element.album"
       :categories="element.album.current_tags"
       :track="element.track"
       class="mt-2 mt-md-0"
     />
- </div>
+  </div>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ import CrateAlbumSpans from "./CrateAlbumSpans.vue";
 import TagList from "../music/TagList.vue";
 import PlayButton from "../music/PlayButton.vue";
 import { mapStores } from "pinia";
-import { usePlaylistStore } from "@/playlist/store";
+import { usePlaylistStore } from "@/playlist/playlistStore";
 import RecentlyPlayedAlert from "../music/RecentlyPlayedAlert.vue";
 
 export default {
