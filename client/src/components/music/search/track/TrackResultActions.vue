@@ -1,12 +1,12 @@
 <template>
-  <AddToCrate :keyToAdd="track.__key" class="w-auto me-2" />
   <PlayButton
     v-if="!recentPlay"
     :album="album"
     :categories="album.current_tags"
     :track="track"
-    class=""
+    class="me-2"
   />
+  <AddToCrate :keyToAdd="track.__key" class="w-auto" />
   <RecentlyPlayedAlert
     v-if="showAlert"
     :album="album"
