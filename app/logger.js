@@ -4,6 +4,11 @@ const logger = require("pino-http")({
     "req.headers.cookie",
     "req.query.api_key",
   ],
+  customProps: function (req) {
+    return {
+      email: req.user?.email,
+    };
+  },
 });
 
 module.exports = logger;
