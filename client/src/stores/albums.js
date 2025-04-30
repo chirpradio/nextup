@@ -89,11 +89,11 @@ export const useAlbumsStore = defineStore("albums", {
     },
   },
   actions: {
-    async getRecentAlbums({ limit = 25, offset = 0} = {}) {
+    async getRecentAlbums({ limit = 25, offset = 0 } = {}) {
       if (this.recent.albums.length === 0 || offset > 0) {
         this.loadingTagCollections.recent = true;
         const response = await api.getRecentAlbums({
- 	  limit, 	
+          limit,
           offset,
         });
         this.recent = {
@@ -105,7 +105,7 @@ export const useAlbumsStore = defineStore("albums", {
     },
     async getMoreRecentAlbums() {
       await this.getRecentAlbums({
-	offset: this.recent.albums.length
+        offset: this.recent.albums.length,
       });
     },
     async getTaggedAlbums({ tag, limit = 25, offset = 0 } = {}) {
