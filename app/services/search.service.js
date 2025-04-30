@@ -129,11 +129,11 @@ function buildFuzzyArtistSearch(params, options) {
   if (params.term) {
     Object.assign(
       queryObj.query.bool,
-      buildFuzzyMultiMatch(params.term, [
-        "name.normalized_standard",
-        "name.normalized_whitespace",
-        "name",
-      ])
+      buildTokenizedFuzzyMultiMatch(
+        params.term,
+        ["name.normalized_standard", "name.normalized_whitespace", "name"],
+        ["name"]
+      )
     );
   }
 
@@ -201,15 +201,19 @@ function buildAlbumSearch(params, options) {
   if (params.term) {
     Object.assign(
       queryObj.query.bool,
-      buildFuzzyMultiMatch(params.term, [
-        "title.normalized_standard^3",
-        "title.normalized_whitespace^3",
-        "title^2",
-        "album_artist.name.normalized_standard",
-        "album_artist.name.normalized_whitespace",
-        "album_artist.name",
-        "label",
-      ])
+      buildTokenizedFuzzyMultiMatch(
+        params.term,
+        [
+          "title.normalized_standard^3",
+          "title.normalized_whitespace^3",
+          "title^2",
+          "album_artist.name.normalized_standard",
+          "album_artist.name.normalized_whitespace",
+          "album_artist.name",
+          "label",
+        ],
+        ["title", "album_artist.name"]
+      )
     );
   }
 
@@ -262,22 +266,29 @@ function buildTrackSearch(params, options) {
   ];
 
   if (params.term) {
+    const fields = [
+      "title.normalized_standard^4",
+      "title.normalized_whitespace^4",
+      "title^3",
+      "track_artist.name.normalized_standard^2",
+      "track_artist.name.normalized_whitespace^2",
+      "track_artist.name^2",
+      "album.album_artist.name.normalized_standard",
+      "album.album_artist.name.normalized_whitespace",
+      "album.album_artist.name",
+      "album.title.normalized_standard",
+      "album.title.normalized_whitespace",
+      "album.title",
+    ];
+    const fuzzyFields = [
+      "title",
+      "album.title",
+      "track_artist.name",
+      "album.album_artist.name",
+    ];
     Object.assign(
       queryObj.query.bool,
-      buildFuzzyMultiMatch(params.term, [
-        "title.normalized_standard^4",
-        "title.normalized_whitespace^4",
-        "title^3",
-        "track_artist.name.normalized_standard^2",
-        "track_artist.name.normalized_whitespace^2",
-        "track_artist.name^2",
-        "album.album_artist.name.normalized_standard",
-        "album.album_artist.name.normalized_whitespace",
-        "album.album_artist.name",
-        "album.title.normalized_standard",
-        "album.title.normalized_whitespace",
-        "album.title",
-      ])
+      buildTokenizedFuzzyMultiMatch(params.term, fields, fuzzyFields)
     );
   }
 
@@ -344,8 +355,19 @@ function buildDocumentSearch(params, { from = 0, size = 10 } = {}) {
   };
 }
 
-function buildFuzzyMultiMatch(term, fields) {
-  return {
+/*
+  A "cross_fields" search first analyzes the query string into individual 
+  terms, then looks for each term in any of the fields, as though they were 
+  one big field. But it doesn't support fuzziness, nor do most other 
+  multi_match types we could use.
+
+  This tries for a cross-field search first with the query string as-is, but 
+  also manually breaks up the query into tokens and does a fuzzy search on the 
+  given fields for each token. The as-is search results have their scores
+  boosted above the fuzzy results.
+*/
+function buildTokenizedFuzzyMultiMatch(term, fields, fuzzyFields) {
+  const query = {
     minimum_should_match: 1,
     should: [
       {
@@ -357,17 +379,28 @@ function buildFuzzyMultiMatch(term, fields) {
           boost: 2,
         },
       },
-      {
-        multi_match: {
-          query: term,
-          operator: "AND",
-          fuzziness: 1,
-          prefix_length: 1,
-          fields: fields,
-        },
-      },
     ],
   };
+
+  const tokens = term.split(" ");
+  const fuzzySubquery = {
+    bool: {
+      should: [],
+    },
+  };
+  for (const token of tokens) {
+    fuzzySubquery.bool.should.push({
+      multi_match: {
+        query: token,
+        fields: fuzzyFields,
+        fuzziness: "AUTO",
+        prefix_length: 1,
+      },
+    });
+  }
+  query.should.push(fuzzySubquery);
+
+  return query;
 }
 
 function buildQuery(type, field, value) {
