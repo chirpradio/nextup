@@ -87,10 +87,10 @@ export default {
         this.added = true;
       } catch (error) {
         this.error = true;
-        setTimeout(() => (this.error = false), 2000);
+        setTimeout(() => (this.error = false), 4000);
       }
       this.adding = false;
-      setTimeout(() => (this.added = false), 2000);
+      setTimeout(() => (this.added = false), 4000);
     },
   },
 };
