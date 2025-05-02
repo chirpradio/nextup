@@ -5,7 +5,8 @@ import { _ } from "lodash";
 
 let intervalID;
 const GROUP_ENTRIES_WITHIN = 3; // minutes
-const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // every minute
+const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // check every minute
+const TRAFFIC_LOG_POLLING_OFFSET = 20; // but only update this long after the hour
 
 function getChicagoWeekdayAndHour(hourOffset = 0) {
   const dt = DateTime.now()
@@ -63,6 +64,13 @@ async function update(store) {
     updates.missing.reduce((lastPromise, pair) => {
       return lastPromise.then(() => store.getEntries(pair));
     }, Promise.resolve());
+  }
+}
+
+async function pollForUpdates(store) {
+  const now = new Date();
+  if (now.getMinutes() === TRAFFIC_LOG_POLLING_OFFSET) {
+    update(store);
   }
 }
 
@@ -170,7 +178,7 @@ export const useTrafficLogStore = defineStore("trafficLog", {
     pollForEntries() {
       update(this);
       if (!intervalID) {
-        intervalID = setInterval(update, TRAFFIC_LOG_POLLING_INTERVAL, this);
+        intervalID = setInterval(pollForUpdates, TRAFFIC_LOG_POLLING_INTERVAL, this);
       }
     },
   },
