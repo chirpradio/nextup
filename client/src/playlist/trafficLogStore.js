@@ -67,7 +67,7 @@ async function update(store) {
   }
 }
 
-async function pollForUpdates(store) {
+async function updateOnOffset(store) {
   const now = new Date();
   if (now.getMinutes() === TRAFFIC_LOG_POLLING_OFFSET) {
     update(store);
@@ -178,7 +178,7 @@ export const useTrafficLogStore = defineStore("trafficLog", {
     pollForEntries() {
       update(this);
       if (!intervalID) {
-        intervalID = setInterval(pollForUpdates, TRAFFIC_LOG_POLLING_INTERVAL, this);
+        intervalID = setInterval(updateOnOffset, TRAFFIC_LOG_POLLING_INTERVAL, this);
       }
     },
   },
