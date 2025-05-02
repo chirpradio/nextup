@@ -3,6 +3,7 @@ import { api } from "../services/api.service";
 import { DateTime } from "luxon";
 import { _ } from "lodash";
 
+let intervalID;
 const GROUP_ENTRIES_WITHIN = 3; // minutes
 const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // every minute
 
@@ -129,18 +130,24 @@ export const useTrafficLogStore = defineStore("trafficLog", {
   },
   actions: {
     async getEntries({ weekday, hour } = {}) {
-      this.loading = true;
-      const { data: newEntries } = await api.get("/traffic-log", {
-        params: {
-          dow: weekday,
-          hour,
-          greylist: this.spotCopyIdsInLastHour,
-        },
-      });
-      this.entries = [...this.entries, ...newEntries];
-      this.entries.sort(sortEntries);
-      this.groups = groupNearbyEntries(this.entries);
-      this.loading = false;
+      try {
+        this.loading = true;
+        const { data: newEntries } = await api.get("/traffic-log", {
+          params: {
+            dow: weekday,
+            hour,
+            greylist: this.spotCopyIdsInLastHour,
+          },
+        });
+        this.entries = [...this.entries, ...newEntries];
+        this.entries.sort(sortEntries);
+        this.groups = groupNearbyEntries(this.entries);
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        clearInterval(intervalID);
+        intervalID = undefined;
+      }
     },
     removeEntries({ hour } = {}) {
       this.entries = this.entries.filter((entry) => entry.hour !== hour);
@@ -160,12 +167,14 @@ export const useTrafficLogStore = defineStore("trafficLog", {
       Object.assign(entry, data);
       this.groups = groupNearbyEntries(this.entries);
     },
+    pollForEntries() {
+      update(this);
+      if (!intervalID) {
+        intervalID = setInterval(update, TRAFFIC_LOG_POLLING_INTERVAL, this);
+      }
+    },
   },
   persist: {
     paths: ["entries", "groups"],
-    afterRestore: ({ store }) => {
-      update(store);
-      setInterval(update, TRAFFIC_LOG_POLLING_INTERVAL, store);
-    },
   },
 });
