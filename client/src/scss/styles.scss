@@ -190,14 +190,14 @@ a.btn-link-light:hover {
 }
 
 .drawer {
-  width: 90% !important;
+  width: 100% !important;
 }
 
 .offcanvas-backdrop.show {
   opacity: 0.1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .drawer {
     width: 750px !important;
   }
