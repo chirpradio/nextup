@@ -1,7 +1,8 @@
 <template>
   <div class="dropdown">
     <button
-      class="btn btn-sm btn-outline-chirp-red dropdown-toggle w-100"
+      class="btn btn-sm dropdown-toggle w-100"
+      :class="buttonClass"
       role="button"
       data-bs-toggle="dropdown"
       aria-expanded="false"
@@ -60,10 +61,16 @@ export default {
     },
     iconClass() {
       return {
-        "text-success": this.added,
-        "text-danger": this.error,
+        "text-white": this.added || this.error,        
       };
     },
+    buttonClass() {
+      return {
+        "btn-outline-chirp-red": !this.added && !this.error,
+        "btn-success": this.added,
+        "btn-danger": this.error,
+      };
+    }
   },
   methods: {
     async addTo(crate) {
@@ -80,10 +87,10 @@ export default {
         this.added = true;
       } catch (error) {
         this.error = true;
-        setTimeout(() => (this.error = false), 2000);
+        setTimeout(() => (this.error = false), 4000);
       }
       this.adding = false;
-      setTimeout(() => (this.added = false), 2000);
+      setTimeout(() => (this.added = false), 4000);
     },
   },
 };
