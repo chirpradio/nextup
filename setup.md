@@ -152,6 +152,7 @@ Once it's done, navigate to http://localhost:5173/ in your browser and log in. C
 After setting up all app components and confirming that they can run in their own terminal, there is also an option to launch all with a single command from the project root:
 
 ```
+npm install
 npm run dev:all
 ```
 _Note: Any processes still running as outlined in the preceding steps must be stopped to before using the all-in-one command_
