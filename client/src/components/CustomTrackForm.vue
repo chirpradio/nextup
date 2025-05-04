@@ -1,5 +1,20 @@
 <template>
   <form ref="form">
+    <div v-if="single" class="row mb-3">
+      <div class="col-2">
+        <label for="single" class="col-form-label pb-0">Single</label>
+        <span v-if="required" class="form-text">required</span>
+      </div>
+      <div class="col-10">
+        <input
+          id="single"
+          class="form-control"
+          v-model="item.single"
+          :required="required"
+          @change="onChange"
+        />
+      </div>
+    </div>
     <div class="row mb-3">
       <div class="col-2">
         <label for="artist" class="col-form-label pb-0">Artist</label>
@@ -24,6 +39,7 @@
           class="form-control"
           v-model="item.track"
           :required="required"
+          :disabled="disabled"
           @change="onChange"
         />
       </div>
@@ -39,6 +55,7 @@
           class="form-control"
           v-model="item.album"
           :required="required"
+          :disabled="disabled"
           @change="onChange"
         />
       </div>
@@ -54,6 +71,7 @@
           class="form-control"
           v-model="item.label"
           :required="required"
+          :disabled="disabled"
           @change="onChange"
         />
       </div>
@@ -138,6 +156,7 @@ import ArtistTypeahead from "./music/search/artist/ArtistTypeahead.vue";
 
 const CHANGE = "change";
 const EMPTY_ITEM = {
+  single: "",
   track: "",
   artist: "",
   album: "",
@@ -158,6 +177,10 @@ function resetItem() {
 export default {
   components: { ArtistTypeahead },
   props: {
+    single: {
+      type: Boolean,
+      default: false,
+    },
     required: {
       type: Boolean,
       default: false,
@@ -166,6 +189,10 @@ export default {
       type: Object,
       required: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
