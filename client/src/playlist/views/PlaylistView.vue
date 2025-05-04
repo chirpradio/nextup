@@ -34,6 +34,13 @@
             @click="addTrack"
           />
           <LoadingButton
+            class="col h-md-50 me-1"
+            :class="addButtonClasses"
+            icon="dice-one"
+            label="add single"
+            @click="addSingle"
+          />
+          <LoadingButton
             class="col h-md-50"
             :class="addButtonClasses"
             icon="plus"
@@ -90,6 +97,7 @@
     </nav>
 
     <AddTrackModal ref="addTrackModal" />
+    <AddSingleModal ref="addSingleModal" />
     <AlbumPreview
       id="albumPreview"
       class="drawer"
@@ -100,6 +108,7 @@
 
 <script>
 import AddTrackModal from "../components/AddTrackModal.vue";
+import AddSingleModal from "../components/AddSingleModal.vue";
 import LoadingButton from "@/components/LoadingButton.vue";
 import PlaylistBreak from "../components/PlaylistBreak.vue";
 import PlaylistTrack from "../components/PlaylistTrack.vue";
@@ -117,6 +126,7 @@ const TRAFFIC_LOG = "traffic-log";
 export default {
   components: {
     AddTrackModal,
+    AddSingleModal,
     LoadingButton,
     PlaylistBreak,
     PlaylistTrack,
@@ -194,6 +204,9 @@ export default {
     },
     addTrack() {
       this.$refs.addTrackModal.show();
+    },
+    addSingle() {
+      this.$refs.addSingleModal.show();
     },
     updateSectionInView() {
       if (this.$refs.trafficLog) {
