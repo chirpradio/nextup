@@ -49,20 +49,20 @@ export default {
     updateDisabled() {
       this.disabled = !this.$refs.form.checkValidity();
       if (this.$refs.form.item.single) {
-        const single = this.$refs.form.item.single.split("/");
+        const re = /(.+?)\s*\/\s*"(.+?)"\s*\/\s(.+?)\s*\/\s*(.+)/g;
+        const single = re.exec(this.$refs.form.item.single);
+        // const single = this.$refs.form.item.single.split("/");
         console.log(single);
-        this.$refs.form.item.artist = single[0];
-        const reTrack = /"(.+)"/g;
-        const track = reTrack.exec(single[1]);
-        this.$refs.form.item.track = track[1];
-        this.$refs.form.item.album = single[2];
-        const re = /(.+)\((.+)\)/g;
-        const labelNotes = single.slice(3).join("/");
-        const regexResults = re.exec(labelNotes);
+        this.$refs.form.item.artist = single[1];
+        // const reTrack = /"(.+)"/g;
+        // const track = reTrack.exec(single[1]);
+        this.$refs.form.item.track = single[2];
+        this.$refs.form.item.album = single[3];
+        const reLabel = /(.+)\((.+)\)/g;
+        const regexResults = reLabel.exec(single[4]);
         this.$refs.form.item.label = regexResults[1];
         this.$refs.form.item.notes = regexResults[2];
         console.log(regexResults);
-        
       }
       this.singleDisabled = !this.$refs.form.item.single;
     },
