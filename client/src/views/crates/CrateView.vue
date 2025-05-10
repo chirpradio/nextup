@@ -201,12 +201,18 @@ export default {
     },
   },
   created: async function () {
-    this.loading = true;
-    await this.cratesStore.getCrate({ crateId: this.id });
-    await this.cratesStore.getCrateItems({
-      crateId: this.id,
-    });
-    this.loading = false;
+    try {
+      this.loading = true;
+      await this.cratesStore.getCrate({ crateId: this.id });
+      await this.cratesStore.getCrateItems({
+        crateId: this.id,
+      });
+      this.loading = false;
+    } catch (err) {
+      if (err.status === 403) {
+        this.$router.replace("/");
+      }
+    }
   },
   mounted() {
     deleteModal = new Modal(document.getElementById("deleteModal"));
