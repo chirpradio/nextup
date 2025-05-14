@@ -1,1 +1,8 @@
-{}
+{
+  "scripts": {
+    "dev:all": "concurrently --kill-others -c yellow,blue,red --names api,es,client \"docker compose --profile api up\" \"docker compose --profile es up\" \"npm run dev --prefix client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
