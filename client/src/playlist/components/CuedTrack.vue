@@ -86,6 +86,7 @@ export default {
         });
       }
       this.adding = false;
+      this.editing = false;
       this.clear();
     },
     edit() {
