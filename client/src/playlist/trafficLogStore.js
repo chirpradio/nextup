@@ -3,8 +3,11 @@ import { api } from "../services/api.service";
 import { DateTime } from "luxon";
 import { _ } from "lodash";
 
+let intervalID;
 const GROUP_ENTRIES_WITHIN = 3; // minutes
-const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // every minute
+const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // check every minute
+const TRAFFIC_LOG_UPDATE_MIN = 20; // but only update this long after the hour
+const TRAFFIC_LOG_UPDATE_MAX = 25; // with plenty of tolerance just in case
 
 function getChicagoWeekdayAndHour(hourOffset = 0) {
   const dt = DateTime.now()
@@ -62,6 +65,14 @@ async function update(store) {
     updates.missing.reduce((lastPromise, pair) => {
       return lastPromise.then(() => store.getEntries(pair));
     }, Promise.resolve());
+  }
+}
+
+async function updateOnOffset(store) {
+  const now = new Date();
+  const minutes = now.getMinutes();
+  if (minutes >= TRAFFIC_LOG_UPDATE_MIN && minutes <= TRAFFIC_LOG_UPDATE_MAX) {
+    update(store);
   }
 }
 
@@ -129,18 +140,24 @@ export const useTrafficLogStore = defineStore("trafficLog", {
   },
   actions: {
     async getEntries({ weekday, hour } = {}) {
-      this.loading = true;
-      const { data: newEntries } = await api.get("/traffic-log", {
-        params: {
-          dow: weekday,
-          hour,
-          greylist: this.spotCopyIdsInLastHour,
-        },
-      });
-      this.entries = [...this.entries, ...newEntries];
-      this.entries.sort(sortEntries);
-      this.groups = groupNearbyEntries(this.entries);
-      this.loading = false;
+      try {
+        this.loading = true;
+        const { data: newEntries } = await api.get("/traffic-log", {
+          params: {
+            dow: weekday,
+            hour,
+            greylist: this.spotCopyIdsInLastHour,
+          },
+        });
+        this.entries = [...this.entries, ...newEntries];
+        this.entries.sort(sortEntries);
+        this.groups = groupNearbyEntries(this.entries);
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        clearInterval(intervalID);
+        intervalID = undefined;
+      }
     },
     removeEntries({ hour } = {}) {
       this.entries = this.entries.filter((entry) => entry.hour !== hour);
@@ -160,12 +177,18 @@ export const useTrafficLogStore = defineStore("trafficLog", {
       Object.assign(entry, data);
       this.groups = groupNearbyEntries(this.entries);
     },
+    pollForEntries() {
+      update(this);
+      if (!intervalID) {
+        intervalID = setInterval(
+          updateOnOffset,
+          TRAFFIC_LOG_POLLING_INTERVAL,
+          this
+        );
+      }
+    },
   },
   persist: {
     paths: ["entries", "groups"],
-    afterRestore: ({ store }) => {
-      update(store);
-      setInterval(update, TRAFFIC_LOG_POLLING_INTERVAL, store);
-    },
   },
 });

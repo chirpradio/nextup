@@ -51,17 +51,17 @@
           </div>
         </div>
         <div class="d-flex mb-2 mb-md-0">
-          <AddToCrate
-            :keyToAdd="track.__key"
-            :limitWidth="true"
-            class="mt-lg-0 me-2"
-          />
           <PlayButton
             :album="album"
             :categories="album.current_tags"
             :track="track"
-            class="mt-0 mb-0"
+            class="mt-0 mb-0 me-2"
           />
+          <AddToCrate
+            :keyToAdd="track.__key"
+            :limitWidth="true"
+            class="mt-lg-0"
+          />          
         </div>
       </li>
     </ol>

@@ -25,6 +25,15 @@
             {{ cancelLabel }}
           </button>
           <button
+            v-if="!loading && showSecondaryBtn"
+            type="button"
+            class="btn btn-outline-chirp-red"
+            @click="secondaryAction"
+            :disabled="disabled"
+          >
+            {{ secondaryLabel }}
+          </button>
+          <button
             v-if="!loading"
             type="button"
             class="btn btn-chirp-red"
@@ -45,10 +54,11 @@ import { Modal } from "bootstrap";
 import RecordSpinner from "./RecordSpinner.vue";
 
 const CONFIRM = "confirm";
+const SECONDARY = "secondary";
 
 export default {
   components: { RecordSpinner },
-  emits: [CONFIRM],
+  emits: [CONFIRM, SECONDARY],
   props: {
     title: String,
     cancelLabel: {
@@ -58,6 +68,13 @@ export default {
     confirmLabel: {
       type: String,
       default: "confirm",
+    },
+    secondaryLabel: {
+      type: String,
+    },
+    showSecondaryBtn: {
+      type: Boolean,
+      default: false,
     },
     loading: {
       type: Boolean,
@@ -89,6 +106,9 @@ export default {
     },
     confirm() {
       this.$emit(CONFIRM);
+    },
+    secondaryAction() {
+      this.$emit(SECONDARY);
     },
   },
 };

@@ -3,7 +3,10 @@
     ref="modal"
     title="Add track to playlist"
     confirmLabel="add to playlist"
-    @confirm="onConfirm"
+    @confirm="addToPlaylist"
+    :showSecondaryBtn="true"
+    secondaryLabel="cue track"
+    @secondary="cueTrack"
     :loading="adding"
     :error="error"
     :disabled="disabled"
@@ -39,7 +42,7 @@ export default {
     updateDisabled() {
       this.disabled = !this.$refs.form.checkValidity();
     },
-    async onConfirm() {
+    async addToPlaylist() {
       if (this.$refs.form.checkValidity()) {
         try {
           this.error = false;
@@ -55,6 +58,15 @@ export default {
         } finally {
           this.adding = false;
         }
+      }
+    },
+    cueTrack() {
+      if (this.$refs.form.checkValidity()) {
+        const item = this.$refs.form.item;
+        const track = this.convertCrateItemToFreeformTrack(item);
+        this.playlistStore.cue(track);
+        this.$refs.form.reset();
+        this.$refs.modal.hide();
       }
     },
   },

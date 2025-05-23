@@ -123,6 +123,9 @@ export default {
       }
     },
   },
+  created() {
+    this.trafficLogStore.pollForEntries();
+  },
   mounted() {
     this.drawer = new Offcanvas(this.$refs.spot);
   },
