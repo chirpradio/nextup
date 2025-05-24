@@ -90,16 +90,30 @@ export const useAlbumsStore = defineStore("albums", {
   },
   actions: {
     async getRecentAlbums({ limit = 25, offset = 0 } = {}) {
-      if (this.recent.albums.length === 0 || offset > 0) {
+      const loading = this.loadingTagCollections.recent;
+      const empty = this.recent.albums.length === 0;
+      const gettingMore = offset > 0;
+
+      if (!loading && (empty || gettingMore)) {
         this.loadingTagCollections.recent = true;
         const response = await api.getRecentAlbums({
           limit,
           offset,
         });
-        this.recent = {
-          albums: this.recent.albums.concat(response.albums),
-          more: typeof response.nextPageCursor === "string",
-        };
+
+        for (const album of response.albums) {
+          const recentAlbums = this.recent.albums;
+          const index = recentAlbums.findIndex(
+            (item) => item.album_id.value === album.album_id.value
+          );
+          if (index > -1) {
+            recentAlbums.splice(index, 1, album);
+          } else {
+            recentAlbums.push(album);
+          }
+        }
+        this.recent.more = typeof response.nextPageCursor === "string";
+
         this.loadingTagCollections.recent = false;
       }
     },
@@ -109,7 +123,11 @@ export const useAlbumsStore = defineStore("albums", {
       });
     },
     async getTaggedAlbums({ tag, limit = 25, offset = 0 } = {}) {
-      if (this.tagCollections[tag].albums.length === 0 || offset > 0) {
+      const loading = this.loadingTagCollections[tag];
+      const empty = this.tagCollections[tag].albums.length === 0;
+      const gettingMore = offset > 0;
+
+      if (!loading && (empty || gettingMore)) {
         this.loadingTagCollections[tag] = true;
 
         const response = await api.getTaggedAlbums({
@@ -118,12 +136,19 @@ export const useAlbumsStore = defineStore("albums", {
           offset,
         });
 
-        const more = typeof response.nextPageCursor === "string";
-        const albums = this.tagCollections[tag].albums.concat(response.albums);
-        this.tagCollections[tag] = {
-          albums,
-          more,
-        };
+        for (const album of response.albums) {
+          const taggedAlbums = this.tagCollections[tag].albums;
+          const index = taggedAlbums.findIndex(
+            (item) => item.album_id.value === album.album_id.value
+          );
+          if (index > -1) {
+            taggedAlbums.splice(index, 1, album);
+          } else {
+            taggedAlbums.push(album);
+          }
+        }
+        this.tagCollections[tag].more =
+          typeof response.nextPageCursor === "string";
 
         this.loadingTagCollections[tag] = false;
       }
