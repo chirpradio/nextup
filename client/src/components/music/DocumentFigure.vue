@@ -1,7 +1,7 @@
 <template>
   <figure>
     <blockquote :class="blockquoteClass">
-      <p v-html="document.unsafe_text"></p>
+      <p v-html="render(document.unsafe_text)"></p>
     </blockquote>
     <figcaption
       v-if="document.author"
@@ -24,6 +24,13 @@
 
 <script>
 import formatters from "@/mixins/formatters";
+import markdownit from "markdown-it";
+
+const md = markdownit({
+  html: true,
+  breaks: true,
+  linkify: true,
+});
 
 export default {
   props: {
@@ -46,5 +53,10 @@ export default {
     },
   },
   mixins: [formatters],
+  methods: {
+    render(text) {
+      return md.render(text);
+    },
+  },
 };
 </script>
