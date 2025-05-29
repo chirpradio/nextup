@@ -26,6 +26,7 @@ router.post(
           return next(err);
         }
         const body = {
+          entityKey: user.entityKey,
           email: user.email,
           roles: user.roles,
           first_name: user.first_name,
