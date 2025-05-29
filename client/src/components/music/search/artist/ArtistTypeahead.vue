@@ -33,7 +33,6 @@
 <script>
 import { mapStores } from "pinia";
 import { useSearchStore } from "@/stores/search";
-import { debounce } from "lodash";
 
 const UPDATE = "update:modelValue";
 
@@ -67,7 +66,7 @@ export default {
     enableResults() {
       this.showResults = true;
     },
-    onInput: debounce(async function (event) {
+    onInput: async function (event) {
       this.$emit(UPDATE, event.target.value);
       this.enableResults();
       this.activeIndex = -1;
@@ -80,7 +79,7 @@ export default {
           as_you_type: true,
         });
       }
-    }, 350),
+    },
     incrementIndex() {
       this.activeIndex++;
       if (this.activeIndex === this.artists.length) {
