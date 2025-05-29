@@ -16,8 +16,8 @@
   />
   <div class="row">
     <label for="comment" class="form-label">Write a comment</label>
-    <div class="col-9">
-      <textarea id="comment" class="form-control" v-model="comment" />
+    <div class="col-9">      
+      <MarkdownEditor v-model="comment" />
     </div>
   </div>
   <LoadingButton
@@ -37,11 +37,13 @@ import DocumentFigure from "./DocumentFigure.vue";
 import { mapStores } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useDocumentsStore } from "../../stores/documents";
+import MarkdownEditor from "./MarkdownEditor.vue";
 
 export default {
   components: {
     DocumentFigure,
     LoadingButton,
+    MarkdownEditor,
   },
   data() {
     return {
