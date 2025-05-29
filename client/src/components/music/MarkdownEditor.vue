@@ -16,7 +16,7 @@
     </div>
     <div class="text-content bg-white mt-1 flex-grow-1 d-flex flex-column">
       <textarea
-        v-if="!inPreviewMode"
+        v-if="!previewMode"
         ref="ta"
         class="w-100 ps-1 pt-1 border-0"
         :value="modelValue"
@@ -25,7 +25,7 @@
         @change="onInput"
       />
       <MarkdownRenderer
-        v-if="inPreviewMode"
+        v-if="previewMode"
         class="flex-grow-1 ps-1 pt-1"        
         :text="modelValue"
       />
@@ -80,11 +80,6 @@ export default {
   },
   components: {
     MarkdownRenderer,
-  },
-  computed: {
-    inPreviewMode() {
-      return this.previewMode === true;
-    },
   },
   emits: [UPDATE],
   methods: {
