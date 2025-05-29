@@ -1,24 +1,17 @@
 <template>
   <div class="markdown-editor d-flex flex-column bg-light p-2">
     <div class="d-flex bg-light align-items-center">
-      <button class="btn btn-light btn-sm" @click="bold" title="bold">
+      <button class="btn btn-light btn-sm" @click="bold" title="bold" :disabled="previewMode">
         <font-awesome-icon icon="bold" />
       </button>
-      <button class="btn btn-light btn-sm" @click="italic" title="italic">
+      <button class="btn btn-light btn-sm" @click="italic" title="italic" :disabled="previewMode">
         <font-awesome-icon icon="italic" />
       </button>
-      <button class="btn btn-light btn-sm" @click="underline" title="underline">
+      <button class="btn btn-light btn-sm" @click="underline" title="underline" :disabled="previewMode">
         <font-awesome-icon icon="underline" />
       </button>
-      <button class="btn btn-light btn-sm" @click="link" title="link">
+      <button class="btn btn-light btn-sm" @click="link" title="link" :disabled="previewMode">
         <font-awesome-icon icon="link" />
-      </button>
-      <button
-        class="ms-auto btn btn-outline-dark btn-sm"
-        :class="{ active: inPreviewMode }"
-        @click="togglePreviewMode"
-      >
-        preview formatting
       </button>
     </div>
     <div class="text-content bg-white mt-1 flex-grow-1 d-flex flex-column">
@@ -37,6 +30,10 @@
         :text="modelValue"
       />
     </div>
+    <div>
+      <input id="previewCheck" type="checkbox" v-model="previewMode" />
+      <label for="previewCheck" class="ms-1 preview-label">preview formatting</label>
+    </div>
   </div>
 </template>
 
@@ -47,11 +44,17 @@
 
 .text-content {
   border: 1px solid #ccc;
+  min-height: 3.5em;
 }
 
 textarea {
   resize: none;
 }
+
+.preview-label {
+  font-size: 0.875em;
+}
+
 </style>
 
 <script>
@@ -87,9 +90,6 @@ export default {
   methods: {
     onInput(event) {
       this.$emit(UPDATE, event.target.value);
-    },
-    togglePreviewMode() {
-      this.previewMode = !this.previewMode;
     },
     wrapOrUnwrap(startMarker, endMarker) {
       const ta = this.$refs.ta;
