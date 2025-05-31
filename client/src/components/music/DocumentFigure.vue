@@ -1,7 +1,7 @@
 <template>
   <figure>
     <blockquote :class="blockquoteClass">
-      <p v-html="document.unsafe_text"></p>
+      <MarkdownRenderer :text="document.unsafe_text" />
     </blockquote>
     <figcaption
       v-if="document.author"
@@ -24,6 +24,7 @@
 
 <script>
 import formatters from "@/mixins/formatters";
+import MarkdownRenderer from "./MarkdownRenderer.vue";
 
 export default {
   props: {
@@ -32,6 +33,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  components: {
+    MarkdownRenderer,
   },
   computed: {
     blockquoteClass() {
