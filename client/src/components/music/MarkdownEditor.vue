@@ -1,16 +1,36 @@
 <template>
   <div class="markdown-editor d-flex flex-column bg-light p-2">
     <div class="d-flex bg-light align-items-center">
-      <button class="btn btn-light btn-sm" @click="bold" title="bold" :disabled="previewMode">
+      <button
+        class="btn btn-light btn-sm"
+        @click="bold"
+        title="bold"
+        :disabled="previewMode"
+      >
         <font-awesome-icon icon="bold" />
       </button>
-      <button class="btn btn-light btn-sm" @click="italic" title="italic" :disabled="previewMode">
+      <button
+        class="btn btn-light btn-sm"
+        @click="italic"
+        title="italic"
+        :disabled="previewMode"
+      >
         <font-awesome-icon icon="italic" />
       </button>
-      <button class="btn btn-light btn-sm" @click="underline" title="underline" :disabled="previewMode">
+      <button
+        class="btn btn-light btn-sm"
+        @click="underline"
+        title="underline"
+        :disabled="previewMode"
+      >
         <font-awesome-icon icon="underline" />
       </button>
-      <button class="btn btn-light btn-sm" @click="link" title="link" :disabled="previewMode">
+      <button
+        class="btn btn-light btn-sm"
+        @click="link"
+        title="link"
+        :disabled="previewMode"
+      >
         <font-awesome-icon icon="link" />
       </button>
     </div>
@@ -26,13 +46,15 @@
       />
       <MarkdownRenderer
         v-if="previewMode"
-        class="flex-grow-1 ps-1 pt-1"        
+        class="flex-grow-1 ps-1 pt-1"
         :text="modelValue"
       />
     </div>
     <div>
       <input id="previewCheck" type="checkbox" v-model="previewMode" />
-      <label for="previewCheck" class="ms-1 preview-label">preview formatting</label>
+      <label for="previewCheck" class="ms-1 preview-label"
+        >preview formatting</label
+      >
     </div>
   </div>
 </template>
@@ -54,7 +76,6 @@ textarea {
 .preview-label {
   font-size: 0.875em;
 }
-
 </style>
 
 <script>
@@ -91,12 +112,21 @@ export default {
       const text = this.modelValue;
       const start = ta.selectionStart;
       const end = ta.selectionEnd;
-      const before = text.substring(start - startMarker.length, start);
-      const after = text.substring(end, end + endMarker.length);
+      const selectedText = text.substring(start, end);
+      const wrappedInsideSelection =
+        selectedText.startsWith(startMarker) &&
+        selectedText.endsWith(endMarker);
+      const extendedSelection = text.substring(
+        Math.max(start - startMarker.length, 0),
+        Math.min(end + endMarker.length, text.length)
+      );
+      const wrappedOutsideSelection =
+        extendedSelection.startsWith(startMarker) &&
+        extendedSelection.endsWith(endMarker);
       let operation;
 
       ta.focus();
-      if (before === startMarker && after === endMarker) {
+      if (wrappedOutsideSelection) {
         operation = "unwrap";
         // remove markers
         ta.value =
@@ -107,6 +137,21 @@ export default {
         ta.setSelectionRange(
           start - startMarker.length,
           end - startMarker.length
+        );
+      } else if (wrappedInsideSelection) {
+        operation = "unwrap";
+        // remove markers
+        ta.value =
+          text.substring(0, start) +
+          selectedText.substring(
+            startMarker.length,
+            selectedText.length - endMarker.length
+          ) +
+          text.substring(end, text.length);
+        // select original text
+        ta.setSelectionRange(
+          start,
+          end - startMarker.length - endMarker.length
         );
       } else {
         operation = "wrap";
