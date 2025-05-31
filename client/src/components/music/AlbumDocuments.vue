@@ -16,7 +16,7 @@
   />
   <div class="row">
     <label for="comment" class="form-label">Write a comment</label>
-    <div class="col-9">      
+    <div class="col-9">
       <MarkdownEditor v-model="comment" />
     </div>
   </div>
