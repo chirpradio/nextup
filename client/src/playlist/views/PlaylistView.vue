@@ -90,11 +90,7 @@
     </nav>
 
     <AddTrackModal ref="addTrackModal" />
-    <AlbumPreview
-      id="albumPreview"
-      class="drawer"
-      :album_id="selectedAlbumId"
-    />
+    <AlbumPreview id="albumPreview" :album_id="selectedAlbumId" />
   </div>
 </template>
 

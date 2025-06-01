@@ -12,10 +12,7 @@
             <button
               v-if="!freeform"
               class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#albumPreview"
               role="button"
-              aria-controls="albumPreview"
               @click="selectAlbum"
             >
               <font-awesome-icon icon="square-caret-left" />
