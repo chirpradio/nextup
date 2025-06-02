@@ -37,6 +37,7 @@ export default {
         "studio@joslinlakedesign.com",
         "mattbarr1516@yahoo.com",
         "pigface13@yahoo.com",
+        "fatimashahkhan@gmail.com",
       ],
     },
     "traffic-log": {
