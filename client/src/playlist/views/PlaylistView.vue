@@ -55,6 +55,7 @@
                 :is="getComponent(event)"
                 :track="event"
                 class="py-2"
+                @preview-album="onPreviewAlbum"
               />
             </li>
           </ol>
@@ -90,7 +91,7 @@
     </nav>
 
     <AddTrackModal ref="addTrackModal" />
-    <AlbumPreview id="albumPreview" :album_id="selectedAlbumId" />
+    <AlbumPreview ref="albumPreview" :album_id="selectedAlbumId" />
   </div>
 </template>
 
@@ -200,6 +201,9 @@ export default {
           this.sectionInView = PLAYLIST;
         }
       }
+    },
+    onPreviewAlbum() {
+      this.$refs.albumPreview.show();
     },
   },
 };

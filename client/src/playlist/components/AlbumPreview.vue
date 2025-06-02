@@ -73,12 +73,14 @@ export default {
   watch: {
     async album_id(newId) {
       this.loading = true;
-      this.$refs.drawer.show();
       await this.albumsStore.getAlbum(newId);
       this.loading = false;
     },
   },
   methods: {
+    show() {
+      this.$refs.drawer.show();
+    },
     hide() {
       this.$refs.drawer.hide();
     },

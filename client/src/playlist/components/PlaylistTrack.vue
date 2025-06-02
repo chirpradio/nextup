@@ -74,6 +74,8 @@ import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
 import Modal from "@/components/ModalDialog.vue";
 
+const PREVIEW_ALBUM = "previewAlbum";
+
 export default {
   components: { PlayedTime, TagList, Modal },
   props: {
@@ -102,9 +104,11 @@ export default {
       return !this.track.album?.album_id;
     },
   },
+  emits: [PREVIEW_ALBUM],
   methods: {
     selectAlbum() {
       this.playlistStore.selectAlbum(this.track.album.album_id.value);
+      this.$emit(PREVIEW_ALBUM);
     },
     showConfirmationModal() {
       this.$refs.deleteModal.show();
