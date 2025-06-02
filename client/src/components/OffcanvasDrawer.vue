@@ -44,7 +44,7 @@ export default {
       }
     },
     createOffcanvas() {
-      const inLargeViewport = document.documentElement.clientWidth >= 1200;
+      const inLargeViewport = document.documentElement.clientWidth >= 1600;
       this.drawer = new Offcanvas(this.$refs.aside, {
         backdrop: !inLargeViewport,
         scroll: inLargeViewport,
