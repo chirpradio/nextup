@@ -25,7 +25,7 @@
 
     <OffcanvasDrawer id="spot" ref="drawer">
       <template #header>
-        <div class="d-flex align-items-center">
+        <div class="w-100 d-flex align-items-center">
           <h5 class="offcanvas-title flex-grow-1" id="offcanvasLabel">
             {{ spotHeading(selected) }}
           </h5>
