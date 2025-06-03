@@ -40,7 +40,7 @@ jobs:
       run: npm ci
     - id: build-client
       working-directory: ./client
-      run: npm run build
+      run: npm run build:dev
     - id: deploy
       uses: google-github-actions/deploy-appengine@v2
       with:
