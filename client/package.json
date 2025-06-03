@@ -6,6 +6,7 @@
     "dev": "vite",
     "serve": "vite serve",
     "build": "vite build --emptyOutDir",
+    "build:dev": "vite build --emptyOutDir --mode development",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
