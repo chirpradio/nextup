@@ -126,6 +126,9 @@ export default {
       }
     },
   },
+  created() {
+    this.trafficLogStore.pollForEntries();
+  },
   methods: {
     time(entry) {
       let hour;
