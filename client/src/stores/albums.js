@@ -12,13 +12,19 @@ export const useAlbumsStore = defineStore("albums", {
         albums: [],
         more: false,
       },
-
       local_current: {
         albums: [],
         more: false,
       },
-
       local_classic: {
+        albums: [],
+        more: false,
+      },
+      /*
+        "recent" is not an actual tag, but treating it like one
+        here in the store makes the code below more reusable
+      */
+      recent: {
         albums: [],
         more: false,
       },
@@ -30,24 +36,20 @@ export const useAlbumsStore = defineStore("albums", {
       local_classic: false,
       recent: false,
     },
-    recent: {
-      albums: [],
-      more: false,
-    },
     albums: {},
   }),
   getters: {
     recentAlbums: (state) => {
-      return state.recent.albums;
+      return state.tagCollections["recent"].albums;
     },
     moreRecentAlbums: (state) => {
-      return state.recent.more;
+      return state.tagCollections["recent"].more;
     },
     loadingRecentAlbums: (state) => {
       return state.loadingTagCollections.recent;
     },
     libraryAdds: (state) => {
-      return state.recent.albums.filter((album) => {
+      return state.tagCollections["recent"].albums.filter((album) => {
         if (!album.current_tags) {
           return true;
         }
@@ -90,40 +92,47 @@ export const useAlbumsStore = defineStore("albums", {
   },
   actions: {
     async getRecentAlbums({ limit = 25, offset = 0 } = {}) {
-      if (this.recent.albums.length === 0 || offset > 0) {
-        this.loadingTagCollections.recent = true;
-        const response = await api.getRecentAlbums({
-          limit,
-          offset,
-        });
-        this.recent = {
-          albums: this.recent.albums.concat(response.albums),
-          more: typeof response.nextPageCursor === "string",
-        };
-        this.loadingTagCollections.recent = false;
-      }
+      await this.getTaggedAlbums({
+        tag: "recent",
+        limit,
+        offset,
+      });
     },
     async getMoreRecentAlbums() {
-      await this.getRecentAlbums({
-        offset: this.recent.albums.length,
+      await this.getTaggedAlbums({
+        tag: "recent",
+        offset: this.tagCollections.recent.albums.length,
       });
     },
     async getTaggedAlbums({ tag, limit = 25, offset = 0 } = {}) {
-      if (this.tagCollections[tag].albums.length === 0 || offset > 0) {
+      const loading = this.loadingTagCollections[tag];
+      const empty = this.tagCollections[tag].albums.length === 0;
+      const gettingMore = offset > 0;
+
+      if (!loading && (empty || gettingMore)) {
         this.loadingTagCollections[tag] = true;
 
-        const response = await api.getTaggedAlbums({
+        const fetchFunction =
+          tag === "recent" ? api.getRecentAlbums : api.getTaggedAlbums;
+        const response = await fetchFunction({
           tag,
           limit,
           offset,
         });
 
-        const more = typeof response.nextPageCursor === "string";
-        const albums = this.tagCollections[tag].albums.concat(response.albums);
-        this.tagCollections[tag] = {
-          albums,
-          more,
-        };
+        for (const album of response.albums) {
+          const taggedAlbums = this.tagCollections[tag].albums;
+          const index = taggedAlbums.findIndex(
+            (item) => item.album_id.value === album.album_id.value
+          );
+          if (index > -1) {
+            taggedAlbums.splice(index, 1, album);
+          } else {
+            taggedAlbums.push(album);
+          }
+        }
+        this.tagCollections[tag].more =
+          typeof response.nextPageCursor === "string";
 
         this.loadingTagCollections[tag] = false;
       }
