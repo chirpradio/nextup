@@ -6,7 +6,7 @@
     role="alert"
   >
     <font-awesome-icon icon="fa-circle-pause" fade class="slow-fade" />
-    played by {{ dj }} at {{ time }}
+    {{ object_word }}played by {{ dj }} at {{ time }}
   </div>
 </template>
 
@@ -44,6 +44,17 @@ export default {
     ...mapStores(usePlaylistStore),
     recentPlay() {
       return this.playlistStore.recentPlay(this.album);
+    },
+    object_word() {
+      let action = "";
+      if (this.album?.id === this.recentPlay.album.__key?.name) {
+        action = "album ";
+      } else if (
+        this.album.album_artist?.id === this.recentPlay.album.album_artist?.name
+      ) {
+        action = "artist ";
+      }
+      return action;
     },
     dj() {
       let name = "";

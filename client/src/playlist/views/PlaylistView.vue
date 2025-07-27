@@ -160,6 +160,7 @@ export default {
   },
   created: async function () {
     this.update();
+    this.playlistStore.pollRecentPlays();
     this.playlistStore.pollRotationPlays();
   },
   mounted() {

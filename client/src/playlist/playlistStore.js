@@ -17,10 +17,28 @@ export const usePlaylistStore = defineStore("playlist", {
       start: undefined,
       end: undefined,
     },
+    recentPlays: {
+      plays: [],
+      start: undefined,
+      end: undefined,
+    },
     selectedAlbumId: undefined,
   }),
   getters: {
     recentPlay: (state) => (album) => {
+      let idToFind = album.album_artist?.id;
+      if (idToFind !== undefined) {
+        return state.recentPlays.plays.find(
+          (play) => play.artist?.id === idToFind
+        );
+      } else {
+        idToFind = album.id || album.__key?.name;
+        return state.recentPlays.plays.find(
+          (play) => play.album.__key?.name === idToFind
+        );
+      }
+    },
+    xrecentPlay: (state) => (album) => {
       const idToFind = album.id || album.__key?.name;
       return state.rotationPlays.plays.find(
         (play) => play.album?.name === idToFind
@@ -80,6 +98,30 @@ export const usePlaylistStore = defineStore("playlist", {
         }
       }
       this.lastUpdated = Date.now();
+    },
+    async getRecentPlays() {
+      try {
+        const start = new Date();
+        start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
+        const { data: recentPlays } = await api.get("/playlist/", {
+          params: {
+            start: start.getTime(),
+          },
+        });
+        this.recentPlays.plays = recentPlays;
+      } catch (error) {
+        clearInterval(intervalID);
+        intervalID = undefined;
+      }
+    },
+    async pollRecentPlays() {
+      this.getRecentPlays();
+      if (!intervalID) {
+        intervalID = setInterval(
+          this.getRecentPlays,
+          ROTATION_PLAY_POLLING_INTERVAL
+        );
+      }
     },
     async getRecentRotationPlays() {
       try {

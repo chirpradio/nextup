@@ -17,6 +17,7 @@ export default {
   },
   created() {
     this.playlistStore.pollRotationPlays();
+    this.playlistStore.pollRecentPlays();
   },
 };
 </script>
