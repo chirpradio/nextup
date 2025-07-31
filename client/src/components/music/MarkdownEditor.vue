@@ -128,16 +128,27 @@ export default {
       ta.focus();
       if (wrappedOutsideSelection) {
         operation = "unwrap";
-        // remove markers
-        ta.value =
-          text.substring(0, start - startMarker.length) +
-          text.substring(start, end) +
-          text.substring(end + endMarker.length, text.length);
-        // select original text
-        ta.setSelectionRange(
-          start - startMarker.length,
-          end - startMarker.length
-        );
+        if (start === 0 && end === text.length) {
+          // all text is wrapped
+          ta.value = text.substring(
+            startMarker.length,
+            text.length - endMarker.length
+          );
+          ta.select();
+        } else {
+          // part of the text is wrapped
+
+          // remove markers
+          ta.value =
+            text.substring(0, start - startMarker.length) +
+            text.substring(start, end) +
+            text.substring(end + endMarker.length, text.length);
+          // select original text
+          ta.setSelectionRange(
+            start - startMarker.length,
+            end - startMarker.length
+          );
+        }
       } else if (wrappedInsideSelection) {
         operation = "unwrap";
         // remove markers
