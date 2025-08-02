@@ -29,6 +29,33 @@ components:
           type: array
         encodedKey:
           type: string
+    Document:
+      properties:
+        author:
+          $ref: '#/components/schemas/Key'
+        author_name:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        doctype:
+          type: string
+          enum: [review, comment]
+        modified:
+          type: string
+          format: date-time
+          readOnly: true 
+        revoked:
+          type: boolean
+        subject: 
+          $ref: '#/components/schemas/Key'
+        unsafe_text:
+          type: string
+        required:
+          - doctype
+          - subject
+          - unsafe_text
     Key:
       properties:
         id:
@@ -614,6 +641,23 @@ paths:
       responses:
         '200':
           description: Item reordered
+        '403':
+          description: Forbidden
+  /document:
+    post:
+      security:
+        - Bearer: []
+      summary: Add a comment or review
+      tags:
+        - Document
+      requestBody:
+        content:
+          application/json:
+            schema:
+              - $ref: '#/components/schemas/Document'
+      responses:
+        '201': 
+          description: Document added
         '403':
           description: Forbidden
   /playlist:
