@@ -11,18 +11,16 @@
       {{ error }}
     </div>
 
-    <div v-if="showSuccessMessage && createdUser && temporaryPassword" class="alert alert-success" role="alert">
-      <h5>User created successfully!</h5>
+    <div v-if="showSuccessMessage && createdUser && temporaryPassword" class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="btn-close" @click="clearSuccessMessage" aria-label="Close"></button>
+      <h2 class="h5">User created successfully!</h2>
       <p><span class="fw-bold">Email:</span> {{ createdUser.email }}</p>
       <p><span class="fw-bold">Temporary password:</span> <code>{{ temporaryPassword }}</code></p>
       <p class="mb-0">Please provide this password to the user so they can log in.</p>
       <div class="mt-2">
-        <button class="btn btn-sm btn-outline-success me-2" @click="copyPassword">
+        <button class="btn btn-sm btn-outline-success" @click="copyPassword">
           <font-awesome-icon icon="clipboard" />
           copy password
-        </button>
-        <button class="btn btn-sm btn-outline-secondary" @click="clearSuccessMessage">
-          dismiss
         </button>
       </div>
     </div>
