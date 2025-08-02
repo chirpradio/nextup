@@ -16,7 +16,6 @@ export default {
     ...mapStores(usePlaylistStore),
   },
   created() {
-    this.playlistStore.pollRotationPlays();
     this.playlistStore.pollRecentPlays();
   },
 };

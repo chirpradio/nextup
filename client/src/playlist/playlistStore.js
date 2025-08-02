@@ -12,37 +12,30 @@ export const usePlaylistStore = defineStore("playlist", {
     events: [],
     lastUpdated: undefined,
     onAir: false,
-    rotationPlays: {
-      plays: [],
-      start: undefined,
-      end: undefined,
-    },
-    recentPlays: {
-      plays: [],
-      start: undefined,
-      end: undefined,
-    },
+    recentPlays: [],
     selectedAlbumId: undefined,
   }),
   getters: {
     recentPlay: (state) => (album) => {
-      let idToFind = album.album_artist?.id;
-      if (idToFind !== undefined) {
-        return state.recentPlays.plays.find(
-          (play) => play.artist?.id === idToFind
-        );
-      } else {
-        idToFind = album.id || album.__key?.name;
-        return state.recentPlays.plays.find(
-          (play) => play.album.__key?.name === idToFind
-        );
-      }
-    },
-    xrecentPlay: (state) => (album) => {
-      const idToFind = album.id || album.__key?.name;
-      return state.rotationPlays.plays.find(
-        (play) => play.album?.name === idToFind
+      const albumId = album.id ?? album.__key?.name;
+      const artistId = album.album_artist?.id;
+  
+      const albumPlay = state.recentPlays.find(
+        (play) => play.album?.__key?.name === albumId
       );
+
+      if (albumPlay) {
+        return { kind: "album", play: albumPlay };
+      }
+      if (artistId) {
+        const artistPlay = state.recentPlays.find(
+          (play) => play.artist?.id === artistId
+        );
+        if (artistPlay) {
+          return { kind: "artist", play: artistPlay };
+        }
+      }
+      return null;
     },
   },
   actions: {
@@ -108,7 +101,7 @@ export const usePlaylistStore = defineStore("playlist", {
             start: start.getTime(),
           },
         });
-        this.recentPlays.plays = recentPlays;
+        this.recentPlays = recentPlays;
       } catch (error) {
         clearInterval(intervalID);
         intervalID = undefined;
@@ -119,30 +112,6 @@ export const usePlaylistStore = defineStore("playlist", {
       if (!intervalID) {
         intervalID = setInterval(
           this.getRecentPlays,
-          ROTATION_PLAY_POLLING_INTERVAL
-        );
-      }
-    },
-    async getRecentRotationPlays() {
-      try {
-        const start = new Date();
-        start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
-        const { data: rotationPlays } = await api.get("/playlist/rotation", {
-          params: {
-            start: start.getTime(),
-          },
-        });
-        this.rotationPlays = rotationPlays;
-      } catch (error) {
-        clearInterval(intervalID);
-        intervalID = undefined;
-      }
-    },
-    async pollRotationPlays() {
-      this.getRecentRotationPlays();
-      if (!intervalID) {
-        intervalID = setInterval(
-          this.getRecentRotationPlays,
           ROTATION_PLAY_POLLING_INTERVAL
         );
       }
