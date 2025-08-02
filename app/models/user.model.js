@@ -10,7 +10,7 @@ const userSchema = new Schema({
   first_name: { type: String, required: true },
   is_active: { type: Boolean },
   is_superuser: { type: Boolean },
-  last_login: { type: Date },
+  last_login: { type: Date, default: gstore.defaultValues.NOW },
   last_name: { type: String, required: true },
   password: { type: String, required: true },
   api_key: { type: String },
