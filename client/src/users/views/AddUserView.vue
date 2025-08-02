@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-lg-8">
         <h1>Add New User</h1>
-        
+
         <div v-if="error" class="alert alert-danger" role="alert">
           {{ error }}
         </div>
 
-        <UserForm 
+        <UserForm
           :saving="savingUser"
           @submit="onCreateUser"
           @cancel="onCancel"
@@ -30,26 +30,35 @@ export default {
     UserForm,
   },
   computed: {
-    ...mapState(useUsersStore, ["savingUser", "createdUser", "temporaryPassword", "error"]),
+    ...mapState(useUsersStore, [
+      "savingUser",
+      "createdUser",
+      "temporaryPassword",
+      "error",
+    ]),
   },
   methods: {
-    ...mapActions(useUsersStore, ["createUser", "setSuccessMessage", "clearError"]),
-    
+    ...mapActions(useUsersStore, [
+      "createUser",
+      "setSuccessMessage",
+      "clearError",
+    ]),
+
     async onCreateUser(userData) {
-      try {        
-        await this.createUser(userData);        
+      try {
+        await this.createUser(userData);
         this.setSuccessMessage(true);
         this.$router.push("/users");
       } catch (error) {
         console.error("Failed to create user:", error);
       }
     },
-    
+
     onCancel() {
       this.$router.push("/users");
     },
   },
-  
+
   beforeUnmount() {
     this.clearError();
   },

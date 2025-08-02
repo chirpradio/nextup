@@ -15,7 +15,9 @@
     </div>
 
     <div class="form-group row mb-3">
-      <label for="firstName" class="col-sm-3 col-form-label">First Name *</label>
+      <label for="firstName" class="col-sm-3 col-form-label"
+        >First Name *</label
+      >
       <div class="col-sm-6">
         <input
           type="text"
@@ -69,9 +71,7 @@
                 v-model="form.roles"
                 :disabled="saving"
               />
-              <label class="form-check-label" for="roleDj">
-                DJ
-              </label>
+              <label class="form-check-label" for="roleDj"> DJ </label>
             </div>
             <div class="form-check">
               <input
@@ -100,7 +100,7 @@
               </label>
             </div>
           </div>
-          <div class="col-md-6">            
+          <div class="col-md-6">
             <div class="form-check">
               <input
                 class="form-check-input"
@@ -127,7 +127,7 @@
                 Traffic Log Admin
               </label>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
     </div>
@@ -142,9 +142,7 @@
             v-model="form.is_active"
             :disabled="saving"
           />
-          <label class="form-check-label" for="isActive">
-            Active User
-          </label>
+          <label class="form-check-label" for="isActive"> Active User </label>
         </div>
       </div>
     </div>
@@ -153,7 +151,7 @@
       <div class="col-sm-9 offset-sm-3">
         <div class="d-flex gap-2">
           <LoadingButton
-            type="submit"            
+            type="submit"
             label="add new user"
             :loading="saving"
             loadingText="adding..."

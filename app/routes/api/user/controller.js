@@ -15,7 +15,7 @@ module.exports = {
       };
 
       const { entities: users } = await User.list(options);
-      
+
       // Remove password field from all users
       const safeUsers = users.map((user) => {
         const { password, ...userResponse } = user.entityData;
@@ -42,15 +42,13 @@ module.exports = {
 
       // Check if user already exists
       try {
-        const existingUser = await User.findOne({ email });    
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
           return res.status(409).json({
-            error: "User with this email already exists"
+            error: "User with this email already exists",
           });
         }
-      } catch (error) {
-        
-      }    
+      } catch (error) {}
 
       // Generate a random password
       const password = generateRandomPassword();
@@ -102,7 +100,8 @@ module.exports = {
       res.status(201).json({
         user: userResponse,
         temporary_password: password,
-        message: "User created successfully. Please provide the temporary password to the user."
+        message:
+          "User created successfully. Please provide the temporary password to the user.",
       });
     } catch (error) {
       next(error);

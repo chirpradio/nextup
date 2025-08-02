@@ -2,9 +2,7 @@ const { body } = require("express-validator");
 
 module.exports = {
   validateUserCreation: [
-    body("email")
-      .isEmail()      
-      .withMessage("Must provide a valid email address"),
+    body("email").isEmail().withMessage("Must provide a valid email address"),
     body("first_name")
       .isString()
       .trim()
@@ -21,13 +19,16 @@ module.exports = {
       .trim()
       .isLength({ max: 100 })
       .withMessage("DJ name must be less than 100 characters"),
-    body("roles")
-      .optional()
-      .isArray()
-      .withMessage("Roles must be an array"),
+    body("roles").optional().isArray().withMessage("Roles must be an array"),
     body("roles.*")
       .optional()
-      .isIn(["dj", "music_director", "traffic_log_admin", "reviewer", "volunteer_coordinator"])
+      .isIn([
+        "dj",
+        "music_director",
+        "traffic_log_admin",
+        "reviewer",
+        "volunteer_coordinator",
+      ])
       .withMessage("Invalid role specified"),
   ],
 };

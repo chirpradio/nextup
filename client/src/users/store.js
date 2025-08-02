@@ -14,7 +14,7 @@ export const useUsersStore = defineStore("users", {
   }),
   getters: {
     user: (state) => (id) => {
-      return state.users.find(user => user.id === id);
+      return state.users.find((user) => user.id === id);
     },
   },
   actions: {
@@ -62,11 +62,11 @@ export const useUsersStore = defineStore("users", {
         if (a.is_active !== b.is_active) {
           return b.is_active - a.is_active; // true (1) comes before false (0)
         }
-        
+
         // Then sort by last name (ascending)
-        const lastNameA = (a.last_name || '').toLowerCase();
-        const lastNameB = (b.last_name || '').toLowerCase();
-        
+        const lastNameA = (a.last_name || "").toLowerCase();
+        const lastNameB = (b.last_name || "").toLowerCase();
+
         return lastNameA.localeCompare(lastNameB);
       });
     },
@@ -97,6 +97,6 @@ export const useUsersStore = defineStore("users", {
     resetUsersCache() {
       this.usersLoaded = false;
       this.users = [];
-    }
-  }
+    },
+  },
 });
