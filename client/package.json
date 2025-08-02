@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "VITE_API_URL=http://localhost:1071/api vite",
     "serve": "vite serve",
     "build": "vite build --emptyOutDir",
+    "build:dev": "vite build --emptyOutDir --mode development",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {

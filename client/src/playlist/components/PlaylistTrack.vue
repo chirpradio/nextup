@@ -12,10 +12,7 @@
             <button
               v-if="!freeform"
               class="btn btn-link-chirp-red fst-italic px-1 py-0 border-0 align-baseline"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#albumPreview"
               role="button"
-              aria-controls="albumPreview"
               @click="selectAlbum"
             >
               <font-awesome-icon icon="square-caret-left" />
@@ -77,6 +74,8 @@ import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
 import Modal from "@/components/ModalDialog.vue";
 
+const PREVIEW_ALBUM = "previewAlbum";
+
 export default {
   components: { PlayedTime, TagList, Modal },
   props: {
@@ -105,9 +104,11 @@ export default {
       return !this.track.album?.album_id;
     },
   },
+  emits: [PREVIEW_ALBUM],
   methods: {
     selectAlbum() {
       this.playlistStore.selectAlbum(this.track.album.album_id.value);
+      this.$emit(PREVIEW_ALBUM);
     },
     showConfirmationModal() {
       this.$refs.deleteModal.show();

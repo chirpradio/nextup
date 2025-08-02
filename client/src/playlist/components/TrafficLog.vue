@@ -23,64 +23,67 @@
       </button>
     </ul>
 
-    <aside id="spot" ref="spot" class="offcanvas offcanvas-end drawer">
-      <div class="offcanvas-header d-flex align-items-center">
-        <h5 class="offcanvas-title flex-grow-1" id="offcanvasLabel">
-          {{ spotHeading(selected) }}
-        </h5>
-        <span v-if="selectedGroup" class="h5 mb-0 me-2">
-          {{ ordinal }} of {{ selectedGroup.length }} spots
-        </span>
-      </div>
-      <div class="offcanvas-body fs-3 fs-md-1">
-        <TrafficLogActions
-          :previous="previousInGroup"
-          :next="nextInGroup"
-          :has-been-read="hasBeenRead(selected)"
-          @close="close"
-          @previous="previous"
-          @next="next"
-          @mark-as-read="markAsRead"
-        ></TrafficLogActions>
-        <p class="mt-2 mb-5">{{ selected?.spot_copy.body }}</p>
-        <TrafficLogActions
-          :previous="previousInGroup"
-          :next="nextInGroup"
-          :has-been-read="hasBeenRead(selected)"
-          @close="close"
-          @previous="previous"
-          @next="next"
-          @mark-as-read="markAsRead"
-        ></TrafficLogActions>
-        <div class="font-sans fs-6">
-          <div v-if="previousInGroup">
-            Previous spot: {{ spotHeading(previousInGroup) }} ({{
-              readLabel(previousInGroup)
-            }})
-          </div>
-          <div v-if="nextInGroup">
-            Next spot: {{ spotHeading(nextInGroup) }} ({{
-              readLabel(nextInGroup)
-            }})
+    <OffcanvasDrawer id="spot" ref="drawer">
+      <template #header>
+        <div class="w-100 d-flex align-items-center">
+          <h5 class="offcanvas-title flex-grow-1" id="offcanvasLabel">
+            {{ spotHeading(selected) }}
+          </h5>
+          <span v-if="selectedGroup" class="h5 mb-0 me-2">
+            {{ ordinal }} of {{ selectedGroup.length }} spots
+          </span>
+        </div>
+      </template>
+      <template #body>
+        <div class="offcanvas-body fs-3 fs-md-1">
+          <TrafficLogActions
+            :previous="previousInGroup"
+            :next="nextInGroup"
+            :has-been-read="hasBeenRead(selected)"
+            @close="hide"
+            @previous="previous"
+            @next="next"
+            @mark-as-read="markAsRead"
+          ></TrafficLogActions>
+          <p class="mt-2 mb-5">{{ selected?.spot_copy.body }}</p>
+          <TrafficLogActions
+            :previous="previousInGroup"
+            :next="nextInGroup"
+            :has-been-read="hasBeenRead(selected)"
+            @close="hide"
+            @previous="previous"
+            @next="next"
+            @mark-as-read="markAsRead"
+          ></TrafficLogActions>
+          <div class="font-sans fs-6">
+            <div v-if="previousInGroup">
+              Previous spot: {{ spotHeading(previousInGroup) }} ({{
+                readLabel(previousInGroup)
+              }})
+            </div>
+            <div v-if="nextInGroup">
+              Next spot: {{ spotHeading(nextInGroup) }} ({{
+                readLabel(nextInGroup)
+              }})
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </template>
+    </OffcanvasDrawer>
   </div>
 </template>
 
 <script>
-import { Offcanvas } from "bootstrap"; // eslint-disable-line no-unused-vars
 import { mapStores } from "pinia";
 import { useTrafficLogStore } from "../trafficLogStore";
 import TrafficLogActions from "./TrafficLogActions.vue";
 import RecordSpinner from "@/components/RecordSpinner.vue";
+import OffcanvasDrawer from "@/components/OffcanvasDrawer.vue";
 
 export default {
-  components: { TrafficLogActions, RecordSpinner },
+  components: { TrafficLogActions, RecordSpinner, OffcanvasDrawer },
   data() {
     return {
-      drawer: undefined,
       selected: null,
     };
   },
@@ -126,9 +129,6 @@ export default {
   created() {
     this.trafficLogStore.pollForEntries();
   },
-  mounted() {
-    this.drawer = new Offcanvas(this.$refs.spot);
-  },
   methods: {
     time(entry) {
       let hour;
@@ -152,8 +152,8 @@ export default {
     select(entry) {
       this.selected = entry;
     },
-    close() {
-      this.drawer.hide();
+    hide() {
+      this.$refs.drawer.hide();
     },
     previous() {
       this.selected = this.previousInGroup;
@@ -166,7 +166,7 @@ export default {
       if (this.nextInGroup) {
         this.next();
       } else {
-        this.close();
+        this.hide();
       }
     },
     hasBeenRead(entry) {
