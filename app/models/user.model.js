@@ -50,4 +50,8 @@ userSchema.methods.isTrafficLogAdmin = function () {
   return this.roles.includes("traffic_log_admin");
 };
 
+userSchema.methods.isVolunteerCoordinator = function () {
+  return this.roles.includes("volunteer_coordinator");
+};
+
 module.exports = gstore.model("User", userSchema);

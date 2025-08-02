@@ -3,20 +3,23 @@ const { validateUserCreation } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 
-function requireSuperuser(req, res, next) {
-  if (!req.user || !req.user.is_superuser) {
+function requireUserManagementAccess(req, res, next) {
+  if (
+    !req.user ||
+    (!req.user.is_superuser && !req.user.isVolunteerCoordinator())
+  ) {
     return res.status(403).json({
-      error: "Forbidden: Superuser access required",
+      error: "Forbidden: Superuser or volunteer coordinator access required",
     });
   }
   next();
 }
 
-router.get("/", requireSuperuser, controller.listUsers);
+router.get("/", requireUserManagementAccess, controller.listUsers);
 
 router.post(
   "/",
-  requireSuperuser,
+  requireUserManagementAccess,
   validateUserCreation,
   checkErrors,
   controller.createUser

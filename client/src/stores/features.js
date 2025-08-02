@@ -19,6 +19,7 @@ export default {
     },
     users: {
       superuser: true,
+      roles: ["volunteer_coordinator"],
     },
   },
   production: {
@@ -30,6 +31,7 @@ export default {
     },
     users: {
       superuser: true,
+      roles: ["volunteer_coordinator"],
     },
   },
 };

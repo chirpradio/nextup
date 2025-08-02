@@ -25,7 +25,7 @@
       <h2 class="h5">User created successfully!</h2>
       <p><span class="fw-bold">Email:</span> {{ createdUser.email }}</p>
       <p>
-        <span class="fw-bold">Temporary password:</span>
+        <span class="fw-bold">Temporary password: </span>
         <code>{{ temporaryPassword }}</code>
       </p>
       <p class="mb-0">

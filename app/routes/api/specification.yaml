@@ -1198,7 +1198,7 @@ paths:
   /user:
     get:
       summary: List all users
-      description: Retrieve a list of all users in the system. Requires superuser privileges.
+      description: Retrieve a list of all users in the system. Requires superuser privileges or volunteer coordinator role.
       security:
         - Bearer: []
       responses:
@@ -1213,10 +1213,10 @@ paths:
         '401':
           description: Unauthorized
         '403':
-          description: Forbidden - superuser access required
+          description: Forbidden - superuser or volunteer coordinator access required
     post:
       summary: Create a new user
-      description: Create a new user account. Requires superuser privileges. A temporary password will be generated and returned.
+      description: Create a new user account. Requires superuser privileges or volunteer coordinator role. A temporary password will be generated and returned.
       security:
         - Bearer: []
       requestBody:
@@ -1245,6 +1245,6 @@ paths:
         '401':
           description: Unauthorized
         '403':
-          description: Forbidden - superuser access required
+          description: Forbidden - superuser or volunteer coordinator access required
         '409':
           description: Conflict - user with email already exists
