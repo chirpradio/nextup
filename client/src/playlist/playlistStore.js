@@ -12,19 +12,30 @@ export const usePlaylistStore = defineStore("playlist", {
     events: [],
     lastUpdated: undefined,
     onAir: false,
-    rotationPlays: {
-      plays: [],
-      start: undefined,
-      end: undefined,
-    },
+    recentPlays: [],
     selectedAlbumId: undefined,
   }),
   getters: {
     recentPlay: (state) => (album) => {
-      const idToFind = album.id || album.__key?.name;
-      return state.rotationPlays.plays.find(
-        (play) => play.album?.name === idToFind
+      const albumId = album.id ?? album.__key?.name;
+      const artistId = album.album_artist?.id;
+  
+      const albumPlay = state.recentPlays.find(
+        (play) => play.album?.__key?.name === albumId
       );
+
+      if (albumPlay) {
+        return { kind: "album", play: albumPlay };
+      }
+      if (artistId) {
+        const artistPlay = state.recentPlays.find(
+          (play) => play.artist?.id === artistId
+        );
+        if (artistPlay) {
+          return { kind: "artist", play: artistPlay };
+        }
+      }
+      return null;
     },
   },
   actions: {
@@ -81,26 +92,26 @@ export const usePlaylistStore = defineStore("playlist", {
       }
       this.lastUpdated = Date.now();
     },
-    async getRecentRotationPlays() {
+    async getRecentPlays() {
       try {
         const start = new Date();
         start.setHours(start.getHours() - ROTATION_PLAY_WINDOW);
-        const { data: rotationPlays } = await api.get("/playlist/rotation", {
+        const { data: recentPlays } = await api.get("/playlist/", {
           params: {
             start: start.getTime(),
           },
         });
-        this.rotationPlays = rotationPlays;
+        this.recentPlays = recentPlays;
       } catch (error) {
         clearInterval(intervalID);
         intervalID = undefined;
       }
     },
-    async pollRotationPlays() {
-      this.getRecentRotationPlays();
+    async pollRecentPlays() {
+      this.getRecentPlays();
       if (!intervalID) {
         intervalID = setInterval(
-          this.getRecentRotationPlays,
+          this.getRecentPlays,
           ROTATION_PLAY_POLLING_INTERVAL
         );
       }

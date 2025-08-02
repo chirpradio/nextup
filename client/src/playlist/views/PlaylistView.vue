@@ -160,7 +160,7 @@ export default {
   },
   created: async function () {
     this.update();
-    this.playlistStore.pollRotationPlays();
+    this.playlistStore.pollRecentPlays();
   },
   mounted() {
     this.debounceUpdateSectionInView = debounce(this.updateSectionInView, 100);
