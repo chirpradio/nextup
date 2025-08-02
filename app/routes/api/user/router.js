@@ -13,6 +13,12 @@ function requireSuperuser(req, res, next) {
   next();
 }
 
+router.get(
+  "/",
+  requireSuperuser,
+  controller.listUsers
+);
+
 router.post(
   "/",
   requireSuperuser,

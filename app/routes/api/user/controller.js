@@ -7,6 +7,28 @@ function generateRandomPassword() {
 }
 
 module.exports = {
+  async listUsers(req, res, next) {
+    try {
+      const options = {
+        format: "ENTITY",
+        showKey: true,
+      };
+
+      const { entities: users } = await User.list(options);
+      
+      // Remove password field from all users
+      const safeUsers = users.map((user) => {
+        const { password, ...userResponse } = user.entityData;
+        userResponse.__key = user.entityKey;
+        return userResponse;
+      });
+
+      res.json(safeUsers);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async createUser(req, res, next) {
     try {
       const {
