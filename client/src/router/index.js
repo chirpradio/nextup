@@ -4,6 +4,7 @@ import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
 import playlistRoutes from "../playlist/routes";
 import trafficLogRoutes from "../traffic-log/routes";
+import usersRoutes from "../users/routes";
 
 const LOG_IN = "Log In";
 
@@ -191,6 +192,7 @@ const routes = [
   },
   ...playlistRoutes,
   ...trafficLogRoutes,
+  ...usersRoutes,
 ];
 
 const router = createRouter({
