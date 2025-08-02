@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="d-flex flex-column flex-sm-row align-items-sm-center mb-3">
       <h1 class="flex-grow-1">Users</h1>
-      <router-link class="btn btn-primary" to="/users/add">
+      <router-link class="btn btn-chirp-red" to="/users/add">
         add new user
       </router-link>
     </div>
@@ -41,8 +41,7 @@
             <th>Email</th>
             <th>DJ Name</th>
             <th>Roles</th>
-            <th>Status</th>
-            <th>Date Joined</th>
+            <th>Status</th>            
           </tr>
         </thead>
         <tbody>
@@ -60,8 +59,7 @@
               <span :class="user.is_active ? 'badge bg-success' : 'badge bg-danger'">
                 {{ user.is_active ? 'Active' : 'Inactive' }}
               </span>
-            </td>
-            <td>{{ formatDate(user.date_joined) }}</td>
+            </td>            
           </tr>
         </tbody>
       </table>
