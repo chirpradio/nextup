@@ -5,6 +5,7 @@ const passport = require("passport");
 const albumRouter = require("./album/router");
 const artistRouter = require("./artist.api.router");
 const crateRouter = require("./crate/router");
+const documentRouter = require("./document/router");
 const playlistRouter = require("./playlist/router");
 const searchRouter = require("./search/router");
 const spotRouter = require("./spot/router");
@@ -35,6 +36,7 @@ router.get(
 router.use("/album", authenticate, albumRouter);
 router.use("/artist", authenticate, artistRouter);
 router.use("/crate", authenticate, crateRouter);
+router.use("/document", authenticate, documentRouter);
 router.use("/playlist", authenticate, playlistRouter);
 router.use("/search", authenticate, searchRouter);
 router.use("/spot", authenticate, spotRouter);
