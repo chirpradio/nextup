@@ -97,6 +97,19 @@
               >
                 Spots
               </router-link>
+              <li v-if="isAuthorized('users')">
+                <hr class="dropdown-divider" />
+              </li>
+              <li v-if="isAuthorized('users')">
+                <h6 class="dropdown-header">User Management</h6>
+              </li>
+              <router-link
+                v-if="isAuthorized('users')"
+                class="dropdown-item"
+                to="/users"
+              >
+                Users
+              </router-link>
             </div>
           </li>
         </ul>

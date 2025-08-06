@@ -35,7 +35,9 @@ export const useAuthStore = defineStore("auth", {
     isAuthorized: (state) => (feature) => {
       const permitted = state.features[feature];
 
-      if (permitted?.users) {
+      if (permitted?.superuser && state.user.is_superuser) {
+        return true;
+      } else if (permitted?.users) {
         return permitted.users.includes(state.user.email);
       } else if (permitted?.roles) {
         const commonRoles = permitted.roles.filter((role) =>
