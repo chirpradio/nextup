@@ -9,7 +9,7 @@ const md = markdownit({
   html: true,
   breaks: true,
   linkify: true,
-});
+}).disable(["heading", "image"]);
 
 export default {
   props: {
