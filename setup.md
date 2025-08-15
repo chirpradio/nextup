@@ -148,4 +148,13 @@ This runs some updates, generates some CSS warnings you can ignore, and starts s
 Once it's done, navigate to http://localhost:5173/ in your browser and log in. Changing JavaScript and Vue files in the /client directory will automatically reload the app in your browser.
 
 # Test your NextUp installation
+
+After setting up all app components and confirming that they can run in their own terminal, there is also an option to launch all with a single command from the project root:
+
+```
+npm install
+npm run dev:all
+```
+_Note: Any processes still running as outlined in the preceding steps must be stopped to before using the all-in-one command_
+
 If you can log in successfully, see some albums, and successfully run a search, your installation is complete!
