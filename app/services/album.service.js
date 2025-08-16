@@ -177,6 +177,7 @@ async function listAlbumReviews(album) {
       ["is_hidden", false],
       ["revoked", false],
     ],
+    showKey: true,
   };
   const { entities: reviews } = await Document.list(options).populate("author");
   reviews.forEach(async (review) => {
