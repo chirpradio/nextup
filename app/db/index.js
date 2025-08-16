@@ -26,13 +26,13 @@ async function getPlaylistKey() {
   successfully.
 */
 function parseIndexerTransaction(path) {
-  if (path[0] === "IndexerTransaction") {
-    return [path[0], parseInt(path[1], 10), path[2], path[3]];
-  } else if (typeof path[1] === "string" && path[1].match(/^\d*$/)) {
-    return [path[0], parseInt(path[1], 10)];
-  } else {
-    return path;
-  }
+  const parsedPath = path.map(item => {
+    if (item.match(/^\d*$/)) {
+      return parseInt(item, 10);
+    }
+    return item;
+  });
+  return parsedPath;
 }
 
 /*
