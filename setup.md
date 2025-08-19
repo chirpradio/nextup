@@ -89,7 +89,7 @@ npm install
 This generates a static HTML version of the API documentation from the YAML specification.
 ```
 cd routes/api
-redoc-cli bundle specification.yaml
+redoc-cli build specification.yaml
 ```
 
 
