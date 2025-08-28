@@ -162,6 +162,7 @@ async function listAlbumComments(album) {
       ["is_hidden", false],
       ["revoked", false],
     ],
+    showKey: true,
   };
   const { entities: comments } = await Document.list(options).populate(
     "author",
