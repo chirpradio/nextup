@@ -24,14 +24,14 @@ module.exports = {
     data.unsafe_text = sanitize(data.unsafe_text);
     const document = new Document(data);
     await document.save();
-    return document.populate("author");
+    return document.populate("author", ["first_name", "last_name"]);
   },
   getDocument,
   async updateDocument(key, data) {    
     const document = await getDocument(key, false);
     document.unsafe_text = sanitize(data.unsafe_text);
     await document.save();
-    return document.populate("author");
+    return document.populate("author", ["first_name", "last_name"]);
   },
   async listDocumentsBySubject(subject) {
     const options = {
