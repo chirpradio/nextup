@@ -7,7 +7,7 @@
       </blockquote>
     </div>
     <figcaption class="blockquote-footer" :class="footerClass">
-      {{ author }} • {{ formatDate(document.created) }}
+      {{ author }} ({{ formatDate(document.created) }})
       <span
         v-if="document.modified && document.modified !== document.created"
         class="dot-divider ms-1"
