@@ -4,21 +4,21 @@
     v-for="review in album.reviews"
     :key="review.id"
     :document="review"
+    :rows="15"
     class="py-3"
   />
 
   <h4>Comments</h4>
-  <DocumentFigure
+      <DocumentFigure
     v-for="comment in album.comments"
     :key="comment.id"
     :document="comment"
     :compact="true"
-  />
+    :bottomBorder="true"
+  />  
   <div class="row">
     <label for="comment" class="form-label">Write a comment</label>
-    <div class="col-9">
-      <MarkdownEditor v-model="comment" />
-    </div>
+    <MarkdownEditor v-model="comment" />
   </div>
   <LoadingButton
     class="mt-3 mb-5"

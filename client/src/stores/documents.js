@@ -12,5 +12,12 @@ export const useDocumentsStore = defineStore("documents", {
       });
       album.comments.push(newComment);
     },
+    async updateDocument(documentKey, unsafe_text) {
+      const { data: updatedDocument } = await api.patch('/document', {
+        __key: documentKey,
+        unsafe_text,
+      });
+      return updatedDocument;
+    },
   },
 });
