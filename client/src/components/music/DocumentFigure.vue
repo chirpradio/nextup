@@ -131,10 +131,7 @@ export default {
       this.saving = true;
 
       try {
-        await this.documentsStore.updateDocument(
-          this.document.__key.path,
-          this.editText
-        );
+        await this.documentsStore.updateDocument(this.document, this.editText);
         this.isEditing = false;
         this.editText = "";
       } catch (error) {

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../services/api.service";
+import { useAlbumsStore } from "./albums";
 
 export const useDocumentsStore = defineStore("documents", {
   actions: {
@@ -12,12 +13,13 @@ export const useDocumentsStore = defineStore("documents", {
       });
       album.comments.push(newComment);
     },
-    async updateDocument(documentKey, unsafe_text) {
+    async updateDocument(document, unsafe_text) {
       const { data: updatedDocument } = await api.patch("/document", {
-        __key: documentKey,
+        __key: document.__key.path,
         unsafe_text,
       });
-      return updatedDocument;
+      const albums = useAlbumsStore();
+      albums.updateDocument(updatedDocument);
     },
   },
 });
