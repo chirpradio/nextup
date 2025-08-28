@@ -8,7 +8,7 @@ async function getDocument(key, populate = true) {
   });
   if (!result) {
     throw new Error("Document not found");
-  }    
+  }
   const document = result.entities[0];
   return populate ? document.populate("author") : document;
 }
@@ -27,7 +27,7 @@ module.exports = {
     return document.populate("author", ["first_name", "last_name"]);
   },
   getDocument,
-  async updateDocument(key, data) {    
+  async updateDocument(key, data) {
     const document = await getDocument(key, false);
     document.unsafe_text = sanitize(data.unsafe_text);
     await document.save();

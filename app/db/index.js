@@ -26,7 +26,7 @@ async function getPlaylistKey() {
   successfully.
 */
 function parseIndexerTransaction(path) {
-  const parsedPath = path.map(item => {
+  const parsedPath = path.map((item) => {
     if (item.match(/^\d*$/)) {
       return parseInt(item, 10);
     }

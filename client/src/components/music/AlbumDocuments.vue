@@ -9,13 +9,13 @@
   />
 
   <h4>Comments</h4>
-      <DocumentFigure
+  <DocumentFigure
     v-for="comment in album.comments"
     :key="comment.id"
     :document="comment"
     :compact="true"
     :bottomBorder="true"
-  />  
+  />
   <div class="row">
     <label for="comment" class="form-label">Write a comment</label>
     <MarkdownEditor v-model="comment" />

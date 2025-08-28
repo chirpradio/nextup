@@ -19,7 +19,7 @@ module.exports = {
   },
   async getDocumentAndRequireEditAccess(req, res, next) {
     try {
-      const documentKey = req.body.__key;      
+      const documentKey = req.body.__key;
       const document = await DocumentService.getDocument(documentKey);
 
       const isAuthor =

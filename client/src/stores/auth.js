@@ -51,10 +51,10 @@ export const useAuthStore = defineStore("auth", {
         return false;
       }
 
-      const isAuthor = document.author?.id === state.user.entityKey.id;      
-      const isMusicDirector = state.user.roles?.includes('music_director');
+      const isAuthor = document.author?.id === state.user.entityKey.id;
+      const isMusicDirector = state.user.roles?.includes("music_director");
       const isSuperuser = state.user.is_superuser === true;
-      
+
       return isAuthor || isMusicDirector || isSuperuser;
     },
   },
