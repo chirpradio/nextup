@@ -7,7 +7,11 @@ export default {
     capitalizeFirstLetter,
     formatDate(dateString) {
       const date = new Date(dateString);
-      return date.toLocaleDateString();
+      return date.toLocaleDateString("en-US", {
+        month: "numeric",
+        day: "numeric",
+        year: "2-digit",
+      });
     },
     formatTag(value) {
       return value.split("_").map(capitalizeFirstLetter).join(" ");

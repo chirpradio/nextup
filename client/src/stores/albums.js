@@ -168,5 +168,20 @@ export const useAlbumsStore = defineStore("albums", {
         album.current_tags = oldTags;
       }
     },
+    updateDocument(document) {
+      const albumKey = document.subject.name || document.subject.id;
+      // "reviews" or "comments"
+      const albumProp = `${document.doctype}s`;
+
+      for (const album of Object.values(this.albums)) {
+        if (album.id === albumKey) {
+          const index = album[albumProp].findIndex((d) => d.id === document.id);
+          if (index > -1) {
+            album[albumProp].splice(index, 1, document);
+          }
+          break;
+        }
+      }
+    },
   },
 });

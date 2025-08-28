@@ -660,6 +660,44 @@ paths:
           description: Document added
         '403':
           description: Forbidden
+  /document:
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a document
+      description: |
+        Update the unsafe_text field of a document.
+        Only the document author, users with music_director role, or superusers can edit documents.
+      tags:
+        - Document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                __key:
+                  type: array
+                  description: Datastore key path array for the document to update
+                unsafe_text:
+                  type: string
+              required:
+                - __key
+                - unsafe_text
+      responses:
+        '200':
+          description: Document updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden - must be document author, music director, or superuser
+        '404':
+          description: Document not found
   /playlist:
     get:
       security:

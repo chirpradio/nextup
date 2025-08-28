@@ -69,10 +69,6 @@
   min-height: 3.5em;
 }
 
-textarea {
-  resize: none;
-}
-
 .preview-label {
   font-size: 0.875em;
 }

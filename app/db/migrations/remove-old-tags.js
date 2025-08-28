@@ -24,11 +24,11 @@ async function up() {
         properties: ["album_id"],
       },
     });
-    
+
     for (const album of albums) {
       console.log(album.album_id.value, album.title);
       const index = album.current_tags.findIndex((item) => item === tag);
-      album.current_tags.splice(index, 1);      
+      album.current_tags.splice(index, 1);
       await album.save();
     }
   }

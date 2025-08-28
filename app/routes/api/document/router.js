@@ -3,6 +3,7 @@ const {
   validateAuthor,
   validateAuthorName,
   validateDoctype,
+  validateDocumentKey,
   validateSubject,
   validateUnsafeText,
 } = require("./validators");
@@ -18,6 +19,15 @@ router.post(
   validateUnsafeText,
   checkErrors,
   controller.createDocument
+);
+
+router.patch(
+  "/",
+  validateDocumentKey,
+  validateUnsafeText,
+  checkErrors,
+  controller.getDocumentAndRequireEditAccess,
+  controller.updateDocument
 );
 
 module.exports = router;

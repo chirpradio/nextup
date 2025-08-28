@@ -61,7 +61,7 @@
             :keyToAdd="track.__key"
             :limitWidth="true"
             class="mt-lg-0"
-          />          
+          />
         </div>
       </li>
     </ol>

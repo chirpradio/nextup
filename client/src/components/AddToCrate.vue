@@ -61,7 +61,7 @@ export default {
     },
     iconClass() {
       return {
-        "text-white": this.added || this.error,        
+        "text-white": this.added || this.error,
       };
     },
     buttonClass() {
@@ -70,7 +70,7 @@ export default {
         "btn-success": this.added,
         "btn-danger": this.error,
       };
-    }
+    },
   },
   methods: {
     async addTo(crate) {
