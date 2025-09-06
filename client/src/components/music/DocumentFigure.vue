@@ -7,13 +7,7 @@
       </blockquote>
     </div>
     <figcaption class="blockquote-footer" :class="footerClass">
-      {{ author }} ({{ formatDate(document.created) }})
-      <span
-        v-if="document.modified && document.modified !== document.created"
-        class="dot-divider ms-1"
-      >
-        edited {{ formatDate(document.modified) }}
-      </span>
+      {{ author }} ({{ dateLabel(document) }})
       <span v-if="canEdit && !isEditing" class="dot-divider ms-1">
         <button
           class="btn btn-sm btn-link-dark pt-0 ps-1 pe-1 pb-0"
@@ -176,6 +170,16 @@ export default {
         this.deleting = false;
       }
     },
+    modifiedLabel(document) {
+      if (document && document.modified && new Date(document.modified) - new Date(document.created) > 1) {
+        return `, edited ${this.formatDate(document.modified)}`;
+      }
+      
+      return "";
+    },
+    dateLabel(document) {
+      return `${this.formatDate(document.created)}${this.modifiedLabel(document)}`;
+    },  
   },
   mixins: [formatters],
 };
