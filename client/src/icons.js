@@ -56,9 +56,9 @@ library.add(
   farFaPenToSquare,
   faClock,
   faExclamation,
-  faClipboard
+  faClipboard,
   faBold,
   faItalic,
   faUnderline,
-  faLink
+  faLink,
 );
