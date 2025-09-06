@@ -17,6 +17,10 @@ export default {
     "traffic-log": {
       roles: ["traffic_log_admin"],
     },
+    users: {
+      superuser: true,
+      roles: ["volunteer_coordinator"],
+    },
   },
   production: {
     playlist: {
@@ -24,6 +28,10 @@ export default {
     },
     "traffic-log": {
       roles: ["traffic_log_admin"],
+    },
+    users: {
+      superuser: true,
+      roles: ["volunteer_coordinator"],
     },
   },
 };

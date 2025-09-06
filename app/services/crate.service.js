@@ -257,12 +257,13 @@ async function renameCrate(crate, name) {
   await crate.save();
 }
 
-async function addCrate(userKey, name) {
+async function addCrate(userKey, name, is_default = false) {
   const crate = new Crate({
     user: userKey,
     name,
     items: [],
     order: [],
+    is_default,
   });
   await crate.save();
   return crate;

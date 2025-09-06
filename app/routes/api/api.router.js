@@ -11,6 +11,7 @@ const searchRouter = require("./search/router");
 const spotRouter = require("./spot/router");
 const trafficLogRouter = require("./traffic-log/router");
 const tokenRouter = require("./token.api.router");
+const userRouter = require("./user/router");
 const { sendErrorCode } = require("./errors");
 const authenticate = passport.authenticate(["api_key", "jwt"], {
   session: false,
@@ -42,6 +43,7 @@ router.use("/search", authenticate, searchRouter);
 router.use("/spot", authenticate, spotRouter);
 router.use("/traffic-log", authenticate, trafficLogRouter);
 router.use("/token", tokenRouter);
+router.use("/user", authenticate, userRouter);
 
 // error handling
 router.use(sendErrorCode);

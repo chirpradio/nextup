@@ -23,6 +23,7 @@ import {
   faCompactDisc,
   faClock,
   faExclamation,
+  faClipboard,
   faBold,
   faItalic,
   faUnderline,
@@ -55,6 +56,7 @@ library.add(
   farFaPenToSquare,
   faClock,
   faExclamation,
+  faClipboard
   faBold,
   faItalic,
   faUnderline,

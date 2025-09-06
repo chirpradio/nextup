@@ -217,6 +217,75 @@ components:
               - light_rotation
               - local_classic
               - local_current
+    User:
+      properties:
+        __key:
+          $ref: '#/components/schemas/Key'
+          readOnly: true
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        dj_name:
+          type: string
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+        is_superuser:
+          type: boolean
+          readOnly: true
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+              - dj
+              - music_director
+              - traffic_log_admin
+              - reviewer
+              - volunteer_coordinator
+      required:
+        - email
+        - first_name
+        - last_name
+    UserCreateRequest:
+      properties:
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        dj_name:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+            enum:
+              - dj
+              - music_director
+              - traffic_log_admin
+              - reviewer
+              - volunteer_coordinator
+        is_active:
+          type: boolean
+          default: true
+      required:
+        - email
+        - first_name
+        - last_name
 paths:
   /token:
     post:
@@ -1207,3 +1276,56 @@ paths:
                 type: string
         '403':
           description: Forbidden
+  /user:
+    get:
+      summary: List all users
+      description: Retrieve a list of all users in the system. Requires superuser privileges or volunteer coordinator role.
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - superuser or volunteer coordinator access required
+    post:
+      summary: Create a new user
+      description: Create a new user account. Requires superuser privileges or volunteer coordinator role. A temporary password will be generated and returned.
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  temporary_password:
+                    type: string
+                    description: Temporary password for the new user
+                  message:
+                    type: string
+        '400':
+          description: Bad request - validation errors
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - superuser or volunteer coordinator access required
+        '409':
+          description: Conflict - user with email already exists
