@@ -11,7 +11,7 @@
     v-if="showAlert"
     :album="album"
     :fitContent="false"
-    class="recently-played-alert mt-2 mb-0 col-5"
+    class="recently-played-alert ms-2 mt-0 mb-0 col-5"
   />
 </template>
 

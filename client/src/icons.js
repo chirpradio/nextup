@@ -24,6 +24,10 @@ import {
   faClock,
   faExclamation,
   faClipboard,
+  faBold,
+  faItalic,
+  faUnderline,
+  faLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare as farFaPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
@@ -53,4 +57,8 @@ library.add(
   faClock,
   faExclamation,
   faClipboard
+  faBold,
+  faItalic,
+  faUnderline,
+  faLink
 );

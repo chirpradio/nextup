@@ -29,6 +29,33 @@ components:
           type: array
         encodedKey:
           type: string
+    Document:
+      properties:
+        author:
+          $ref: '#/components/schemas/Key'
+        author_name:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        doctype:
+          type: string
+          enum: [review, comment]
+        modified:
+          type: string
+          format: date-time
+          readOnly: true 
+        revoked:
+          type: boolean
+        subject: 
+          $ref: '#/components/schemas/Key'
+        unsafe_text:
+          type: string
+        required:
+          - doctype
+          - subject
+          - unsafe_text
     Key:
       properties:
         id:
@@ -685,6 +712,60 @@ paths:
           description: Item reordered
         '403':
           description: Forbidden
+  /document:
+    post:
+      security:
+        - Bearer: []
+      summary: Add a comment or review
+      tags:
+        - Document
+      requestBody:
+        content:
+          application/json:
+            schema:
+              - $ref: '#/components/schemas/Document'
+      responses:
+        '201': 
+          description: Document added
+        '403':
+          description: Forbidden
+    patch:
+      security:
+        - Bearer: []
+      summary: Update a document
+      description: |
+        Update the unsafe_text field of a document.
+        Only the document author, users with music_director role, or superusers can edit documents.
+      tags:
+        - Document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                __key:
+                  type: array
+                  description: Datastore key path array for the document to update
+                unsafe_text:
+                  type: string
+              required:
+                - __key
+                - unsafe_text
+      responses:
+        '200':
+          description: Document updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden - must be document author, music director, or superuser
+        '404':
+          description: Document not found
   /playlist:
     get:
       security:

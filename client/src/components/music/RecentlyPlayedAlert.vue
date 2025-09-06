@@ -6,7 +6,7 @@
     role="alert"
   >
     <font-awesome-icon icon="fa-circle-pause" fade class="slow-fade" />
-    played by {{ dj }} at {{ time }}
+    {{ recentPlay.kind }} played by {{ dj }} at {{ time }}
   </div>
 </template>
 
@@ -47,15 +47,15 @@ export default {
     },
     dj() {
       let name = "";
-      const user = this.recentPlay?.selector;
+      const user = this.recentPlay.play?.selector;
       if (user) {
         name = `${user.first_name} ${user.last_name}`;
       }
       return name;
     },
     time() {
-      if (this.recentPlay?.established) {
-        const played = new Date(this.recentPlay.established);
+      if (this.recentPlay.play?.established) {
+        const played = new Date(this.recentPlay.play.established);
         return played.toLocaleTimeString("en-us", {
           timeZone: "America/Chicago",
           timeStyle: "short",
