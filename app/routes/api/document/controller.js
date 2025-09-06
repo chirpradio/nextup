@@ -52,4 +52,13 @@ module.exports = {
       next(error);
     }
   },
+  async deleteDocument(req, res, next) {
+    try {
+      const documentKey = req.body.__key;
+      await DocumentService.deleteDocument(documentKey);
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  },
 };

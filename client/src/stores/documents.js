@@ -21,5 +21,12 @@ export const useDocumentsStore = defineStore("documents", {
       const albums = useAlbumsStore();
       albums.updateDocument(updatedDocument);
     },
+    async deleteDocument(document) {
+      await api.delete("/document", {
+        data: { __key: document.__key.path },
+      });
+      const albums = useAlbumsStore();
+      albums.removeDocument(document);
+    },
   },
 });

@@ -168,7 +168,7 @@ export const useAlbumsStore = defineStore("albums", {
         album.current_tags = oldTags;
       }
     },
-    updateDocument(document) {
+    modifyDocument(document, operation = "update") {
       const albumKey = document.subject.name || document.subject.id;
       // "reviews" or "comments"
       const albumProp = `${document.doctype}s`;
@@ -177,11 +177,21 @@ export const useAlbumsStore = defineStore("albums", {
         if (album.id === albumKey) {
           const index = album[albumProp].findIndex((d) => d.id === document.id);
           if (index > -1) {
-            album[albumProp].splice(index, 1, document);
+            if (operation === "remove") {
+              album[albumProp].splice(index, 1);
+            } else {
+              album[albumProp].splice(index, 1, document);
+            }
           }
           break;
         }
       }
+    },
+    updateDocument(document) {
+      this.modifyDocument(document, "update");
+    },
+    removeDocument(document) {
+      this.modifyDocument(document, "remove");
     },
   },
 });

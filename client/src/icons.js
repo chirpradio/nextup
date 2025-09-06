@@ -60,5 +60,5 @@ library.add(
   faBold,
   faItalic,
   faUnderline,
-  faLink,
+  faLink
 );

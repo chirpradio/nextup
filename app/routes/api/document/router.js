@@ -30,4 +30,12 @@ router.patch(
   controller.updateDocument
 );
 
+router.delete(
+  "/",
+  validateDocumentKey,
+  checkErrors,
+  controller.getDocumentAndRequireEditAccess,
+  controller.deleteDocument
+);
+
 module.exports = router;

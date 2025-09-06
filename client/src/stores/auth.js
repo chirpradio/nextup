@@ -59,6 +59,9 @@ export const useAuthStore = defineStore("auth", {
 
       return isAuthor || isMusicDirector || isSuperuser;
     },
+    canDeleteDocument: (state) => (document) => {
+      return state.canEditDocument(document);
+    },
   },
   actions: {
     async logIn({ email, password }) {

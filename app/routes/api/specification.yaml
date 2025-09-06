@@ -766,6 +766,36 @@ paths:
           description: Forbidden - must be document author, music director, or superuser
         '404':
           description: Document not found
+    delete:
+      security:
+        - Bearer: []
+      summary: Delete a document
+      description: |
+        Soft delete a document by marking it as revoked.
+        Only the document author, users with music_director role, or superusers can delete documents.
+      tags:
+        - Document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                __key:
+                  type: array
+                  description: Datastore key path array for the document to delete
+              required:
+                - __key
+      responses:
+        '204':
+          description: Document deleted successfully
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden - must be document author, music director, or superuser
+        '404':
+          description: Document not found
   /playlist:
     get:
       security:

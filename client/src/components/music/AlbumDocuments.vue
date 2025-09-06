@@ -10,7 +10,7 @@
 
   <h4>Comments</h4>
   <DocumentFigure
-    v-for="comment in album.comments"
+    v-for="comment in sortedComments"
     :key="comment.id"
     :document="comment"
     :compact="true"
@@ -58,6 +58,14 @@ export default {
     ...mapStores(useDocumentsStore, useAuthStore),
     commentEmpty() {
       return this.comment.length === 0;
+    },
+    sortedComments() {
+      if (!this.album.comments || !Array.isArray(this.album.comments)) {
+        return [];
+      }
+      return [...this.album.comments].sort((a, b) => {
+        return new Date(b.created) - new Date(a.created);
+      });
     },
   },
   methods: {
