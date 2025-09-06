@@ -153,7 +153,7 @@ export default {
     confirmDelete() {
       if (
         confirm(
-          "Are you sure you want to delete this document? This action cannot be undone."
+          `Are you sure you want to delete this ${this.document.doctype}? This action cannot be undone.`
         )
       ) {
         this.deleteDocument();
