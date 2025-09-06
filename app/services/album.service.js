@@ -162,9 +162,11 @@ async function listAlbumComments(album) {
       ["is_hidden", false],
       ["revoked", false],
     ],
+    showKey: true,
   };
   const { entities: comments } = await Document.list(options).populate(
-    "author"
+    "author",
+    ["first_name", "last_name"]
   );
   return comments;
 }
@@ -177,8 +179,12 @@ async function listAlbumReviews(album) {
       ["is_hidden", false],
       ["revoked", false],
     ],
+    showKey: true,
   };
-  const { entities: reviews } = await Document.list(options).populate("author");
+  const { entities: reviews } = await Document.list(options).populate(
+    "author",
+    ["first_name", "last_name"]
+  );
   reviews.forEach(async (review) => {
     review.unsafe_text = await rewriteOldLinks(review.unsafe_text);
   });
