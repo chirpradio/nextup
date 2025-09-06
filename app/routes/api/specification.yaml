@@ -660,7 +660,6 @@ paths:
           description: Document added
         '403':
           description: Forbidden
-  /document:
     patch:
       security:
         - Bearer: []
