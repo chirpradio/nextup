@@ -40,6 +40,15 @@
           cancel
         </button>
       </span>
+      <span v-if="canDelete && !isEditing" class="dot-divider ms-1">
+        <button
+          class="btn btn-sm btn-link-dark pt-0 ps-1 pe-1 pb-0"
+          @click="confirmDelete"
+          :disabled="deleting"
+        >
+          {{ deleteLabel }}
+        </button>
+      </span>
     </figcaption>
   </figure>
 </template>
@@ -83,6 +92,7 @@ export default {
       isEditing: false,
       editText: "",
       saving: false,
+      deleting: false,
     };
   },
   computed: {
@@ -110,8 +120,14 @@ export default {
     canEdit() {
       return this.authStore.canEditDocument(this.document);
     },
+    canDelete() {
+      return this.authStore.canDeleteDocument(this.document);
+    },
     saveLabel() {
       return this.saving ? "saving changes" : "save changes";
+    },
+    deleteLabel() {
+      return this.deleting ? "deleting..." : "delete";
     },
   },
   methods: {
@@ -138,6 +154,26 @@ export default {
         console.error("Failed to update document:", error);
       } finally {
         this.saving = false;
+      }
+    },
+    confirmDelete() {
+      if (
+        confirm(
+          "Are you sure you want to delete this document? This action cannot be undone."
+        )
+      ) {
+        this.deleteDocument();
+      }
+    },
+    async deleteDocument() {
+      this.deleting = true;
+
+      try {
+        await this.documentsStore.deleteDocument(this.document);
+      } catch (error) {
+        console.error("Failed to delete document:", error);
+      } finally {
+        this.deleting = false;
       }
     },
   },
