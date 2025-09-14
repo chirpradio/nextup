@@ -9,6 +9,10 @@ export const useAuthStore = defineStore("auth", {
     token: "",
     user: {},
     features: features[import.meta.env.MODE],
+    password_reset_required: false,
+    email: "",
+    message: "",
+    messageType: "",
   }),
   getters: {
     isAuthenticated: (state) => {
@@ -63,16 +67,40 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async logIn({ email, password }) {
       const response = await api.login(email, password);
-      if (response.token) {
+      if (response.password_reset_required) {
+        return {
+          password_reset_required: true,
+          message: response.message,
+          email: response.email,
+        };
+      } else if (response.token) {
         this.token = response.token;
         const decoded = jwt_decode(response.token);
         this.user = decoded.user;
+        return { success: true };
       } else {
         console.log(response);
+        return { success: false };
       }
     },
     logOut() {
+      api.setAuthorizationHeader("");
       this.$reset();
+    },
+    async resetPassword(token, newPassword) {
+      const response = await api.post("/password/reset", { token, newPassword });
+      return response.data;
+    },
+    async changePassword(currentPassword, newPassword) {
+      try {
+        const response = await api.post("/password/change", {
+          currentPassword,
+          newPassword,
+        });
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response?.data?.error || "Failed to change password");
+      }
     },
   },
   persist: {

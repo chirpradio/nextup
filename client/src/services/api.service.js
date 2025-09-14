@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from "../router";
+import routeNames from "../router/names";
 import { useAuthStore } from "../stores/auth";
 
 const instance = axios.create({
@@ -20,7 +21,7 @@ instance.interceptors.response.use(
       const authStore = useAuthStore();
       authStore.logOut();
       router.push({
-        name: "Log In",
+        name: routeNames.LOG_IN,
         query: {
           redirect: `${window.location.pathname}${window.location.search}`,
         },

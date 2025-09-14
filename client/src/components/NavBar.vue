@@ -181,8 +181,7 @@ export default {
       return this.authStore.isAuthorized(feature);
     },
     logOut() {
-      this.authStore.logOut();
-      this.$router.push("/login");
+      this.authStore.logOut();      
     },
     search() {
       this.$gtag.event("Search", {
