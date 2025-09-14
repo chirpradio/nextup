@@ -244,6 +244,9 @@ components:
         is_superuser:
           type: boolean
           readOnly: true
+        password_reset_required:
+          type: boolean
+          readOnly: true
         roles:
           type: array
           items:
@@ -322,12 +325,23 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:   
-                  token:
-                    type: string
+                oneOf:
+                  - type: object
+                    properties:   
+                      token:
+                        type: string
+                    description: Successful login with JWT token
+                  - type: object
+                    properties:
+                      password_reset_required:
+                        type: boolean
+                      message:
+                        type: string
+                      email:
+                        type: string
+                    description: Password reset required before login
         '401':
-          description: Unauthorized
+          description: Invalid credentials
   /album/tag:
     get:
       security:
@@ -1329,3 +1343,38 @@ paths:
           description: Forbidden - superuser or volunteer coordinator access required
         '409':
           description: Conflict - user with email already exists
+  /user/change-password:
+    post:
+      summary: Change password
+      description: Change password for a user by providing their email and current password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+                  minLength: 12
+              required:
+                - email
+                - currentPassword
+                - newPassword
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid credentials or new password requirements not met
