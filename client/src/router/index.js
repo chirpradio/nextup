@@ -7,7 +7,6 @@ import playlistRoutes from "../playlist/routes";
 import trafficLogRoutes from "../traffic-log/routes";
 import usersRoutes from "../users/routes";
 
-
 const routes = [
   {
     path: "/login",
@@ -217,10 +216,10 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to, from) => {  
+router.beforeEach((to, from) => {
   const authStore = useAuthStore();
   const publicRoutes = [routeNames.LOG_IN, routeNames.CHANGE_PASSWORD];
-  
+
   if (!publicRoutes.includes(to.name) && !authStore.isAuthenticated) {
     return { name: routeNames.LOG_IN, query: { redirect: to.fullPath } };
   }

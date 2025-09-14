@@ -115,7 +115,9 @@ module.exports = {
           .json({ error: errorMessages.INVALID_CREDENTIALS });
       }
       if (currentPassword === newPassword) {
-        return res.status(400).json({ error: "Your new password cannot match your previous password"});
+        return res.status(400).json({
+          error: "Your new password cannot match your previous password",
+        });
       }
 
       user.password = newPassword;

@@ -47,7 +47,7 @@ export default {
       email: "",
       password: "",
       error: false,
-      errorMessage: "",    
+      errorMessage: "",
       authenticating: false,
     };
   },
@@ -71,11 +71,11 @@ export default {
           email: this.email,
           password: this.password,
         });
-        
-        if (result?.password_reset_required) {          
+
+        if (result?.password_reset_required) {
           this.authStore.password_reset_required = true;
-          this.authStore.email = result.email || this.email
-          this.$router.push({ 
+          this.authStore.email = result.email || this.email;
+          this.$router.push({
             name: routeNames.CHANGE_PASSWORD,
           });
           return;

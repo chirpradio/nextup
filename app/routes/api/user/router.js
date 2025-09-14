@@ -22,7 +22,12 @@ function requireUserManagementAccess(req, res, next) {
   next();
 }
 
-router.get("/", authenticate, requireUserManagementAccess, controller.listUsers);
+router.get(
+  "/",
+  authenticate,
+  requireUserManagementAccess,
+  controller.listUsers
+);
 
 router.post(
   "/",

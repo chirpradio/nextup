@@ -5,21 +5,27 @@
         <div class="card">
           <div class="card-body">
             <h1 class="card-title mb-4">Change password</h1>
-            
-            <div v-if="password_reset_required" class="alert alert-warning" role="alert">
+
+            <div
+              v-if="password_reset_required"
+              class="alert alert-warning"
+              role="alert"
+            >
               You must change your password before logging in.
             </div>
-      <div v-if="message" class="alert alert-success" role="alert">
-        {{ message }}
-      </div>
-      
-      <div v-if="error" class="alert alert-danger" role="alert">
-        {{ error }}
-      </div>
+            <div v-if="message" class="alert alert-success" role="alert">
+              {{ message }}
+            </div>
+
+            <div v-if="error" class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
 
             <form @submit.prevent="changePassword">
               <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current password</label>
+                <label for="currentPassword" class="form-label"
+                  >Current password</label
+                >
                 <input
                   type="password"
                   class="form-control"
@@ -48,7 +54,9 @@
               </div>
 
               <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm new password</label>
+                <label for="confirmPassword" class="form-label"
+                  >Confirm new password</label
+                >
                 <input
                   type="password"
                   class="form-control"
@@ -107,16 +115,21 @@ export default {
     ...mapStores(useAuthStore),
     ...mapState(useAuthStore, ["password_reset_required", "email"]),
     passwordMismatch() {
-      return this.confirmPassword.length > 0 && this.newPassword !== this.confirmPassword;
+      return (
+        this.confirmPassword.length > 0 &&
+        this.newPassword !== this.confirmPassword
+      );
     },
     formValid() {
-      return this.currentPassword.length > 0 && 
-             this.newPassword.length >= 12 && 
-             this.confirmPassword.length > 0 && 
-             !this.passwordMismatch;
+      return (
+        this.currentPassword.length > 0 &&
+        this.newPassword.length >= 12 &&
+        this.confirmPassword.length > 0 &&
+        !this.passwordMismatch
+      );
     },
   },
-  methods: {   
+  methods: {
     async changePassword() {
       this.loading = true;
       this.error = "";
@@ -128,10 +141,11 @@ export default {
           newPassword: this.newPassword,
           email: this.email,
         });
-        
-        this.message = response.data.message;        
-        
-        this.authStore.message = "You changed your password and now you can use it to log in.";
+
+        this.message = response.data.message;
+
+        this.authStore.message =
+          "You changed your password and now you can use it to log in.";
         this.authStore.messageType = "success";
         this.authStore.password_reset_required = false;
         this.authStore.email = undefined;

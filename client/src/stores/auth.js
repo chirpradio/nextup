@@ -88,7 +88,10 @@ export const useAuthStore = defineStore("auth", {
       this.$reset();
     },
     async resetPassword(token, newPassword) {
-      const response = await api.post("/password/reset", { token, newPassword });
+      const response = await api.post("/password/reset", {
+        token,
+        newPassword,
+      });
       return response.data;
     },
     async changePassword(currentPassword, newPassword) {
@@ -99,7 +102,9 @@ export const useAuthStore = defineStore("auth", {
         });
         return response.data;
       } catch (error) {
-        throw new Error(error.response?.data?.error || "Failed to change password");
+        throw new Error(
+          error.response?.data?.error || "Failed to change password"
+        );
       }
     },
   },
