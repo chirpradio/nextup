@@ -168,6 +168,26 @@ export const useAlbumsStore = defineStore("albums", {
         album.current_tags = oldTags;
       }
     },
+
+    async updateAlbumInfo({ album, label, year, pronunciation } = {}) {
+      const oldValues = {
+        label: album.label,
+        year: album.year,
+        pronunciation: album.pronunciation,
+      };
+
+      album.label = label;
+      album.year = year;
+      album.pronunciation = pronunciation;
+      try {
+        await api.updateAlbumInfo(album.album_id, { label, year, pronunciation });
+      } catch (error) {
+        album.label = oldValues.label;
+        album.year = oldValues.year;
+        album.pronunciation = oldValues.pronunciation;
+      }
+    },
+
     modifyDocument(document, operation = "update") {
       const albumKey = document.subject.name || document.subject.id;
       // "reviews" or "comments"

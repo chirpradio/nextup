@@ -39,10 +39,18 @@ router.patch(
 );
 
 router.patch(
-  "/:album_id",
+  "/:album_id/tags",
   validateTags,
   checkErrors,
-  controller.updateAlbumTags
+  controller.updateAlbumTags,
+);
+
+router.patch(
+  "/:album_id/info",
+  checkErrors,
+  controller.getAlbumAndRequireEditAccess,
+  controller.updateAlbumInfo
 );
 
 module.exports = router;
+

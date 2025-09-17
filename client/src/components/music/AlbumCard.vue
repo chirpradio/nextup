@@ -26,6 +26,7 @@
         {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
+      <EditAlbumInfo :album="album" />
       <TagList :tags="album.current_tags" :album="album" />
       <RecentlyPlayedAlert :album="album" />
     </div>
@@ -39,6 +40,7 @@ import ArtistName from "./ArtistName.vue";
 import ReviewPreview from "./ReviewPreview.vue";
 import TagList from "./TagList.vue";
 import RecentlyPlayedAlert from "./RecentlyPlayedAlert.vue";
+import EditAlbumInfo from "./EditAlbumInfo.vue";
 
 export default {
   components: {
@@ -47,6 +49,7 @@ export default {
     AlbumArtLink,
     ReviewPreview,
     RecentlyPlayedAlert,
+    EditAlbumInfo,
   },
   props: {
     album: Object,

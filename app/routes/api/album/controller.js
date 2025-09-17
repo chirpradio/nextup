@@ -38,6 +38,25 @@ module.exports = {
       next(error);
     }
   },
+  async getAlbumAndRequireEditAccess(req, res, next) {
+    try {
+      const album = await AlbumService.getAlbumById(req.params.album_id);
+      const isMusicDirector = req.user.isMusicDirector();
+      const isSuperuser = req.user.is_superuser === true;
+
+      if ( isMusicDirector || isSuperuser) {
+        req.album = album;
+        return next();
+      }
+
+      return res.status(403).json({
+        error:
+          "Forbidden: You can only edit album info if you are a music director or superuser",
+      });
+    } catch (error) {
+      next(error);
+    }	  
+  },
   async getRecentAlbums(req, res, next) {
     try {
       const date = new Date(parseInt(req.query.timestamp, 10));
@@ -72,4 +91,22 @@ module.exports = {
       next(error);
     }
   },
+  async updateAlbumInfo(req, res, next) {
+    try {
+      const album = await AlbumService.getAlbumById(req.params.album_id);
+      await AlbumService.updateAlbumInfo(
+        album,
+        {
+          label: req.body.label,
+          year: req.body.year,
+          pronunciation: req.body.pronunciation,
+        },
+        req.user
+      );
+      res.json(album.plain({ showKey: true }));
+    } catch (error) {
+      next(error);
+    }
+  },
 };
+
