@@ -1,10 +1,6 @@
 const { User } = require("../../../models");
-const { CrateService } = require("../../../services");
-const crypto = require("crypto");
-
-function generateRandomPassword() {
-  return crypto.randomBytes(12).toString("hex");
-}
+const { CrateService, PasswordService } = require("../../../services");
+const { errorMessages } = require("../errors");
 
 module.exports = {
   async listUsers(req, res, next) {
@@ -50,18 +46,19 @@ module.exports = {
         }
       } catch (error) {}
 
-      // Generate a random password
-      const password = generateRandomPassword();
+      // Generate a temporary password
+      const temporaryPassword = PasswordService.generateTemporaryPassword();
 
       // Create new user
       const userData = {
         email,
         first_name,
         last_name,
-        password,
+        password: temporaryPassword,
         date_joined: new Date(),
         is_active,
         is_superuser: false,
+        password_reset_required: true,
         roles,
       };
 
@@ -99,10 +96,35 @@ module.exports = {
 
       res.status(201).json({
         user: userResponse,
-        temporary_password: password,
+        temporary_password: temporaryPassword,
         message:
-          "User created successfully. Please provide the temporary password to the user.",
+          "User created successfully. Please provide the temporary password to the user. They can change it using the change password feature.",
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async changePassword(req, res, next) {
+    try {
+      const { email, currentPassword, newPassword } = req.body;
+      const user = await User.findOne({ email });
+      if (!user || !user.is_active || !user.authenticate(currentPassword)) {
+        return res
+          .status(400)
+          .json({ error: errorMessages.INVALID_CREDENTIALS });
+      }
+      if (currentPassword === newPassword) {
+        return res.status(400).json({
+          error: "Your new password cannot match your previous password",
+        });
+      }
+
+      user.password = newPassword;
+      user.password_reset_required = false;
+      await user.save();
+
+      res.json({ message: "Password changed successfully" });
     } catch (error) {
       next(error);
     }

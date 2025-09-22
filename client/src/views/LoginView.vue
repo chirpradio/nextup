@@ -1,9 +1,12 @@
 <template>
-  <div class="col-12 col-md-6">
+  <div class="col-12 col-md-6" v-if="!this.isAuthenticated">
     <h2>Log in to NextUp</h2>
     <p class="text-muted" v-if="$route.query.redirect">
       You need to log in first.
     </p>
+    <div v-if="message" :class="alertClasses" role="alert">
+      {{ message }}
+    </div>
     <form class="mb-3" @submit.prevent="logIn">
       <div class="form-group">
         <label for="email">Email</label>
@@ -33,8 +36,9 @@
 
 <script>
 import LoadingButton from "../components/LoadingButton.vue";
-import { mapStores } from "pinia";
+import { mapState, mapStores } from "pinia";
 import { useAuthStore } from "@/stores/auth";
+import routeNames from "@/router/names";
 
 export default {
   components: { LoadingButton },
@@ -49,24 +53,42 @@ export default {
   },
   computed: {
     ...mapStores(useAuthStore),
+    ...mapState(useAuthStore, ["isAuthenticated", "message", "messageType"]),
+    alertClasses() {
+      const alertType = `alert-${this.messageType}`;
+      return {
+        alert: true,
+        [alertType]: true,
+      };
+    },
   },
   methods: {
     async logIn() {
       try {
         this.authenticating = true;
         this.error = false;
-        await this.authStore.logIn({
+        const result = await this.authStore.logIn({
           email: this.email,
           password: this.password,
         });
-        this.$router.push(this.$route.query.redirect || "/");
+
+        if (result?.password_reset_required) {
+          this.authStore.password_reset_required = true;
+          this.authStore.email = result.email || this.email;
+          this.$router.push({
+            name: routeNames.CHANGE_PASSWORD,
+          });
+          return;
+        }
       } catch (error) {
         this.authenticating = false;
         this.error = true;
         this.errorMessage =
-          error.response.status === 401
+          error.response?.status === 401
             ? "Invalid username or password"
             : "Could not log in";
+      } finally {
+        this.authenticating = false;
       }
     },
   },

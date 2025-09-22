@@ -182,7 +182,6 @@ export default {
     },
     logOut() {
       this.authStore.logOut();
-      this.$router.push("/login");
     },
     search() {
       this.$gtag.event("Search", {
