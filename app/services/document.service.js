@@ -33,9 +33,16 @@ module.exports = {
     await document.save();
     return document.populate("author", ["first_name", "last_name"]);
   },
+  async deleteDocument(key) {
+    await Document.delete(null, null, null, null, key);
+  },
   async listDocumentsBySubject(subject) {
     const options = {
-      filters: [["subject", subject.entityKey || subject.__key]],
+      filters: [
+        ["subject", subject.entityKey || subject.__key],
+        ["revoked", false],
+        ["is_hidden", false],
+      ],
       order: { property: "created", descending: true },
       showKey: true,
     };

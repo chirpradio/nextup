@@ -7,13 +7,7 @@
       </blockquote>
     </div>
     <figcaption class="blockquote-footer" :class="footerClass">
-      {{ author }} ({{ formatDate(document.created) }})
-      <span
-        v-if="document.modified && document.modified !== document.created"
-        class="dot-divider ms-1"
-      >
-        edited {{ formatDate(document.modified) }}
-      </span>
+      {{ author }} ({{ dateLabel(document) }})
       <span v-if="canEdit && !isEditing" class="dot-divider ms-1">
         <button
           class="btn btn-sm btn-link-dark pt-0 ps-1 pe-1 pb-0"
@@ -38,6 +32,15 @@
           class="btn btn-sm btn-link-dark pt-0 ps-1 pe-1 pb-0"
         >
           cancel
+        </button>
+      </span>
+      <span v-if="canDelete && !isEditing" class="dot-divider ms-1">
+        <button
+          class="btn btn-sm btn-link-dark pt-0 ps-1 pe-1 pb-0"
+          @click="confirmDelete"
+          :disabled="deleting"
+        >
+          {{ deleteLabel }}
         </button>
       </span>
     </figcaption>
@@ -83,6 +86,7 @@ export default {
       isEditing: false,
       editText: "",
       saving: false,
+      deleting: false,
     };
   },
   computed: {
@@ -110,8 +114,14 @@ export default {
     canEdit() {
       return this.authStore.canEditDocument(this.document);
     },
+    canDelete() {
+      return this.authStore.canDeleteDocument(this.document);
+    },
     saveLabel() {
       return this.saving ? "saving changes" : "save changes";
+    },
+    deleteLabel() {
+      return this.deleting ? "deleting..." : "delete";
     },
   },
   methods: {
@@ -139,6 +149,42 @@ export default {
       } finally {
         this.saving = false;
       }
+    },
+    confirmDelete() {
+      if (
+        confirm(
+          `Are you sure you want to delete this ${this.document.doctype}? This action cannot be undone.`
+        )
+      ) {
+        this.deleteDocument();
+      }
+    },
+    async deleteDocument() {
+      this.deleting = true;
+
+      try {
+        await this.documentsStore.deleteDocument(this.document);
+      } catch (error) {
+        console.error("Failed to delete document:", error);
+      } finally {
+        this.deleting = false;
+      }
+    },
+    modifiedLabel(document) {
+      if (
+        document &&
+        document.modified &&
+        new Date(document.modified) - new Date(document.created) > 1
+      ) {
+        return `, edited ${this.formatDate(document.modified)}`;
+      }
+
+      return "";
+    },
+    dateLabel(document) {
+      return `${this.formatDate(document.created)}${this.modifiedLabel(
+        document
+      )}`;
     },
   },
   mixins: [formatters],
