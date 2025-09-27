@@ -28,6 +28,8 @@ import {
   faItalic,
   faUnderline,
   faLink,
+  faCaretDown,
+  faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare as farFaPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
@@ -60,5 +62,7 @@ library.add(
   faBold,
   faItalic,
   faUnderline,
-  faLink
+  faLink,
+  faCaretDown,
+  faCaretRight
 );

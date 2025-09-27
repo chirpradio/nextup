@@ -4,14 +4,14 @@ import { useAlbumsStore } from "./albums";
 
 export const useDocumentsStore = defineStore("documents", {
   actions: {
-    async addComment({ album, comment, user } = {}) {
-      const { data: newComment } = await api.post("/document", {
+    async addDocument({ album, text, user, doctype } = {}) {
+      const { data: newDocument } = await api.post("/document", {
         author: user.entityKey.path,
         subject: album.__key.path,
-        doctype: "comment",
-        unsafe_text: comment,
+        doctype,
+        unsafe_text: text,
       });
-      album.comments.push(newComment);
+      album[`${doctype}s`].push(newDocument);
     },
     async updateDocument(document, unsafe_text) {
       const { data: updatedDocument } = await api.patch("/document", {
