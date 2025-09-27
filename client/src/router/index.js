@@ -2,16 +2,26 @@ import { createRouter, createWebHistory } from "vue-router";
 import qs from "qs";
 import formatters from "../mixins/formatters";
 import { useAuthStore } from "../stores/auth";
+import routeNames from "./names";
 import playlistRoutes from "../playlist/routes";
 import trafficLogRoutes from "../traffic-log/routes";
-
-const LOG_IN = "Log In";
+import usersRoutes from "../users/routes";
 
 const routes = [
   {
     path: "/login",
-    name: LOG_IN,
+    name: routeNames.LOG_IN,
     component: () => import("../views/LoginView.vue"),
+    props: true,
+  },
+  {
+    path: "/change-password",
+    name: routeNames.CHANGE_PASSWORD,
+    component: () => import("../components/auth/ChangePassword.vue"),
+    props: true,
+    meta: {
+      title: routeNames.CHANGE_PASSWORD,
+    },
   },
   {
     path: "/",
@@ -191,6 +201,7 @@ const routes = [
   },
   ...playlistRoutes,
   ...trafficLogRoutes,
+  ...usersRoutes,
 ];
 
 const router = createRouter({
@@ -207,11 +218,13 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const authStore = useAuthStore();
-  if (to.name !== LOG_IN && !authStore.isAuthenticated) {
-    return { name: LOG_IN, query: { redirect: to.fullPath } };
+  const publicRoutes = [routeNames.LOG_IN, routeNames.CHANGE_PASSWORD];
+
+  if (!publicRoutes.includes(to.name) && !authStore.isAuthenticated) {
+    return { name: routeNames.LOG_IN, query: { redirect: to.fullPath } };
   }
 
-  if (to.name === LOG_IN && from.name === LOG_IN) {
+  if (to.name === routeNames.LOG_IN && from.name === routeNames.LOG_IN) {
     return false;
   }
 

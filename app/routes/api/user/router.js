@@ -1,0 +1,54 @@
+const router = require("express").Router();
+const { body } = require("express-validator");
+const { validateUserCreation } = require("./validators");
+const { checkErrors } = require("../errors");
+const controller = require("./controller");
+const rateLimit = require("express-rate-limit");
+const passport = require("passport");
+
+const authenticate = passport.authenticate(["jwt"], {
+  session: false,
+});
+
+function requireUserManagementAccess(req, res, next) {
+  if (
+    !req.user ||
+    (!req.user.is_superuser && !req.user.isVolunteerCoordinator())
+  ) {
+    return res.status(403).json({
+      error: "Forbidden: Superuser or volunteer coordinator access required",
+    });
+  }
+  next();
+}
+
+router.get(
+  "/",
+  authenticate,
+  requireUserManagementAccess,
+  controller.listUsers
+);
+
+router.post(
+  "/",
+  authenticate,
+  requireUserManagementAccess,
+  validateUserCreation,
+  checkErrors,
+  controller.createUser
+);
+
+router.post(
+  "/change-password",
+  rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 3,
+  }),
+  body("email").isEmail(),
+  body("currentPassword").isString(),
+  body("newPassword").isString().isLength({ min: 12 }),
+  checkErrors,
+  controller.changePassword
+);
+
+module.exports = router;

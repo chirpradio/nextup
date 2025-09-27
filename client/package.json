@@ -15,7 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^3.0.2",
     "@popperjs/core": "^2.9.2",
-    "axios": "^1.8.2",
+    "axios": "^1.12.2",
     "bootstrap": "^5.3.3",
     "core-js": "^3.6.5",
     "js-cookie": "^3.0.1",
@@ -41,7 +41,7 @@
     "eslint-plugin-vue": "^9.7.0",
     "prettier": "^2.2.1",
     "sass": "^1.56.1",
-    "vite": "^6.3.4"
+    "vite": "^6.3.6"
   },
   "browserslist": [
     "> 1%",

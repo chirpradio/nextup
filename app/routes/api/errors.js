@@ -5,6 +5,7 @@ const errorMessages = {
   FORBIDDEN: "Forbidden",
   NOT_FOUND: "Not found",
   UNAUTHORIZED: "Unauthorized",
+  INVALID_CREDENTIALS: "Invalid username or password",
 };
 
 function checkErrors(req, res, next) {

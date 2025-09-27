@@ -10,11 +10,12 @@ const userSchema = new Schema({
   first_name: { type: String, required: true },
   is_active: { type: Boolean },
   is_superuser: { type: Boolean },
-  last_login: { type: Date },
+  last_login: { type: Date, default: gstore.defaultValues.NOW },
   last_name: { type: String, required: true },
   password: { type: String, required: true },
+  password_reset_required: { type: Boolean, default: false },
   api_key: { type: String },
-  roles: { type: Array },
+  roles: { type: Array, default: [] },
 });
 
 function hashPassword(input) {
@@ -48,6 +49,10 @@ userSchema.methods.isMusicDirector = function () {
 
 userSchema.methods.isTrafficLogAdmin = function () {
   return this.roles.includes("traffic_log_admin");
+};
+
+userSchema.methods.isVolunteerCoordinator = function () {
+  return this.roles.includes("volunteer_coordinator");
 };
 
 module.exports = gstore.model("User", userSchema);

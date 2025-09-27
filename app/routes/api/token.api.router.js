@@ -3,7 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const { body } = require("express-validator");
-const { checkErrors } = require("./errors");
+const { checkErrors, errorMessages } = require("./errors");
 
 router.post(
   "/",
@@ -18,19 +18,29 @@ router.post(
     passport.authenticate("email-password", { session: false }, (err, user) => {
       if (err || !user) {
         return res.status(401).json({
-          message: "Invalid username or password",
+          message: errorMessages.INVALID_CREDENTIALS,
         });
       }
       req.login(user, { session: false }, (err) => {
         if (err) {
           return next(err);
         }
+
+        if (user.password_reset_required) {
+          return res.status(200).json({
+            password_reset_required: true,
+            message: "Password reset required",
+            email: user.email,
+          });
+        }
+
         const body = {
           entityKey: user.entityKey,
           email: user.email,
           roles: user.roles,
           first_name: user.first_name,
           last_name: user.last_name,
+          is_superuser: user.is_superuser,
         };
         const token = jwt.sign({ user: body }, process.env.JWT_SECRET, {
           expiresIn: "6h",
