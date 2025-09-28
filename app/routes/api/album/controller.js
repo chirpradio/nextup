@@ -93,7 +93,7 @@ module.exports = {
   },
   async updateAlbumInfo(req, res, next) {
     try {
-      const album = await AlbumService.getAlbumById(req.params.album_id);
+      const album = req.album;
       await AlbumService.updateAlbumInfo(
         album,
         {

@@ -155,21 +155,11 @@ async function updateCurrentTags(album, tags, user) {
 }
 
 async function updateAlbumInfo(album, { label, year, pronunciation }, user) {
-  const transaction = gstore.transaction();
-  await transaction.run();
-
-  const oldValues = {
-    label: album.label,
-    year: album.year,
-    pronunciation: album.pronunciation,
-  };
-
   album.label = label;
   album.year = year;
   album.pronunciation = pronunciation;
   await album.save();
 
-  await transaction.commit();
 }
 
 async function listAlbumComments(album) {

@@ -26,7 +26,6 @@
         {{ album.label }} &middot; {{ album.year }}
         <span v-if="album.disc_number">– Disc {{ album.disc_number }}</span>
       </p>
-      <EditAlbumInfo :album="album" />
       <TagList :tags="album.current_tags" :album="album" />
       <RecentlyPlayedAlert :album="album" />
     </div>

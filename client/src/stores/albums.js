@@ -159,35 +159,19 @@ export const useAlbumsStore = defineStore("albums", {
         track.current_tags = oldTags;
       }
     },
-    async updateAlbumTags({ album, tags } = {}) {
+    async updateAlbum({ album, tags, label, year, pronunciation } = {}) {
       const oldTags = album.current_tags ? [...album.current_tags] : [];
       album.current_tags = tags;
       try {
         await api.updateAlbumTags(album.album_id, tags);
+        await api.updateAlbumInfo(album.album_id, { label, year, pronunciation });
+        album.label = label;
+        album.year = year;
+        album.pronunciation = pronunciation;
       } catch (error) {
         album.current_tags = oldTags;
       }
     },
-
-    async updateAlbumInfo({ album, label, year, pronunciation } = {}) {
-      const oldValues = {
-        label: album.label,
-        year: album.year,
-        pronunciation: album.pronunciation,
-      };
-
-      album.label = label;
-      album.year = year;
-      album.pronunciation = pronunciation;
-      try {
-        await api.updateAlbumInfo(album.album_id, { label, year, pronunciation });
-      } catch (error) {
-        album.label = oldValues.label;
-        album.year = oldValues.year;
-        album.pronunciation = oldValues.pronunciation;
-      }
-    },
-
     modifyDocument(document, operation = "update") {
       const albumKey = document.subject.name || document.subject.id;
       // "reviews" or "comments"
