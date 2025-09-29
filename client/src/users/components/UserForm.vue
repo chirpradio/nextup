@@ -155,9 +155,7 @@
             :label="submitLabel"
             :loading="saving"
             :loadingText="loadingText"
-          >
-            {{ submitButtonText }}
-          </LoadingButton>
+          />
           <button
             type="button"
             class="btn btn-outline-secondary"
@@ -214,9 +212,6 @@ export default {
     },
     submitLabel() {
       return this.isEditMode ? "update user" : "add new user";
-    },
-    submitButtonText() {
-      return this.isEditMode ? "Update User" : "Create User";
     },
     loadingText() {
       return this.isEditMode ? "updating..." : "adding...";
