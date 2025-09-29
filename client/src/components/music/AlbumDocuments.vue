@@ -52,17 +52,17 @@
     </div>
     <div v-show="addCommentOpen">
       <label for="comment" class="sr-only">comment</label>
-    <MarkdownEditor v-model="comment" class="ms-2" />
-    <LoadingButton
-      class="mt-3 mb-5 ms-2 col-3"
-      icon="plus"
-      label="add comment"
-      :loading="adding"
-      :small="true"
-      :disable="commentEmpty"
-      @click="addComment"
-    />
-    </div> 
+      <MarkdownEditor v-model="comment" class="ms-2" />
+      <LoadingButton
+        class="mt-3 mb-5 ms-2 col-3"
+        icon="plus"
+        label="add comment"
+        :loading="adding"
+        :small="true"
+        :disable="commentEmpty"
+        @click="addComment"
+      />
+    </div>
   </div>
 </template>
 

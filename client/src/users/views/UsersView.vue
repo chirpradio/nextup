@@ -54,6 +54,7 @@
             <th>DJ Name</th>
             <th>Roles</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -76,6 +77,15 @@
               >
                 {{ user.is_active ? "Active" : "Inactive" }}
               </span>
+            </td>
+            <td>
+              <router-link
+                :to="`/users/${getUserId(user)}/edit`"
+                class="btn btn-sm btn-outline-primary"
+              >
+                <font-awesome-icon icon="edit" />
+                edit
+              </router-link>
             </td>
           </tr>
         </tbody>
@@ -133,6 +143,11 @@ export default {
       } catch (err) {
         console.error("Failed to copy password:", err);
       }
+    },
+
+    getUserId(user) {
+      // Extract user ID from __key path
+      return user.__key?.path?.[1] || user.id;
     },
   },
 

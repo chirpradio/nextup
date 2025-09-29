@@ -152,11 +152,11 @@
         <div class="d-flex gap-2">
           <LoadingButton
             type="submit"
-            label="add new user"
+            :label="submitLabel"
             :loading="saving"
-            loadingText="adding..."
+            :loadingText="loadingText"
           >
-            Create User
+            {{ submitButtonText }}
           </LoadingButton>
           <button
             type="button"
@@ -182,6 +182,15 @@ export default {
   },
   emits: ["submit", "cancel"],
   props: {
+    mode: {
+      type: String,
+      default: "add",
+      validator: (value) => ["add", "edit"].includes(value),
+    },
+    user: {
+      type: Object,
+      default: null,
+    },
     saving: {
       type: Boolean,
       default: false,
@@ -198,6 +207,37 @@ export default {
         is_active: true,
       },
     };
+  },
+  computed: {
+    isEditMode() {
+      return this.mode === "edit";
+    },
+    submitLabel() {
+      return this.isEditMode ? "update user" : "add new user";
+    },
+    submitButtonText() {
+      return this.isEditMode ? "Update User" : "Create User";
+    },
+    loadingText() {
+      return this.isEditMode ? "updating..." : "adding...";
+    },
+  },
+  watch: {
+    user: {
+      immediate: true,
+      handler(newUser) {
+        if (newUser && this.isEditMode) {
+          this.form = {
+            email: newUser.email || "",
+            first_name: newUser.first_name || "",
+            last_name: newUser.last_name || "",
+            dj_name: newUser.dj_name || "",
+            roles: newUser.roles || [],
+            is_active: newUser.is_active !== false,
+          };
+        }
+      },
+    },
   },
   methods: {
     onSubmit() {

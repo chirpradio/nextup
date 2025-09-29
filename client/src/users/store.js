@@ -13,8 +13,8 @@ export const useUsersStore = defineStore("users", {
     usersLoaded: false,
   }),
   getters: {
-    user: (state) => (id) => {
-      return state.users.find((user) => user.id === id);
+    getUserById: (state) => (id) => {
+      return state.users.find((user) => user.__key.id == id);
     },
   },
   actions: {
@@ -92,6 +92,25 @@ export const useUsersStore = defineStore("users", {
 
     refreshUsers() {
       return this.getUsers(true);
+    },
+
+    async updateUser(userId, userData) {
+      this.savingUser = true;
+      this.error = null;
+
+      try {
+        const { data } = await api.patch(`/user/${userId}`, userData);
+
+        const user = this.getUserById(userId);
+        Object.assign(user, data);
+
+        this.savingUser = false;
+        return data;
+      } catch (error) {
+        this.savingUser = false;
+        this.error = error.response?.data?.error || "Failed to update user";
+        throw error;
+      }
     },
 
     resetUsersCache() {
