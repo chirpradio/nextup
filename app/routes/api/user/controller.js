@@ -12,9 +12,9 @@ module.exports = {
 
       const { entities: users } = await User.list(options);
 
-      // Remove password field from all users
+      // Remove password and api_key fields from all users
       const safeUsers = users.map((user) => {
-        const { password, ...userResponse } = user.entityData;
+        const { password, api_key, ...userResponse } = user.entityData;
         userResponse.__key = user.entityKey;
         return userResponse;
       });
@@ -125,6 +125,65 @@ module.exports = {
       await user.save();
 
       res.json({ message: "Password changed successfully" });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async updateUser(req, res, next) {
+    try {
+      const userId = req.params.id;
+      const updates = req.body;
+
+      // Find existing user
+      const user = await User.get(User.gstore.ds.int(userId));
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Email uniqueness check
+      if (updates.email && updates.email !== user.email) {
+        const existingUser = await User.findOne({ email: updates.email });
+        if (existingUser) {
+          return res.status(409).json({
+            error: "User with this email already exists",
+          });
+        }
+      }
+
+      // Apply updates
+      const allowedFields = [
+        "first_name",
+        "last_name",
+        "dj_name",
+        "email",
+        "roles",
+        "is_active",
+      ];
+      allowedFields.forEach((field) => {
+        if (updates.hasOwnProperty(field)) {
+          user[field] = updates[field];
+        }
+      });
+
+      await user.save();
+
+      // Simple success logging
+      req.log.info(
+        {
+          email: user.email,
+          updated_by: req.user.email,
+          fields: Object.keys(updates),
+        },
+        "user updated"
+      );
+
+      // Return updated user without password or api_key
+      const { password, api_key, ...userResponse } = user.entityData;
+      userResponse.__key = user.entityKey;
+
+      res.json(userResponse);
     } catch (error) {
       next(error);
     }
