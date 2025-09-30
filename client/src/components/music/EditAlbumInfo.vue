@@ -9,7 +9,7 @@
     title="Edit Album"
     ref="modal"
     @confirm="setAlbumInfo"
-    confirm-label="Update"
+    confirm-label="update"
   >
     <h3>{{ albumTitle }}</h3>
     <h4 v-if="album.album_artist">by {{ album.album_artist.name }}</h4>
@@ -46,9 +46,9 @@
     <div
       v-for="group in Object.keys(groupedTags)"
       :key="group"
-      class="w-50 d-inline-block mt-1"
+      class="w-50 d-inline-block mt-3"
     >
-      <h5 class="mt-1 mb-1 text-capitalize">{{ group }}</h5>
+      <h5 class="mt-1 mb-1 col-form-label text-capitalize">{{ group }}</h5>
       <ul class="list-unstyled">
         <!-- Create two radio button groups for 'local' and 'rotation' tags,
           that allow you to select one of the valid tags or 'Neither', a null placeholder value -->
