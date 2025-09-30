@@ -2,6 +2,13 @@ const { User } = require("../../../models");
 const { CrateService, PasswordService } = require("../../../services");
 const { errorMessages } = require("../errors");
 
+
+function sanitizeUserData(user) {
+  const { password, api_key, ...userResponse } = user.entityData;
+  userResponse.__key = user.entityKey;
+  return userResponse;
+}
+
 module.exports = {
   async listUsers(req, res, next) {
     try {
@@ -13,11 +20,7 @@ module.exports = {
       const { entities: users } = await User.list(options);
 
       // Remove password and api_key fields from all users
-      const safeUsers = users.map((user) => {
-        const { password, api_key, ...userResponse } = user.entityData;
-        userResponse.__key = user.entityKey;
-        return userResponse;
-      });
+      const safeUsers = users.map(sanitizeUserData);
 
       res.json(safeUsers);
     } catch (error) {
@@ -83,8 +86,7 @@ module.exports = {
       }
 
       // Return user data without password
-      const { password: _, ...userResponse } = user.entityData;
-      userResponse.__key = user.entityKey;
+      const userResponse = sanitizeUserData(user);
 
       req.log.info(
         {
@@ -180,8 +182,7 @@ module.exports = {
       );
 
       // Return updated user without password or api_key
-      const { password, api_key, ...userResponse } = user.entityData;
-      userResponse.__key = user.entityKey;
+      const userResponse = sanitizeUserData(user);
 
       res.json(userResponse);
     } catch (error) {
