@@ -67,7 +67,7 @@ router.patch(
   emailValidator.optional(),
   firstNameValidator.optional(),
   lastNameValidator.optional(),
-  djNameValidator.optional(),
+  djNameValidator,
   roleArrayValidator,
   roleValidator,
   body("is_active").optional().isBoolean(),
