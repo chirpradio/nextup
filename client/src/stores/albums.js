@@ -210,11 +210,5 @@ export const useAlbumsStore = defineStore("albums", {
     removeDocument(document) {
       this.modifyDocument(document, "remove");
     },
-    updateDocument(document) {
-      this.modifyDocument(document, "update");
-    },
-    removeDocument(document) {
-      this.modifyDocument(document, "remove");
-    },
   },
 });
