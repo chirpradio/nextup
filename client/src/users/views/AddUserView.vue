@@ -9,6 +9,7 @@
         </div>
 
         <UserForm
+          mode="add"
           :saving="savingUser"
           @submit="onCreateUser"
           @cancel="onCancel"

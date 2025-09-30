@@ -244,6 +244,9 @@ components:
         is_superuser:
           type: boolean
           readOnly: true
+        password_reset_required:
+          type: boolean
+          readOnly: true
         roles:
           type: array
           items:
@@ -322,12 +325,23 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:   
-                  token:
-                    type: string
+                oneOf:
+                  - type: object
+                    properties:   
+                      token:
+                        type: string
+                    description: Successful login with JWT token
+                  - type: object
+                    properties:
+                      password_reset_required:
+                        type: boolean
+                      message:
+                        type: string
+                      email:
+                        type: string
+                    description: Password reset required before login
         '401':
-          description: Unauthorized
+          description: Invalid credentials
   /album/tag:
     get:
       security:
@@ -1359,3 +1373,103 @@ paths:
           description: Forbidden - superuser or volunteer coordinator access required
         '409':
           description: Conflict - user with email already exists
+  /user/change-password:
+    post:
+      summary: Change password
+      description: Change password for a user by providing their email and current password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+                  minLength: 12
+              required:
+                - email
+                - currentPassword
+                - newPassword
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Invalid credentials or new password requirements not met
+  /user/{id}:
+    patch:
+      summary: Update user information
+      description: Update specific fields of an existing user. Supports partial updates. Requires superuser privileges or volunteer coordinator role.
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email address (must be unique)
+                first_name:
+                  type: string
+                  description: User's first name
+                last_name:
+                  type: string
+                  description: User's last name
+                dj_name:
+                  type: string
+                  description: User's DJ name/handle
+                roles:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - dj
+                      - music_director
+                      - traffic_log_admin
+                      - reviewer
+                      - volunteer_coordinator
+                  description: Array of user roles
+                is_active:
+                  type: boolean
+                  description: Whether the user account is active
+              additionalProperties: false
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request - validation errors
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - superuser or volunteer coordinator access required
+        '404':
+          description: User not found
+        '409':
+          description: Conflict - email already exists for another user

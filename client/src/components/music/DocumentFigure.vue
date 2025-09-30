@@ -171,15 +171,21 @@ export default {
       }
     },
     modifiedLabel(document) {
-      if (document && document.modified && new Date(document.modified) - new Date(document.created) > 1) {
+      if (
+        document &&
+        document.modified &&
+        new Date(document.modified) - new Date(document.created) > 1
+      ) {
         return `, edited ${this.formatDate(document.modified)}`;
       }
-      
+
       return "";
     },
     dateLabel(document) {
-      return `${this.formatDate(document.created)}${this.modifiedLabel(document)}`;
-    },  
+      return `${this.formatDate(document.created)}${this.modifiedLabel(
+        document
+      )}`;
+    },
   },
   mixins: [formatters],
 };

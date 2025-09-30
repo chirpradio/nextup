@@ -43,7 +43,7 @@ router.use("/search", authenticate, searchRouter);
 router.use("/spot", authenticate, spotRouter);
 router.use("/traffic-log", authenticate, trafficLogRouter);
 router.use("/token", tokenRouter);
-router.use("/user", authenticate, userRouter);
+router.use("/user", userRouter); // authenticated at route level
 
 // error handling
 router.use(sendErrorCode);

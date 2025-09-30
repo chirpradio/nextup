@@ -1,6 +1,17 @@
 import { defineStore } from "pinia";
 import api from "../services/api.service";
 
+function spliceDocument(album, albumProp, document, operation) {
+  const index = album[albumProp].findIndex((d) => d.id === document.id);
+  if (index > -1) {
+    if (operation === "remove") {
+      album[albumProp].splice(index, 1);
+    } else {
+      album[albumProp].splice(index, 1, document);
+    }
+  }
+}
+
 export const useAlbumsStore = defineStore("albums", {
   state: () => ({
     tagCollections: {
@@ -179,17 +190,25 @@ export const useAlbumsStore = defineStore("albums", {
 
       for (const album of Object.values(this.albums)) {
         if (album.id === albumKey) {
-          const index = album[albumProp].findIndex((d) => d.id === document.id);
-          if (index > -1) {
-            if (operation === "remove") {
-              album[albumProp].splice(index, 1);
-            } else {
-              album[albumProp].splice(index, 1, document);
-            }
-          }
+          spliceDocument(album, albumProp, document, operation);
           break;
         }
       }
+      
+      // remove from preview in tag collections
+      for (const collection of Object.values(this.tagCollections)) {
+        for (const album of collection.albums) {
+          if (album.id === albumKey) {
+            spliceDocument(album, albumProp, document, operation);
+          }
+        }
+      }
+    },
+    updateDocument(document) {
+      this.modifyDocument(document, "update");
+    },
+    removeDocument(document) {
+      this.modifyDocument(document, "remove");
     },
     updateDocument(document) {
       this.modifyDocument(document, "update");

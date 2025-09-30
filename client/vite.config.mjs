@@ -57,6 +57,11 @@ export default defineConfig({
             "./src/views/reports/RotationAlbums.vue",
             "./src/views/reports/RotationPlays.vue",
           ],
+          "users": [
+            "./src/users/views/AddUserView.vue",
+            "./src/users/views/EditUserView.vue",
+            "./src/users/views/UsersView.vue",
+          ],
         },
       },
     },

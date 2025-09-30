@@ -12,7 +12,7 @@
             albumArtSrcSize="xl"
           />
         </div>
-        <AddToCrate :keyToAdd="album.__key" class="col-md-4" />
+        <AddToCrate :keyToAdd="album.__key" class="col-md-4 mb-3" />
         <AlbumDocuments :album="album" />
       </div>
 
