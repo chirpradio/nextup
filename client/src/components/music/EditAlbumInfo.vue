@@ -1,5 +1,5 @@
 <template>
-  <li class="list-inline-item edit-tags-button" @click="show">
+  <li class="list-inline-item edit-button" @click="show">
     <div class="fw-normal text-body badge rounded-pill border">
       <font-awesome-icon class="opacity-50 pe-1" icon="edit" size="sm" />
       <span class="opacity-75">Edit</span>
@@ -154,7 +154,7 @@ export default {
 };
 </script>
 <style scoped>
-.edit-tags-button {
+.edit-button {
   cursor: pointer;
 }
 
