@@ -39,6 +39,7 @@ import ArtistName from "./ArtistName.vue";
 import ReviewPreview from "./ReviewPreview.vue";
 import TagList from "./TagList.vue";
 import RecentlyPlayedAlert from "./RecentlyPlayedAlert.vue";
+import EditAlbumInfo from "./EditAlbumInfo.vue";
 
 export default {
   components: {
@@ -47,6 +48,7 @@ export default {
     AlbumArtLink,
     ReviewPreview,
     RecentlyPlayedAlert,
+    EditAlbumInfo,
   },
   props: {
     album: Object,
