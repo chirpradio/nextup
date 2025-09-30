@@ -4,7 +4,7 @@ const { CURRENT_TAGS } = require("../config/constants");
 
 function validateCategories(obj, validator, validTags) {
   if (Array.isArray(obj)) {
-    return obj.every((tag) => validTags.includes(tag.toLowerCase()));
+    return obj.every((tag) => validTags.includes(tag));
   }
 
   return false;
