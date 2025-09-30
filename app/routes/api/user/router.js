@@ -1,6 +1,14 @@
 const router = require("express").Router();
-const { body } = require("express-validator");
-const { validateUserCreation } = require("./validators");
+const { body, param } = require("express-validator");
+const {
+  emailValidator,
+  validateUserCreation,
+  firstNameValidator,
+  lastNameValidator,
+  djNameValidator,
+  roleArrayValidator,
+  roleValidator,
+} = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
 const rateLimit = require("express-rate-limit");
@@ -49,6 +57,22 @@ router.post(
   body("newPassword").isString().isLength({ min: 12 }),
   checkErrors,
   controller.changePassword
+);
+
+router.patch(
+  "/:id",
+  authenticate,
+  requireUserManagementAccess,
+  param("id").isNumeric(),
+  emailValidator.optional(),
+  firstNameValidator.optional(),
+  lastNameValidator.optional(),
+  djNameValidator,
+  roleArrayValidator,
+  roleValidator,
+  body("is_active").optional().isBoolean(),
+  checkErrors,
+  controller.updateUser
 );
 
 module.exports = router;

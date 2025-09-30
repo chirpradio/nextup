@@ -17,6 +17,16 @@ const routes = [
       requiresAuth: "users",
     },
   },
+  {
+    path: "/users/:id/edit",
+    name: "editUser",
+    component: () => import("./views/EditUserView.vue"),
+    props: true,
+    meta: {
+      title: "Edit User",
+      requiresAuth: "users",
+    },
+  },
 ];
 
 export default routes;
