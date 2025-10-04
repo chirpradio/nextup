@@ -8,7 +8,7 @@
     >
       <Tag :tag="tag" />
     </li>
-    <EditTagsButton
+    <EditAlbumInfo
       v-if="canEditTags"
       :currentTags="filteredTags"
       :album="album"
@@ -18,7 +18,7 @@
 
 <script>
 import Tag from "./TagBadge.vue";
-import EditTagsButton from "./EditTagsButton.vue";
+import EditAlbumInfo from "./EditAlbumInfo.vue";
 import { mapStores } from "pinia";
 
 import { useAuthStore } from "@/stores/auth";
@@ -26,7 +26,7 @@ import { allowedTags } from "@/constants";
 
 export default {
   name: "TagList",
-  components: { Tag, EditTagsButton },
+  components: { Tag, EditAlbumInfo },
   props: {
     tags: {
       type: Array,

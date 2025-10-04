@@ -170,11 +170,15 @@ export const useAlbumsStore = defineStore("albums", {
         track.current_tags = oldTags;
       }
     },
-    async updateAlbumTags({ album, tags } = {}) {
+    async updateAlbum({ album, tags, label, year, pronunciation } = {}) {
       const oldTags = album.current_tags ? [...album.current_tags] : [];
       album.current_tags = tags;
       try {
         await api.updateAlbumTags(album.album_id, tags);
+        await api.updateAlbumInfo(album.album_id, { label, year, pronunciation });
+        album.label = label;
+        album.year = year;
+        album.pronunciation = pronunciation;
       } catch (error) {
         album.current_tags = oldTags;
       }
@@ -184,13 +188,13 @@ export const useAlbumsStore = defineStore("albums", {
       // "reviews" or "comments"
       const albumProp = `${document.doctype}s`;
 
-      // remove from album view
       for (const album of Object.values(this.albums)) {
         if (album.id === albumKey) {
           spliceDocument(album, albumProp, document, operation);
           break;
         }
       }
+      
       // remove from preview in tag collections
       for (const collection of Object.values(this.tagCollections)) {
         for (const album of collection.albums) {

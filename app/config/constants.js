@@ -17,4 +17,11 @@ module.exports = {
     "Disc 10",
   ],
   SPOT__VALID_SLOTS: [0, 12, 13, 24, 25, 30, 36, 37, 48, 49, 54, 55],
+  ROLES: [
+    "reviewer",
+    "dj",
+    "music_director",
+    "volunteer_coordinator",
+    "traffic_log_admin",
+  ],
 };

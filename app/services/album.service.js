@@ -154,6 +154,14 @@ async function updateCurrentTags(album, tags, user) {
   await transaction.commit();
 }
 
+async function updateAlbumInfo(album, { label, year, pronunciation }, user) {
+  album.label = label;
+  album.year = year;
+  album.pronunciation = pronunciation;
+  await album.save();
+
+}
+
 async function listAlbumComments(album) {
   const options = {
     filters: [
@@ -299,6 +307,7 @@ module.exports = {
   listAlbumTracks,
   options,
   updateCurrentTags,
+  updateAlbumInfo,
   getAlbumsByAlbumArtist,
   getAlbumsWithTag,
   getAlbumsImportedSince,
