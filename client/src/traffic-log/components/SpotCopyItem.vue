@@ -64,10 +64,13 @@ export default {
       return this.copy.name || this.copy.body;
     },
     started() {
-      return copyStarted(this.copy.start_on);
+      return copyStarted(this.copy.start_on) || this.noDates;
     },
     expired() {
       return copyExpired(this.copy.expire_on);
+    },
+    noDates() {
+      return !this.copy.start_on && !this.copy.expire_on;
     },
     badgeLabel() {
       if (this.expired) {
