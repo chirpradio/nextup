@@ -15,6 +15,7 @@ module.exports = {
     "Disc 8",
     "Disc 9",
     "Disc 10",
+    "EP",
   ],
   SPOT__VALID_SLOTS: [0, 12, 13, 24, 25, 30, 36, 37, 48, 49, 54, 55],
   ROLES: [
