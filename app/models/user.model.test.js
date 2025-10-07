@@ -10,12 +10,12 @@ describe("Password hashing and authentication", () => {
       date_joined: new Date(),
       email: "test@test.com",
       first_name: "Test",
-      last_name: "Test",
-      password: input,
+      last_name: "Test",      
     });
 
     try {
-      user = await user.save();
+      user.setPassword(input);
+      await user.save();
     } catch (err) {
       console.error(err);
     }

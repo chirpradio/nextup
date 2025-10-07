@@ -56,8 +56,7 @@ module.exports = {
       const userData = {
         email,
         first_name,
-        last_name,
-        password: temporaryPassword,
+        last_name,        
         date_joined: new Date(),
         is_active,
         is_superuser: false,
@@ -70,6 +69,7 @@ module.exports = {
       }
 
       const user = new User(userData);
+      user.setPassword(temporaryPassword);
       await user.save();
 
       // Create a default crate for the new user
@@ -122,7 +122,7 @@ module.exports = {
         });
       }
 
-      user.password = newPassword;
+      user.setPassword(newPassword);
       user.password_reset_required = false;
       await user.save();
 
