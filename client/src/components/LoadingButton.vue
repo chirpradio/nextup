@@ -2,7 +2,7 @@
   <button class="btn" :class="classes" :disabled="disabled">
     <font-awesome-icon v-if="icon && !loading" :icon="icon" />
     <RecordSpinner v-if="loading" size="xs" class="nudge-up" />
-    {{ label }}
+    {{ displayLabel }}
   </button>
 </template>
 
@@ -21,6 +21,7 @@ export default {
   props: {
     icon: String,
     label: String,
+    loadingLabel: String,
     small: {
       type: Boolean,
       default: false,
@@ -50,6 +51,9 @@ export default {
     },
     disabled() {
       return this.disable || this.loading;
+    },
+    displayLabel() {
+      return this.loading ? this.loadingLabel : this.label;
     },
   },
 };
