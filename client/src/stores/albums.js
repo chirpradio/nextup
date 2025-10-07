@@ -175,7 +175,11 @@ export const useAlbumsStore = defineStore("albums", {
       album.current_tags = tags;
       try {
         await api.updateAlbumTags(album.album_id, tags);
-        await api.updateAlbumInfo(album.album_id, { label, year, pronunciation });
+        await api.updateAlbumInfo(album.album_id, {
+          label,
+          year,
+          pronunciation,
+        });
         album.label = label;
         album.year = year;
         album.pronunciation = pronunciation;
@@ -194,7 +198,7 @@ export const useAlbumsStore = defineStore("albums", {
           break;
         }
       }
-      
+
       // remove from preview in tag collections
       for (const collection of Object.values(this.tagCollections)) {
         for (const album of collection.albums) {

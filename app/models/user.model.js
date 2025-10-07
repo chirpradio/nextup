@@ -22,7 +22,6 @@ function hashPassword(input) {
   return crypto.createHash("sha1").update(input).digest("hex");
 }
 
-
 userSchema.methods.setPassword = function (input) {
   // matches the approach of the existing DJDB app
   const salt = crypto.randomBytes(2).toString("hex");

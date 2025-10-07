@@ -2,7 +2,6 @@ const { User } = require("../../../models");
 const { CrateService, PasswordService } = require("../../../services");
 const { errorMessages } = require("../errors");
 
-
 function sanitizeUserData(user) {
   const { password, api_key, ...userResponse } = user.entityData;
   userResponse.__key = user.entityKey;
@@ -56,7 +55,7 @@ module.exports = {
       const userData = {
         email,
         first_name,
-        last_name,        
+        last_name,
         date_joined: new Date(),
         is_active,
         is_superuser: false,
@@ -162,9 +161,9 @@ module.exports = {
       if (isSelfUpdate) {
         // For self-updates, only allow DJ name
         allowedFields = ["dj_name"];
-        
+
         // Only allow DJ name updates if user is actually a DJ
-        if (updates.dj_name && !user.roles?.includes('dj')) {
+        if (updates.dj_name && !user.roles?.includes("dj")) {
           return res.status(403).json({
             error: "Only DJs can update their DJ name",
           });
@@ -173,7 +172,7 @@ module.exports = {
         // For admin updates, allow all standard fields
         allowedFields = [
           "first_name",
-          "last_name", 
+          "last_name",
           "dj_name",
           "email",
           "roles",

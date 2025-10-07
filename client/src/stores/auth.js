@@ -85,7 +85,7 @@ export const useAuthStore = defineStore("auth", {
         this.user = decoded.user;
         return { success: true };
       } else {
-        console.log(response);
+        console.log(data);
         return { success: false };
       }
     },
@@ -114,9 +114,9 @@ export const useAuthStore = defineStore("auth", {
 
       try {
         const { data } = await api.patch(`/user/${userId}`, userData);
-        Object.assign(this.user, data);        
+        Object.assign(this.user, data);
         return data;
-      } catch (error) {        
+      } catch (error) {
         this.error = error.response?.data?.error || "Failed to update user";
         throw error;
       }

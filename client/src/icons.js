@@ -14,7 +14,7 @@ import {
   faPlus,
   faPen,
   faRightFromBracket,
-  faRightToBracket,  
+  faRightToBracket,
   faCirclePause,
   faArrowLeft,
   faArrowRight,

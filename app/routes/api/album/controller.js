@@ -44,7 +44,7 @@ module.exports = {
       const isMusicDirector = req.user.isMusicDirector();
       const isSuperuser = req.user.is_superuser === true;
 
-      if ( isMusicDirector || isSuperuser) {
+      if (isMusicDirector || isSuperuser) {
         req.album = album;
         return next();
       }
@@ -55,7 +55,7 @@ module.exports = {
       });
     } catch (error) {
       next(error);
-    }	  
+    }
   },
   async getRecentAlbums(req, res, next) {
     try {
@@ -109,4 +109,3 @@ module.exports = {
     }
   },
 };
-

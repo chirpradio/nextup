@@ -11,91 +11,92 @@
         <div v-if="successMessage" class="alert alert-success" role="alert">
           {{ successMessage }}
         </div>
-        
+
         <div v-if="isDJ" class="mt-4 mb-4">
           <h2>Update info</h2>
-            <form @submit.prevent="updateInfo">
-              <div class="mb-3">
-                <label for="djName" class="form-label">DJ name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="djName"
-                  v-model="infoForm.dj_name"
-                  placeholder="Enter your DJ name"
-                />
-              </div>
-              <div class="d-flex gap-2">
-                <LoadingButton
-                  type="submit"
-                  :loading="savingInfo"
-                  :disable="!djNameChanged"
-                  label="update"
-                  loadingLabel="updating"
-                />
-              </div>
-            </form> 
+          <form @submit.prevent="updateInfo">
+            <div class="mb-3">
+              <label for="djName" class="form-label">DJ name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="djName"
+                v-model="infoForm.dj_name"
+                placeholder="Enter your DJ name"
+              />
+            </div>
+            <div class="d-flex gap-2">
+              <LoadingButton
+                type="submit"
+                :loading="savingInfo"
+                :disable="!djNameChanged"
+                label="update"
+                loadingLabel="updating"
+              />
+            </div>
+          </form>
         </div>
 
-        <div>          
-            <h2>Change password</h2>          
-            <form @submit.prevent="changePassword">
-              <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="currentPassword"
-                  v-model="passwordForm.currentPassword"
-                  required
-                />
-              </div>
+        <div>
+          <h2>Change password</h2>
+          <form @submit.prevent="changePassword">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label"
+                >Current password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="currentPassword"
+                v-model="passwordForm.currentPassword"
+                required
+              />
+            </div>
 
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">New password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="newPassword"
-                  v-model="passwordForm.newPassword"
-                  required
-                  minlength="12"
-                />
-                <div class="form-text">
-                  minimum 12 characters
-                </div>
-              </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">New password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="newPassword"
+                v-model="passwordForm.newPassword"
+                required
+                minlength="12"
+              />
+              <div class="form-text">minimum 12 characters</div>
+            </div>
 
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm new password</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="confirmPassword"
-                  v-model="passwordForm.confirmPassword"
-                  required              
-                />
-              </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label"
+                >Confirm new password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                v-model="passwordForm.confirmPassword"
+                required
+              />
+            </div>
 
-              <div class="d-flex gap-2">
-                <LoadingButton
-                  type="submit"
-                  :loading="savingPassword"
-                  label="change password"
-                  loadingLabel="changing..."
-                />
-                <button 
-                  type="button" 
-                  class="btn btn-outline-secondary"
-                  @click="resetPasswordForm"
-                  :disabled="savingPassword"
-                >
-                  clear
-                </button>
-              </div>
-            </form>
+            <div class="d-flex gap-2">
+              <LoadingButton
+                type="submit"
+                :loading="savingPassword"
+                label="change password"
+                loadingLabel="changing..."
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                @click="resetPasswordForm"
+                :disabled="savingPassword"
+              >
+                clear
+              </button>
+            </div>
+          </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -140,7 +141,7 @@ export default {
     },
   },
   mounted() {
-    if (this.isDJ) {      
+    if (this.isDJ) {
       this.infoForm.dj_name = this.user.dj_name || "";
     }
   },
@@ -179,7 +180,7 @@ export default {
 
       try {
         await this.authStore.changePassword(
-          this.passwordForm.currentPassword, 
+          this.passwordForm.currentPassword,
           this.passwordForm.newPassword
         );
         this.successMessage = "Password changed successfully";

@@ -40,7 +40,6 @@ export { setAuthorizationHeader };
 export { instance as api };
 
 export default {
-
   async getTaggedAlbums(params) {
     const getter = instance.get("/album/tag", { params });
     return await getAndHandleError(getter);
@@ -65,7 +64,9 @@ export default {
   },
 
   async updateAlbumTags(album_id, tags) {
-    const response = await instance.patch(`/album/${album_id.value}/tags`, { tags });
+    const response = await instance.patch(`/album/${album_id.value}/tags`, {
+      tags,
+    });
     return response.data;
   },
 

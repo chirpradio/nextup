@@ -42,7 +42,7 @@ router.patch(
   "/:album_id/tags",
   validateTags,
   checkErrors,
-  controller.updateAlbumTags,
+  controller.updateAlbumTags
 );
 
 router.patch(
@@ -53,4 +53,3 @@ router.patch(
 );
 
 module.exports = router;
-
