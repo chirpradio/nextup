@@ -93,16 +93,10 @@ export const useAuthStore = defineStore("auth", {
       setAuthorizationHeader("");
       this.$reset();
     },
-    async resetPassword(token, newPassword) {
-      const response = await api.post("/password/reset", {
-        token,
-        newPassword,
-      });
-      return response.data;
-    },
     async changePassword(currentPassword, newPassword) {
       try {
-        const response = await api.post("/password/change", {
+        const response = await api.post("/user/change-password", {
+          email: this.user.email,
           currentPassword,
           newPassword,
         });
@@ -111,6 +105,20 @@ export const useAuthStore = defineStore("auth", {
         throw new Error(
           error.response?.data?.error || "Failed to change password"
         );
+      }
+    },
+    async updateProfile(userData) {
+      this.error = null;
+
+      const userId = this.user.entityKey.id;
+
+      try {
+        const { data } = await api.patch(`/user/${userId}`, userData);
+        Object.assign(this.user, data);        
+        return data;
+      } catch (error) {        
+        this.error = error.response?.data?.error || "Failed to update user";
+        throw error;
       }
     },
   },
