@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api, setAuthorizationHeader } from "../services/api.service";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import features from "./features";
@@ -69,16 +69,19 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     async logIn({ email, password }) {
-      const response = await api.login(email, password);
-      if (response.password_reset_required) {
+      const { data } = await api.post("/token", {
+        email,
+        password,
+      });
+      if (data.password_reset_required) {
         return {
           password_reset_required: true,
-          message: response.message,
-          email: response.email,
+          message: data.message,
+          email: data.email,
         };
-      } else if (response.token) {
-        this.token = response.token;
-        const decoded = jwt_decode(response.token);
+      } else if (data.token) {
+        this.token = data.token;
+        const decoded = jwt_decode(data.token);
         this.user = decoded.user;
         return { success: true };
       } else {
@@ -87,7 +90,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     logOut() {
-      api.setAuthorizationHeader("");
+      setAuthorizationHeader("");
       this.$reset();
     },
     async resetPassword(token, newPassword) {
@@ -124,7 +127,7 @@ export const useAuthStore = defineStore("auth", {
     },
     afterRestore: ({ store }) => {
       if (store.isAuthenticated) {
-        api.setAuthorizationHeader(store.token);
+        setAuthorizationHeader(store.token);
       }
     },
   },
