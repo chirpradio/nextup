@@ -126,14 +126,33 @@
             aria-label="Search"
           />
         </form>
-        <div class="d-flex flex-column align-items-start align-items-md-end">
-          <div class="username text-white me-1">{{ userName }}</div>
+        <div class="dropdown navbar-nav">
           <button
-            class="btn btn-sm btn-link btn-link-light ps-0 ps-md-2"
-            @click="logOut"
+            class="btn nav-link dropdown-toggle"
+            type="button"
+            id="userDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
-            log out
+            {{ initials }}
           </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <p class="ms-3 text-muted">
+              {{ displayName }}
+            </p>
+            <li>
+              <router-link class="dropdown-item" to="/profile">              
+                edit your profile
+              </router-link>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button class="dropdown-item" @click="logOut">
+                <font-awesome-icon icon="right-from-bracket" class="me-2" />
+                log out
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -170,10 +189,13 @@ export default {
     isAuthenticated() {
       return this.authStore.isAuthenticated;
     },
-    userName() {
-      const user = this.authStore.user;
-      const lastInitial = user.last_name?.length ? `${user.last_name[0]}.` : "";
-      return `${user.first_name} ${lastInitial}`;
+    initials() {
+      const user = this.authStore.user;      
+      return `${user.first_name?.slice(0, 1)}${user.last_name?.slice(0, 1)}`; 
+    },
+    displayName() {
+      const user = this.authStore.user;      
+      return `${user.first_name} ${user.last_name}`;
     },
   },
   methods: {

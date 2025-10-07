@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-6">
-        <h1>Profile Settings</h1>
+        <h1>Edit Your Profile</h1>
 
         <div v-if="error" class="alert alert-danger" role="alert">
           {{ error }}
@@ -12,7 +12,7 @@
           {{ successMessage }}
         </div>
         
-        <div v-if="isDJ" class="mb-4">
+        <div v-if="isDJ" class="mt-4 mb-4">
           <h2>Update info</h2>
             <form @submit.prevent="updateInfo">
               <div class="mb-3">
@@ -41,19 +41,18 @@
             <h2>Change password</h2>          
             <form @submit.prevent="changePassword">
               <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current Password</label>
+                <label for="currentPassword" class="form-label">Current password</label>
                 <input
                   type="password"
                   class="form-control"
                   id="currentPassword"
                   v-model="passwordForm.currentPassword"
                   required
-                  placeholder="Enter your current password"
                 />
               </div>
 
               <div class="mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
+                <label for="newPassword" class="form-label">New password</label>
                 <input
                   type="password"
                   class="form-control"
@@ -61,19 +60,20 @@
                   v-model="passwordForm.newPassword"
                   required
                   minlength="12"
-                  placeholder="Enter new password (minimum 12 characters)"
                 />
+                <div class="form-text">
+                  minimum 12 characters
+                </div>
               </div>
 
               <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                <label for="confirmPassword" class="form-label">Confirm new password</label>
                 <input
                   type="password"
                   class="form-control"
                   id="confirmPassword"
                   v-model="passwordForm.confirmPassword"
-                  required
-                  placeholder="Confirm your new password"
+                  required              
                 />
               </div>
 
