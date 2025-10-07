@@ -159,7 +159,6 @@ async function updateAlbumInfo(album, { label, year, pronunciation }, user) {
   album.year = year;
   album.pronunciation = pronunciation;
   await album.save();
-
 }
 
 async function listAlbumComments(album) {

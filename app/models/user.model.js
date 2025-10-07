@@ -22,15 +22,14 @@ function hashPassword(input) {
   return crypto.createHash("sha1").update(input).digest("hex");
 }
 
-function saltAndHashPassword() {
+userSchema.methods.setPassword = function (input) {
   // matches the approach of the existing DJDB app
   const salt = crypto.randomBytes(2).toString("hex");
-  const hash = hashPassword(salt + this.password);
+  const hash = hashPassword(salt + input);
   this.password = salt + hash;
 
   return Promise.resolve();
-}
-userSchema.pre("save", saltAndHashPassword);
+};
 
 userSchema.methods.authenticate = function (plainText) {
   const salt = this.password.substring(0, 4);

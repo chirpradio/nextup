@@ -107,7 +107,7 @@ export default {
           },
         };
       }, {}),
-     form: this.buildForm(),
+      form: this.buildForm(),
     };
   },
   computed: {

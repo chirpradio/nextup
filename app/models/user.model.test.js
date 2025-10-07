@@ -11,11 +11,11 @@ describe("Password hashing and authentication", () => {
       email: "test@test.com",
       first_name: "Test",
       last_name: "Test",
-      password: input,
     });
 
     try {
-      user = await user.save();
+      user.setPassword(input);
+      await user.save();
     } catch (err) {
       console.error(err);
     }
