@@ -70,3 +70,11 @@ indexes:
   properties:
   - name: active
   - name: deleted
+
+- kind: Document 
+  properties: 
+  - name: is_hidden 
+  - name: revoked 
+  - name: subject 
+  - name: created 
+    direction: desc
