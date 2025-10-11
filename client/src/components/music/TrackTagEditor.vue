@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     toggle(tag) {
-      const tags = this.track.current_tags.includes(tag) ? [] : [tag];
+      const tags = (this.track.current_tags ??= []).includes(tag) ? [] : [tag];
       this.albumsStore.updateTrackTags({
         album_id: this.album_id,
         track: this.track,
