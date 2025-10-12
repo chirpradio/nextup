@@ -234,19 +234,31 @@ async function getReport(start, end) {
     ],
   }).populate(["spot", "spot_copy"]);
 
-  const header = ["readtime", "dow", "slot_time", "title", "type", "excerpt"];
+  const header = ["readtime", "dow", "slot_time", "underwriter", "title", "type", "excerpt"];
+  
   const rows = entries.sort(byReadTime).map((entry) => {
     const fields = [];
+    
     const dt = DateTime.fromJSDate(entry.readtime).setZone("America/Chicago");
-    fields.push(dt.toISO());
+    fields.push(dt.toFormat("yyyy-MM-dd HH:mm:ss"));
+    
     fields.push(dt.weekdayLong);
-    fields.push(`${entry.hour}:${entry.slot.toString().padStart(2, 0)}`);
-    fields.push(entry.spot.title);
-    fields.push(entry.spot.type);
-    const excerpt = entry.spot_copy
-      ? `${entry.spot_copy.body.substring(0, 12)}...`
+        
+    const slotTime = `${entry.hour.toString().padStart(2, '0')}:${entry.slot.toString().padStart(2, '0')}`;
+    fields.push(slotTime);
+        
+    const underwriter = entry.spot_copy?.underwriter || "";
+    fields.push(underwriter);
+        
+    fields.push(entry.spot?.title || "");
+        
+    fields.push(entry.spot?.type || "");
+    
+    const excerpt = entry.spot_copy?.body 
+      ? entry.spot_copy.body.substring(0, 140)
       : "";
     fields.push(excerpt);
+    
     return fields;
   });
 
