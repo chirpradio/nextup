@@ -25,4 +25,14 @@ module.exports = {
     "volunteer_coordinator",
     "traffic_log_admin",
   ],
+  SPOT_TYPES: [
+    "Live Read Promo",
+    "Recorded Promo",
+    "Live Read PSA",
+    "Recorded PSA",
+    "Underwriting Spot",
+    "Pledge Liner",
+    "Station ID",
+    "Other",
+  ],
 };

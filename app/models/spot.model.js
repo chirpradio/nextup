@@ -1,15 +1,6 @@
 const gstore = require("../db").gstore;
 const { Schema } = gstore;
-const VALID_TYPES = [
-  "Live Read Promo",
-  "Recorded Promo",
-  "Live Read PSA",
-  "Recorded PSA",
-  "Underwriting Spot",
-  "Pledge Liner",
-  "Station ID",
-  "Other",
-];
+const { SPOT_TYPES } = require("../config/constants");
 
 const spotSchema = new Schema({
   title: { type: String, required: true },
@@ -18,7 +9,7 @@ const spotSchema = new Schema({
     required: true,
     validate: {
       rule: "isIn",
-      args: [VALID_TYPES],
+      args: [SPOT_TYPES],
     },
   },
   active: { type: Boolean, default: true },

@@ -227,28 +227,26 @@ function byReadTime(a, b) {
 }
 
 async function getReport(start, end, options = {}) {
-  const { spotId, underwriter } = options;
-  
-  // Build filters array with required date range
-  const filters = [
-    ["log_date", ">=", start],
-    ["log_date", "<=", end],
-  ];
-  
-  // Add spot filter if provided
-  if (spotId) {
-    const spotKey = datastore.key(['Spot', parseInt(spotId)]);
-    filters.push(["spot", spotKey]);
-  }
+  const { spotType, underwriter } = options;
   
   const { entities: entries } = await TrafficLogEntry.list({
-    filters,
+    filters: [
+      ["log_date", ">=", start],
+      ["log_date", "<=", end],
+    ],
   }).populate(["spot", "spot_copy"]);
   
-  // Filter by underwriter at application level since it's a nested field
+  // Filter by spot type and underwriter at application level since they are nested fields
   let filteredEntries = entries;
+  
+  if (spotType) {
+    filteredEntries = filteredEntries.filter(entry => 
+      entry.spot && entry.spot.type === spotType
+    );
+  }
+  
   if (underwriter) {
-    filteredEntries = entries.filter(entry => 
+    filteredEntries = filteredEntries.filter(entry => 
       entry.spot_copy && 
       entry.spot_copy.underwriter && 
       entry.spot_copy.underwriter.toLowerCase().includes(underwriter.toLowerCase())

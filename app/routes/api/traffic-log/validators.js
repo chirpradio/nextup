@@ -1,4 +1,5 @@
 const { query } = require("express-validator");
+const { SPOT_TYPES } = require("../../config/constants");
 
 module.exports = {
   validateDow: query("dow").optional().isInt({ min: 1, max: 7 }).toInt(),
@@ -17,6 +18,6 @@ module.exports = {
     .toArray(),
   validateStart: query("start").isISO8601(),
   validateEnd: query("end").isISO8601(),
-  validateSpotId: query("spot_id").optional().isInt({ min: 1 }).toInt(),
+  validateSpotType: query("spot_type").optional().isString().trim().isIn(SPOT_TYPES),
   validateUnderwriter: query("underwriter").optional().isString().trim(),
 };

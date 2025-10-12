@@ -38,8 +38,8 @@ module.exports = {
       
       // Build options object for filtering
       const options = {};
-      if (req.query.spot_id) {
-        options.spotId = req.query.spot_id;
+      if (req.query.spot_type) {
+        options.spotType = req.query.spot_type;
       }
       if (req.query.underwriter) {
         options.underwriter = req.query.underwriter;
