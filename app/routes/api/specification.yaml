@@ -1318,6 +1318,19 @@ paths:
             type: string
             format: date
           description: End date for the report (YYYY-MM-DD)
+        - name: spot_id
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Filter results to only include entries for the specified spot ID
+        - name: underwriter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter results to only include entries with underwriter names containing this text (case-insensitive)
       responses:
         '200':
           description: CSV report generated successfully

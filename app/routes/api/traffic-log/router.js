@@ -5,6 +5,8 @@ const {
   validateDow,
   validateHour,
   validateGreylist,
+  validateSpotId,
+  validateUnderwriter,
 } = require("./validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");
@@ -37,6 +39,8 @@ router.get(
   requireTrafficLogAdminAccess,
   validateStart,
   validateEnd,
+  validateSpotId,
+  validateUnderwriter,
   checkErrors,
   controller.exportLog
 );

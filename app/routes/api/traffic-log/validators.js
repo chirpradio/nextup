@@ -17,4 +17,6 @@ module.exports = {
     .toArray(),
   validateStart: query("start").isISO8601(),
   validateEnd: query("end").isISO8601(),
+  validateSpotId: query("spot_id").optional().isInt({ min: 1 }).toInt(),
+  validateUnderwriter: query("underwriter").optional().isString().trim(),
 };
