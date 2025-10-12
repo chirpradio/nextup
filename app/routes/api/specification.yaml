@@ -1322,8 +1322,11 @@ paths:
           description: Forbidden
   /user:
     get:
-      summary: List all users
-      description: Retrieve a list of all users in the system. Requires superuser privileges or volunteer coordinator role.
+      summary: List users
+      description: |
+        Retrieve a list of users in the system. Returns different data based on user permissions:
+        - **Regular authenticated users**: Get basic user info (first_name, last_name, __key)
+        - **Volunteer coordinators & superusers**: Get full user objects with all fields
       security:
         - Bearer: []
       responses:
@@ -1332,13 +1335,28 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                oneOf:
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                        __key:
+                          $ref: '#/components/schemas/Key'
+                      required:
+                        - first_name
+                        - last_name
+                        - __key
+                    description: Basic user data for regular authenticated users
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                    description: Full user data for volunteer coordinators and superusers
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden - superuser or volunteer coordinator access required
     post:
       summary: Create a new user
       description: Create a new user account. Requires superuser privileges or volunteer coordinator role. A temporary password will be generated and returned.

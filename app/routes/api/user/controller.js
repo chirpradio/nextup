@@ -19,10 +19,24 @@ module.exports = {
 
       const { entities: users } = await User.list(options);
 
-      // Remove password and api_key fields from all users
-      const safeUsers = users.map(sanitizeUserData);
+      // Check if user has volunteer coordinator role or is superuser
+      const hasFullAccess = req.user.is_superuser || 
+                           req.user.roles?.includes('volunteer_coordinator');
 
-      res.json(safeUsers);
+      let responseUsers;
+      if (hasFullAccess) {
+        // Return full user objects for volunteer coordinators and superusers
+        responseUsers = users.map(sanitizeUserData);
+      } else {
+        // Return limited user data for regular authenticated users
+        responseUsers = users.map(user => ({
+          first_name: user.entityData.first_name,
+          last_name: user.entityData.last_name,
+          __key: user.entityKey,
+        }));
+      }
+
+      res.json(responseUsers);
     } catch (error) {
       next(error);
     }
