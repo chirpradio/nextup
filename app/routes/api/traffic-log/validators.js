@@ -1,5 +1,5 @@
 const { query } = require("express-validator");
-const { SPOT_TYPES } = require("../../config/constants");
+const { SPOT_TYPES } = require("../../../config/constants");
 
 module.exports = {
   validateDow: query("dow").optional().isInt({ min: 1, max: 7 }).toInt(),
