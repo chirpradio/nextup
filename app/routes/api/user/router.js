@@ -33,7 +33,6 @@ function requireUserManagementAccess(req, res, next) {
 router.get(
   "/",
   authenticate,
-  requireUserManagementAccess,
   controller.listUsers
 );
 
