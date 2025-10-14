@@ -11,6 +11,9 @@ module.exports = {
     const transaction = gstore.transaction();
     await transaction.run();
 
+    if (!Array.isArray(track.current_tags)) {
+      track.current_tags = [];
+    } 
     const oldTags = [...track.current_tags];
     track.current_tags = tags;
     await track.save();

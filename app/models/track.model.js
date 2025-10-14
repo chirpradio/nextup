@@ -26,6 +26,7 @@ const trackSchema = new Schema({
   },
   current_tags: {
     type: Array,
+    default: [],
     validate: {
       rule: validateCurrentTags,
       args: [["explicit", "recommended"]],
