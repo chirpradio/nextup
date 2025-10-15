@@ -15,6 +15,7 @@ module.exports = {
     "Disc 8",
     "Disc 9",
     "Disc 10",
+    "EP",
   ],
   SPOT__VALID_SLOTS: [0, 12, 13, 24, 25, 30, 36, 37, 48, 49, 54, 55],
   ROLES: [
@@ -23,5 +24,15 @@ module.exports = {
     "music_director",
     "volunteer_coordinator",
     "traffic_log_admin",
+  ],
+  SPOT_TYPES: [
+    "Live Read Promo",
+    "Recorded Promo",
+    "Live Read PSA",
+    "Recorded PSA",
+    "Underwriting Spot",
+    "Pledge Liner",
+    "Station ID",
+    "Other",
   ],
 };

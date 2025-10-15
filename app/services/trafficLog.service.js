@@ -226,27 +226,58 @@ function byReadTime(a, b) {
   return 0;
 }
 
-async function getReport(start, end) {
+async function getReport(start, end, options = {}) {
+  const { spotType, underwriter } = options;
+  
   const { entities: entries } = await TrafficLogEntry.list({
     filters: [
       ["log_date", ">=", start],
       ["log_date", "<=", end],
     ],
   }).populate(["spot", "spot_copy"]);
+  
+  // Filter by spot type and underwriter at application level since they are nested fields
+  let filteredEntries = entries;
+  
+  if (spotType) {
+    filteredEntries = filteredEntries.filter(entry => 
+      entry.spot && entry.spot.type === spotType
+    );
+  }
+  
+  if (underwriter) {
+    filteredEntries = filteredEntries.filter(entry => 
+      entry.spot_copy && 
+      entry.spot_copy.underwriter && 
+      entry.spot_copy.underwriter.toLowerCase().includes(underwriter.toLowerCase())
+    );
+  }
 
-  const header = ["readtime", "dow", "slot_time", "title", "type", "excerpt"];
-  const rows = entries.sort(byReadTime).map((entry) => {
+  const header = ["readtime", "dow", "slot_time", "underwriter", "title", "type", "excerpt"];
+  
+  const rows = filteredEntries.sort(byReadTime).map((entry) => {
     const fields = [];
+    
     const dt = DateTime.fromJSDate(entry.readtime).setZone("America/Chicago");
-    fields.push(dt.toISO());
+    fields.push(dt.toFormat("yyyy-MM-dd HH:mm:ss"));
+    
     fields.push(dt.weekdayLong);
-    fields.push(`${entry.hour}:${entry.slot.toString().padStart(2, 0)}`);
-    fields.push(entry.spot.title);
-    fields.push(entry.spot.type);
-    const excerpt = entry.spot_copy
-      ? `${entry.spot_copy.body.substring(0, 12)}...`
+        
+    const slotTime = `${entry.hour.toString().padStart(2, '0')}:${entry.slot.toString().padStart(2, '0')}`;
+    fields.push(slotTime);
+        
+    const underwriter = entry.spot_copy?.underwriter || "";
+    fields.push(underwriter);
+        
+    fields.push(entry.spot?.title || "");
+        
+    fields.push(entry.spot?.type || "");
+    
+    const excerpt = entry.spot_copy?.body 
+      ? entry.spot_copy.body.substring(0, 140)
       : "";
     fields.push(excerpt);
+    
     return fields;
   });
 

@@ -82,7 +82,9 @@ export default {
           return this.spot.copy.filter((copy) => copyExpired(copy.expire_on));
         case "started":
           return this.spot.copy.filter(
-            (copy) => copyStarted(copy.start_on) && !copyExpired(copy.expire_on)
+            (copy) =>
+              (!copy.start_on && !copy.expire_on) ||
+              (copyStarted(copy.start_on) && !copyExpired(copy.expire_on))
           );
         case "notStarted":
           return this.spot.copy.filter(

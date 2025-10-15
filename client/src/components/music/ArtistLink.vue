@@ -1,5 +1,6 @@
 <template>
   <router-link
+    v-if="artistId"
     class="text-break"
     :to="{ name: 'artist', params: { id: artistId } }"
   >
@@ -20,7 +21,10 @@ export default {
       "artist:" *and* have a parent id that needs to be included in the query
     */
     artistId: function () {
-      const key = this.artist.__key;
+      const key = this.artist?.__key;
+      if (!key) {
+        return undefined;
+      }
       return key.id || `${key.name}-${key.parent.id}`;
     },
   },
