@@ -40,6 +40,7 @@ router.post(
           roles: user.roles,
           first_name: user.first_name,
           last_name: user.last_name,
+          dj_name: user.dj_name,
           is_superuser: user.is_superuser,
         };
         const token = jwt.sign({ user: body }, process.env.JWT_SECRET, {

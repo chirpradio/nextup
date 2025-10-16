@@ -36,23 +36,10 @@ async function getAndHandleError(getter) {
   return response.data;
 }
 
+export { setAuthorizationHeader };
 export { instance as api };
 
 export default {
-  async login(email, password) {
-    const response = await instance.post("/token", {
-      email,
-      password,
-    });
-
-    if (response.data.token) {
-      setAuthorizationHeader(response.data.token);
-    }
-    return response.data;
-  },
-
-  setAuthorizationHeader,
-
   async getTaggedAlbums(params) {
     const getter = instance.get("/album/tag", { params });
     return await getAndHandleError(getter);
@@ -77,7 +64,9 @@ export default {
   },
 
   async updateAlbumTags(album_id, tags) {
-    const response = await instance.patch(`/album/${album_id.value}/tags`, { tags });
+    const response = await instance.patch(`/album/${album_id.value}/tags`, {
+      tags,
+    });
     return response.data;
   },
 
