@@ -30,11 +30,11 @@
             <div class="me-auto mb-2 mb-lg-0">
               <div class="mb-1 me-2">
                 <span>{{ track.title }}</span>
-                <span v-if="album.is_compilation && track.track_artist">
+                <span v-if="showTrackArtist(track)">
                   by
                   <ArtistLink :artist="track.track_artist" />
                 </span>
-                <span v-else class="text-danger"> no track artist </span>
+                <span v-if="showNoArtistWarning(track)" class="text-danger"> no track artist </span>
               </div>
               <div
                 v-if="track.pronunciation"
@@ -128,6 +128,12 @@ export default {
     },
     finishEditing() {
       this.editing = false;
+    },
+    showTrackArtist(track) {
+      return this.album.is_compilation && track.track_artist;
+    },
+    showNoArtistWarning(track) {
+      return this.album.is_compilation && !track.track_artist;
     },
   },
 };
