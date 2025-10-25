@@ -3,6 +3,7 @@ const {
   DateService,
   PlaylistEventService,
 } = require("../../../services");
+const { DateTime } = require("luxon");
 
 async function getAlbums(events) {
   const albumKeys = events.map((event) => event.album);
@@ -160,9 +161,11 @@ async function exportPlaylistReport(req, res, next) {
       const albumTitle = track.album?.title || track.freeform_album_title || "";
       const label = track.album?.label || track.freeform_label || "";
 
-      const establishedDate = new Date(track.established);
-      const date = establishedDate.toISOString().split("T")[0]; // YYYY-MM-DD
-      const time = establishedDate.toTimeString().split(" ")[0]; // HH:MM:SS
+      const chicagoDateTime = DateTime.fromJSDate(
+        new Date(track.established)
+      ).setZone("America/Chicago");
+      const date = chicagoDateTime.toFormat("yyyy-MM-dd"); // YYYY-MM-DD
+      const time = chicagoDateTime.toFormat("HH:mm:ss"); // HH:MM:SS
 
       const row = [
         date,
