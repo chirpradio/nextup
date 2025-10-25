@@ -158,7 +158,7 @@ async function exportPlaylistReport(req, res, next) {
       const trackTitle = track.track?.title || track.freeform_track_title || "";
       const artistName = track.artist?.name || track.freeform_artist_name || "";
       const albumTitle = track.album?.title || track.freeform_album_title || "";
-      const label = track.album.label || track.freeform_label || "";
+      const label = track.album?.label || track.freeform_label || "";
 
       const establishedDate = new Date(track.established);
       const date = establishedDate.toISOString().split("T")[0]; // YYYY-MM-DD
