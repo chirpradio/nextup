@@ -10,7 +10,18 @@ async function getAlbums(events) {
   const filteredKeys = albumKeys.filter((key) => {
     return key !== null && key !== undefined;
   });
-  return await AlbumService.getAlbumsByKeys(filteredKeys);
+
+  // Can only retrieve a maximum of 1000 keys at a time
+  const batchSize = 1000;
+  const allAlbums = [];
+
+  for (let i = 0; i < filteredKeys.length; i += batchSize) {
+    const batch = filteredKeys.slice(i, i + batchSize);
+    const albums = await AlbumService.getAlbumsByKeys(batch);
+    allAlbums.push(...albums);
+  }
+
+  return allAlbums;
 }
 
 function replaceAlbumKeysWithAlbums(events, albums) {
