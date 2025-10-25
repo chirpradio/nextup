@@ -164,6 +164,7 @@ async function exportPlaylistReport(req, res, next) {
       "track",
       "album",
       "label",
+      "local",
     ];
     const csvRows = [headers.join(",")];
 
@@ -178,6 +179,10 @@ async function exportPlaylistReport(req, res, next) {
       ).setZone("America/Chicago");
       const date = chicagoDateTime.toFormat("yyyy-MM-dd"); // YYYY-MM-DD
       const time = chicagoDateTime.toFormat("HH:mm:ss"); // HH:MM:SS
+      
+      // Check if track has local categories
+      const isLocal = track.categories?.includes("local_current") || 
+                     track.categories?.includes("local_classic") ? 1 : 0;
 
       const row = [
         date,
@@ -187,6 +192,7 @@ async function exportPlaylistReport(req, res, next) {
         `"${trackTitle.replace(/"/g, '""')}"`,
         `"${albumTitle.replace(/"/g, '""')}"`,
         `"${label.replace(/"/g, '""')}"`,
+        isLocal,
       ];
       csvRows.push(row.join(","));
     });

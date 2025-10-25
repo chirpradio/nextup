@@ -967,7 +967,7 @@ paths:
       description: |
         Generate and download a CSV report of all playlist entries for the specified date range.
         Returns chronological data for both album tracks and freeform tracks with fields:
-        date, time, station, artist, track, album, label.
+        date, time, station, artist, track, album, label, local.
         Requires music director access.
       tags:
         - Playlist
@@ -994,8 +994,9 @@ paths:
               schema: 
                 type: string
               example: |
-                date,time,station,artist,track,album,label
-                2024-01-15,14:30:22,"WCXP-LP","Artist Name","Track Title","Album Title","Record Label"
+                date,time,station,artist,track,album,label,local
+                2024-01-15,14:30:22,"WCXP-LP","Artist Name","Track Title","Album Title","Record Label",1
+                2024-01-15,14:35:15,"WCXP-LP","National Artist","Another Song","Another Album","Major Label",0
         '400':
           description: Bad request - invalid date parameters
         '401':
