@@ -9,27 +9,28 @@ async function getAlbums(events) {
   const albumKeys = events.map((event) => event.album);
   const filteredKeys = albumKeys.filter((key) => {
     return key !== null && key !== undefined;
-  });
-
-  // Can only retrieve a maximum of 1000 keys at a time
+  });  
+  const uniqueKeys = [...new Set(filteredKeys.map(key => key.name))].map(name => 
+    filteredKeys.find(key => key.name === name)
+  );
+  
+  // Datastore can only fetch up to 1000 keys at a time
   const batchSize = 1000;
-  const allAlbums = [];
-
-  for (let i = 0; i < filteredKeys.length; i += batchSize) {
-    const batch = filteredKeys.slice(i, i + batchSize);
-    const albums = await AlbumService.getAlbumsByKeys(batch);
-    allAlbums.push(...albums);
+  const batchPromises = [];
+  for (let i = 0; i < uniqueKeys.length; i += batchSize) {
+    const batch = uniqueKeys.slice(i, i + batchSize);
+    batchPromises.push(AlbumService.getAlbumsByKeys(batch));
   }
 
-  return allAlbums;
+  const batchResults = await Promise.all(batchPromises);
+  return batchResults.flat();
 }
 
 function replaceAlbumKeysWithAlbums(events, albums) {
+  const albumMap = new Map(albums.map(album => [album.__key.name, album]));
   events.forEach((event) => {
     if (event.album) {
-      event.album = albums.find(
-        (album) => event.album.name === album.__key.name
-      );
+      event.album = albumMap.get(event.album.name);
     }
   });
 }
