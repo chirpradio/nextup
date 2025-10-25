@@ -21,6 +21,11 @@ indexes:
   - name: import_timestamp
     direction: desc
 
+- kind: Album 
+  properties: 
+  - name: __key__ 
+    direction: desc
+
 - kind: Artist
   properties:
   - name: revoked
@@ -70,3 +75,4 @@ indexes:
   properties:
   - name: active
   - name: deleted
+

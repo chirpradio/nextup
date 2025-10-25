@@ -132,8 +132,64 @@ async function updateTrack(req, res, next) {
   }
 }
 
+async function exportPlaylistReport(req, res, next) {
+  try {
+    const start = DateService.getStartDateFromHTMLValue(req.query.start);
+    const end = DateService.getEndDateFromHTMLValue(req.query.end);
+    const tracks = await PlaylistEventService.getTracksBetweenDates({
+      start,
+      end,
+    });
+    const albums = await getAlbums(tracks);
+    replaceAlbumKeysWithAlbums(tracks, albums);
+
+    const headers = [
+      "date",
+      "time",
+      "station",
+      "artist",
+      "track",
+      "album",
+      "label",
+    ];
+    const csvRows = [headers.join(",")];
+
+    tracks.forEach((track) => {
+      const trackTitle = track.track?.title || track.freeform_track_title || "";
+      const artistName = track.artist?.name || track.freeform_artist_name || "";
+      const albumTitle = track.album?.title || track.freeform_album_title || "";
+      const label = track.album.label || track.freeform_label || "";
+
+      const establishedDate = new Date(track.established);
+      const date = establishedDate.toISOString().split("T")[0]; // YYYY-MM-DD
+      const time = establishedDate.toTimeString().split(" ")[0]; // HH:MM:SS
+
+      const row = [
+        date,
+        time,
+        "WCXP-LP",
+        `"${artistName.replace(/"/g, '""')}"`,
+        `"${trackTitle.replace(/"/g, '""')}"`,
+        `"${albumTitle.replace(/"/g, '""')}"`,
+        `"${label.replace(/"/g, '""')}"`,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="playlist-report-${req.query.start}-to-${req.query.to}.csv"`
+    );
+    res.send(csvRows.join("\n"));
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   deleteTrack,
+  exportPlaylistReport,
   getPlaylistEvents,
   getRotationPlays,
   postFreeformPlaylistTrack,

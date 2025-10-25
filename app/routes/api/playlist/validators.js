@@ -9,6 +9,8 @@ function toKey(value) {
 
 const validateEnd = query("end").optional().isInt().toInt();
 const validateStart = query("start").optional().isInt().toInt();
+const validateReportStart = query("start").isISO8601();
+const validateReportEnd = query("end").isISO8601();
 const validateAlbum = body("album").isArray().customSanitizer(toKey);
 const validateArtist = body("artist").isArray().customSanitizer(toKey);
 const validateCategories = body("categories").isArray();
@@ -17,6 +19,17 @@ const validateLabel = body("label").isString().optional({ nullable: true });
 const validateRole = function (req, res, next) {
   try {
     if (req.user.isDJ() || req.user.isMusicDirector()) {
+      next();
+    } else {
+      throw new Error(errorMessages.FORBIDDEN);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+const validateMusicDirectorRole = function (req, res, next) {
+  try {
+    if (req.user.isMusicDirector()) {
       next();
     } else {
       throw new Error(errorMessages.FORBIDDEN);
@@ -34,6 +47,9 @@ module.exports = {
   validateEnd,
   validateFreeformTrackTitle,
   validateLabel,
+  validateMusicDirectorRole,
+  validateReportEnd,
+  validateReportStart,
   validateRole,
   validateStart,
   validateTrack,
