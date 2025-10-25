@@ -8,6 +8,15 @@ const routes = [
       requiresAuth: "playlist",
     },
   },
+  {
+    path: "/playlist/report",
+    name: "playlist-report",
+    component: () => import("./views/PlaylistReport.vue"),
+    meta: {
+      title: "Playlist Report",
+      requiresAuth: "playlist-report",
+    },
+  },
 ];
 
 export default routes;
