@@ -35,9 +35,20 @@ module.exports = {
         req.query.end,
         "end"
       );
+      
+      // Build options object for filtering
+      const options = {};
+      if (req.query.spot_type) {
+        options.spotType = req.query.spot_type;
+      }
+      if (req.query.underwriter) {
+        options.underwriter = req.query.underwriter;
+      }
+      
       const report = await TrafficLogService.getReport(
         new Date(fullStartISO),
-        new Date(fullEndISO)
+        new Date(fullEndISO),
+        options
       );
 
       const filename = `chirp-traffic-log-${req.query.start}-to-${req.query.end}.csv`;

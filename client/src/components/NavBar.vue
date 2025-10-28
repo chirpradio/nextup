@@ -104,6 +104,13 @@
               >
                 Spots
               </router-link>
+              <router-link
+                v-if="isAuthorized('traffic-log')"
+                class="dropdown-item"
+                to="/traffic-log/report"
+              >
+                Traffic Log Report
+              </router-link>
               <li v-if="isAuthorized('users')">
                 <hr class="dropdown-divider" />
               </li>

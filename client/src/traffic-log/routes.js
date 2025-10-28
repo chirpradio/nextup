@@ -47,6 +47,15 @@ const routes = [
       requiresAuth: "traffic-log",
     },
   },
+  {
+    path: "/traffic-log/report",
+    name: "trafficLogReport",
+    component: () => import("./views/TrafficLogReport.vue"),
+    meta: {
+      title: "Traffic Log Report",
+      requiresAuth: "traffic-log",
+    },
+  },
 ];
 
 export default routes;

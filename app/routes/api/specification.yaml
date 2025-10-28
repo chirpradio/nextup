@@ -1339,7 +1339,12 @@ paths:
     get:
       security:
         - Bearer: []
-      summary: Download CSV of entries
+      summary: Download CSV of traffic log entries
+      description: |
+        Generate and download a CSV report of traffic log entries for the specified date range.
+        Returns data in the same format as the legacy Python implementation with fields:
+        readtime, dow, slot_time, underwriter, title, type, excerpt (140 chars max).
+        Requires traffic log admin access.
       tags:
         - Traffic Log
       parameters:
@@ -1349,21 +1354,51 @@ paths:
           schema:
             type: string
             format: date
+          description: Start date for the report (YYYY-MM-DD)
         - name: end
           in: query
           required: true
           schema:
             type: string
             format: date
+          description: End date for the report (YYYY-MM-DD)
+        - name: spot_type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - Live Read Promo
+              - Recorded Promo
+              - Live Read PSA
+              - Recorded PSA
+              - Underwriting Spot
+              - Pledge Liner
+              - Station ID
+              - Other
+          description: Filter results to only include entries for the specified spot type
+        - name: underwriter
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter results to only include entries with underwriter names containing this text (case-insensitive)
       responses:
         '200':
-          description: Success
+          description: CSV report generated successfully
           content:
             text/csv:
               schema: 
                 type: string
+              example: |
+                readtime,dow,slot_time,underwriter,title,type,excerpt
+                2024-01-15 14:30:22,Monday,14:30,ACME Corp,Station ID,Station ID,Welcome to CHIRP Radio...
+        '400':
+          description: Bad request - invalid date parameters
+        '401':
+          description: Unauthorized
         '403':
-          description: Forbidden
+          description: Forbidden - traffic log admin access required
   /user:
     get:
       summary: List users
