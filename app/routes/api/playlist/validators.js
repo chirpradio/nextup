@@ -11,6 +11,24 @@ const validateEnd = query("end").optional().isInt().toInt();
 const validateStart = query("start").optional().isInt().toInt();
 const validateReportStart = query("start").isISO8601();
 const validateReportEnd = query("end").isISO8601();
+const validateDateSpan = function (req, res, next) {
+  try {
+    const startDate = new Date(req.query.start);
+    const endDate = new Date(req.query.end);
+    const diffInMs = endDate - startDate;
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    
+    if (diffInDays > 100) {
+      return res.status(400).json({
+        error: "Date range cannot exceed 100 days"
+      });
+    }
+    
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 const validateAlbum = body("album").isArray().customSanitizer(toKey);
 const validateArtist = body("artist").isArray().customSanitizer(toKey);
 const validateCategories = body("categories").isArray();
@@ -44,6 +62,7 @@ module.exports = {
   validateAlbum,
   validateArtist,
   validateCategories,
+  validateDateSpan,
   validateEnd,
   validateFreeformTrackTitle,
   validateLabel,

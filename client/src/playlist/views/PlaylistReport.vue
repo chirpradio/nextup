@@ -16,6 +16,7 @@
     <div class="row px-2 mb-3">
       <LoadingButton
         :loading="downloading"
+        :disabled="!isValidDateRange"
         label="Download CSV"
         loadingLabel="Downloading..."
         @click="downloadReport"
@@ -50,9 +51,37 @@ export default {
       error: null,
     };
   },
+  computed: {
+    isValidDateRange() {
+      // Check if both dates are valid
+      if (!this.from || !this.to) {
+        return false;
+      }
+      
+      const startDate = new Date(this.from);
+      const endDate = new Date(this.to);
+      
+      // Check if dates are valid and start is not after end
+      return !isNaN(startDate.getTime()) && 
+             !isNaN(endDate.getTime()) && 
+             startDate <= endDate;
+    }
+  },
   methods: {
     async downloadReport() {
       this.error = null;
+      
+      // Validate date span
+      const startDate = new Date(this.from);
+      const endDate = new Date(this.to);
+      const diffInMs = endDate - startDate;
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+      
+      if (diffInDays > 100) {
+        this.error = "Date range cannot exceed 100 days";
+        return;
+      }
+      
       this.downloading = true;
 
       try {
