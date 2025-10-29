@@ -115,11 +115,20 @@ export const useAuthStore = defineStore("auth", {
       try {
         const { data } = await api.patch(`/user/${userId}`, userData);
         Object.assign(this.user, data);
+        
+        // Also update the user in the users store if it's loaded
+        const { useUsersStore } = await import("../users/store");
+        const usersStore = useUsersStore();
+        usersStore.updateUserInStore(userId, data);
+        
         return data;
       } catch (error) {
         this.error = error.response?.data?.error || "Failed to update user";
         throw error;
       }
+    },
+    updateUserData(userData) {
+      Object.assign(this.user, userData);
     },
   },
   persist: {
