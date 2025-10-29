@@ -18,17 +18,44 @@ const authenticate = passport.authenticate(["jwt"], {
   session: false,
 });
 
-function requireUserManagementAccess(req, res, next) {
-  if (
-    !req.user ||
-    (!req.user.is_superuser && !req.user.isVolunteerCoordinator())
-  ) {
+function createUserAccessMiddleware(allowSelfAccess = false) {
+  return function (req, res, next) {
+    if (!req.user) {
+      return res.status(403).json({
+        error: "Forbidden: Authentication required",
+      });
+    }
+
+    // Check if user has management privileges
+    const hasManagementAccess =
+      req.user.is_superuser || req.user.isVolunteerCoordinator();
+
+    if (hasManagementAccess) {
+      return next();
+    }
+
+    // If self access is allowed, check if user is accessing their own record
+    if (allowSelfAccess && req.params.id) {
+      const targetUserId = parseInt(req.params.id, 10);
+      const currentUserId = parseInt(req.user.entityKey.id, 10);
+
+      if (targetUserId === currentUserId) {
+        return next();
+      }
+    }
+
+    const errorMessage = allowSelfAccess
+      ? "Forbidden: Can only update your own profile or requires management access"
+      : "Forbidden: Superuser or volunteer coordinator access required";
+
     return res.status(403).json({
-      error: "Forbidden: Superuser or volunteer coordinator access required",
+      error: errorMessage,
     });
-  }
-  next();
+  };
 }
+
+const requireUserManagementAccess = createUserAccessMiddleware(false);
+const requireUserManagementOrSelfAccess = createUserAccessMiddleware(true);
 
 router.get(
   "/",
@@ -61,7 +88,7 @@ router.post(
 router.patch(
   "/:id",
   authenticate,
-  requireUserManagementAccess,
+  requireUserManagementOrSelfAccess,
   param("id").isNumeric(),
   emailValidator.optional(),
   firstNameValidator.optional(),

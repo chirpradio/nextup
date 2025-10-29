@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import api from "../services/api.service";
+import { api, setAuthorizationHeader } from "../services/api.service";
 import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 import features from "./features";
@@ -69,37 +69,34 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     async logIn({ email, password }) {
-      const response = await api.login(email, password);
-      if (response.password_reset_required) {
+      const { data } = await api.post("/token", {
+        email,
+        password,
+      });
+      if (data.password_reset_required) {
         return {
           password_reset_required: true,
-          message: response.message,
-          email: response.email,
+          message: data.message,
+          email: data.email,
         };
-      } else if (response.token) {
-        this.token = response.token;
-        const decoded = jwt_decode(response.token);
+      } else if (data.token) {
+        this.token = data.token;
+        const decoded = jwt_decode(data.token);
         this.user = decoded.user;
         return { success: true };
       } else {
-        console.log(response);
+        console.log(data);
         return { success: false };
       }
     },
     logOut() {
-      api.setAuthorizationHeader("");
+      setAuthorizationHeader("");
       this.$reset();
-    },
-    async resetPassword(token, newPassword) {
-      const response = await api.post("/password/reset", {
-        token,
-        newPassword,
-      });
-      return response.data;
     },
     async changePassword(currentPassword, newPassword) {
       try {
-        const response = await api.post("/password/change", {
+        const response = await api.post("/user/change-password", {
+          email: this.user.email,
           currentPassword,
           newPassword,
         });
@@ -109,6 +106,29 @@ export const useAuthStore = defineStore("auth", {
           error.response?.data?.error || "Failed to change password"
         );
       }
+    },
+    async updateProfile(userData) {
+      this.error = null;
+
+      const userId = this.user.entityKey.id;
+
+      try {
+        const { data } = await api.patch(`/user/${userId}`, userData);
+        Object.assign(this.user, data);
+
+        // Also update the user in the users store if it's loaded
+        const { useUsersStore } = await import("../users/store");
+        const usersStore = useUsersStore();
+        usersStore.updateUserInStore(userId, data);
+
+        return data;
+      } catch (error) {
+        this.error = error.response?.data?.error || "Failed to update user";
+        throw error;
+      }
+    },
+    updateUserData(userData) {
+      Object.assign(this.user, userData);
     },
   },
   persist: {
@@ -124,7 +144,7 @@ export const useAuthStore = defineStore("auth", {
     },
     afterRestore: ({ store }) => {
       if (store.isAuthenticated) {
-        api.setAuthorizationHeader(store.token);
+        setAuthorizationHeader(store.token);
       }
     },
   },

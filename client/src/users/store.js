@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "../services/api.service";
+import { useAuthStore } from "../stores/auth";
 
 export const useUsersStore = defineStore("users", {
   state: () => ({
@@ -101,8 +102,16 @@ export const useUsersStore = defineStore("users", {
       try {
         const { data } = await api.patch(`/user/${userId}`, userData);
 
+        // Update the user in the users list
         const user = this.getUserById(userId);
         Object.assign(user, data);
+
+        // Check if the updated user is the currently authenticated user
+        const authStore = useAuthStore();
+        if (authStore.user && authStore.user.entityKey.id == userId) {
+          // Update the auth store with the new user data
+          authStore.updateUserData(data);
+        }
 
         this.savingUser = false;
         return data;
@@ -116,6 +125,13 @@ export const useUsersStore = defineStore("users", {
     resetUsersCache() {
       this.usersLoaded = false;
       this.users = [];
+    },
+
+    updateUserInStore(userId, userData) {
+      const user = this.getUserById(userId);
+      if (user) {
+        Object.assign(user, userData);
+      }
     },
   },
 });
