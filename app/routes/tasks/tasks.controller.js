@@ -1,7 +1,6 @@
 const {
   AlbumService,
   ArtistService,
-  DateService,
   DocumentService,
   PlaylistEventService,
   SearchService,

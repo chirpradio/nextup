@@ -4,7 +4,7 @@ const { errorMessages } = require("../errors");
 
 
 function sanitizeUserData(user) {
-  const { password, api_key, ...userResponse } = user.entityData;
+  const { password: _password, api_key: _api_key, ...userResponse } = user.entityData;
   userResponse.__key = user.entityKey;
   return userResponse;
 }

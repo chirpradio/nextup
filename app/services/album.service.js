@@ -154,7 +154,7 @@ async function updateCurrentTags(album, tags, user) {
   await transaction.commit();
 }
 
-async function updateAlbumInfo(album, { label, year, pronunciation }, user) {
+async function updateAlbumInfo(album, { label, year, pronunciation }) {
   album.label = label;
   album.year = year;
   album.pronunciation = pronunciation;

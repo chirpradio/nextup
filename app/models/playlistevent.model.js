@@ -1,8 +1,7 @@
-const { datastore, gstore, getPlaylistKey } = require("../db");
+const { gstore, getPlaylistKey } = require("../db");
 const { Schema } = gstore;
 const { CURRENT_TAGS } = require("../config/constants");
 
-let PLAYLIST_KEY;
 
 function validateArray(obj, validator, validItems) {
   if (Array.isArray(obj)) {
