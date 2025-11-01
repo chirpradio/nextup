@@ -180,7 +180,7 @@ module.exports = {
         "is_active",
       ];
       allowedFields.forEach((field) => {
-        if (updates.hasOwnProperty(field)) {
+        if (Object.hasOwn(updates, field)) {
           user[field] = updates[field];
         }
       });
