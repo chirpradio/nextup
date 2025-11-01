@@ -25,6 +25,7 @@
               :album="track.album"
               fit-content
               shrink
+              class="mt-2"
             />
           </div>
           <div v-if="!editable" class="col-1">
