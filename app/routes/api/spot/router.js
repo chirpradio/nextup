@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { query } = require("express-validator");
 const { authorizeTrafficLogAdmins, validateId } = require("../validators");
 const { checkErrors } = require("../errors");
 const controller = require("./controller");

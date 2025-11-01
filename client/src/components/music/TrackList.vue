@@ -34,7 +34,9 @@
                   by
                   <ArtistLink :artist="track.track_artist" />
                 </span>
-                <span v-if="showNoArtistWarning(track)" class="text-danger"> no track artist </span>
+                <span v-if="showNoArtistWarning(track)" class="text-danger">
+                  no track artist
+                </span>
               </div>
               <div
                 v-if="track.pronunciation"

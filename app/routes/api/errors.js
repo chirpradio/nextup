@@ -17,7 +17,7 @@ function checkErrors(req, res, next) {
   }
 }
 
-function sendErrorCode(error, req, res, next) {
+function sendErrorCode(error, req, res) {
   req.log.error(error);
 
   if (!res.headersSent) {

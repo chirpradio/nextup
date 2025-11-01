@@ -16,7 +16,7 @@ async function search(params, index = "all", options) {
   const trimmedParams = removeEmptyStrings(params);
   const searchFn =
     index === "all"
-      ? doMSearch(trimmedParams, options)
+      ? doMSearch(trimmedParams)
       : doSearchByIndex(trimmedParams, index, options);
   return await searchFn;
 }
@@ -33,7 +33,7 @@ function removeEmptyStrings(obj) {
     );
 }
 
-async function doMSearch(params, options) {
+async function doMSearch(params) {
   const keys = Object.keys(params);
   const emptyParams =
     keys.length === 0 ||
@@ -52,7 +52,7 @@ async function doMSearch(params, options) {
   };
 }
 
-function getRandomQuery({ from = 0, size = 10 } = options) {
+function getRandomQuery({ from = 0, size = 10 } = {}) {
   return {
     from,
     size,
