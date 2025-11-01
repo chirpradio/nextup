@@ -52,7 +52,7 @@ async function doMSearch(params) {
   };
 }
 
-function getRandomQuery({ from = 0, size = 10 } = options) {
+function getRandomQuery({ from = 0, size = 10 } = {}) {
   return {
     from,
     size,
