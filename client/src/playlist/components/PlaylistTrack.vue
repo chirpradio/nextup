@@ -21,7 +21,7 @@
             <span class="text-muted"> ({{ label }})</span>
             <TagList :tags="track.categories" class="d-inline ms-2" />
             <RecentlyPlayedAlert
-	      v-if="showRecentlyPlayed"
+              v-if="showRecentlyPlayed"
               :album="track.album"
               fit-content
               shrink
@@ -45,7 +45,7 @@
             id="notes"
             :value="notes"
             @input="$emit('update:notes', $event.target.value)"
-           />
+          />
           <label class="form-label" for="notes">Notes</label>
         </div>
         <div v-if="!editable && track.notes" class="text-muted">
@@ -95,7 +95,7 @@ export default {
     track: Object,
     showRecentlyPlayed: {
       type: Boolean,
-      default: true, 
+      default: true,
     },
   },
   computed: {
