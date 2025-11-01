@@ -61,7 +61,9 @@ module.exports = {
             error: "User with this email already exists",
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        req.log.error(error, "Error checking for existing user");
+      }
 
       // Generate a temporary password
       const temporaryPassword = PasswordService.generateTemporaryPassword();
