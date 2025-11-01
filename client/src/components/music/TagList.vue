@@ -44,7 +44,7 @@ export default {
       };
     },
     canEditTags() {
-      return !!this.album && this.authStore.hasRole("reviewer");
+      return !!this.album && this.authStore.hasRole("music_director");
     },
     filteredTags() {
       if (!this.tags) {
