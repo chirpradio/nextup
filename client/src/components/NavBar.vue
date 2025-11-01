@@ -84,6 +84,13 @@
               <router-link class="dropdown-item" to="/reports/rotation/plays">
                 Rotation Plays
               </router-link>
+              <router-link
+                v-if="isAuthorized('playlist-report')"
+                class="dropdown-item"
+                to="/playlist/report"
+              >
+                Playlist Report
+              </router-link>
               <li v-if="isAuthorized('traffic-log')">
                 <hr class="dropdown-divider" />
               </li>

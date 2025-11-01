@@ -3,21 +3,34 @@ const {
   DateService,
   PlaylistEventService,
 } = require("../../../services");
+const { DateTime } = require("luxon");
 
 async function getAlbums(events) {
   const albumKeys = events.map((event) => event.album);
   const filteredKeys = albumKeys.filter((key) => {
     return key !== null && key !== undefined;
-  });
-  return await AlbumService.getAlbumsByKeys(filteredKeys);
+  });  
+  const uniqueKeys = [...new Set(filteredKeys.map(key => key.name))].map(name => 
+    filteredKeys.find(key => key.name === name)
+  );
+  
+  // Datastore can only fetch up to 1000 keys at a time
+  const batchSize = 1000;
+  const batchPromises = [];
+  for (let i = 0; i < uniqueKeys.length; i += batchSize) {
+    const batch = uniqueKeys.slice(i, i + batchSize);
+    batchPromises.push(AlbumService.getAlbumsByKeys(batch));
+  }
+
+  const batchResults = await Promise.all(batchPromises);
+  return batchResults.flat();
 }
 
 function replaceAlbumKeysWithAlbums(events, albums) {
+  const albumMap = new Map(albums.map(album => [album.__key.name, album]));
   events.forEach((event) => {
     if (event.album) {
-      event.album = albums.find(
-        (album) => event.album.name === album.__key.name
-      );
+      event.album = albumMap.get(event.album.name);
     }
   });
 }
@@ -132,8 +145,72 @@ async function updateTrack(req, res, next) {
   }
 }
 
+async function exportPlaylistReport(req, res, next) {
+  try {
+    const start = DateService.getStartDateFromHTMLValue(req.query.start);
+    const end = DateService.getEndDateFromHTMLValue(req.query.end);
+    const tracks = await PlaylistEventService.getTracksBetweenDates({
+      start,
+      end,
+    });
+    const albums = await getAlbums(tracks);
+    replaceAlbumKeysWithAlbums(tracks, albums);
+
+    const headers = [
+      "date",
+      "time",
+      "station",
+      "artist",
+      "track",
+      "album",
+      "label",
+      "local",
+    ];
+    const csvRows = [headers.join(",")];
+
+    tracks.forEach((track) => {
+      const trackTitle = track.track?.title || track.freeform_track_title || "";
+      const artistName = track.artist?.name || track.freeform_artist_name || "";
+      const albumTitle = track.album?.title || track.freeform_album_title || "";
+      const label = track.album?.label || track.freeform_label || "";
+
+      const chicagoDateTime = DateTime.fromJSDate(
+        new Date(track.established)
+      ).setZone("America/Chicago");
+      const date = chicagoDateTime.toFormat("yyyy-MM-dd"); // YYYY-MM-DD
+      const time = chicagoDateTime.toFormat("HH:mm:ss"); // HH:MM:SS
+      
+      // Check if track has local categories
+      const isLocal = track.categories?.includes("local_current") || 
+                     track.categories?.includes("local_classic") ? 1 : 0;
+
+      const row = [
+        date,
+        time,
+        "WCXP-LP",
+        `"${artistName.replace(/"/g, '""')}"`,
+        `"${trackTitle.replace(/"/g, '""')}"`,
+        `"${albumTitle.replace(/"/g, '""')}"`,
+        `"${label.replace(/"/g, '""')}"`,
+        isLocal,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="playlist-report-${req.query.start}-to-${req.query.to}.csv"`
+    );
+    res.send(csvRows.join("\n"));
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   deleteTrack,
+  exportPlaylistReport,
   getPlaylistEvents,
   getRotationPlays,
   postFreeformPlaylistTrack,

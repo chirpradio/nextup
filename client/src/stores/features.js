@@ -14,6 +14,9 @@ export default {
     playlist: {
       roles: ["dj"],
     },
+    "playlist-report": {
+      roles: ["music_director"],
+    },
     "traffic-log": {
       roles: ["traffic_log_admin"],
     },
@@ -25,6 +28,9 @@ export default {
   production: {
     playlist: {
       roles: ["dj"],
+    },
+    "playlist-report": {
+      roles: ["music_director"],
     },
     "traffic-log": {
       roles: ["traffic_log_admin"],
