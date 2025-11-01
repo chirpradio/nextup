@@ -36,6 +36,8 @@ module.exports = [
         clearInterval: 'readonly',
         setImmediate: 'readonly',
         clearImmediate: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
         // Jest globals
         describe: 'readonly',
         test: 'readonly',
