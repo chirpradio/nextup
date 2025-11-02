@@ -76,9 +76,10 @@ export default {
       const endDate = new Date(this.to);
       const diffInMs = endDate - startDate;
       const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+      const MAX_DATE_RANGE_IN_DAYS = 100;
       
-      if (diffInDays > 100) {
-        this.error = "Date range cannot exceed 100 days";
+      if (diffInDays > MAX_DATE_RANGE_IN_DAYS) {
+        this.error = `Date range cannot exceed ${MAX_DATE_RANGE_IN_DAYS} days`;
         return;
       }
       

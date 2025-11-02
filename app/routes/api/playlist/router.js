@@ -4,7 +4,7 @@ const {
   validateAlbum,
   validateArtist,
   validateCategories,
-  validateDateSpan,
+  validateDateRange,
   validateEnd,
   validateLabel,
   validateMusicDirectorRole,
@@ -65,7 +65,7 @@ router.get(
   validateMusicDirectorRole,
   validateReportStart,
   validateReportEnd,
-  validateDateSpan,
+  validateDateRange,
   checkErrors,
   controller.exportPlaylistReport
 );
