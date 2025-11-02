@@ -4,8 +4,12 @@ const {
   validateAlbum,
   validateArtist,
   validateCategories,
+  validateDateRange,
   validateEnd,
   validateLabel,
+  validateMusicDirectorRole,
+  validateReportEnd,
+  validateReportStart,
   validateRole,
   validateStart,
   validateTrack,
@@ -54,6 +58,16 @@ router.get(
   validateEnd,
   checkErrors,
   controller.getRotationPlays
+);
+
+router.get(
+  "/report",
+  validateMusicDirectorRole,
+  validateReportStart,
+  validateReportEnd,
+  validateDateRange,
+  checkErrors,
+  controller.exportPlaylistReport
 );
 
 module.exports = router;
