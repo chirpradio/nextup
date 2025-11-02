@@ -20,6 +20,13 @@
             </button>
             <span class="text-muted"> ({{ label }})</span>
             <TagList :tags="track.categories" class="d-inline ms-2" />
+            <RecentlyPlayedAlert
+              v-if="showRecentlyPlayed"
+              :album="track.album"
+              fit-content
+              shrink
+              class="mt-2"
+            />
           </div>
           <div v-if="!editable" class="col-1">
             <button
@@ -73,11 +80,12 @@ import { usePlaylistStore } from "../playlistStore";
 import PlayedTime from "./PlayedTime.vue";
 import TagList from "@/components/music/TagList.vue";
 import Modal from "@/components/ModalDialog.vue";
+import RecentlyPlayedAlert from "@/components/music/RecentlyPlayedAlert.vue";
 
 const PREVIEW_ALBUM = "previewAlbum";
 
 export default {
-  components: { PlayedTime, TagList, Modal },
+  components: { PlayedTime, TagList, Modal, RecentlyPlayedAlert },
   props: {
     editable: {
       type: Boolean,
@@ -85,6 +93,10 @@ export default {
     },
     notes: String,
     track: Object,
+    showRecentlyPlayed: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     ...mapStores(usePlaylistStore),

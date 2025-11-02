@@ -54,6 +54,7 @@
               <component
                 :is="getComponent(event)"
                 :track="event"
+                :show-recently-played="false"
                 class="py-2"
                 @preview-album="onPreviewAlbum"
               />
