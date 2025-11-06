@@ -6,14 +6,11 @@
 - Admin access to your machine
 - A Google account
 - An admin to grant access to the chirpradiodev project in Google Cloud Platform for that Google account 
-- A username and password for DJDB & NextUp in the chirpradiodev project
+- A username and password for DJDB & NextUp in the chirpradiodev project. (this one accout account is used by both projects.)
 - A copy of esdump.zip from an admin
 
 # Install Docker Desktop
 Download Docker Desktop from https://www.docker.com/get-started, then install and run it. If you already have Docker Desktop installed, make sure you are upgraded to the latest version.
-
-After it's installed and running, from the Settings menu (the gear icon in header) you should: 
-- check "Use Docker Compose V2"
 
 You can optionally choose to:
 - check "Start Docker Desktop when you log in"
@@ -60,7 +57,7 @@ Once installation has finished, initialize the SDK with the following command:
 
 This will open a browser window where you can sign in to your Google account and grant access to the SDK.
 
-Back in the Terminal window, choose "chirpradiodev" as the default Cloud project and "n" when asked to set a  default Compute Engine region
+Back in the Terminal window, choose "chirpradiodev" as the default Cloud project and "n" if asked to set a  default Compute Engine region
 
 So you don't have to sign in every time you run the application locally, you can run the following command to log in once more and save your credentials as the default:
 `gcloud auth application-default login`
@@ -119,6 +116,7 @@ nextup-kibana-1  | {"type":"log","@timestamp":"2021-12-31T22:02:03Z","tags":["st
 Once you see those and the messages stop you're ready to continue. Keep this Terminal window open and the process running.
 
 ### Create the indexes
+[NOT SURE IF THESE STEPS ARE NEEDED? THEY SEEM TO BE CREATED WITH THE DATA IMPORT?]
 Open a new Terminal window and from the /nextup/elasticsearch/indexes directory, run the following four commands:
 ```
 curl -X PUT "localhost:9200/album?pretty" -H "Content-Type: application/json" -d @album.index.json
@@ -134,7 +132,7 @@ The [Elasticdump](https://github.com/elasticsearch-dump/elasticsearch-dump) libr
 Download the esdump.zip file shared with you, unzip it, and change to that directory. From that directory run the following command to import all the data:
 `for FILE in *.json; do elasticdump --input=$FILE --output=http://localhost:9200; done`
 
-Note: this import process will take over an hour to complete.
+Note: this import process can possibly take over an hour to complete.
 
 ## Set up the front end
 Open a new Terminal window. From the /nextup/client directory, run the following commands:
