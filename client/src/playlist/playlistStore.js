@@ -20,6 +20,10 @@ export const usePlaylistStore = defineStore("playlist", {
       const albumId = album.id ?? album.__key?.name;
       const artistId = album.album_artist?.id;
 
+      if (!albumId && !artistId) {
+        return null;
+      }
+
       const albumPlay = state.recentPlays.find(
         (play) => play.album?.__key?.name === albumId
       );
