@@ -6,7 +6,7 @@
 - Admin access to your machine
 - A Google account
 - An admin to grant access to the chirpradiodev project in Google Cloud Platform for that Google account 
-- A username and password for DJDB & NextUp in the chirpradiodev project. (this one accout account is used by both projects.)
+- A username and password for DJDB & NextUp in the chirpradiodev project. (This one accout account is used by both projects.)
 - A copy of esdump.zip from an admin
 
 # Install Docker Desktop
@@ -116,7 +116,6 @@ nextup-kibana-1  | {"type":"log","@timestamp":"2021-12-31T22:02:03Z","tags":["st
 Once you see those and the messages stop you're ready to continue. Keep this Terminal window open and the process running.
 
 ### Create the indexes
-[NOT SURE IF THESE STEPS ARE NEEDED? THEY SEEM TO BE CREATED WITH THE DATA IMPORT?]
 Open a new Terminal window and from the /nextup/elasticsearch/indexes directory, run the following four commands:
 ```
 curl -X PUT "localhost:9200/album?pretty" -H "Content-Type: application/json" -d @album.index.json
