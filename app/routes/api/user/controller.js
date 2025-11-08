@@ -4,7 +4,7 @@ const { errorMessages } = require("../errors");
 
 
 function sanitizeUserData(user) {
-  const { password, api_key, ...userResponse } = user.entityData;
+  const { password: _password, api_key: _api_key, ...userResponse } = user.entityData;
   userResponse.__key = user.entityKey;
   return userResponse;
 }
@@ -61,7 +61,9 @@ module.exports = {
             error: "User with this email already exists",
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        req.log.error(error, "Error checking for existing user");
+      }
 
       // Generate a temporary password
       const temporaryPassword = PasswordService.generateTemporaryPassword();
@@ -178,7 +180,7 @@ module.exports = {
         "is_active",
       ];
       allowedFields.forEach((field) => {
-        if (updates.hasOwnProperty(field)) {
+        if (Object.hasOwn(updates, field)) {
           user[field] = updates[field];
         }
       });

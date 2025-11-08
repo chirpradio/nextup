@@ -37,8 +37,9 @@ export default {
   },
   methods: {
     toggle(tag) {
-      // ensure track.current_tags array exists and check if it has the tag then toggle the tag
-      const tags = (this.track.current_tags ??= []).includes(tag) ? [] : [tag];
+      // default to [] if current_tags is missing
+      const currentTags = this.track.current_tags ?? [];
+      const tags = currentTags.includes(tag) ? [] : [tag];
       this.albumsStore.updateTrackTags({
         album_id: this.album_id,
         track: this.track,
