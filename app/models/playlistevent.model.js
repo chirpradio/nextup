@@ -60,4 +60,10 @@ async function setDefaultPlaylist() {
 }
 playlistEventSchema.pre("save", setDefaultPlaylist);
 
+async function filterTags() {
+  this.categories = this.categories.filter(tag => CURRENT_TAGS.includes(tag));
+  return Promise.resolve();
+}
+playlistEventSchema.pre("save", filterTags);
+
 module.exports = gstore.model("PlaylistEvent", playlistEventSchema);
