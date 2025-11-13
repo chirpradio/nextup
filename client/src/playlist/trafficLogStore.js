@@ -11,7 +11,7 @@ const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // check every minute
 const TRAFFIC_LOG_UPDATE_MIN = 20; // but only update this long after the hour
 const TRAFFIC_LOG_UPDATE_MAX = 25; // with plenty of tolerance just in case
 const LEADER_HEARTBEAT_INTERVAL = 5 * 1000; // 5 seconds
-const LEADER_TIMEOUT = 10 * 1000; // 10 seconds
+const LEADER_TIMEOUT = 15 * 1000; // 15 seconds
 
 // Initialize unique tab ID on page load
 if (!tabId) {
@@ -49,14 +49,16 @@ function checkLeadership(store) {
   const currentLeader = localStorage.getItem("trafficLog_leader_tab");
   const now = Date.now();
 
-  // If no leader or leader hasn't updated recently, try to become leader
-  if (
-    !lastHeartbeat ||
-    !currentLeader ||
-    now - parseInt(lastHeartbeat) > LEADER_TIMEOUT
-  ) {
+  const isStale = !lastHeartbeat || now - parseInt(lastHeartbeat) > LEADER_TIMEOUT;
+
+  if (!currentLeader || (isStale && currentLeader !== tabId)) {
     becomeLeader(store);
     return true;
+  }
+
+  // If we're the leader but heartbeat is stale, refresh it
+  if (currentLeader === tabId && isStale) {
+    updateHeartbeat();
   }
 
   return currentLeader === tabId;
