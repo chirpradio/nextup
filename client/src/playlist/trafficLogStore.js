@@ -12,6 +12,9 @@ const TRAFFIC_LOG_UPDATE_MIN = 20; // but only update this long after the hour
 const TRAFFIC_LOG_UPDATE_MAX = 25; // with plenty of tolerance just in case
 const LEADER_HEARTBEAT_INTERVAL = 5 * 1000; // 5 seconds
 const LEADER_TIMEOUT = 15 * 1000; // 15 seconds
+const TRAFFIC_LOG_LEADER_HEARTBEAT = "trafficLog_leader_heartbeat";
+const TRAFFIC_LOG_LEADER_TAB = "trafficLog_leader_tab";
+
 
 // Initialize unique tab ID on page load
 if (!tabId) {
@@ -27,26 +30,26 @@ function getChicagoWeekdayAndHour(hourOffset = 0) {
 
 // Leader election functions
 function isLeader() {
-  const currentLeader = localStorage.getItem("trafficLog_leader_tab");
+  const currentLeader = localStorage.getItem(TRAFFIC_LOG_LEADER_TAB);
   return currentLeader === tabId;
 }
 
 function becomeLeader(store) {
   console.log("becoming traffic log leader");
-  localStorage.setItem("trafficLog_leader", Date.now().toString());
-  localStorage.setItem("trafficLog_leader_tab", tabId);
+  localStorage.setItem(TRAFFIC_LOG_LEADER_HEARTBEAT, Date.now().toString());
+  localStorage.setItem(TRAFFIC_LOG_LEADER_TAB, tabId);
   store.pollForEntries();
 }
 
 function updateHeartbeat() {
   if (isLeader()) {
-    localStorage.setItem("trafficLog_leader", Date.now().toString());
+    localStorage.setItem(TRAFFIC_LOG_LEADER_HEARTBEAT, Date.now().toString());
   }
 }
 
 function checkLeadership(store) {
-  const lastHeartbeat = localStorage.getItem("trafficLog_leader");
-  const currentLeader = localStorage.getItem("trafficLog_leader_tab");
+  const lastHeartbeat = localStorage.getItem(TRAFFIC_LOG_LEADER_HEARTBEAT);
+  const currentLeader = localStorage.getItem(TRAFFIC_LOG_LEADER_TAB);
   const now = Date.now();
 
   const isStale = !lastHeartbeat || now - parseInt(lastHeartbeat) > LEADER_TIMEOUT;
