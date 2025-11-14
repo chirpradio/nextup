@@ -136,7 +136,7 @@ export default {
       typeFilter: "",
       updatingCopy: false,
       types,
-      copyFilter: "all",
+      copyFilter: "started",
     };
   },
   computed: {
