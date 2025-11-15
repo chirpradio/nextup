@@ -51,7 +51,11 @@ module.exports = function configureAuth(app) {
           return done(null, false);
         } catch (err) {
           req.log.error(err, email);
-          return done(new Error("Unauthorized"), false);
+          // Distinguish between "user not found" vs system errors
+          if (err.message && err.message.toLowerCase().includes("not found")) {
+            return done(null, false); // Authentication failure (401)
+          }
+          return done(err); // System error (500)
         }
       }
     )
@@ -73,7 +77,11 @@ module.exports = function configureAuth(app) {
         return done(null, false);
       } catch (err) {
         req.log.error(err);
-        return done(new Error("Unauthorized"), false);
+        // Distinguish between "user not found" vs system errors
+        if (err.message && err.message.toLowerCase().includes("not found")) {
+          return done(null, false); // Authentication failure (401)
+        }
+        return done(err); // System error (500)
       }
     })
   );
