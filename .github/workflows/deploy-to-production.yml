@@ -32,7 +32,7 @@ jobs:
     - id: create-tag
       run: |
         # Generate date-based tag with run number for uniqueness
-        TAG="v$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}"
+        TAG="v$(date +'%Y-%m-%d')-${GITHUB_RUN_NUMBER}"
         echo "tag=$TAG" >> $GITHUB_OUTPUT
         echo "Creating production release tag: $TAG"
         
