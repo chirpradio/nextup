@@ -1,12 +1,7 @@
 name: Deploy to Production
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name or number'
-        required: true
-        default: 'production'
+  workflow_dispatch
 
 jobs:
   deploy:
