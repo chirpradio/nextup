@@ -1,5 +1,3 @@
-const crypto = require("crypto");
-
 module.exports = {
   generateTemporaryPassword() {
     // Generate a 12-character secure password with mixed case, numbers, and symbols

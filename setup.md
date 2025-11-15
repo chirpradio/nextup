@@ -6,14 +6,11 @@
 - Admin access to your machine
 - A Google account
 - An admin to grant access to the chirpradiodev project in Google Cloud Platform for that Google account 
-- A username and password for DJDB & NextUp in the chirpradiodev project
+- A username and password for DJDB & NextUp in the chirpradiodev project. (This one accout account is used by both projects.)
 - A copy of esdump.zip from an admin
 
 # Install Docker Desktop
 Download Docker Desktop from https://www.docker.com/get-started, then install and run it. If you already have Docker Desktop installed, make sure you are upgraded to the latest version.
-
-After it's installed and running, from the Settings menu (the gear icon in header) you should: 
-- check "Use Docker Compose V2"
 
 You can optionally choose to:
 - check "Start Docker Desktop when you log in"
@@ -60,7 +57,7 @@ Once installation has finished, initialize the SDK with the following command:
 
 This will open a browser window where you can sign in to your Google account and grant access to the SDK.
 
-Back in the Terminal window, choose "chirpradiodev" as the default Cloud project and "n" when asked to set a  default Compute Engine region
+Back in the Terminal window, choose "chirpradiodev" as the default Cloud project and "n" if asked to set a  default Compute Engine region
 
 So you don't have to sign in every time you run the application locally, you can run the following command to log in once more and save your credentials as the default:
 `gcloud auth application-default login`
@@ -134,7 +131,7 @@ The [Elasticdump](https://github.com/elasticsearch-dump/elasticsearch-dump) libr
 Download the esdump.zip file shared with you, unzip it, and change to that directory. From that directory run the following command to import all the data:
 `for FILE in *.json; do elasticdump --input=$FILE --output=http://localhost:9200; done`
 
-Note: this import process will take over an hour to complete.
+Note: this import process can possibly take over an hour to complete.
 
 ## Set up the front end
 Open a new Terminal window. From the /nextup/client directory, run the following commands:

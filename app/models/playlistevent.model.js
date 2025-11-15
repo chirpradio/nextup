@@ -1,8 +1,7 @@
-const { datastore, gstore, getPlaylistKey } = require("../db");
+const { gstore, getPlaylistKey } = require("../db");
 const { Schema } = gstore;
 const { CURRENT_TAGS } = require("../config/constants");
 
-let PLAYLIST_KEY;
 
 function validateArray(obj, validator, validItems) {
   if (Array.isArray(obj)) {
@@ -60,5 +59,11 @@ async function setDefaultPlaylist() {
   return Promise.resolve();
 }
 playlistEventSchema.pre("save", setDefaultPlaylist);
+
+async function filterTags() {
+  this.categories = this.categories.filter(tag => CURRENT_TAGS.includes(tag));
+  return Promise.resolve();
+}
+playlistEventSchema.pre("save", filterTags);
 
 module.exports = gstore.model("PlaylistEvent", playlistEventSchema);

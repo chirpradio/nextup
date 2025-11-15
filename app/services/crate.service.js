@@ -195,7 +195,7 @@ async function addItem(crate, key, index) {
     throw new RangeError("Invalid index");
   }
 
-  if (!crate.items || crate.items === []) {
+  if (!crate.items || crate.items.length === 0) {
     crate.items = [key];
     crate.order = [1];
   } else {

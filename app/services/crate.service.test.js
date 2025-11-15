@@ -19,6 +19,7 @@ async function buildCrateWithItems(user) {
 
 describe("CrateService", () => {
   let owner, crate;
+  // eslint-disable-next-line no-unused-vars
   let incompleteCrateData, emptyCrateData;
 
   beforeAll(async () => {
