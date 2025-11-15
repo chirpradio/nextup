@@ -6,4 +6,7 @@ process.env.JWT_SECRET = "qwerty";
 
 module.exports = {
   testEnvironment: "node",
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
+  detectOpenHandles: true,
+  testTimeout: 10000,
 };
