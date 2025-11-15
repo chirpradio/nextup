@@ -2,3 +2,18 @@ changelog:
   exclude:
     labels:
       - "exclude from release notes"
+  categories:
+    - title: Features
+      labels:
+        - "enhancement"
+        - "feature"
+    - title: Bug fixes
+      labels:
+        - "bug"
+        - "fix"
+    - title: Dependencies
+      labels:
+        - "dependencies"
+    - title: Other changes
+      labels:
+        - "*"
