@@ -4,16 +4,67 @@ import { DateTime } from "luxon";
 import { _ } from "lodash";
 
 let intervalID;
+let leaderIntervalID;
+let tabId;
 const GROUP_ENTRIES_WITHIN = 3; // minutes
 const TRAFFIC_LOG_POLLING_INTERVAL = 60 * 1000; // check every minute
 const TRAFFIC_LOG_UPDATE_MIN = 20; // but only update this long after the hour
 const TRAFFIC_LOG_UPDATE_MAX = 25; // with plenty of tolerance just in case
+const LEADER_HEARTBEAT_INTERVAL = 5 * 1000; // 5 seconds
+const LEADER_TIMEOUT = 15 * 1000; // 15 seconds
+const TRAFFIC_LOG_LEADER_HEARTBEAT = "trafficLog_leader_heartbeat";
+const TRAFFIC_LOG_LEADER_TAB = "trafficLog_leader_tab";
+
+
+// Initialize unique tab ID on page load
+if (!tabId) {
+  tabId = Math.random().toString(36).substr(2, 9);
+}
 
 function getChicagoWeekdayAndHour(hourOffset = 0) {
   const dt = DateTime.now()
     .setZone("America/Chicago")
     .plus({ hours: hourOffset });
   return { weekday: dt.weekday, hour: dt.hour };
+}
+
+// Leader election functions
+function isLeader() {
+  const currentLeader = localStorage.getItem(TRAFFIC_LOG_LEADER_TAB);
+  return currentLeader === tabId;
+}
+
+function becomeLeader(store) {
+  console.log("becoming traffic log leader");
+  localStorage.setItem(TRAFFIC_LOG_LEADER_HEARTBEAT, Date.now().toString());
+  localStorage.setItem(TRAFFIC_LOG_LEADER_TAB, tabId);
+  store.pollForEntries();
+}
+
+function updateHeartbeat() {
+  if (isLeader()) {
+    localStorage.setItem(TRAFFIC_LOG_LEADER_HEARTBEAT, Date.now().toString());
+  }
+}
+
+function checkLeadership(store) {
+  const lastHeartbeat = localStorage.getItem(TRAFFIC_LOG_LEADER_HEARTBEAT);
+  const currentLeader = localStorage.getItem(TRAFFIC_LOG_LEADER_TAB);
+  const now = Date.now();
+
+  const isStale = !lastHeartbeat || now - parseInt(lastHeartbeat) > LEADER_TIMEOUT;
+
+  if (!currentLeader || (isStale && currentLeader !== tabId)) {
+    becomeLeader(store);
+    return true;
+  }
+
+  // If we're the leader but heartbeat is stale, refresh it
+  if (currentLeader === tabId && isStale) {
+    updateHeartbeat();
+  }
+
+  return currentLeader === tabId;
 }
 
 function checkSlotsForUpdates(entries) {
@@ -69,6 +120,11 @@ async function update(store) {
 }
 
 async function updateOnOffset(store) {
+  // Only update if this tab is the leader
+  if (!checkLeadership(store)) {
+    return;
+  }
+
   const now = new Date();
   const minutes = now.getMinutes();
   if (minutes >= TRAFFIC_LOG_UPDATE_MIN && minutes <= TRAFFIC_LOG_UPDATE_MAX) {
@@ -155,8 +211,7 @@ export const useTrafficLogStore = defineStore("trafficLog", {
         this.loading = false;
       } catch (error) {
         this.loading = false;
-        clearInterval(intervalID);
-        intervalID = undefined;
+        console.error(error);
       }
     },
     removeEntries({ hour } = {}) {
@@ -178,14 +233,33 @@ export const useTrafficLogStore = defineStore("trafficLog", {
       this.groups = groupNearbyEntries(this.entries);
     },
     pollForEntries() {
-      update(this);
-      if (!intervalID) {
-        intervalID = setInterval(
-          updateOnOffset,
-          TRAFFIC_LOG_POLLING_INTERVAL,
-          this
-        );
+      // Check leadership and start polling if this tab should be the leader
+      if (checkLeadership(this)) {
+        console.log("starting traffic log polling");
+        update(this);
+
+        // Start polling interval if not already started
+        if (!intervalID) {
+          intervalID = setInterval(
+            updateOnOffset,
+            TRAFFIC_LOG_POLLING_INTERVAL,
+            this
+          );
+        }
+
+        // Start heartbeat to maintain leadership
+        if (!leaderIntervalID) {
+          leaderIntervalID = setInterval(
+            updateHeartbeat,
+            LEADER_HEARTBEAT_INTERVAL
+          );
+        }
+      } else {
+        console.log("not traffic log leader");
       }
+
+      // Always check leadership periodically in case current leader fails
+      setInterval(checkLeadership, LEADER_HEARTBEAT_INTERVAL, this);
     },
   },
   persist: {
