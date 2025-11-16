@@ -4,7 +4,9 @@ const { Datastore } = require("@google-cloud/datastore");
 const gstore = new Gstore();
 const datastore = new Datastore();
 gstore.connect(datastore);
-console.log(`datastore connected to: ${process.env.DATASTORE_PROJECT_ID}`);
+if (process.env.NODE_ENV !== 'test') {
+  console.log(`datastore connected to: ${process.env.DATASTORE_PROJECT_ID}`);
+}
 
 /*
   There is only one Playlist entity in the Datastore, 
