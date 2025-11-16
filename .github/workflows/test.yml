@@ -6,6 +6,12 @@ on:
     types: [opened, synchronize, reopened]
   push:
     branches: [develop, main]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to test'
+        required: false
+        default: 'develop'
 
 jobs:
   test:
