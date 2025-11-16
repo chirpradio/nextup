@@ -97,5 +97,5 @@ jobs:
         name: test-results
         path: |
           app/coverage/
-          app/test-results.xml
         retention-days: 30
+        if-no-files-found: ignore
