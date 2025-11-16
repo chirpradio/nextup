@@ -1,0 +1,105 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to test'
+        required: false
+        default: 'develop'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      # Google Cloud Datastore Emulator
+      datastore-emulator:
+        image: google/cloud-sdk:latest
+        ports:
+          - 8081:8081
+        options: >-
+          --health-cmd "curl -f http://localhost:8081/ || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          DATASTORE_DATASET: nextup-integration-tests
+          DATASTORE_EMULATOR_HOST: localhost:8081
+          DATASTORE_PROJECT_ID: nextup-integration-tests
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'lts/*'
+        cache: 'npm'
+        cache-dependency-path: |
+          app/package-lock.json
+          client/package-lock.json
+    
+    - name: Start Datastore Emulator
+      run: |
+        # Install and start the datastore emulator
+        gcloud components install cloud-datastore-emulator --quiet
+        gcloud beta emulators datastore start \
+          --project=nextup-integration-tests \
+          --host-port=localhost:8081 \
+          --no-store-on-disk &
+        
+        # Wait for emulator to be ready
+        timeout 60 bash -c 'until curl -f http://localhost:8081/; do sleep 2; done'
+        echo "Datastore emulator is ready"
+      env:
+        CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+    
+    - name: Install backend dependencies
+      run: |
+        cd app
+        npm ci
+    
+    - name: Install frontend dependencies  
+      run: |
+        cd client
+        npm ci
+    
+    - name: Run backend tests
+      run: |
+        cd app
+        npm test
+      env:
+        NODE_ENV: test
+        DATASTORE_PROJECT_ID: nextup-integration-tests
+        DATASTORE_EMULATOR_HOST: localhost:8081
+        JWT_SECRET: test-jwt-secret
+        SESSION_SECRET: test-session-secret
+        SESSION_LENGTH: 3600000
+        LASTFM_API_KEY: test-lastfm-key
+        
+    - name: Run frontend tests (if they exist)
+      run: |
+        cd client
+        if [ -f "package.json" ] && npm run | grep -q "test"; then
+          npm test
+        else
+          echo "No frontend tests configured, skipping..."
+        fi
+      continue-on-error: true
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: |
+          app/coverage/
+          app/test-results.xml
+        retention-days: 30
