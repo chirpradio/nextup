@@ -10,4 +10,16 @@ module.exports = {
   setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
   detectOpenHandles: true,
   testTimeout: 10000,
+  collectCoverage: process.env.CI === 'true',
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  collectCoverageFrom: [
+    'services/**/*.js',
+    'models/**/*.js', 
+    'routes/**/*.js',
+    'config/**/*.js',
+    '!**/*.test.js',
+    '!**/node_modules/**',
+    '!services/__mocks__/**'
+  ]
 };
