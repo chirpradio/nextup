@@ -5,6 +5,7 @@ export const useArtistsStore = defineStore("artists", {
   state: () => ({
     _artists: {},
     _artistAlbums: {},
+    _artistAppearsOn: {},
   }),
   getters: {
     artist: (state) => (id) => {
@@ -12,6 +13,9 @@ export const useArtistsStore = defineStore("artists", {
     },
     artistAlbums: (state) => (id) => {
       return state._artistAlbums[id];
+    },
+    artistAppearsOn: (state) => (id) => {
+      return state._artistAppearsOn[id];
     },
   },
   actions: {
@@ -25,6 +29,7 @@ export const useArtistsStore = defineStore("artists", {
       if (!this._artistAlbums[id]) {
         const response = await api.getArtistAlbums(id);
         this._artistAlbums[id] = response.albums;
+        this._artistAppearsOn[id] = response.appearsOn;
       }
     },
   },
