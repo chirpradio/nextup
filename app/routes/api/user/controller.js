@@ -2,7 +2,6 @@ const { User } = require("../../../models");
 const { CrateService, PasswordService } = require("../../../services");
 const { errorMessages } = require("../errors");
 
-
 function sanitizeUserData(user) {
   const { password: _password, api_key: _api_key, ...userResponse } = user.entityData;
   userResponse.__key = user.entityKey;
@@ -73,7 +72,6 @@ module.exports = {
         email,
         first_name,
         last_name,
-        password: temporaryPassword,
         date_joined: new Date(),
         is_active,
         is_superuser: false,
@@ -86,6 +84,7 @@ module.exports = {
       }
 
       const user = new User(userData);
+      user.setPassword(temporaryPassword);
       await user.save();
 
       // Create a default crate for the new user
@@ -138,7 +137,7 @@ module.exports = {
         });
       }
 
-      user.password = newPassword;
+      user.setPassword(newPassword);
       user.password_reset_required = false;
       await user.save();
 
@@ -160,6 +159,9 @@ module.exports = {
         return res.status(404).json({ error: "User not found" });
       }
 
+      // Check if user is updating their own profile
+      const isSelfUpdate = req.user.entityKey.id === user.entityKey.id;
+
       // Email uniqueness check
       if (updates.email && updates.email !== user.email) {
         const existingUser = await User.findOne({ email: updates.email });
@@ -170,15 +172,31 @@ module.exports = {
         }
       }
 
+      // Define allowed fields based on update type
+      let allowedFields;
+      if (isSelfUpdate) {
+        // For self-updates, only allow DJ name
+        allowedFields = ["dj_name"];
+
+        // Only allow DJ name updates if user is actually a DJ
+        if (updates.dj_name && !user.roles?.includes("dj")) {
+          return res.status(403).json({
+            error: "Only DJs can update their DJ name",
+          });
+        }
+      } else {
+        // For admin updates, allow all standard fields
+        allowedFields = [
+          "first_name",
+          "last_name",
+          "dj_name",
+          "email",
+          "roles",
+          "is_active",
+        ];
+      }
+
       // Apply updates
-      const allowedFields = [
-        "first_name",
-        "last_name",
-        "dj_name",
-        "email",
-        "roles",
-        "is_active",
-      ];
       allowedFields.forEach((field) => {
         if (Object.hasOwn(updates, field)) {
           user[field] = updates[field];
@@ -187,12 +205,13 @@ module.exports = {
 
       await user.save();
 
-      // Simple success logging
+      // Success logging
       req.log.info(
         {
           email: user.email,
           updated_by: req.user.email,
           fields: Object.keys(updates),
+          self_update: isSelfUpdate,
         },
         "user updated"
       );

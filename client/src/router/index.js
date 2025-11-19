@@ -24,6 +24,14 @@ const routes = [
     },
   },
   {
+    path: "/profile",
+    name: "profile",
+    component: () => import("../views/ProfileView.vue"),
+    meta: {
+      title: "Profile Settings",
+    },
+  },
+  {
     path: "/",
     redirect: "/library",
   },

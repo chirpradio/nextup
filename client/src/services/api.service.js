@@ -36,23 +36,10 @@ async function getAndHandleError(getter) {
   return response.data;
 }
 
+export { setAuthorizationHeader };
 export { instance as api };
 
 export default {
-  async login(email, password) {
-    const response = await instance.post("/token", {
-      email,
-      password,
-    });
-
-    if (response.data.token) {
-      setAuthorizationHeader(response.data.token);
-    }
-    return response.data;
-  },
-
-  setAuthorizationHeader,
-
   async getTaggedAlbums(params) {
     const getter = instance.get("/album/tag", { params });
     return await getAndHandleError(getter);
