@@ -1,4 +1,4 @@
-const { inspect } = require("util");
+// const { inspect } = require("util");
 const { Album, Document, Track, TagEdit } = require("../models");
 const { datastore, gstore, renameKey } = require("../db");
 const { JSDOM } = require("jsdom");
@@ -21,11 +21,6 @@ const jsonOptions = {
     integerTypeCastFunction: datastore.int,
     properties: ["album_id"],
   },
-};
-const jsonOptionsTrack = {
-  format: "JSON",
-  showKey: true,
-  wrapNumbers: true,
 };
 
 async function rewriteOldLinks(reviewTextHTML) {
@@ -247,43 +242,28 @@ async function runAndRenameKeys(query) {
 async function getAlbumsByAlbumArtist({ key, limit = 50, offset } = {}) {
   const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
   let result = await runAndRenameKeys(query);
-  try {
-    const appearsOn = await getAppearsOnTrackArtist({ key, limit, offset });
-    const appearsOnKeys = appearsOn.tracks.map((track) => track.album);
-    const appearsOnAlbums = await getAlbumsByKeys(appearsOnKeys);
-    console.log(`Album key: ${inspect(appearsOnAlbums)}`);
-    result = {
-      albums: result.albums,
-      appearsOn: appearsOnAlbums,
-      nextPageCursor: result.nextPageCursor,
-    };
-  } catch (error) {
-    console.error(`Error getting appears on info`, error);
-  }
-  console.log(`Album artists: ${inspect(result)}`);
-  return result;
+  const appearsOn = await getArtistAppearsOnTracks({
+    key,
+    limit,
+    offset,
+  });
+  return appearsOn ? { ...result, appearsOn } : result;
 }
 
-function getBaseTrackQuery({ limit = 25, offset = 0 } = {}) {
-  return Track.query().offset(offset).limit(limit);
-}
+async function getArtistAppearsOnTracks({ key, limit = 50, offset } = {}) {
+  const query = Track.query()
+    .offset(offset)
+    .limit(limit)
+    .filter("track_artist", key);
 
-async function runTracksQuery(query) {
-  return await query.run(jsonOptionsTrack);
-}
+  const { entities } = await query.run({
+    ...jsonOptions,
+    wrapNumbers: true,
+  });
 
-async function runAndRenameKeysTrack(query) {
-  const { entities, nextPageCursor } = await runTracksQuery(query);
   const tracks = renameKeys(entities);
-  return { tracks, nextPageCursor };
-}
-
-async function getAppearsOnTrackArtist({ key, limit = 50, offset } = {}) {
-  const query = getBaseTrackQuery({ limit, offset }).filter(
-    "track_artist",
-    key
-  );
-  return await runAndRenameKeysTrack(query);
+  const appearsOnAlbumKeys = tracks.map((track) => track.album);
+  return await getAlbumsByKeys(appearsOnAlbumKeys);
 }
 
 async function getAlbumsWithTag({ tag, limit, offset } = {}) {
