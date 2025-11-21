@@ -5,8 +5,8 @@
       <h1 class="mb-3">{{ artist.name }}</h1>
       <AddToCrate :keyToAdd="artist.__key" class="col-4 col-md-3 mb-3" />
       <AlbumCollection
-        :albums="albums"
         heading="Albums"
+        :albums="albums"
         sortBy="year"
         :hideArtistLinks="true"
       />

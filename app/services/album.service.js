@@ -1,4 +1,3 @@
-// const { inspect } = require("util");
 const { Album, Document, Track, TagEdit } = require("../models");
 const { datastore, gstore, renameKey } = require("../db");
 const { JSDOM } = require("jsdom");
@@ -241,7 +240,7 @@ async function runAndRenameKeys(query) {
 
 async function getAlbumsByAlbumArtist({ key, limit = 50, offset } = {}) {
   const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
-  let result = await runAndRenameKeys(query);
+  const result = await runAndRenameKeys(query);
   const appearsOn = await getArtistAppearsOnTracks({
     key,
     limit,
