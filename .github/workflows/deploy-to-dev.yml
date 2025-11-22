@@ -1,6 +1,8 @@
 name: Deploy to Dev
 
 on:
+  push:
+    branches: [develop]
   workflow_dispatch:
     inputs:
       branch:
@@ -25,7 +27,7 @@ jobs:
     - id: checkout
       uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.inputs.branch }}
+        ref: ${{ github.event.inputs.branch || github.ref }}
     - id: auth
       uses: google-github-actions/auth@v2
       with:
@@ -55,5 +57,5 @@ jobs:
           ELASTICSEARCH_PASSWORD=${{ secrets.ELASTICSEARCH_PASSWORD }}
           DATASTORE_PROJECT_ID=${{ steps.auth.outputs.project_id }}
           LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
-        version: ${{ github.event.inputs.version }}
-        promote: ${{ github.event.inputs.promote }}
+        version: ${{ github.event.inputs.version || 'live' }}
+        promote: ${{ github.event.inputs.promote != 'false' }}
