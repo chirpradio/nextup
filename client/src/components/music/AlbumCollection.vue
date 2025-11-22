@@ -1,9 +1,12 @@
 <template>
   <div class="pb-3">
-    <h1 v-if="heading">
+    <h1 v-if="heading && seeAllLink">
       <router-link v-if="seeAllLink" :to="seeAllLink">
         {{ heading }}
       </router-link>
+    </h1>
+    <h1 v-else-if="heading && albums?.length > 0">
+      {{ heading }}
     </h1>
     <div class="px-2">
       <AlbumCard

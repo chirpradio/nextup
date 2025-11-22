@@ -4,7 +4,18 @@
     <div v-if="!loading">
       <h1 class="mb-3">{{ artist.name }}</h1>
       <AddToCrate :keyToAdd="artist.__key" class="col-4 col-md-3 mb-3" />
-      <AlbumCollection :albums="albums" sortBy="year" :hideArtistLinks="true" />
+      <AlbumCollection
+        heading="Albums"
+        :albums="albums"
+        sortBy="year"
+        :hideArtistLinks="true"
+      />
+      <AlbumCollection
+        heading="Appears On"
+        :albums="appearsOn"
+        sortBy="year"
+        :hideArtistLinks="true"
+      />
     </div>
   </div>
 </template>
@@ -34,6 +45,9 @@ export default {
     },
     albums() {
       return this.artistsStore.artistAlbums(this.id);
+    },
+    appearsOn() {
+      return this.artistsStore.artistAppearsOn(this.id);
     },
   },
   created() {

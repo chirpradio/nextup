@@ -159,7 +159,6 @@ async function updateAlbumInfo(album, { label, year, pronunciation }) {
   album.year = year;
   album.pronunciation = pronunciation;
   await album.save();
-
 }
 
 async function listAlbumComments(album) {
@@ -208,9 +207,8 @@ async function listAlbumTracks(album) {
     order: { property: "track_num" },
     showKey: true,
   };
-  const { entities: tracks } = await Track.list(listOptions).populate(
-    "track_artist"
-  );
+  const { entities: tracks } =
+    await Track.list(listOptions).populate("track_artist");
   tracks.forEach((track) => {
     if (track.track_artist) {
       renameKey(track.track_artist);
@@ -242,7 +240,29 @@ async function runAndRenameKeys(query) {
 
 async function getAlbumsByAlbumArtist({ key, limit = 50, offset } = {}) {
   const query = getBaseQuery({ limit, offset }).filter("album_artist", key);
-  return await runAndRenameKeys(query);
+  const result = await runAndRenameKeys(query);
+  const appearsOn = await getArtistAppearsOnTracks({
+    key,
+    limit,
+    offset,
+  });
+  return appearsOn ? { ...result, appearsOn } : result;
+}
+
+async function getArtistAppearsOnTracks({ key, limit = 50, offset } = {}) {
+  const query = Track.query()
+    .offset(offset)
+    .limit(limit)
+    .filter("track_artist", key);
+
+  const { entities } = await query.run({
+    ...jsonOptions,
+    wrapNumbers: true,
+  });
+
+  const tracks = renameKeys(entities);
+  const appearsOnAlbumKeys = tracks.map((track) => track.album);
+  return await getAlbumsByKeys(appearsOnAlbumKeys);
 }
 
 async function getAlbumsWithTag({ tag, limit, offset } = {}) {
