@@ -1,18 +1,13 @@
 name: Deploy to Production
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name or number'
-        required: true
-        default: 'production'
+  workflow_dispatch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
     - id: checkout
@@ -34,6 +29,21 @@ jobs:
     - id: build-client
       working-directory: ./client
       run: npm run build
+    - id: create-tag
+      run: |
+        # Generate date-based tag with run number for uniqueness
+        TAG="v$(date +'%Y-%m-%d')-${GITHUB_RUN_NUMBER}"
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        echo "Creating production release tag: $TAG"
+        
+        # Configure git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Create and push tag
+        git tag $TAG
+        git push origin $TAG
+      name: Create Production Release Tag
     - id: deploy
       uses: google-github-actions/deploy-appengine@v2
       with:
@@ -48,5 +58,12 @@ jobs:
           ELASTICSEARCH_PASSWORD=${{ secrets.ELASTICSEARCH_PASSWORD }}
           DATASTORE_PROJECT_ID=${{ secrets.DATASTORE_PROJECT_ID }}
           LASTFM_API_KEY=${{ secrets.LASTFM_API_KEY }}
-        version: ${{ github.event.inputs.version }}
+        version: ${{ steps.create-tag.outputs.tag }}
         promote: true
+    - id: create-release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.create-tag.outputs.tag }}
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
