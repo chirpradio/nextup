@@ -286,6 +286,7 @@ async function getReport(start, end, options = {}) {
 
 module.exports = {
   addEntry,
+  copyIsRunning,
   getLog,
   getReport,
 };

@@ -33,7 +33,7 @@ const validateDateRange = function (req, res, next) {
 const validateAlbum = body("album").isArray().customSanitizer(toKey);
 const validateArtist = body("artist").isArray().customSanitizer(toKey);
 const validateCategories = body("categories").isArray();
-const validateFreeformTrackTitle = body("track.title").isString();
+const validateFreeformTrackTitle = body("freeform_track_title").isString();
 const validateLabel = body("label").isString().optional({ nullable: true });
 const validateRole = function (req, res, next) {
   try {
